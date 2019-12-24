@@ -1,0 +1,19 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "examples/applications/wallet/check-balance/package.json",
+        "examples/applications/wallet/consolidate-dust/package.json",
+        "examples/applications/wallet/consolidate-utxos/package.json",
+        "examples/applications/wallet/create-wallet/package.json",
+        "examples/applications/wallet/send-WIF/package.json",
+        "examples/applications/wallet/send-all/package.json",
+        "examples/applications/wallet/send-bch/package.json",
+        "examples/low-level/OP_RETURN/package.json",
+        "examples/low-level/address-details/package.json",
+        "examples/low-level/utxo-address/package.json",
+        "package.json"
+      ]
+    }
+  }
+}

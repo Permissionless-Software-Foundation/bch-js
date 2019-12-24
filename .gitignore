@@ -1,0 +1,10 @@
+node_modules/*
+.nyc_output/*
+wallet-info.txt
+wallet.json
+
+docs/
+
+
+# This paragraph comes last. Force includes specific files.
+!docs/README.md
