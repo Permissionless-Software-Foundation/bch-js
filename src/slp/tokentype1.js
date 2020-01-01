@@ -42,6 +42,7 @@ class TokenType1 {
         totalTokens += tokenUtxos[i].tokenQty
 
       const change = totalTokens - sendQty
+      // console.log(`change: ${change}`)
 
       let script
       let outputs = 1
@@ -98,6 +99,56 @@ class TokenType1 {
       }
 
       return { script, outputs }
+    } catch (err) {
+      console.log(`Error in generateSendOpReturn()`)
+      throw err
+    }
+  }
+
+  /**
+   * @api SLP.TokenType1.generateBurnOpReturn() generateBurnOpReturn() - OP_RETURN code for SLP Send tx
+   * @apiName generateBurnOpReturn
+   * @apiGroup SLP
+   * @apiDescription Generate the OP_RETURN value needed to create an SLP Send transaction that burns tokens.
+   * This is a slight variation of generateSendOpReturn(). It generates an SLP
+   * SEND transaction designed to burn a select quantity of tokens.
+   *
+   * It's assumed all elements in the tokenUtxos array belong to the same token.
+   * Returns an object with two properties:
+   *  - script: an array of Bufers that is ready to fed into bchjs.Script.encode() to be turned into a transaction output.
+   *  - outputs: an integer with a value of 1. There is no token change to be sent with this transaction.
+   */
+  generateBurnOpReturn(tokenUtxos, burnQty) {
+    try {
+      const tokenId = tokenUtxos[0].tokenId
+      const decimals = tokenUtxos[0].decimals
+
+      // Calculate the total amount of tokens owned by the wallet.
+      let totalTokens = 0
+      for (let i = 0; i < tokenUtxos.length; i++)
+        totalTokens += tokenUtxos[i].tokenQty
+
+      const remainder = totalTokens - burnQty
+
+      let baseQty = new BigNumber(remainder).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      let baseQtyHex = baseQty.toString(16)
+      baseQtyHex = baseQtyHex.padStart(16, "0")
+
+      // console.log(`baseQty: ${baseQty.toString()}`)
+
+      const script = [
+        this.Script.opcodes.OP_RETURN,
+        Buffer.from("534c5000", "hex"),
+        //BITBOX.Script.opcodes.OP_1,
+        Buffer.from("01", "hex"),
+        Buffer.from(`SEND`),
+        Buffer.from(tokenId, "hex"),
+        Buffer.from(baseQtyHex, "hex")
+      ]
+
+      return script
     } catch (err) {
       console.log(`Error in generateSendOpReturn()`)
       throw err
