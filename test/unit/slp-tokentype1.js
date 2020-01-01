@@ -107,6 +107,40 @@ describe("#SLP TokenType1", () => {
     //   })
   })
 
+  describe("#generateBurnOpReturn", () => {
+    it("should generate burn OP_RETURN code", async () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          txid:
+            "a8eb788b8ddda6faea00e6e2756624b8feb97655363d0400dd66839ea619d36e",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546,
+          utxoType: "token",
+          transactionType: "send",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          tokenTicker: "TOK-CH",
+          tokenName: "TokyoCash",
+          tokenDocumentUrl: "",
+          tokenDocumentHash: "",
+          decimals: 8,
+          tokenQty: 7
+        }
+      ]
+
+      const result = await bchjs.SLP.TokenType1.generateBurnOpReturn(
+        tokenUtxos,
+        1
+      )
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+    })
+  })
+
   describe("#generateGenesisOpReturn", () => {
     it("should generate genesis OP_RETURN code", async () => {
       const configObj = {

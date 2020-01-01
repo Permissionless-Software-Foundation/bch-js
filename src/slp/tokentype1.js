@@ -118,7 +118,7 @@ class TokenType1 {
    *  - script: an array of Bufers that is ready to fed into bchjs.Script.encode() to be turned into a transaction output.
    *  - outputs: an integer with a value of 1. There is no token change to be sent with this transaction.
    */
-  generateBurnOpReturn(tokenUtxos, sendQty) {
+  generateBurnOpReturn(tokenUtxos, burnQty) {
     try {
       const tokenId = tokenUtxos[0].tokenId
       const decimals = tokenUtxos[0].decimals
@@ -128,63 +128,27 @@ class TokenType1 {
       for (let i = 0; i < tokenUtxos.length; i++)
         totalTokens += tokenUtxos[i].tokenQty
 
-      const change = totalTokens - sendQty
+      const remainder = totalTokens - burnQty
 
-      let script
-      let outputs = 1
+      let baseQty = new BigNumber(remainder).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      let baseQtyHex = baseQty.toString(16)
+      baseQtyHex = baseQtyHex.padStart(16, "0")
 
-      // The normal case, when there is token change to return to sender.
-      if (change > 0) {
-        outputs = 2
+      // console.log(`baseQty: ${baseQty.toString()}`)
 
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        let baseQtyHex = baseQty.toString(16)
-        baseQtyHex = baseQtyHex.padStart(16, "0")
+      const script = [
+        this.Script.opcodes.OP_RETURN,
+        Buffer.from("534c5000", "hex"),
+        //BITBOX.Script.opcodes.OP_1,
+        Buffer.from("01", "hex"),
+        Buffer.from(`SEND`),
+        Buffer.from(tokenId, "hex"),
+        Buffer.from(baseQtyHex, "hex")
+      ]
 
-        let baseChange = new BigNumber(change).times(10 ** decimals)
-        baseChange = baseChange.absoluteValue()
-        baseChange = Math.floor(baseChange)
-        // console.log(`baseChange: ${baseChange.toString()}`)
-
-        let baseChangeHex = baseChange.toString(16)
-        baseChangeHex = baseChangeHex.padStart(16, "0")
-        // console.log(`baseChangeHex padded: ${baseChangeHex}`)
-
-        script = [
-          this.Script.opcodes.OP_RETURN,
-          Buffer.from("534c5000", "hex"),
-          //BITBOX.Script.opcodes.OP_1,
-          Buffer.from("01", "hex"),
-          Buffer.from(`SEND`),
-          Buffer.from(tokenId, "hex"),
-          Buffer.from(baseQtyHex, "hex"),
-          Buffer.from(baseChangeHex, "hex")
-        ]
-      } else {
-        // Corner case, when there is no token change to send back.
-
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        let baseQtyHex = baseQty.toString(16)
-        baseQtyHex = baseQtyHex.padStart(16, "0")
-
-        // console.log(`baseQty: ${baseQty.toString()}`)
-
-        script = [
-          this.Script.opcodes.OP_RETURN,
-          Buffer.from("534c5000", "hex"),
-          //BITBOX.Script.opcodes.OP_1,
-          Buffer.from("01", "hex"),
-          Buffer.from(`SEND`),
-          Buffer.from(tokenId, "hex"),
-          Buffer.from(baseQtyHex, "hex")
-        ]
-      }
-
-      return { script, outputs }
+      return script
     } catch (err) {
       console.log(`Error in generateSendOpReturn()`)
       throw err
