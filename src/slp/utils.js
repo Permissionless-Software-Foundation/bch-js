@@ -1141,13 +1141,17 @@ class Utils {
         const thisUtxo = utxos[i]
         // console.log(`thisUtxo: ${JSON.stringify(thisUtxo, null, 2)}`)
 
-        const thisValidation = validations.filter(x => x.txid === thisUtxo.txid)
+        const thisValidation = validations.filter(x => {
+          if (x !== null) return x.txid === thisUtxo.txid
+
+          return false
+        })
         // console.log(
         //   `thisValidation: ${JSON.stringify(thisValidation, null, 2)}`
         // )
 
         // If the utxo is not SLP, then skip the loop.
-        if (!thisValidation[0].valid) {
+        if (!thisValidation[0] || !thisValidation[0].valid) {
           outAry[i] = false
           continue
         }
