@@ -51,6 +51,8 @@ class BCHJS {
       apiToken: this.apiToken
     }
 
+    // console.log(`apiToken: ${this.apiToken}`)
+
     // Populate Blockbook endpoints.
     this.Blockbook = new Blockbook(libConfig)
 

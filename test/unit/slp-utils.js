@@ -4,7 +4,10 @@ const assert2 = require("chai").assert
 const SLP = require("../../src/slp/slp")
 //const slp = new SLP("http://decatur.hopto.org:12400/v3/")
 //const slp = new SLP("https://rest.bitcoin.com/v2/")
-const slp = new SLP("https://mainnet.bchjs.cash/v3/")
+const slp = new SLP({
+  restURL: "https://mainnet.bchjs.cash/v3/",
+  apiToken: process.env.BCHJSTOKEN
+})
 
 const nock = require("nock") // http call mocking
 const sinon = require("sinon")
@@ -818,11 +821,6 @@ describe("#SLP Utils", () => {
             txid:
               "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
             valid: true
-          },
-          {
-            txid:
-              "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-            valid: true
           }
         ])
 
@@ -868,21 +866,22 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.equal(data[0], false, "Change UTXO marked as false.")
-      assert2.hasAnyKeys(data[1], [
-        "txid",
-        "vout",
-        "amount",
-        "satoshis",
-        "height",
-        "confirmations",
-        "tokenType",
-        "tokenId",
-        "tokenTicker",
-        "tokenName",
-        "tokenDocumentUrl",
-        "tokenDocumentHash",
-        "decimals"
-      ])
+
+      assert2.property(data[1], "txid")
+      assert2.property(data[1], "vout")
+      assert2.property(data[1], "amount")
+      assert2.property(data[1], "satoshis")
+      assert2.property(data[1], "height")
+      assert2.property(data[1], "confirmations")
+      assert2.property(data[1], "tokenType")
+      assert2.property(data[1], "tokenId")
+      assert2.property(data[1], "tokenTicker")
+      assert2.property(data[1], "tokenName")
+      assert2.property(data[1], "tokenDocumentUrl")
+      assert2.property(data[1], "tokenDocumentHash")
+      assert2.property(data[1], "decimals")
+      assert2.property(data[1], "isValid")
+      assert2.equal(data[1].isValid, true)
     })
 
     it("should return details for a MINT token utxo", async () => {
@@ -945,29 +944,29 @@ describe("#SLP Utils", () => {
       const data = await slp.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.hasAnyKeys(data[0], [
-        "txid",
-        "vout",
-        "amount",
-        "satoshis",
-        "height",
-        "confirmations",
-        "utxoType",
-        "transactionType",
-        "tokenId",
-        "tokenTicker",
-        "tokenName",
-        "tokenDocumentUrl",
-        "tokenDocumentHash",
-        "decimals",
-        "mintBatonVout",
-        "batonStillExists",
-        "tokenQty"
-      ])
+      assert2.property(data[0], "txid")
+      assert2.property(data[0], "vout")
+      assert2.property(data[0], "amount")
+      assert2.property(data[0], "satoshis")
+      assert2.property(data[0], "height")
+      assert2.property(data[0], "confirmations")
+      assert2.property(data[0], "utxoType")
+      assert2.property(data[0], "transactionType")
+      assert2.property(data[0], "tokenId")
+      assert2.property(data[0], "tokenTicker")
+      assert2.property(data[0], "tokenName")
+      assert2.property(data[0], "tokenDocumentUrl")
+      assert2.property(data[0], "tokenDocumentHash")
+      assert2.property(data[0], "decimals")
+      assert2.property(data[0], "mintBatonVout")
+      assert2.property(data[0], "batonStillExists")
+      assert2.property(data[0], "tokenQty")
+      assert2.property(data[0], "isValid")
+      assert.equal(data[0].isValid, true)
     })
 
     it("should return details for a simple SEND SLP token utxo", async () => {
-      // Mock the call to REST API
+      // // Mock the call to REST API
       if (process.env.TEST === "unit") {
         // Stub the call to validateTxid
         sandbox.stub(slp.Utils, "validateTxid").resolves([
@@ -1032,24 +1031,24 @@ describe("#SLP Utils", () => {
       ]
 
       const data = await slp.Utils.tokenUtxoDetails(utxos)
-      //console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.hasAnyKeys(data[0], [
-        "txid",
-        "vout",
-        "amount",
-        "satoshis",
-        "height",
-        "confirmations",
-        "utxoType",
-        "tokenId",
-        "tokenTicker",
-        "tokenName",
-        "tokenDocumentUrl",
-        "tokenDocumentHash",
-        "decimals",
-        "tokenQty"
-      ])
+      assert2.property(data[0], "txid")
+      assert2.property(data[0], "vout")
+      assert2.property(data[0], "amount")
+      assert2.property(data[0], "satoshis")
+      assert2.property(data[0], "height")
+      assert2.property(data[0], "confirmations")
+      assert2.property(data[0], "utxoType")
+      assert2.property(data[0], "tokenId")
+      assert2.property(data[0], "tokenTicker")
+      assert2.property(data[0], "tokenName")
+      assert2.property(data[0], "tokenDocumentUrl")
+      assert2.property(data[0], "tokenDocumentHash")
+      assert2.property(data[0], "decimals")
+      assert2.property(data[0], "tokenQty")
+      assert2.property(data[0], "isValid")
+      assert.equal(data[0].isValid, true)
     })
 
     it("should handle BCH and SLP utxos in the same TX", async () => {
@@ -1088,74 +1087,82 @@ describe("#SLP Utils", () => {
       assert2.isArray(result)
       assert2.equal(result.length, 2)
       assert2.equal(result[0], false)
+      assert.equal(result[1].isValid, true)
     })
 
     it("should handle problematic utxos", async () => {
       // Mock external dependencies.
-      // Mock the call to REST API
       if (process.env.TEST === "unit") {
         // Stub the call to validateTxid
         sandbox.stub(slp.Utils, "validateTxid").resolves([
           {
             txid:
-              "b35746c9e7f086fe87a3680e866bc859395483cde46b4667937ffc9b638baa4a",
+              "67fd3c7c3a6eb0fea9ab311b91039545086220f7eeeefa367fa28e6e43009f19",
             valid: true
-          },
-          {
-            txid:
-              "eb313e0319f17fe42e38e0321c8bcadb219cf665b3123be6bb3f05749839b9ef",
-            valid: false
           }
         ])
 
         // Stub the calls to decodeOpReturn.
-        sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
-          tokenType: 1,
-          transactionType: "send",
-          tokenId:
-            "155784a206873c98acc09e8dabcccf6abf13c4c14d8662190534138a16bb93ce",
-          spendData: [
-            {
-              quantity: "1200000000000",
-              sentTo: "bchtest:qpt74e74f75w6s7cd8r9p5fumvdhqf995gp3mkk6xw",
-              vout: 1
-            },
-            {
-              quantity: "8800000000000",
-              sentTo: "bchtest:qq9zyh5sqwqlfc3q3rf2t8x82zp87euf7576n4465c",
-              vout: 2
-            }
-          ]
-        })
+        sandbox
+          .stub(slp.Utils, "decodeOpReturn")
+          .onCall(0)
+          .throws({ message: "Not an OP_RETURN" })
+          .onCall(1)
+          .resolves({
+            tokenType: 1,
+            transactionType: "send",
+            tokenId:
+              "f05faf13a29c7f5e54ab921750aafb6afaa953db863bd2cf432e918661d4132f",
+            spendData: [
+              {
+                quantity: "5000000",
+                sentTo:
+                  "bitcoincash:qr06e2fetka9fyh207ff3cq8xh9zfe78gyx24yadjz",
+                vout: 1
+              },
+              {
+                quantity: "395010942",
+                sentTo:
+                  "bitcoincash:qqzjzzlmx8h3hum3drsuk894jnf8r909kueykgrkk2",
+                vout: 2
+              }
+            ]
+          })
+          .onCall(2)
+          .resolves({
+            tokenType: 1,
+            transactionType: "genesis",
+            ticker: "AUDC",
+            name: "AUD Coin",
+            documentUrl: "audcoino@gmail.com",
+            documentHash: "",
+            decimals: 6,
+            mintBatonVout: 0,
+            initialQty: 2000000000000,
+            tokensSentTo:
+              "bitcoincash:qp5pup5vpdcq3qyq8f858nuqmgfq8krupvsxxuxctx",
+            batonHolder: "NEVER_CREATED"
+          })
       }
-
-      // sandbox
-      //   .stub(slp.Utils, "validateTxid")
-      //   .resolves(mockData.mockDualValidation)
-      // sandbox
-      //   .stub(slp.Utils, "decodeOpReturn")
-      //   .resolves(mockData.mockDualOpData)
-
-      // const slp2 = new SLP({ restURL: `https://tapi.bchjs.cash/v3/` })
 
       const utxos = [
         {
           txid:
-            "eb313e0319f17fe42e38e0321c8bcadb219cf665b3123be6bb3f05749839b9ef",
-          vout: 1,
-          value: "10000000",
-          height: 1346640,
-          confirmations: 225,
-          satoshcreateTokenTxis: 10000000
+            "0e3a217fc22612002031d317b4cecd9b692b66b52951a67b23c43041aefa3959",
+          vout: 0,
+          amount: 0.00018362,
+          satoshis: 18362,
+          height: 613483,
+          confirmations: 124
         },
         {
           txid:
-            "b35746c9e7f086fe87a3680e866bc859395483cde46b4667937ffc9b638baa4a",
+            "67fd3c7c3a6eb0fea9ab311b91039545086220f7eeeefa367fa28e6e43009f19",
           vout: 1,
-          value: "546",
-          height: 1346569,
-          confirmations: 296,
-          satoshis: 546
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 612075,
+          confirmations: 1532
         }
       ]
 
@@ -1165,6 +1172,7 @@ describe("#SLP Utils", () => {
       assert2.isArray(result)
       assert2.equal(result.length, 2)
       assert2.equal(result[0], false)
+      assert2.equal(result[1].isValid, true)
     })
 
     it("should return false for BCH-only UTXOs", async () => {
