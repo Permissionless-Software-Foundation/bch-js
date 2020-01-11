@@ -985,14 +985,14 @@ class Utils {
       // Loop through each element in the array and spot check the required
       // properties.
       for (let i = 0; i < utxos.length; i++) {
-        const thisUtxo = utxos[i]
+        const utxo = utxos[i]
 
         // Throw error if utxo does not have a satoshis property.
-        if (!thisUtxo.satoshis)
+        if (!utxo.satoshis)
           throw new Error(`utxo ${i} does not have a satoshis property.`)
 
         // Throw error if utxo does not have a txid property.
-        if (!thisUtxo.txid)
+        if (!utxo.txid)
           throw new Error(`utxo ${i} does not have a txid property.`)
       }
 
@@ -1010,11 +1010,11 @@ class Utils {
       // further processing.
       for (let i = 0; i < utxos.length; i++) {
         const thisValidation = validations[i]
-        const thisUtxo = utxos[i]
+        const utxo = utxos[i]
 
         // Only need to worry about validations that are still true.
         if (thisValidation) {
-          const slpData = await this.decodeOpReturn(thisUtxo.txid)
+          const slpData = await this.decodeOpReturn(utxo.txid)
           //console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
 
           // Handle Genesis and Mint SLP transactions.
@@ -1023,15 +1023,15 @@ class Utils {
             slpData.transactionType === "mint"
           ) {
             if (
-              thisUtxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-              thisUtxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
+              utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
+              utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
             )
               // Can safely be marked as false.
               validations[i] = false
           } else if (slpData.transactionType === "send") {
             // Filter out any vouts that match.
             const voutMatch = slpData.spendData.filter(
-              x => thisUtxo.vout === x.vout
+              x => utxo.vout === x.vout
             )
             //console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
 
@@ -1045,7 +1045,7 @@ class Utils {
         // UTXOs only contain dust values. <--- NOT TRUE
         // Note: This is not a very accurate way to make a determination.
         // See https://gist.github.com/christroutner/434ae0c710001b57e33a4fa8abb7d478
-        //if (thisUtxo.satoshis > 546) validations[i] = false
+        //if (utxo.satoshis > 546) validations[i] = false
       }
 
       return validations
@@ -1065,13 +1065,15 @@ class Utils {
    * If the
    * UTXO does not belong to a SLP transaction, it will return false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
-   * with additional SLP information attached.
+   * with additional SLP information attached. An isValid property will be included.
+   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed.
    *
    * @apiExample Example usage:
    *
    * (async () => {
    * try {
-   *  const u = await bchjs.Insight.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
+   *  const u = await bchjs.Blockbook.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
    *  const utxos = u.utxos
    *
    *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
@@ -1097,10 +1099,13 @@ class Utils {
    *  "tokenDocumentUrl": "",
    *  "tokenDocumentHash": "",
    *  "decimals": 8,
-   *  "tokenQty": 2
+   *  "tokenQty": 2,
+   *  "isValid": true
    * }
    */
 
+  // CT 1/11/20: Refactored to comply with this GitHub Issue:
+  // https://github.com/Bitcoin-com/slp-sdk/issues/84
   async tokenUtxoDetails(utxos) {
     try {
       // Throw error if input is not an array.
@@ -1109,57 +1114,57 @@ class Utils {
       // Loop through each element in the array and validate the input before
       // further processing.
       for (let i = 0; i < utxos.length; i++) {
-        const thisUtxo = utxos[i]
+        const utxo = utxos[i]
 
         // Convert Blockbook UTXOs to Insight format.
-        if (thisUtxo.value) thisUtxo.satoshis = Number(thisUtxo.value)
+        if (utxo.value) utxo.satoshis = Number(utxo.value)
 
         // Throw error if utxo does not have a satoshis property.
-        if (!thisUtxo.satoshis)
+        if (!utxo.satoshis)
           throw new Error(`utxo ${i} does not have a satoshis property.`)
 
         // Throw error if utxo does not have a txid property.
-        if (!thisUtxo.txid)
+        if (!utxo.txid)
           throw new Error(`utxo ${i} does not have a txid property.`)
       }
 
-      // Create an array of txid strings to feed to validateTxid
-      const txids = utxos.map(x => x.txid)
-      // console.log(`txids: ${JSON.stringify(txids, null, 2)}`)
+      // Output Array
+      const outAry = []
 
-      // Validate the array of txids.
-      const validations = await this.validateTxid(txids)
-      // console.log(`validations: ${JSON.stringify(validations, null, 2)}`)
-
-      const outAry = [] // Output Array
-
-      // Loop through each element and compute final validation on any that
-      // returned true.
-      // Loop on utxos, not validations since txids can be the same and
-      // UTXOs are differentiated by vout value.
+      // Loop through each utxo
       for (let i = 0; i < utxos.length; i++) {
-        const thisUtxo = utxos[i]
-        // console.log(`thisUtxo: ${JSON.stringify(thisUtxo, null, 2)}`)
+        const utxo = utxos[i]
 
-        const thisValidation = validations.filter(x => x.txid === thisUtxo.txid)
-        // console.log(
-        //   `thisValidation: ${JSON.stringify(thisValidation, null, 2)}`
-        // )
+        // Get raw transaction data from the full node and attempt to decode
+        // the OP_RETURN data.
+        // If there is no OP_RETURN, mark the UTXO as false.
+        let slpData = false
+        try {
+          slpData = await this.decodeOpReturn(utxo.txid)
+          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+        } catch (err) {
+          // console.log(`decodeOpReturn err: `, err)
 
-        // If the utxo is not SLP, then skip the loop.
-        if (!thisValidation[0].valid) {
-          outAry[i] = false
-          continue
+          if (
+            err.message === "Not an OP_RETURN" ||
+            err.message === "Not a SLP OP_RETURN"
+          ) {
+            // An error will be thrown if the txid is not SLP.
+            // Mark as false and continue the loop.
+            outAry.push(false)
+
+            continue
+          } else {
+            throw err
+          }
         }
 
-        const slpData = await this.decodeOpReturn(thisUtxo.txid)
-        // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
-
+        // If there is an OP_RETURN, attempt to decode it.
         // Handle Genesis SLP transactions.
         if (slpData.transactionType === "genesis") {
           if (
-            thisUtxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-            thisUtxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
+            utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
+            utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
             outAry[i] = false
@@ -1167,24 +1172,24 @@ class Utils {
 
           // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
           else {
-            thisUtxo.tokenType = "minting-baton"
-            thisUtxo.tokenId = thisUtxo.txid
-            thisUtxo.tokenTicker = slpData.ticker
-            thisUtxo.tokenName = slpData.name
-            thisUtxo.tokenDocumentUrl = slpData.documentUrl
-            thisUtxo.tokenDocumentHash = slpData.documentHash
-            thisUtxo.decimals = slpData.decimals
+            utxo.tokenType = "minting-baton"
+            utxo.tokenId = utxo.txid
+            utxo.tokenTicker = slpData.ticker
+            utxo.tokenName = slpData.name
+            utxo.tokenDocumentUrl = slpData.documentUrl
+            utxo.tokenDocumentHash = slpData.documentHash
+            utxo.decimals = slpData.decimals
 
             // something
-            outAry[i] = thisUtxo
+            outAry[i] = utxo
           }
         }
 
         // Handle Mint SLP transactions.
         if (slpData.transactionType === "mint") {
           if (
-            thisUtxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-            thisUtxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
+            utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
+            utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
             outAry[i] = false
@@ -1195,33 +1200,30 @@ class Utils {
             const genesisData = await this.decodeOpReturn(slpData.tokenId)
 
             // Hydrate the UTXO object with information about the SLP token.
-            thisUtxo.utxoType = "token"
-            thisUtxo.transactionType = "mint"
-            thisUtxo.tokenId = slpData.tokenId
+            utxo.utxoType = "token"
+            utxo.transactionType = "mint"
+            utxo.tokenId = slpData.tokenId
 
-            thisUtxo.tokenTicker = genesisData.ticker
-            thisUtxo.tokenName = genesisData.name
-            thisUtxo.tokenDocumentUrl = genesisData.documentUrl
-            thisUtxo.tokenDocumentHash = genesisData.documentHash
-            thisUtxo.decimals = genesisData.decimals
+            utxo.tokenTicker = genesisData.ticker
+            utxo.tokenName = genesisData.name
+            utxo.tokenDocumentUrl = genesisData.documentUrl
+            utxo.tokenDocumentHash = genesisData.documentHash
+            utxo.decimals = genesisData.decimals
 
-            thisUtxo.mintBatonVout = slpData.mintBatonVout
-            thisUtxo.batonStillExists = slpData.batonStillExists
+            utxo.mintBatonVout = slpData.mintBatonVout
+            utxo.batonStillExists = slpData.batonStillExists
 
             // Calculate the real token quantity.
-            thisUtxo.tokenQty =
-              slpData.quantity / Math.pow(10, thisUtxo.decimals)
+            utxo.tokenQty = slpData.quantity / Math.pow(10, utxo.decimals)
 
-            outAry[i] = thisUtxo
+            outAry[i] = utxo
           }
         }
 
         // Handle Send SLP transactions.
         if (slpData.transactionType === "send") {
           // Filter out any vouts that match.
-          const voutMatch = slpData.spendData.filter(
-            x => thisUtxo.vout === x.vout
-          )
+          const voutMatch = slpData.spendData.filter(x => utxo.vout === x.vout)
           // console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
 
           // If there are no vout matches, the UTXO can safely be marked as false.
@@ -1232,30 +1234,35 @@ class Utils {
           // If UTXO passes validation, then return formatted token data.
           else {
             const genesisData = await this.decodeOpReturn(slpData.tokenId)
-            // console.log(
-            //   `genesisData: ${JSON.stringify(genesisData, null, 2)}`
-            // )
+            // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
-            // console.log(`thisUtxo: ${JSON.stringify(thisUtxo, null, 2)}`)
+            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
             // Hydrate the UTXO object with information about the SLP token.
-            thisUtxo.utxoType = "token"
-            thisUtxo.transactionType = "send"
-            thisUtxo.tokenId = slpData.tokenId
-            thisUtxo.tokenTicker = genesisData.ticker
-            thisUtxo.tokenName = genesisData.name
-            thisUtxo.tokenDocumentUrl = genesisData.documentUrl
-            thisUtxo.tokenDocumentHash = genesisData.documentHash
-            thisUtxo.decimals = genesisData.decimals
+            utxo.utxoType = "token"
+            utxo.transactionType = "send"
+            utxo.tokenId = slpData.tokenId
+            utxo.tokenTicker = genesisData.ticker
+            utxo.tokenName = genesisData.name
+            utxo.tokenDocumentUrl = genesisData.documentUrl
+            utxo.tokenDocumentHash = genesisData.documentHash
+            utxo.decimals = genesisData.decimals
 
             // Calculate the real token quantity.
-            thisUtxo.tokenQty =
-              voutMatch[0].quantity / Math.pow(10, thisUtxo.decimals)
+            utxo.tokenQty = voutMatch[0].quantity / Math.pow(10, utxo.decimals)
 
-            // console.log(`thisUtxo: ${JSON.stringify(thisUtxo, null, 2)}`)
+            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
-            outAry[i] = thisUtxo
+            outAry[i] = utxo
           }
+        }
+
+        // Finally, validate the SLP txid with SLPDB.
+        if (outAry[i]) {
+          const isValid = await this.validateTxid(utxo.txid)
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+
+          outAry[i].isValid = isValid[0].valid
         }
       }
 
