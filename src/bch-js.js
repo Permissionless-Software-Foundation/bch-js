@@ -167,6 +167,9 @@ class BitboxShim {
 
     // Populate OpenBazaar endpoints
     this.OpenBazaar = new OpenBazaar(libConfig)
+
+    // Bitcoin.com Ninsight indexer
+    this.Ninsight = new Ninsight()
   }
 }
 
