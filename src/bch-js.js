@@ -29,6 +29,7 @@ const SLP = require("./slp/slp")
 
 const Blockbook = require("./blockbook")
 const OpenBazaar = require("./openbazaar")
+const Ninsight = require("./ninsight")
 
 class BCHJS {
   constructor(config) {
@@ -58,6 +59,9 @@ class BCHJS {
 
     // Populate OpenBazaar endpoints
     this.OpenBazaar = new OpenBazaar(libConfig)
+
+    // Bitcoin.com Ninsight indexer
+    this.Ninsight = new Ninsight()
 
     // Populate Full Node
     this.Control = new Control(libConfig)
