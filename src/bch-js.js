@@ -43,6 +43,8 @@ class BCHJS {
       this.restURL = process.env.RESTURL
     else this.restURL = DEFAULT_REST_API
 
+    console.log(`BCHJS constructor, this.restURL: ${this.restURL}`)
+
     // Retrieve the apiToken
     this.apiToken = "" // default value.
     if (config && config.apiToken && config.apiToken !== "")
