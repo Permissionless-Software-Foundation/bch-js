@@ -19,13 +19,14 @@ class SLP {
   constructor(config) {
     const tmp = {}
     if (!config || !config.restURL) {
-      tmp.restURL = `https://api.bchjs.cash/v3/`
+      tmp.restURL = `https://api.fullstack.cash/v3/`
     } else {
       tmp.restURL = config.restURL
       tmp.apiToken = config.apiToken
     }
 
     this.restURL = tmp.restURL
+    this.apiToken = tmp.apiToken
 
     this.Address = new Address(tmp)
     this.ECPair = ECPair
