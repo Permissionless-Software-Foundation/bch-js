@@ -1109,6 +1109,7 @@ class Utils {
   async tokenUtxoDetails(utxos) {
     try {
       console.log(`tokenUtxoDetails, apiToken: ${_this.apiToken}`)
+      console.log(`tokenUtxoDetails, restURL: ${_this.restURL}`)
 
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
