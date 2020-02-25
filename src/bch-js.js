@@ -35,6 +35,8 @@ const Ninsight = require("./ninsight")
 class BCHJS {
   constructor(config) {
     console.log(`BCHJS constructor config: ${JSON.stringify(config, null, 2)}`)
+    console.log(`process.env.RESTURL: ${process.env.RESTURL}`)
+    console.log(`DEFAULT_REST_API: ${DEFAULT_REST_API}`)
 
     // Try to retrieve the REST API URL from different sources.
     if (config && config.restURL && config.restURL !== "")
