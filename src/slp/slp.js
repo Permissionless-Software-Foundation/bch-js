@@ -28,6 +28,8 @@ class SLP {
     this.restURL = tmp.restURL
     this.apiToken = tmp.apiToken
 
+    console.log(`SLP constructor tmp: ${JSON.stringify(tmp, null, 2)}`)
+
     this.Address = new Address(tmp)
     this.ECPair = ECPair
     this.TokenType1 = new TokenType1(this.restURL)

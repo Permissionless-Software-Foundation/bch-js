@@ -9,6 +9,8 @@ let _this
 
 class Utils {
   constructor(config) {
+    console.log(`SLP Utils config: ${JSON.stringify(config, null, 2)}`)
+
     this.restURL = config.restURL
     this.apiToken = config.apiToken
 

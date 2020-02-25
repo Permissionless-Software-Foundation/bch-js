@@ -88,6 +88,7 @@ class BCHJS {
     this.Wallet = Wallet
     this.Schnorr = new Schnorr(libConfig)
 
+    console.log(`SLP libConfig: ${JSON.stringify(libConfig, null, 2)}`)
     this.SLP = new SLP(libConfig)
     this.SLP.HDNode = this.HDNode
   }
