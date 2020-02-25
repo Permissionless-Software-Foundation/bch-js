@@ -8,7 +8,7 @@
 const chai = require("chai")
 const assert = chai.assert
 
-let RESTURL = `https://tapi.bchjs.cash/v3/`
+let RESTURL = `https://tapi.fullstack.cash/v3/`
 if (process.env.RESTURL) RESTURL = process.env.RESTURL
 
 const BCHJS = require("../../../src/bch-js")

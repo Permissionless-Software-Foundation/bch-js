@@ -9,8 +9,6 @@ let _this
 
 class Utils {
   constructor(config) {
-    console.log(`SLP Utils config: ${JSON.stringify(config, null, 2)}`)
-
     this.restURL = config.restURL
     this.apiToken = config.apiToken
 
@@ -1110,9 +1108,6 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
   async tokenUtxoDetails(utxos) {
     try {
-      console.log(`tokenUtxoDetails, apiToken: ${_this.apiToken}`)
-      console.log(`tokenUtxoDetails, restURL: ${_this.restURL}`)
-
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
 

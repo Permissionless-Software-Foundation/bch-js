@@ -12,7 +12,7 @@
     "test:integration": "mocha --timeout 30000 test/integration",
     "test:integration:testnet": "mocha --timeout 30000 test/integration/testnet",
     "test:integration:local": "RESTURL=http://localhost:3000/v3/ mocha --timeout 30000 test/integration",
-    "test:integration:api": "RESTURL=https://api.bchjs.cash/v3/ mocha --timeout 30000 test/integration",
+    "test:integration:api": "RESTURL=https://api.fullstack.cash/v3/ mocha --timeout 30000 test/integration",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
   },

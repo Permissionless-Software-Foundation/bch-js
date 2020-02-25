@@ -17,10 +17,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#SLP`, () => {
-  before(() => {
-    console.log(`bchjs.SLP.restURL: ${bchjs.SLP.restURL}`)
-    console.log(`bchjs.SLP.apiToken: ${bchjs.SLP.apiToken}`)
-  })
+  // before(() => {
+  //   console.log(`bchjs.SLP.restURL: ${bchjs.SLP.restURL}`)
+  //   console.log(`bchjs.SLP.apiToken: ${bchjs.SLP.apiToken}`)
+  // })
 
   describe("#util", () => {
     describe("#list", () => {
