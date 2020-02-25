@@ -1108,6 +1108,8 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
   async tokenUtxoDetails(utxos) {
     try {
+      console.log(`tokenUtxoDetails, apiToken: ${_this.apiToken}`)
+
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
 
