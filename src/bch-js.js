@@ -1,6 +1,9 @@
 /*
   This is the primary library file for bch-js. This file combines all the other
   libraries in order to create the BCHJS class.
+
+  The primary server used has switched to fullstack.cash. Go there to sign up
+  for an account that gives you increased rate limits.
 */
 
 // bch-api mainnet.
