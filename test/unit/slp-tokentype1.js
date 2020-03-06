@@ -71,40 +71,85 @@ describe("#SLP TokenType1", () => {
       assert.isNumber(result.outputs)
     })
 
-    //   it("should handle problematic configuration", async () => {
-    //     // Mock UTXO.
-    //     const tokenUtxos = [
-    //       {
-    //         txid:
-    //           "0bd6b874246202b4cbc2f501419a5ce6f9b01e8ba9521298afd15c7e8eac5951",
-    //         vout: 2,
-    //         value: "546",
-    //         confirmations: 0,
-    //         satoshis: 546,
-    //         utxoType: "token",
-    //         transactionType: "send",
-    //         tokenId:
-    //           "155784a206873c98acc09e8dabcccf6abf13c4c14d8662190534138a16bb93ce",
-    //         tokenTicker: "PSF",
-    //         tokenName: "PSF Testnet Token",
-    //         tokenDocumentUrl: "",
-    //         tokenDocumentHash: "",
-    //         decimals: 8,
-    //         tokenQty: 18004.71169917
-    //       }
-    //     ]
-    //
-    //     const result = await bchjs.SLP.TokenType1.generateSendOpReturn(
-    //       tokenUtxos,
-    //       5000
-    //     )
-    //     console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //
-    //     // console.log(`decoded: ${result.script[6].toString("ascii")}`)
-    //     // const msg = Buffer.from(result.script[6], "hex").toString("ascii")
-    //     const msg = result.script[6].toString("ascii")
-    //     console.log(`msg: ${msg}`)
-    //   })
+    it("should handle problematic configuration", async () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          txid:
+            "0bd6b874246202b4cbc2f501419a5ce6f9b01e8ba9521298afd15c7e8eac5951",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546,
+          utxoType: "token",
+          transactionType: "send",
+          tokenId:
+            "155784a206873c98acc09e8dabcccf6abf13c4c14d8662190534138a16bb93ce",
+          tokenTicker: "PSF",
+          tokenName: "PSF Testnet Token",
+          tokenDocumentUrl: "",
+          tokenDocumentHash: "",
+          decimals: 8,
+          tokenQty: 18004.71169917
+        }
+      ]
+
+      const result = await bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        5000
+      )
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result.script: `, result.script)
+
+      // This transaction failed due to a floating point error. This is expressed
+      // by the script[6] being length 2 (incorrect) instead of 8 (correct).
+      assert.equal(result.script[5].length, 8)
+      assert.equal(result.script[6].length, 8)
+    })
+
+    it("#should generate good OP_RETURN for problematic TX", () => {
+      const utxo1 = {
+        txid:
+          "35287aa2aa7d3f1954fbbcb8a748d8773359b4f2771a851959a4a6116bcb552c",
+        vout: 1,
+        amount: 0.00000546,
+        satoshis: 546,
+        legacyAddress: "1MuLZ9LzLSTKioBHoPzeSfFANTEN2CZhuS",
+        cashAddress: "bitcoincash:qrj5sala6z53v559q54mekexru2xe34yrquhmpy5kx",
+        tokenId:
+          "c4b0d62156b3fa5c8f3436079b5394f7edc1bef5dc1cd2f9d0c4d46f82cca479",
+        decimals: 2,
+        tokenQty: 1371.6
+      }
+
+      const utxo2 = {
+        txid:
+          "cb652ce62babc81936f0f1e1d5b80102cb44de99dece83f4bbd34cfaeef744b0",
+        vout: 2,
+        amount: 0.00000546,
+        satoshis: 546,
+        legacyAddress: "1LzjkvDVB16k6kcSz8hZodW9KPP2zxwmGh",
+        cashAddress: "bitcoincash:qrd4tj48lpf0wv36qt5mkd6c3n4h5xcfgqqw77s63d",
+        tokenId:
+          "c4b0d62156b3fa5c8f3436079b5394f7edc1bef5dc1cd2f9d0c4d46f82cca479",
+        decimals: 2,
+        tokenQty: 3250.75
+      }
+
+      const utxos = [utxo1, utxo2]
+
+      const { script } = bchjs.SLP.TokenType1.generateSendOpReturn(utxos, 1400)
+
+      // console.log(`script: `, script)
+      // console.log(`outputs: `, outputs)
+
+      // console.log(`script[6]: ${script[6].toString("hex")}`)
+      // console.log(`script[6].length: ${script[6].length}`)
+
+      // This transaction failed due to a floating point error. This is expressed
+      // by the script[6] being length 2 (incorrect) instead of 8 (correct).
+      assert.equal(script[6].length, 8)
+    })
   })
 
   describe("#generateBurnOpReturn", () => {
