@@ -7,8 +7,13 @@ process.env.NETWORK = "testnet"
 
 const chai = require("chai")
 const assert = chai.assert
+
+const RESTURL = process.env.RESTURL
+  ? process.env.RESTURL
+  : `https://tapi.fullstack.cash/v3/`
+
 const BCHJS = require("../../../src/bch-js")
-const bchjs = new BCHJS()
+const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe(`#OpenBazaar`, () => {
   describe(`#Balance`, () => {
