@@ -11,7 +11,7 @@ class Blockbook {
   constructor(config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
-    console.log(`Blockbook apiToken: ${this.apiToken}`)
+    // console.log(`Blockbook apiToken: ${this.apiToken}`)
 
     // Add JWT token to the authorization header.
     this.axiosOptions = {
