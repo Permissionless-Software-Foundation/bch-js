@@ -11,7 +11,8 @@ const RESTURL = `https://tapi.fullstack.cash/v3/`
 
 const BCHJS = require("../../../src/bch-js")
 // const bchjs = new BCHJS({ restURL: `https://testnet.bchjs.cash/v3/` })
-const bchjs = new BCHJS({ restURL: RESTURL })
+const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
+// const bchjs = new BCHJS({ restURL: RESTURL })
 //const axios = require("axios")
 
 // Inspect utility used for debugging.
