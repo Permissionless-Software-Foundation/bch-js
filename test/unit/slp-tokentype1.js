@@ -107,7 +107,7 @@ describe("#SLP TokenType1", () => {
       assert.equal(result.script[6].length, 8)
     })
 
-    it("#should generate good OP_RETURN for problematic TX", () => {
+    it("should generate good OP_RETURN for problematic TX", () => {
       const utxo1 = {
         txid:
           "35287aa2aa7d3f1954fbbcb8a748d8773359b4f2771a851959a4a6116bcb552c",
