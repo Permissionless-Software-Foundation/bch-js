@@ -5,7 +5,7 @@ const SLP = require("../../src/slp/slp")
 //const slp = new SLP("http://decatur.hopto.org:12400/v3/")
 //const slp = new SLP("https://rest.bitcoin.com/v2/")
 const slp = new SLP({
-  restURL: "https://mainnet.bchjs.cash/v3/",
+  restURL: "https://api.fullstack.cash/v3/",
   apiToken: process.env.BCHJSTOKEN
 })
 
@@ -1176,10 +1176,12 @@ describe("#SLP Utils", () => {
     })
 
     it("should return false for BCH-only UTXOs", async () => {
-      // Mock the call to REST API
+      // Mock live network calls
       if (process.env.TEST === "unit") {
-        // Stub the call to validateTxid
-        sandbox.stub(slp.Utils, "validateTxid").resolves([null, null])
+        sandbox
+          .stub(slp.Utils, "decodeOpReturn")
+          .throws(new Error("Not an OP_RETURN"))
+        // sandbox.stub(slp.Utils, "validateTxid").resolves([null, null])
       }
 
       const utxos = [
