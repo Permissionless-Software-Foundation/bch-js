@@ -54,4 +54,21 @@ describe(`#SLP`, () => {
       ])
     })
   })
+
+  describe("#decodeOpReturn", () => {
+    it("should decode the OP_RETURN for a SEND txid", async () => {
+      const txid =
+        "ad28116e0818339342dddfc5f58ca8a5379ceb9679b4e4cbd72f4de905415ec1"
+
+      const result = await bchjs.SLP.Utils.decodeOpReturn(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, [
+        "tokenType",
+        "transactionType",
+        "tokenId",
+        "spendData"
+      ])
+    })
+  })
 })
