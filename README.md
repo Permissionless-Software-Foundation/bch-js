@@ -8,25 +8,24 @@
 [bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer)
 
 ### Quick Links
+- [npm Library](https://www.npmjs.com/package/@chris.troutner/bch-js)
 - [Documentation](https://bchjs.cash/bch-js/index.html)
 - [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
-- [api.fullstack.cash](https://api.fullstack.cash) - REST API this library talks to by default.
+- [api.fullstack.cash](https://api.fullstack.cash) - The REST API this library talks to by default.
 - [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
-- [FullStack.cash](https://fullstack.cash) - a turn-key full-stack solution for application
+- [FullStack.cash](https://fullstack.cash) - cloud-based infrastructure for application
 developers.
 - [Permissionless Software Foundation](https://psfoundation.cash) - The organization that maintains this library.
 
 
 ### Quick Notes
-- [npm library](https://www.npmjs.com/package/@chris.troutner/bch-js)
-  - v2.x.x: JWT token access implemented for [api.bchjs.cash](https://api.bchjs.cash) with paid access at [account.bchjs.cash](https://account.bchjs.cash) to increase rate limits.
 
 - Install library: `npm install @chris.troutner/bch-js`
 
 - Instantiate the library in your code:
 ```
 const BCHJS = require("@chris.troutner/bch-js")
-let bchjs = new BCHJS({ restURL: 'https://api.fullstack.cash/v3/' })
+let bchjs = new BCHJS()
 
 // testnet
 bchjs = new BCHJS({ restURL: 'https://tapi.fullstack.cash/v3/' })
@@ -44,7 +43,7 @@ const bitbox = BCHJS.BitboxShim({ restURL: 'https://api.fullstack.cash/v3/' })
 
 ### API Key
 The [bch-api](https://github.com/christroutner/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
-rate limits when interacting with a REST API. See [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) for more information. The JWT token can be fed to bch-js *implicitly* or *explicitly*.
+rate limits when interacting with the back end server. See [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) if you want to understand the system-as-a-whole. The JWT token can be fed to bch-js *implicitly* or *explicitly*.
 
 - Implicitly: bch-js will detect your JWT token by setting the `BCHJSTOKEN` environment variable.
 - Explicitly: You can directly feed in the JWT token with the `apiToken` property when instantiating the library. Here is an example:
@@ -53,7 +52,7 @@ rate limits when interacting with a REST API. See [this article](https://troutsb
 const BCHJS = require("@chris.troutner/bch-js")
 let bchjs = new BCHJS({
   restURL: 'https://api.fullstack.cash/v3/',
-  apiToken: 'eyJhbGciO...'
+  apiToken: 'eyJhbGciO...' // Your JWT token here.
 })
 ```
 
@@ -64,8 +63,7 @@ This library sets itself apart from BITBOX with the following features:
 natively with node.js v10 or higher.
 
 - [slp-sdk](https://github.com/Bitcoin-com/slp-sdk) features are integrated
-into this library too, though not fully working. If you need SLP token functionality,
-you should use slp-sdk or [slp-cli-wallet](https://www.npmjs.com/package/slp-cli-wallet).
+into this library too. Currently only simple token sending is supported. If you need SLP token functionality, you should use [slp-sdk](https://github.com/Bitcoin-com/slp-sdk), [slp-cli-wallet](https://www.npmjs.com/package/slp-cli-wallet).
 
 - [Semantic Release](https://github.com/semantic-release/semantic-release) for
 continuous delivery using semantic versioning.
@@ -116,5 +114,3 @@ if dependencies are pulled from npm or GitHub.
 
 ## License
 [MIT](LICENSE.md)
-
-a minor change
