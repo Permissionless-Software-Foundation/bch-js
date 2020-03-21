@@ -14,6 +14,8 @@
 - [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
 - [FullStack.cash](https://fullstack.cash) - a turn-key full-stack solution for application
 developers.
+- [Permissionless Software Foundation](https://psfoundation.cash) - The organization that maintains this library.
+
 
 ### Quick Notes
 - [npm library](https://www.npmjs.com/package/@chris.troutner/bch-js)
