@@ -384,5 +384,73 @@ describe(`#SLP`, () => {
         assert.equal(false, data[1])
       })
     })
+
+    describe("#balancesForAddress", () => {
+      it(`should throw an error if input is not a string or array of strings`, async () => {
+        try {
+          const address = 1234
+
+          await bchjs.SLP.Utils.balancesForAddress(address)
+
+          assert.equal(true, false, "Uh oh. Code path should not end here.")
+        } catch (err) {
+          //console.log(`Error: `, err)
+          assert.include(
+            err.message,
+            `Input address must be a string or array of strings`
+          )
+        }
+      })
+
+      it(`should fetch all balances for address: simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9`, async () => {
+        // Mock the call to rest.bitcoin.com
+        if (process.env.TEST === "unit") {
+          sandbox
+            .stub(axios, "get")
+            .resolves({ data: mockData.balancesForAddress })
+        }
+
+        const balances = await bchjs.SLP.Utils.balancesForAddress(
+          "simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9"
+        )
+        // console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
+
+        assert.isArray(balances)
+        assert.hasAllKeys(balances[0], [
+          "tokenId",
+          "balanceString",
+          "balance",
+          "decimalCount",
+          "slpAddress"
+        ])
+      })
+
+      it(`should fetch balances for multiple addresses`, async () => {
+        const addresses = [
+          "simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9",
+          "simpleledger:qqss4zp80hn6szsa4jg2s9fupe7g5tcg5ucdyl3r57"
+        ]
+
+        // Mock the call to rest.bitcoin.com
+        if (process.env.TEST === "unit") {
+          sandbox
+            .stub(axios, "post")
+            .resolves({ data: mockData.balancesForAddresses })
+        }
+
+        const balances = await bchjs.SLP.Utils.balancesForAddress(addresses)
+        // console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
+
+        assert.isArray(balances)
+        assert.isArray(balances[0])
+        assert.hasAllKeys(balances[0][0], [
+          "tokenId",
+          "balanceString",
+          "balance",
+          "decimalCount",
+          "slpAddress"
+        ])
+      })
+    })
   })
 })
