@@ -7,6 +7,15 @@
 
 [bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer)
 
+### Quick Links
+- [Documentation](https://bchjs.cash/bch-js/index.html)
+- [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
+- [api.fullstack.cash](https://api.fullstack.cash) - REST API this library talks to by default.
+- [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
+- [FullStack.cash](https://fullstack.cash) - a turn-key full-stack solution for application
+developers.
+
+### Quick Notes
 - [npm library](https://www.npmjs.com/package/@chris.troutner/bch-js)
   - v2.x.x: JWT token access implemented for [api.bchjs.cash](https://api.bchjs.cash) with paid access at [account.bchjs.cash](https://account.bchjs.cash) to increase rate limits.
 
@@ -45,14 +54,6 @@ let bchjs = new BCHJS({
   apiToken: 'eyJhbGciO...'
 })
 ```
-
-**Quick links**
-- [Documentation](https://bchjs.cash/bch-js/index.html)
-- [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
-- [api.fullstack.cash](https://api.fullstack.cash) - REST API this library talks to by default.
-- [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
-- [FullStack.cash](https://fullstack.cash) - a turn-key full-stack solution for application
-developers.
 
 ## Features
 This library sets itself apart from BITBOX with the following features:
