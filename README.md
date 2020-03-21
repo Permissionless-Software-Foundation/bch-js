@@ -5,55 +5,53 @@
 [![Downloads/week](https://img.shields.io/npm/dw/@chris.troutner/bch-js)](https://npmjs.org/package/@chris.troutner/bch-js)
 [![License](https://img.shields.io/npm/l/@chris.troutner/bch-js)](https://github.com/christroutner/bch-js/blob/master/LICENSE.md)
 
-bch-js is a JavaScript npm library for creating web and mobile apps for interacting
-with the Bitcoin Cash (BCH) blockchain.
+[bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer)
 
 - [npm library](https://www.npmjs.com/package/@chris.troutner/bch-js)
   - v2.x.x: JWT token access implemented for [api.bchjs.cash](https://api.bchjs.cash) with paid access at [account.bchjs.cash](https://account.bchjs.cash) to increase rate limits.
 
 - Install library: `npm install @chris.troutner/bch-js`
 
-- Instantiate in your code:
+- Instantiate the library in your code:
 ```
 const BCHJS = require("@chris.troutner/bch-js")
-let bchjs = new BCHJS(`https://api.bchjs.cash/v3/`)
+let bchjs = new BCHJS({ restURL: 'https://api.fullstack.cash/v3/' })
 
 // testnet
-bchjs = new BCHJS(`https://tapi.bchjs.cash/v3/`)
+bchjs = new BCHJS({ restURL: 'https://tapi.fullstack.cash/v3/' })
 ```
 
 This is a fork of the [BITBOX SDK](https://github.com/Bitcoin-com/bitbox-sdk) (which is maintained by Bitcoin.com). This library is intended to be paired with
 the [bch-api](https://github.com/christroutner/bch-api) REST API.
 
-If you need a backward-compatible instantiation of this library, you can use a
+If you need a backward-compatible instance of this library, you can use a
 'shim'. Do it like this:
 ```
 const BCHJS = require("@chris.troutner/bch-js")
-const bitbox = BCHJS.BitboxShim(`https://api.bchjs.cash/v3/`)
+const bitbox = BCHJS.BitboxShim({ restURL: 'https://api.fullstack.cash/v3/' })
 ```
 
 ### API Key
-The REST API hosted by bchjs.cash uses JWT tokens for access, to pay for increased
-rate limits when interacting with a REST API. See [the videos on this website](https://bchjs.cash/), [this video](https://www.youtube.com/watch?v=oFa8Q2OCSaw), and [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) for more information.
+The [bch-api](https://github.com/christroutner/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
+rate limits when interacting with a REST API. See [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) for more information. The JWT token can be fed to bch-js *implicitly* or *explicitly*.
 
-- You can change the REST API used by the app by setting your `RESTURL` environment variable. The default value is `https://api.bchjs.cash/v3/`.
-- You can get a JWT token from [account.bchjs.cash](https://account.bchjs.cash). Pass in the JWT token by setting the environment variable `BCHJSTOKEN` to the JWT token.
+- Implicitly: bch-js will detect your JWT token by setting the `BCHJSTOKEN` environment variable.
+- Explicitly: You can directly feed in the JWT token with the `apiToken` property when instantiating the library. Here is an example:
 
-Or you can pass in either value when instantiating bch-js:
 ```
 const BCHJS = require("@chris.troutner/bch-js")
 let bchjs = new BCHJS({
-  restURL: `https://api.bchjs.cash/v3/`,
-  apiToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYmY4MjA1YTYwODliMjliYTlhZjc1OSIsImlhdCI6MTU3NTQ5MTA2OSwiZXhwIjoxNTc4MDgzMDY5fQ.JKjGw6pZb3y8B5rzWATFd6sLjmG8brkQf4UwApxdiwU'
+  restURL: 'https://api.fullstack.cash/v3/',
+  apiToken: 'eyJhbGciO...'
 })
 ```
 
 **Quick links**
 - [Documentation](https://bchjs.cash/bch-js/index.html)
 - [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
-- [api.bchjs.cash](https://api.bchjs.cash) - REST API this library talks to by default.
-- [account.bchjs.cash](https://account.bchjs.cash) - Get your API key to unlock increased rate limits.
-- [bchjs.cash](https://bchjs.cash) - a turn-key full-stack solution for application
+- [api.fullstack.cash](https://api.fullstack.cash) - REST API this library talks to by default.
+- [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
+- [FullStack.cash](https://fullstack.cash) - a turn-key full-stack solution for application
 developers.
 
 ## Features
