@@ -52,7 +52,8 @@ describe(`#blockchain`, () => {
         "difficulty",
         "chainwork",
         "previousblockhash",
-        "nextblockhash"
+        "nextblockhash",
+        "nTx"
       ])
     })
 
@@ -79,7 +80,8 @@ describe(`#blockchain`, () => {
         "difficulty",
         "chainwork",
         "previousblockhash",
-        "nextblockhash"
+        "nextblockhash",
+        "nTx"
       ])
     })
 
