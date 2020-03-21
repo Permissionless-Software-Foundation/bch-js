@@ -1,8 +1,9 @@
 # bch-js
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/christroutner/bch-js.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/christroutner/bch-js.svg?branch=master)](https://travis-ci.org/christroutner/bch-js)
+[![Version](https://img.shields.io/npm/v/bch-js.svg)](https://www.npmjs.com/package/@chris.troutner/bch-js)
+[![Downloads/week](https://img.shields.io/npm/dw/bch-js.svg)](https://npmjs.org/package/@chris.troutner/bch-js)
+[![License](https://img.shields.io/npm/l/bch-js.svg)](https://github.com/christroutner/bch-js/blob/master/LICENSE.md)
 
 bch-js is a JavaScript npm library for creating web and mobile apps for interacting
 with the Bitcoin Cash (BCH) blockchain.
