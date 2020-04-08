@@ -229,57 +229,21 @@ class Blockbook {
    * @apiExample Example usage:
    *    (async () => {
    *   try {
-   *     let utxo = await bchjs.Blockbook.utxo('bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c');
+   *     let utxo = await bchjs.Blockbook.utxo('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf');
    *     console.log(utxo);
    *   } catch(error) {
    *    console.error(error)
    *   }
    * })()
    *
-   *  // [
-   *  //   {
-   *  //     "txid": "d31dc2cf66fe4d3d3ae18e1065def58a64920746b1702b52f060e5edeea9883b",
-   *  //     "vout": 1,
-   *  //     "value": "1000000",
-   *  //     "height": 585570,
-   *  //     "confirmations": 10392
-   *  //   },
-   *  //   {
-   *  //     "txid": "41e9a118765ecf7a1ba4487c0863e23dba343cc5880381a72f0365ac2546c5fa",
-   *  //     "vout": 0,
-   *  //     "value": "1000000",
-   *  //     "height": 577125,
-   *  //     "confirmations": 18837
-   *  //   },
-   *  //   {
-   *  //     "txid": "2f902dec880568511cefa87b9dd761563edeba9c8ba784dc9fca2f7c8c4e6f97",
-   *  //     "vout": 0,
-   *  //     "value": "1000000",
-   *  //     "height": 569922,
-   *  //     "confirmations": 26040
-   *  //   },
-   *  //   {
-   *  //     "txid": "eea57285462dd70dadcd431fc814857b3f81fe4d0a059a8c02c12fd7d33c02d1",
-   *  //     "vout": 0,
-   *  //     "value": "1000000",
-   *  //     "height": 566900,
-   *  //     "confirmations": 29062
-   *  //   },
-   *  //   {
-   *  //     "txid": "282b3b296b6aed7122586ed69f7a57d35584eaf94a4d1b1ad7d1b05d36cb79d1",
-   *  //     "vout": 0,
-   *  //     "value": "1000000",
-   *  //     "height": 563858,
-   *  //     "confirmations": 32104
-   *  //   },
-   *  //   {
-   *  //     "txid": "ac444896b3e32d17824fa6573eed3b89768c5c9085b7a71f3ba88e9d5ba67355",
-   *  //     "vout": 13,
-   *  //     "value": "1000000",
-   *  //     "height": 558992,
-   *  //     "confirmations": 36970
-   *  //   }
-   *  // ]
+   * [{
+   *    "txid": "7774e449c5a3065144cefbc4c0c21e6b69c987f095856778ef9f45ddd8ae1a41",
+   *    "vout": 0,
+   *    "value": "1000",
+   *    "height": 604392,
+   *    "confirmations": 25530,
+   *    "satoshis": 1000
+   * }]
    *
    *
    * (async () => {
@@ -294,69 +258,23 @@ class Blockbook {
    *   }
    * })()
    *
-   * //[
-   * //  [
-   * //    {
-   * //      "txid": "27ec8512c1a9ee9e9ae9b98eb60375f1d2bd60e2e76a1eff5a45afdbc517cf9c",
-   * //      "vout": 0,
-   * //      "value": "100000",
-   * //      "height": 560430,
-   * //      "confirmations": 35535
-   * //    },
-   * //    {
-   * //      "txid": "6e1ae1bf7db6de799ec1c05ab2816ac65549bd80141567af088e6f291385b07d",
-   * //      "vout": 0,
-   * //      "value": "130000",
-   * //      "height": 560039,
-   * //      "confirmations": 35926
-   * //    }
-   * //  ],
-   * //  [
-   * //    {
-   * //      "txid": "d31dc2cf66fe4d3d3ae18e1065def58a64920746b1702b52f060e5edeea9883b",
-   * //      "vout": 1,
-   * //      "value": "1000000",
-   * //      "height": 585570,
-   * //      "confirmations": 10395
-   * //    },
-   * //    {
-   * //      "txid": "41e9a118765ecf7a1ba4487c0863e23dba343cc5880381a72f0365ac2546c5fa",
-   * //      "vout": 0,
-   * //      "value": "1000000",
-   * //      "height": 577125,
-   * //      "confirmations": 18840
-   * //    },
-   * //    {
-   * //      "txid": "2f902dec880568511cefa87b9dd761563edeba9c8ba784dc9fca2f7c8c4e6f97",
-   * //      "vout": 0,
-   * //      "value": "1000000",
-   * //      "height": 569922,
-   * //      "confirmations": 26043
-   * //    },
-   * //    {
-   * //      "txid": "eea57285462dd70dadcd431fc814857b3f81fe4d0a059a8c02c12fd7d33c02d1",
-   * //      "vout": 0,
-   * //      "value": "1000000",
-   * //      "height": 566900,
-   * //      "confirmations": 29065
-   * //    },
-   * //    {
-   * //      "txid": "282b3b296b6aed7122586ed69f7a57d35584eaf94a4d1b1ad7d1b05d36cb79d1",
-   * //      "vout": 0,
-   * //      "value": "1000000",
-   * //      "height": 563858,
-   * //      "confirmations": 32107
-   * //    },
-   * //    {
-   * //      "txid": "ac444896b3e32d17824fa6573eed3b89768c5c9085b7a71f3ba88e9d5ba67355",
-   * //      "vout": 13,
-   * //      "value": "1000000",
-   * //      "height": 558992,
-   * //      "confirmations": 36973
-   * //    }
-   * //  ]
-   * //]
-   * //
+   *  [
+   *    [{
+   *      "txid": "7774e449c5a3065144cefbc4c0c21e6b69c987f095856778ef9f45ddd8ae1a41",
+   *      "vout": 0,
+   *      "value": "1000",
+   *      "height": 604392,
+   *      "confirmations": 25530,
+   *      "satoshis": 1000
+   *    }],
+   *    [{
+   *      "txid": "d5228d2cdc77fbe5a9aa79f19b0933b6802f9f0067f42847fc4fe343664723e5",
+   *      "vout": 0,
+   *      "value": "6000",
+   *      "confirmations": 0,
+   *      "satoshis": 6000
+   *    }]
+   *  ]
    */
   async utxo(address) {
     try {
