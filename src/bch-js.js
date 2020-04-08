@@ -34,6 +34,7 @@ const SLP = require("./slp/slp")
 const Blockbook = require("./blockbook")
 const OpenBazaar = require("./openbazaar")
 const Ninsight = require("./ninsight")
+const Electrumx = require("./electrumx")
 
 class BCHJS {
   constructor(config) {
@@ -66,6 +67,9 @@ class BCHJS {
 
     // Bitcoin.com Ninsight indexer
     this.Ninsight = new Ninsight()
+
+    // ElectrumX indexer
+    this.Electrumx = new Electrumx(libConfig)
 
     // Populate Full Node
     this.Control = new Control(libConfig)
@@ -174,6 +178,7 @@ class BitboxShim {
 
     // Bitcoin.com Ninsight indexer
     this.Ninsight = new Ninsight()
+    this.Electrumx = new Electrumx(libConfig)
   }
 }
 
