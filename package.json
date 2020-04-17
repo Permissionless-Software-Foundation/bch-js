@@ -8,9 +8,9 @@
   ],
   "main": "src/bch-js",
   "scripts": {
-    "test": "nyc mocha --timeout 30000 test/unit/electrumx.js",
-    "test:integration": "mocha --timeout 30000 test/integration/electrumx.js",
-    "test:integration:testnet": "mocha --timeout 30000 test/integration/testnet/electrumx.js",
+    "test": "nyc mocha --timeout 30000 test/unit/",
+    "test:integration": "mocha --timeout 30000 test/integration/",
+    "test:integration:testnet": "mocha --timeout 30000 test/integration/testnet/",
     "test:integration:local": "RESTURL=http://localhost:3000/v3/ mocha --timeout 30000 test/integration",
     "test:integration:testnet:local": "RESTURL=http://localhost:4000/v3/ mocha --timeout 30000 test/integration/testnet",
     "test:integration:api": "RESTURL=https://api.fullstack.cash/v3/ mocha --timeout 30000 test/integration",
