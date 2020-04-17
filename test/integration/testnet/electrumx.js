@@ -1,12 +1,13 @@
 const chai = require("chai")
 const assert = chai.assert
-const axios = require("axios")
 const sinon = require("sinon")
 
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
+const RESTURL = process.env.RESTURL
+  ? process.env.RESTURL
+  : `https://tapi.fullstack.cash/v3/`
 
-const mockData = require("./fixtures/electrumx-mock")
+const BCHJS = require("../../../src/bch-js")
+const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe(`#ElectrumX`, () => {
   let sandbox
@@ -14,26 +15,8 @@ describe(`#ElectrumX`, () => {
   afterEach(() => sandbox.restore())
 
   describe(`#utxo`, () => {
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Electrumx.utxo(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
-    })
-
     it(`should GET utxos for a single address`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "get").resolves({ data: mockData.utxo })
-
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
 
       const result = await bchjs.Electrumx.utxo(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -51,16 +34,13 @@ describe(`#ElectrumX`, () => {
     })
 
     it(`should POST utxo details for an array of addresses`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.utxos })
-
       const addr = [
-        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
-        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2",
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
       ]
 
       const result = await bchjs.Electrumx.utxo(addr)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result, "success")
       assert.equal(result.success, true)
@@ -77,29 +57,27 @@ describe(`#ElectrumX`, () => {
       assert.property(result.utxos[0].utxos[0], "tx_pos")
       assert.property(result.utxos[0].utxos[0], "value")
     })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
+
+        const result = await bchjs.Electrumx.utxo(addr)
+        //console.log(`result: ${util.inspect(result)}`)
+
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
+    })
   })
 
   describe(`#balance`, () => {
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Electrumx.balance(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
-    })
-
     it(`should GET balance for a single address`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "get").resolves({ data: mockData.balance })
-
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
 
       const result = await bchjs.Electrumx.balance(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -112,13 +90,10 @@ describe(`#ElectrumX`, () => {
       assert.property(result.balance, "unconfirmed")
     })
 
-    it(`should POST balance for an array of addresses`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.balances })
-
+    it(`should POST request for balances for an array of addresses`, async () => {
       const addr = [
-        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
-        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2",
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
       ]
 
       const result = await bchjs.Electrumx.balance(addr)
@@ -135,29 +110,27 @@ describe(`#ElectrumX`, () => {
       assert.property(result.balances[0].balance, "confirmed")
       assert.property(result.balances[0].balance, "unconfirmed")
     })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
+
+        const result = await bchjs.Electrumx.balance(addr)
+
+        console.log(`result: ${util.inspect(result)}`)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
+    })
   })
 
   describe(`#transactions`, () => {
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Electrumx.transactions(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
-    })
-
-    it(`should GET transactions for a single address`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "get").resolves({ data: mockData.transaction })
-
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+    it(`should GET transaction history for a single address`, async () => {
+      const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
 
       const result = await bchjs.Electrumx.transactions(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -171,13 +144,10 @@ describe(`#ElectrumX`, () => {
       assert.property(result.transactions[0], "tx_hash")
     })
 
-    it(`should POST transaction history for an array of addresses`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.transactions })
-
+    it(`should POST request for transaction history for an array of addresses`, async () => {
       const addr = [
-        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
-        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2",
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
       ]
 
       const result = await bchjs.Electrumx.transactions(addr)
@@ -194,6 +164,22 @@ describe(`#ElectrumX`, () => {
       assert.isArray(result.transactions[0].transactions)
       assert.property(result.transactions[0].transactions[0], "height")
       assert.property(result.transactions[0].transactions[0], "tx_hash")
+    })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
+
+        const result = await bchjs.Electrumx.transactions(addr)
+
+        console.log(`result: ${util.inspect(result)}`)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
     })
   })
 })
