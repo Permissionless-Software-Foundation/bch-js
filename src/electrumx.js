@@ -128,6 +128,53 @@ class ElectrumX {
       else throw error
     }
   }
+
+  /**
+   * @api ElectrumX.transactions()  transactions() - Get the transaction history for an address.
+   * @apiName ElectrumX Transactions
+   * @apiGroup ElectrumX
+   * @apiDescription Return a transaction history for an address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let transactions = await bchjs.Electrumx.transactions('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf');
+   *     console.log(utxo);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   */
+  async transactions(address) {
+    try {
+      // Handle single address.
+      if (typeof address === "string") {
+        const response = await axios.get(
+          `${this.restURL}electrumx/transactions/${address}`,
+          _this.axiosOptions
+        )
+        return response.data
+
+        // Handle array of addresses.
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.restURL}electrumx/transactions`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = ElectrumX

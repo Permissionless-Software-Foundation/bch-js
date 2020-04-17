@@ -123,4 +123,59 @@ describe(`#ElectrumX`, () => {
       }
     })
   })
+
+  describe(`#transactions`, () => {
+    it(`should GET transaction history for a single address`, async () => {
+      const addr = "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+
+      const result = await bchjs.Electrumx.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "transactions")
+      assert.isArray(result.transactions)
+      assert.property(result.transactions[0], "height")
+      assert.property(result.transactions[0], "tx_hash")
+    })
+
+    it(`should POST request for transaction history for an array of addresses`, async () => {
+      const addr = [
+        "bitcoincash:qrl2nlsaayk6ekxn80pq0ks32dya8xfclyktem2mqj",
+        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+      ]
+
+      const result = await bchjs.Electrumx.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "transactions")
+      assert.isArray(result.transactions)
+
+      assert.property(result.transactions[0], "address")
+      assert.property(result.transactions[0], "transactions")
+      assert.isArray(result.transactions[0].transactions)
+      assert.property(result.transactions[0].transactions[0], "height")
+      assert.property(result.transactions[0].transactions[0], "tx_hash")
+    })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bitcoincash:qrehqueqhw629p6e57994436w730t4rzasnly00ht0")
+
+        const result = await bchjs.Electrumx.transactions(addr)
+
+        console.log(`result: ${util.inspect(result)}`)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
+    })
+  })
 })
