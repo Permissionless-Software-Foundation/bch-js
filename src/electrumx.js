@@ -81,6 +81,53 @@ class ElectrumX {
       else throw error
     }
   }
+
+  /**
+   * @api ElectrumX.balance()  balance() - Get the balance for an address.
+   * @apiName ElectrumX Balance
+   * @apiGroup ElectrumX
+   * @apiDescription Return a list of balances for an address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let balance = await bchjs.Electrumx.balance('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf');
+   *     console.log(utxo);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   */
+  async balance(address) {
+    try {
+      // Handle single address.
+      if (typeof address === "string") {
+        const response = await axios.get(
+          `${this.restURL}electrumx/balance/${address}`,
+          _this.axiosOptions
+        )
+        return response.data
+
+        // Handle array of addresses.
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.restURL}electrumx/balance`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = ElectrumX

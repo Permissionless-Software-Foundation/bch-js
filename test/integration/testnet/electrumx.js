@@ -2,8 +2,12 @@ const chai = require("chai")
 const assert = chai.assert
 const sinon = require("sinon")
 
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
+const RESTURL = process.env.RESTURL
+  ? process.env.RESTURL
+  : `https://tapi.fullstack.cash/v3/`
+
+const BCHJS = require("../../../src/bch-js")
+const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe(`#ElectrumX`, () => {
   let sandbox
@@ -12,7 +16,7 @@ describe(`#ElectrumX`, () => {
 
   describe(`#utxo`, () => {
     it(`should GET utxos for a single address`, async () => {
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
 
       const result = await bchjs.Electrumx.utxo(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -29,14 +33,14 @@ describe(`#ElectrumX`, () => {
       assert.property(result.utxos[0], "value")
     })
 
-    it(`should POST request for UTXOs for an array of addresses`, async () => {
+    it(`should POST utxo details for an array of addresses`, async () => {
       const addr = [
-        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
-        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2",
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
       ]
 
       const result = await bchjs.Electrumx.utxo(addr)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result, "success")
       assert.equal(result.success, true)
@@ -58,11 +62,11 @@ describe(`#ElectrumX`, () => {
       try {
         const addr = []
         for (let i = 0; i < 25; i++)
-          addr.push("bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf")
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
 
         const result = await bchjs.Electrumx.utxo(addr)
+        //console.log(`result: ${util.inspect(result)}`)
 
-        console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         assert.hasAnyKeys(err, ["error"])
@@ -73,7 +77,7 @@ describe(`#ElectrumX`, () => {
 
   describe(`#balance`, () => {
     it(`should GET balance for a single address`, async () => {
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
 
       const result = await bchjs.Electrumx.balance(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -88,8 +92,8 @@ describe(`#ElectrumX`, () => {
 
     it(`should POST request for balances for an array of addresses`, async () => {
       const addr = [
-        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
-        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2",
+        "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
       ]
 
       const result = await bchjs.Electrumx.balance(addr)
@@ -111,7 +115,7 @@ describe(`#ElectrumX`, () => {
       try {
         const addr = []
         for (let i = 0; i < 25; i++)
-          addr.push("bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf")
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
 
         const result = await bchjs.Electrumx.balance(addr)
 
