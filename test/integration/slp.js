@@ -22,6 +22,11 @@ describe(`#SLP`, () => {
   //   console.log(`bchjs.SLP.apiToken: ${bchjs.SLP.apiToken}`)
   // })
 
+  beforeEach(async () => {
+    // Introduce a delay so that the BVT doesn't trip the rate limits.
+    await sleep(1000)
+  })
+
   describe("#util", () => {
     describe("#list", () => {
       it(`should get information on the Spice token`, async () => {
@@ -454,3 +459,8 @@ describe(`#SLP`, () => {
     })
   })
 })
+
+// Promise-based sleep function
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

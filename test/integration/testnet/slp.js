@@ -23,6 +23,11 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#SLP`, () => {
+  beforeEach(async () => {
+    // Introduce a delay so that the BVT doesn't trip the rate limits.
+    await sleep(1000)
+  })
+
   describe("#util", () => {
     it(`should get information on the Oasis token`, async () => {
       const tokenId = `a371e9934c7695d08a5eb7f31d3bceb4f3644860cc67520cda1e149423b9ec39`
