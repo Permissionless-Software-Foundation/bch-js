@@ -145,3 +145,8 @@ describe(`#SLP`, () => {
     })
   })
 })
+
+// Promise-based sleep function
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
