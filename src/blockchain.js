@@ -612,8 +612,17 @@ class Blockchain {
         throw new Error(`include_mempool input must be of type boolean`)
 
       // Send the request to the REST API.
-      const response = await axios.get(
-        `${this.restURL}blockchain/getTxOut/${txid}/${n}?include_mempool=${include_mempool}`,
+      // const response = await axios.get(
+      //   `${this.restURL}blockchain/getTxOut/${txid}/${n}?include_mempool=${include_mempool}`,
+      //   _this.axiosOptions
+      // )
+      const response = await axios.post(
+        `${this.restURL}blockchain/getTxOut`,
+        {
+          txid: txid,
+          vout: n,
+          mempool: include_mempool
+        },
         _this.axiosOptions
       )
 

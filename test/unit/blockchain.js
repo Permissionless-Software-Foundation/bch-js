@@ -385,7 +385,7 @@ describe("#Blockchain", () => {
     })
 
     it("should get information on an unspent tx", async () => {
-      sandbox.stub(axios, "get").resolves({ data: mockData.txOutUnspent })
+      sandbox.stub(axios, "post").resolves({ data: mockData.txOutUnspent })
 
       const result = await bchjs.Blockchain.getTxOut(
         "62a3ea958a463a372bc0caf2c374a7f60be9c624be63a0db8db78f05809df6d8",
@@ -404,7 +404,7 @@ describe("#Blockchain", () => {
     })
 
     it("should get information on a spent tx", async () => {
-      sandbox.stub(axios, "get").resolves({ data: null })
+      sandbox.stub(axios, "post").resolves({ data: null })
 
       const result = await bchjs.Blockchain.getTxOut(
         "87380e52d151856b23173d6d8a3db01b984c6b50f77ea045a5a1cf4f54497871",
