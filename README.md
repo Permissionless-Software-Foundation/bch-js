@@ -5,7 +5,12 @@
 [![Downloads/week](https://img.shields.io/npm/dw/@chris.troutner/bch-js)](https://npmjs.org/package/@chris.troutner/bch-js)
 [![License](https://img.shields.io/npm/l/@chris.troutner/bch-js)](https://github.com/christroutner/bch-js/blob/master/LICENSE.md)
 
-[bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer)
+[bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer).
+
+### Quick Start Videos:
+Here are two YouTube walk-through videos to help you get started:
+- [Introduction to bch-js and the bch-js-examples repository](https://youtu.be/GD2i1ZUiyrk)
+- [Working with the FullStack.cash JWT token](https://youtu.be/GD2i1ZUiyrk)
 
 ### Quick Links
 - [npm Library](https://www.npmjs.com/package/@chris.troutner/bch-js)
