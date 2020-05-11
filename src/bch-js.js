@@ -30,6 +30,7 @@ const Socket = require("./socket")
 const Wallet = require("./wallet")
 const Schnorr = require("./schnorr")
 const SLP = require("./slp/slp")
+const IPFS = require("./ipfs")
 
 const Blockbook = require("./blockbook")
 const OpenBazaar = require("./openbazaar")
@@ -97,6 +98,8 @@ class BCHJS {
 
     this.SLP = new SLP(libConfig)
     this.SLP.HDNode = this.HDNode
+
+    this.IPFS = new IPFS()
   }
 
   static BitboxShim() {
