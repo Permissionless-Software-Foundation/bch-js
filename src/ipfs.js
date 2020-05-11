@@ -14,7 +14,8 @@ class IPFS {
   constructor(config) {
     this.IPFS_API = process.env.IPFS_API
       ? process.env.IPFS_API
-      : `https://ipfs-api.fullstack.cash`
+      : // : `https://ipfs-api.fullstack.cash`
+        `http://localhost:5001`
 
     // Default options when calling axios.
     this.axiosOptions = {
@@ -30,7 +31,7 @@ class IPFS {
     _this.fs = fs
 
     // Initialize Uppy
-    _this.uppy = _this.initUppy
+    _this.uppy = _this.initUppy()
   }
 
   // Initializes Uppy, which is used for file uploads.
@@ -54,11 +55,34 @@ class IPFS {
 
   // Upload a file to the FullStack.cash IPFS server. If successful, it will
   // return an object with an ID, a BCH address, and an amount of BCH to pay.
-  async upload(path) {
+  async uploadFile(path) {
     try {
       // Ensure the file exists.
       if (!_this.fs.existsSync(path))
         throw new Error(`Could not find this file: ${path}`)
+
+      // Read in the file.
+      const fileBuf = _this.fs.readFileSync(path)
+
+      // Convert the node.js Buffer to a Blob
+      // https://stackoverflow.com/questions/14653349/node-js-can%C2%B4t-create-blobs
+      const blob = Uint8Array.from(fileBuf).buffer
+
+      // Get the file name from the path.
+      const splitPath = path.split("/")
+      const fileName = splitPath[splitPath.length - 1]
+
+      const id = _this.uppy.addFile({
+        name: fileName,
+        data: blob,
+        source: "Local",
+        isRemote: false
+      })
+
+      console.log(`id: ${JSON.stringify(id, null, 2)}`)
+
+      const upData = await _this.uppy.upload()
+      console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
 
       return true
     } catch (err) {
