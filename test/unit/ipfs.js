@@ -37,13 +37,25 @@ describe(`#IPFS`, () => {
         assert.equal(true, false, "Unexpected result")
       } catch (err) {
         //console.log(`err.message: ${err.message}`)
-        assert.include(err.message,`Could not find this file`)
+        assert.include(err.message, `Could not find this file`)
       }
     })
 
     it("should return true if the file is uploaded", async () => {
       //const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
       try {
+        const mock = {
+          successful: [
+            {
+              id: 'file id'
+            }
+          ],
+          failed: []
+        }
+        sandbox
+          .stub(bchjs.IPFS.uppy, 'upload')
+          .resolves(mock)
+
         const path = `${__dirname}/ipfs.js`
         const result = await bchjs.IPFS.uploadFile(path)
 
@@ -53,6 +65,33 @@ describe(`#IPFS`, () => {
       } catch (err) {
         //console.log(err)
         assert.equal(true, false, "Unexpected result")
+      }
+    })
+    it("Should throw error if the file was not uploaded", async () => {
+      //const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
+      try {
+        const mock = {
+          successful: [],
+          failed: [
+            {
+              id: 'file id'
+            }
+          ]
+        }
+        sandbox
+          .stub(bchjs.IPFS.uppy, 'upload')
+          .resolves(mock)
+
+        const path = `${__dirname}/ipfs.js`
+        await bchjs.IPFS.uploadFile(path)
+
+        assert.equal(true, false, "Unexpected result")
+
+
+      } catch (err) {
+        //console.log(err)
+        assert.include(err.message, `The file could not be uploaded`)
+
       }
     })
   })
