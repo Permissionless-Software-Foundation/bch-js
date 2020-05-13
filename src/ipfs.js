@@ -47,7 +47,6 @@ class IPFS {
         allowedFileTypes: null //type of files allowed to load
       }
     })
-
     uppy.use(Tus, { endpoint: `${_this.IPFS_API}/uppy-files` })
 
     return uppy
@@ -66,7 +65,7 @@ class IPFS {
 
       // Convert the node.js Buffer to a Blob
       // https://stackoverflow.com/questions/14653349/node-js-can%C2%B4t-create-blobs
-      const blob = Uint8Array.from(fileBuf).buffer
+      // const blob = Uint8Array.from(fileBuf).buffer
 
       // Get the file name from the path.
       const splitPath = path.split("/")
@@ -74,7 +73,7 @@ class IPFS {
 
       const id = _this.uppy.addFile({
         name: fileName,
-        data: blob,
+        data: fileBuf,
         source: "Local",
         isRemote: false
       })
@@ -82,7 +81,16 @@ class IPFS {
       console.log(`id: ${JSON.stringify(id, null, 2)}`)
 
       const upData = await _this.uppy.upload()
-      console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
+
+      //console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
+      console.log(`
+        Files Successful : ${upData.successful.length}
+        Files Failed : ${upData.failed.length}
+        `)
+
+      if (upData.failed.length) {
+        throw new Error('The file could not be uploaded')
+      } 
 
       return true
     } catch (err) {
