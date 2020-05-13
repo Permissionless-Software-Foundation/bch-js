@@ -36,14 +36,24 @@ describe(`#IPFS`, () => {
 
         assert.equal(true, false, "Unexpected result")
       } catch (err) {
-        console.log(`err.message: ${err.message}`)
+        //console.log(`err.message: ${err.message}`)
+        assert.include(err.message,`Could not find this file`)
       }
     })
 
-    it("should do something", async () => {
-      const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
+    it("should return true if the file is uploaded", async () => {
+      //const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
+      try {
+        const path = `${__dirname}/ipfs.js`
+        const result = await bchjs.IPFS.uploadFile(path)
 
-      await bchjs.IPFS.uploadFile(path)
+        assert.isBoolean(result)
+        assert.isTrue(result)
+
+      } catch (err) {
+        //console.log(err)
+        assert.equal(true, false, "Unexpected result")
+      }
     })
   })
 })
