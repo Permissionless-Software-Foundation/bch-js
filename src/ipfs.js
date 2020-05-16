@@ -14,8 +14,8 @@ class IPFS {
   constructor(config) {
     this.IPFS_API = process.env.IPFS_API
       ? process.env.IPFS_API
-      : // : `https://ipfs-api.fullstack.cash`
-        `http://localhost:5001`
+      : `http://localhost:5001`
+    // : `https://ipfs-api.fullstack.cash`
 
     // Default options when calling axios.
     this.axiosOptions = {
@@ -82,19 +82,34 @@ class IPFS {
 
       const upData = await _this.uppy.upload()
 
-      //console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
-      console.log(`
-        Files Successful : ${upData.successful.length}
-        Files Failed : ${upData.failed.length}
-        `)
+      // console.log(`
+      //   Files Successful : ${upData.successful.length}
+      //   Files Failed : ${upData.failed.length}
+      //   `)
 
-      if (upData.failed.length) {
-        throw new Error('The file could not be uploaded')
-      } 
+      if (upData.failed.length)
+        throw new Error("The file could not be uploaded")
 
-      return true
+      if (upData.successful.length) {
+        delete upData.successful[0].data
+        // console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
+
+        const fileObj = {
+          schemaVersion: 1,
+          size: upData.successful[0].progress.bytesTotal,
+          fileId: upData.successful[0].id,
+          fileName: upData.successful[0].name,
+          fileExtension: upData.successful[0].extension
+        }
+        // console.log(`fileObj: ${JSON.stringify(fileObj, null, 2)}`)
+
+        return fileObj
+        // return true
+      }
+
+      return false
     } catch (err) {
-      console.error(`Error in bch-js/src/ipfs.js/upload()`)
+      console.error(`Error in bch-js/src/ipfs.js/upload(): `)
       throw err
     }
   }

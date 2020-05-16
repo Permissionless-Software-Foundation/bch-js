@@ -1,12 +1,14 @@
+/*
+  Unit tests for the IPFS Class.
+*/
+
 const assert = require("chai").assert
-// const axios = require("axios")
 const sinon = require("sinon")
 
 const BCHJS = require("../../src/bch-js")
-// const bchjs = new BCHJS()
 let bchjs
 
-// const mockData = require("./fixtures/electrumx-mock")
+const mockData = require("./fixtures/ipfs-mock")
 
 describe(`#IPFS`, () => {
   let sandbox
@@ -41,57 +43,44 @@ describe(`#IPFS`, () => {
       }
     })
 
-    it("should return true if the file is uploaded", async () => {
-      //const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
-      try {
-        const mock = {
-          successful: [
-            {
-              id: 'file id'
-            }
-          ],
-          failed: []
-        }
-        sandbox
-          .stub(bchjs.IPFS.uppy, 'upload')
-          .resolves(mock)
-
-        const path = `${__dirname}/ipfs.js`
-        const result = await bchjs.IPFS.uploadFile(path)
-
-        assert.isBoolean(result)
-        assert.isTrue(result)
-
-      } catch (err) {
-        //console.log(err)
-        assert.equal(true, false, "Unexpected result")
-      }
-    })
     it("Should throw error if the file was not uploaded", async () => {
-      //const path = `/home/trout/work/personal/bch-js/test/unit/ipfs.js`
       try {
         const mock = {
           successful: [],
           failed: [
             {
-              id: 'file id'
+              id: "file id"
             }
           ]
         }
-        sandbox
-          .stub(bchjs.IPFS.uppy, 'upload')
-          .resolves(mock)
+        sandbox.stub(bchjs.IPFS.uppy, "upload").resolves(mock)
 
         const path = `${__dirname}/ipfs.js`
         await bchjs.IPFS.uploadFile(path)
 
         assert.equal(true, false, "Unexpected result")
-
-
       } catch (err) {
         //console.log(err)
         assert.include(err.message, `The file could not be uploaded`)
+      }
+    })
 
+    it("should return true if the file is uploaded", async () => {
+      try {
+        sandbox.stub(bchjs.IPFS.uppy, "upload").resolves(mockData.uploadData)
+
+        const path = `${__dirname}/ipfs.js`
+        const result = await bchjs.IPFS.uploadFile(path)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.property(result, "schemaVersion")
+        assert.property(result, "size")
+        assert.property(result, "fileId")
+        assert.property(result, "fileName")
+        assert.property(result, "fileExtension")
+      } catch (err) {
+        //console.log(err)
+        assert.equal(true, false, "Unexpected result")
       }
     })
   })
