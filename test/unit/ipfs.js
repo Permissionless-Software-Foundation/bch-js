@@ -65,7 +65,7 @@ describe(`#IPFS`, () => {
       }
     })
 
-    it("should return true if the file is uploaded", async () => {
+    it("should return file object if the file is uploaded", async () => {
       try {
         sandbox.stub(bchjs.IPFS.uppy, "upload").resolves(mockData.uploadData)
 
@@ -82,6 +82,42 @@ describe(`#IPFS`, () => {
         //console.log(err)
         assert.equal(true, false, "Unexpected result")
       }
+    })
+  })
+
+  describe("#getPaymentInfo", () => {
+    it("should return payment information", async () => {
+      sandbox
+        .stub(bchjs.IPFS.axios, "post")
+        .resolves({ data: mockData.paymentInfo })
+
+      const fileObj = {
+        schemaVersion: 1,
+        size: 2374,
+        fileId: "uppy-ipfs/js-1e-application/octet-stream",
+        fileName: "ipfs.js",
+        fileExtension: "js"
+      }
+
+      const result = await bchjs.IPFS.getPaymentInfo(fileObj)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.property(result, "hostingCostBCH")
+      assert.property(result, "hostingCostUSD")
+      assert.property(result, "file")
+      assert.property(result.file, "payloadLink")
+      assert.property(result.file, "hasBeenPaid")
+      assert.property(result.file, "_id")
+      assert.property(result.file, "schemaVersion")
+      assert.property(result.file, "size")
+      assert.property(result.file, "fileId")
+      assert.property(result.file, "fileName")
+      assert.property(result.file, "fileExtension")
+      assert.property(result.file, "createdTimestamp")
+      assert.property(result.file, "hostingCost")
+      assert.property(result.file, "walletIndex")
+      assert.property(result.file, "bchAddr")
     })
   })
 })

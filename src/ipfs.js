@@ -63,10 +63,6 @@ class IPFS {
       // Read in the file.
       const fileBuf = _this.fs.readFileSync(path)
 
-      // Convert the node.js Buffer to a Blob
-      // https://stackoverflow.com/questions/14653349/node-js-can%C2%B4t-create-blobs
-      // const blob = Uint8Array.from(fileBuf).buffer
-
       // Get the file name from the path.
       const splitPath = path.split("/")
       const fileName = splitPath[splitPath.length - 1]
@@ -92,7 +88,7 @@ class IPFS {
 
       if (upData.successful.length) {
         delete upData.successful[0].data
-        // console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
+        console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
 
         const fileObj = {
           schemaVersion: 1,
@@ -110,6 +106,21 @@ class IPFS {
       return false
     } catch (err) {
       console.error(`Error in bch-js/src/ipfs.js/upload(): `)
+      throw err
+    }
+  }
+
+  // Call this after uploadFile().
+  async getPaymentInfo(fileObj) {
+    try {
+      const fileData = await _this.axios.post(`${this.IPFS_API}/files`, {
+        file: fileObj
+      })
+      // console.log(`fileData.data: ${JSON.stringify(fileData.data, null, 2)}`)
+
+      return fileData.data
+    } catch (err) {
+      console.error(`Error in getPaymentInfo()`)
       throw err
     }
   }

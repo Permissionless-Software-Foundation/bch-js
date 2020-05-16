@@ -42,6 +42,28 @@ const uploadData = {
   uploadID: "cka90u4m300000fi0cldg6lrf"
 }
 
+const paymentInfo = {
+  success: true,
+  hostingCostBCH: 0.00004201,
+  hostingCostUSD: 0.01,
+  file: {
+    payloadLink: "",
+    hasBeenPaid: false,
+    _id: "5ebf5d04cba8b038394e0d62",
+    schemaVersion: 1,
+    size: 2374,
+    fileId: "uppy-ipfs/js-1e-application/octet-stream",
+    fileName: "ipfs.js",
+    fileExtension: "js",
+    createdTimestamp: "1589599492.952",
+    hostingCost: 4201,
+    walletIndex: 36,
+    bchAddr: "bchtest:qqymyk4zfvnw8rh6hcvl922ewudkyrn9jvk6gtuae6",
+    __v: 0
+  }
+}
+
 module.exports = {
-  uploadData
+  uploadData,
+  paymentInfo
 }
