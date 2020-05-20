@@ -52,6 +52,7 @@ class IPFS {
     return uppy
   }
 
+  // DEPRECATED
   // Upload a file to the FullStack.cash IPFS server. If successful, it will
   // return an object with an ID, a BCH address, and an amount of BCH to pay.
   async uploadFile(path) {
@@ -110,6 +111,7 @@ class IPFS {
     }
   }
 
+  // DEPRECATED
   // Call this after uploadFile().
   async getPaymentInfo(fileObj) {
     try {
@@ -121,6 +123,47 @@ class IPFS {
       return fileData.data
     } catch (err) {
       console.error(`Error in getPaymentInfo()`)
+      throw err
+    }
+  }
+
+  async createFileModel(path) {
+    try {
+      // Ensure the file exists.
+      if (!_this.fs.existsSync(path))
+        throw new Error(`Could not find this file: ${path}`)
+
+      // Read in the file.
+      const fileBuf = _this.fs.readFileSync(path)
+      // console.log(`fileBuf: `, fileBuf)
+
+      // console.log(`Buffer length: ${fileBuf.length}`)
+
+      // Get the file name from the path.
+      const splitPath = path.split("/")
+      const fileName = splitPath[splitPath.length - 1]
+
+      // Get the file extension.
+      const splitExt = fileName.split(".")
+      const fileExt = splitExt[splitExt.length - 1]
+
+      const fileObj = {
+        schemaVersion: 1,
+        size: fileBuf.length,
+        // fileId: upData.successful[0].id,
+        fileName: fileName,
+        fileExtension: fileExt
+      }
+      // console.log(`fileObj: ${JSON.stringify(fileObj, null, 2)}`)
+
+      const fileData = await _this.axios.post(`${this.IPFS_API}/files`, {
+        file: fileObj
+      })
+      // console.log(`fileData.data: ${JSON.stringify(fileData.data, null, 2)}`)
+
+      return fileData.data
+    } catch (err) {
+      console.error(`Error in createFileModel()`)
       throw err
     }
   }

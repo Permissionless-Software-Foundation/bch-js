@@ -63,7 +63,28 @@ const paymentInfo = {
   }
 }
 
+mockNewFileModel = {
+  success: true,
+  hostingCostBCH: 0.00004197,
+  hostingCostUSD: 0.01,
+  file: {
+    payloadLink: "",
+    hasBeenPaid: false,
+    _id: "5ec562319bfacc745e8d8a52",
+    schemaVersion: 1,
+    size: 4458,
+    fileName: "ipfs.js",
+    fileExtension: "js",
+    createdTimestamp: "1589994033.655",
+    hostingCost: 4196,
+    walletIndex: 49,
+    bchAddr: "bchtest:qzrpkevu7h2ayfa4rjx08r5elvpfu72dg567x3mh3c",
+    __v: 0
+  }
+}
+
 module.exports = {
   uploadData,
-  paymentInfo
+  paymentInfo,
+  mockNewFileModel
 }
