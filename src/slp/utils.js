@@ -1,4 +1,5 @@
 const axios = require("axios")
+const slpParser = require("slp-parser")
 
 const Script = require("../script")
 const scriptLib = new Script()
@@ -11,6 +12,7 @@ class Utils {
   constructor(config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
+    this.slpParser = slpParser
 
     // Add JWT token to the authorization header.
     this.axiosOptions = {
@@ -740,6 +742,9 @@ class Utils {
    *
    * Throws an error if given a non-SLP txid.
    *
+   * Note: At some point, this method will be deprecated in favor of decodeOpReturn2().
+   * At that time, decodeOpReturn2() will be rename to decodeOpReturn().
+   *
    * @apiExample Example usage:
    *
    * (async () => {
@@ -933,6 +938,106 @@ class Utils {
       }
 
       return outObj
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  /**
+   * @api SLP.Utils.decodeOpReturn2() decodeOpReturn2() - Read the OP_RETURN data from an SLP transaction.
+   * @apiName decodeOpReturn2
+   * @apiGroup SLP
+   * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
+   *
+   * Similar to decodeOpReturn(), except decodeOpReturn2() uses the slp-parser
+   * library maintained by JT Freeman. Outputs have slightly different format.
+   *
+   * Throws an error if given a non-SLP txid.
+   *
+   * In a future version of bch-js, this method will replace the origonal
+   * decodeOpReturn() method.
+   *
+   * @apiExample Example usage:
+   *
+   * (async () => {
+   * try {
+   *  const txid =
+   *   "266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1"
+   *
+   *  const data = await slp.Utils.decodeOpReturn2(txid)
+   *
+   *  console.log(`Decoded OP_RETURN data: ${JSON.stringify(data,null,2)}`)
+   * } catch (error) {
+   *  console.error(error)
+   * }
+   * })()
+   *
+   * // returns
+   * {
+   *  "tokenType": 1,
+   *  "txType": "SEND",
+   *  "tokenId": "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+   *  "amounts": [
+   *    "100000000",
+   *    "99883300000000"
+   *  ]
+   * }
+   */
+  // Reimplementation of decodeOpReturn() using slp-parser.
+  async decodeOpReturn2(txid) {
+    try {
+      // Validate the txid input.
+      if (!txid || txid === "" || typeof txid !== "string")
+        throw new Error(`txid string must be included.`)
+
+      // Retrieve the transaction object from the full node.
+      const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
+      const response = await axios.get(path, _this.axiosOptions)
+      const txDetails = response.data
+      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+      // SLP spec expects OP_RETURN to be the first output of the transaction.
+      const opReturn = txDetails.vout[0].scriptPubKey.hex
+      // console.log(`opReturn hex: ${opReturn}`)
+
+      const parsedData = _this.slpParser.parseSLP(Buffer.from(opReturn, "hex"))
+      // console.log(`parsedData: ${JSON.stringify(parsedData, null, 2)}`)
+
+      // Convert Buffer data to hex strings or utf8 strings.
+      let tokenData = {}
+      if (parsedData.transactionType === "SEND") {
+        tokenData = {
+          tokenType: parsedData.tokenType,
+          txType: parsedData.transactionType,
+          tokenId: parsedData.data.tokenId.toString("hex"),
+          amounts: parsedData.data.amounts
+        }
+      } else if (parsedData.transactionType === "GENESIS") {
+        tokenData = {
+          tokenType: parsedData.tokenType,
+          txType: parsedData.transactionType,
+          ticker: parsedData.data.ticker.toString(),
+          name: parsedData.data.name.toString(),
+          tokenId: txid,
+          documentUri: parsedData.data.documentUri.toString(),
+          documentHash: parsedData.data.documentHash.toString(),
+          decimals: parsedData.data.decimals,
+          mintBatonVout: parsedData.data.mintBatonVout,
+          qty: parsedData.data.qty
+        }
+      } else if (parsedData.transactionType === "MINT") {
+        tokenData = {
+          tokenType: parsedData.tokenType,
+          txType: parsedData.transactionType,
+          tokenId: parsedData.data.tokenId.toString("hex"),
+          mintBatonVout: parsedData.data.mintBatonVout,
+          qty: parsedData.data.qty
+        }
+      }
+      // console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
+
+      return tokenData
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error

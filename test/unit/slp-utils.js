@@ -525,6 +525,187 @@ describe("#SLP Utils", () => {
     })
   })
 
+  describe("#decodeOpReturn2", () => {
+    it("should throw an error for a non-string input", async () => {
+      try {
+        const txid = 53423 // Not a string.
+
+        await slp.Utils.decodeOpReturn2(txid)
+
+        assert2.equal(true, false, "Unexpected result.")
+      } catch (err) {
+        //console.log(`err: ${util.inspect(err)}`)
+        assert2.include(err.message, `txid string must be included`)
+      }
+    })
+
+    it("should throw an error for non-SLP transaction", async () => {
+      try {
+        // Mock the call to the REST API
+        if (process.env.TEST === "unit") {
+          sandbox
+            .stub(axios, "get")
+            .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
+        }
+
+        const txid =
+          "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
+
+        await slp.Utils.decodeOpReturn2(txid)
+
+        assert2.equal(true, false, "Unexpected result.")
+      } catch (err) {
+        // console.log(`err: ${util.inspect(err)}`)
+        assert2.include(err.message, `scriptpubkey not op_return`)
+      }
+    })
+
+    it("should throw an error for non-SLP transaction with OP_RETURN", async () => {
+      try {
+        // Mock the call to the REST API
+        if (process.env.TEST === "unit") {
+          sandbox
+            .stub(axios, "get")
+            .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
+        }
+
+        const txid =
+          "2ff74c48a5d657cf45f699601990bffbbe7a2a516d5480674cbf6c6a4497908f"
+
+        await slp.Utils.decodeOpReturn2(txid)
+
+        assert2.equal(true, false, "Unexpected result.")
+      } catch (err) {
+        // console.log(`err: ${util.inspect(err)}`)
+        assert2.include(err.message, `SLP not in first chunk`)
+      }
+    })
+
+    it("should decode a genesis transaction", async () => {
+      // Mock the call to the REST API
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(axios, "get")
+          .resolves({ data: mockData.txDetailsSLPGenesis })
+      }
+
+      const txid =
+        "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
+
+      const result = await slp.Utils.decodeOpReturn2(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.hasAllKeys(result, [
+        "tokenType",
+        "txType",
+        "tokenId",
+        "ticker",
+        "name",
+        "documentUri",
+        "documentHash",
+        "decimals",
+        "mintBatonVout",
+        "qty"
+      ])
+    })
+
+    it("should decode a mint transaction", async () => {
+      // Mock the call to the REST API
+      if (process.env.TEST === "unit")
+        sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPMint })
+
+      const txid =
+        "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
+
+      const result = await slp.Utils.decodeOpReturn2(txid)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.hasAllKeys(result, [
+        "tokenType",
+        "txType",
+        "tokenId",
+        "mintBatonVout",
+        "qty"
+      ])
+    })
+
+    it("should decode a send transaction", async () => {
+      // Mock the call to the REST API
+      if (process.env.TEST === "unit")
+        sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPSend })
+
+      const txid =
+        "4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa"
+
+      const result = await slp.Utils.decodeOpReturn2(txid)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.hasAllKeys(result, ["tokenType", "txType", "tokenId", "amounts"])
+    })
+
+    it("should properly decode a Genesis transaction with no minting baton", async () => {
+      // Mock the call to the REST API.
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(axios, "get")
+          .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
+      }
+
+      const txid =
+        "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+
+      const data = await slp.Utils.decodeOpReturn2(txid)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.equal(data.mintBatonVout, 0)
+    })
+
+    it("should decode a send transaction with alternate encoding", async () => {
+      // Mock the call to rest.bitcoin.com
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(axios, "get")
+          .resolves({ data: mockData.txDetailsSLPSendAlt })
+      }
+
+      const txid =
+        "d94357179775425ebc59c93173bd6dc9854095f090a2eb9dcfe9797398bc8eae"
+
+      const data = await slp.Utils.decodeOpReturn2(txid)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.hasAnyKeys(data, [
+        "transactionType",
+        "txType",
+        "tokenId",
+        "amounts"
+      ])
+    })
+
+    // Note: This TX is interpreted as valid by the original decodeOpReturn().
+    // Fixing this issue and related issues was the reason for creating the
+    // decodeOpReturn2() method using the slp-parser library.
+    it("should throw error for invalid SLP transaction", async () => {
+      try {
+        // Mock the call to rest.bitcoin.com
+        if (process.env.TEST === "unit") {
+          sandbox
+            .stub(axios, "get")
+            .resolves({ data: mockData.mockInvalidSlpSend })
+        }
+
+        const txid =
+          "a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415"
+
+        await slp.Utils.decodeOpReturn2(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert2.include(err.message, "amount string size not 8 bytes")
+      }
+    })
+  })
+
   describe("#isTokenUtxo", () => {
     it("should throw error if input is not an array.", async () => {
       try {
@@ -1277,4 +1458,14 @@ describe("#SLP Utils", () => {
       ])
     })
   })
+
+  // describe("#decodeOpReturn2", () => {
+  //   it("should do something", async () => {
+  //     const txid =
+  //       "4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa"
+  //
+  //     await slp.Utils.decodeOpReturn2(txid)
+  //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+  //   })
+  // })
 })
