@@ -742,6 +742,9 @@ class Utils {
    *
    * Throws an error if given a non-SLP txid.
    *
+   * Note: At some point, this method will be deprecated in favor of decodeOpReturn2().
+   * At that time, decodeOpReturn2() will be rename to decodeOpReturn().
+   *
    * @apiExample Example usage:
    *
    * (async () => {
@@ -952,6 +955,34 @@ class Utils {
    *
    * Throws an error if given a non-SLP txid.
    *
+   * In a future version of bch-js, this method will replace the origonal
+   * decodeOpReturn() method.
+   *
+   * @apiExample Example usage:
+   *
+   * (async () => {
+   * try {
+   *  const txid =
+   *   "266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1"
+   *
+   *  const data = await slp.Utils.decodeOpReturn2(txid)
+   *
+   *  console.log(`Decoded OP_RETURN data: ${JSON.stringify(data,null,2)}`)
+   * } catch (error) {
+   *  console.error(error)
+   * }
+   * })()
+   *
+   * // returns
+   * {
+   *  "tokenType": 1,
+   *  "txType": "SEND",
+   *  "tokenId": "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+   *  "amounts": [
+   *    "100000000",
+   *    "99883300000000"
+   *  ]
+   * }
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
   async decodeOpReturn2(txid) {
