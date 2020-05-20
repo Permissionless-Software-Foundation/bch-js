@@ -62,6 +62,8 @@
     "repl.history": "^0.1.4",
     "safe-buffer": "^5.1.2",
     "satoshi-bitcoin": "^1.0.4",
+    "slp-mdm": "0.0.6",
+    "slp-parser": "0.0.4",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
     "touch": "^3.1.0",

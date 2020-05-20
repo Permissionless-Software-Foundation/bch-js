@@ -75,6 +75,156 @@ describe(`#SLP`, () => {
           "spendData"
         ])
       })
+
+      it("should decode the OP_RETURN for a GENESIS txid", async () => {
+        const txid =
+          "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+
+        const result = await bchjs.SLP.Utils.decodeOpReturn(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.hasAllKeys(result, [
+          "tokenType",
+          "transactionType",
+          "ticker",
+          "name",
+          "documentUrl",
+          "documentHash",
+          "decimals",
+          "mintBatonVout",
+          "initialQty",
+          "tokensSentTo",
+          "batonHolder"
+        ])
+      })
+
+      it("should decode the OP_RETURN for a MINT txid", async () => {
+        const txid =
+          "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
+
+        const result = await bchjs.SLP.Utils.decodeOpReturn(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.hasAllKeys(result, [
+          "tokenType",
+          "transactionType",
+          "tokenId",
+          "mintBatonVout",
+          "batonStillExists",
+          "quantity",
+          "tokensSentTo",
+          "batonHolder"
+        ])
+      })
+
+      it("should throw an error for a non-SLP transaction", async () => {
+        try {
+          const txid =
+            "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
+
+          await bchjs.SLP.Utils.decodeOpReturn(txid)
+
+          assert.equal(true, false, "Unexpected result")
+        } catch (err) {
+          // console.log(`err: `, err)
+          assert.include(err.message, "Not an OP_RETURN")
+        }
+      })
+    })
+
+    describe("#decodeOpReturn2", () => {
+      it("should decode the OP_RETURN for a SEND txid", async () => {
+        const txid =
+          "266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1"
+
+        const result = await bchjs.SLP.Utils.decodeOpReturn2(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.hasAllKeys(result, ["tokenType", "txType", "tokenId", "amounts"])
+        assert.equal(
+          result.tokenId,
+          "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+        )
+
+        // Verify outputs
+        assert.equal(result.amounts.length, 2)
+        assert.equal(result.amounts[0], "100000000")
+        assert.equal(result.amounts[1], "99883300000000")
+      })
+
+      it("should decode the OP_RETURN for a GENESIS txid", async () => {
+        const txid =
+          "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+
+        const result = await bchjs.SLP.Utils.decodeOpReturn2(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.hasAllKeys(result, [
+          "tokenType",
+          "txType",
+          "tokenId",
+          "ticker",
+          "name",
+          "documentUri",
+          "documentHash",
+          "decimals",
+          "mintBatonVout",
+          "qty"
+        ])
+        assert.equal(
+          result.tokenId,
+          "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
+        )
+        assert.equal(result.txType, "GENESIS")
+        assert.equal(result.ticker, "TOK-CH")
+        assert.equal(result.name, "TokyoCash")
+      })
+
+      it("should decode the OP_RETURN for a MINT txid", async () => {
+        const txid =
+          "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
+
+        const result = await bchjs.SLP.Utils.decodeOpReturn2(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.hasAllKeys(result, [
+          "tokenType",
+          "txType",
+          "tokenId",
+          "mintBatonVout",
+          "qty"
+        ])
+      })
+
+      it("should throw an error for a non-SLP transaction", async () => {
+        try {
+          const txid =
+            "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
+
+          await bchjs.SLP.Utils.decodeOpReturn2(txid)
+
+          assert.equal(true, false, "Unexpected result")
+        } catch (err) {
+          // console.log(`err: `, err)
+          assert.include(err.message, "scriptpubkey not op_return")
+        }
+      })
+
+      // Note: This TX is interpreted as valid by the original decodeOpReturn().
+      // Fixing this issue and related issues was the reason for creating the
+      // decodeOpReturn2() method using the slp-parser library.
+      it("should throw error for invalid SLP transaction", async () => {
+        try {
+          const txid =
+            "a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415"
+
+          await bchjs.SLP.Utils.decodeOpReturn2(txid)
+          // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        } catch (err) {
+          // console.log(`err: `, err)
+          assert.include(err.message, "amount string size not 8 bytes")
+        }
+      })
     })
 
     describe("#tokenUtxoDetails", () => {

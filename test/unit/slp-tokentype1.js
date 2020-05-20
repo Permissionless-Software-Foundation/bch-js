@@ -99,7 +99,8 @@ describe("#SLP TokenType1", () => {
         5000
       )
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-      // console.log(`result.script: `, result.script)
+      console.log(`result.script: `, result.script)
+      console.log(`result.script: `, result.script.toString("hex"))
 
       // This transaction failed due to a floating point error. This is expressed
       // by the script[6] being length 2 (incorrect) instead of 8 (correct).
