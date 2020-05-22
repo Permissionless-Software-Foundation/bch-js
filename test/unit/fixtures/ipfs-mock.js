@@ -84,8 +84,44 @@ mockNewFileModel = {
   }
 }
 
+const unpaidFileData = {
+  file: {
+    payloadLink: "",
+    hasBeenPaid: false,
+    _id: "5ec7392c2acfe57aa62e945a",
+    schemaVersion: 1,
+    size: 726,
+    fileName: "ipfs-e2e.js",
+    fileExtension: "js",
+    createdTimestamp: "1590114604.986",
+    hostingCost: 4403,
+    walletIndex: 56,
+    bchAddr: "bchtest:qz5z82u0suqh80x5tfx4ht8kdrkkw664vcy44uz0wk",
+    __v: 0
+  }
+}
+
+const paidFileData = {
+  file: {
+    payloadLink: "QmRDHPhY5hCNVRMVQvS2H9uty8P1skdwgLaHpUAkEvsjcE",
+    hasBeenPaid: true,
+    _id: "5ec7392c2acfe57aa62e945a",
+    schemaVersion: 1,
+    size: 726,
+    fileName: "ipfs-e2e.js",
+    fileExtension: "js",
+    createdTimestamp: "1590114604.986",
+    hostingCost: 4403,
+    walletIndex: 56,
+    bchAddr: "bchtest:qz5z82u0suqh80x5tfx4ht8kdrkkw664vcy44uz0wk",
+    __v: 0
+  }
+}
+
 module.exports = {
   uploadData,
   paymentInfo,
-  mockNewFileModel
+  mockNewFileModel,
+  unpaidFileData,
+  paidFileData
 }

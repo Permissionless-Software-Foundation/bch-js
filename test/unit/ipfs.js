@@ -143,4 +143,53 @@ describe(`#IPFS`, () => {
       }
     })
   })
+
+  describe("#getStatus", () => {
+    it("should throw an error if modelId is not included", async () => {
+      try {
+        await bchjs.IPFS.getStatus()
+
+        assert.equal(true, false, "Unexpected result")
+      } catch (err) {
+        //console.log(`err.message: ${err.message}`)
+        assert.include(err.message, `Must include a file model ID`)
+      }
+    })
+
+    it("should get data on an unpaid file", async () => {
+      const modelId = "5ec7392c2acfe57aa62e945a"
+
+      sandbox
+        .stub(bchjs.IPFS.axios, "get")
+        .resolves({ data: mockData.unpaidFileData })
+
+      const result = await bchjs.IPFS.getStatus(modelId)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "hasBeenPaid")
+      assert.property(result, "satCost")
+      assert.property(result, "bchAddr")
+      assert.property(result, "ipfsHash")
+      assert.property(result, "fileId")
+      assert.property(result, "fileName")
+    })
+
+    it("should get data on an unpaid file", async () => {
+      const modelId = "5ec7392c2acfe57aa62e945a"
+
+      sandbox
+        .stub(bchjs.IPFS.axios, "get")
+        .resolves({ data: mockData.paidFileData })
+
+      const result = await bchjs.IPFS.getStatus(modelId)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "hasBeenPaid")
+      assert.property(result, "satCost")
+      assert.property(result, "bchAddr")
+      assert.property(result, "ipfsHash")
+      assert.property(result, "fileId")
+      assert.property(result, "fileName")
+    })
+  })
 })

@@ -158,6 +158,33 @@ class IPFS {
       throw err
     }
   }
+
+  // Gets the status of the uploaded file. Will return an object that indicates
+  // the payment status. If the file is paid, it should contain an IPFS hash.
+  async getStatus(modelId) {
+    try {
+      if (!modelId) throw new Error(`Must include a file model ID.`)
+
+      const fileData = await _this.axios.get(
+        `${this.IPFS_API}/files/${modelId}`
+      )
+      // console.log(`fileData.data: ${JSON.stringify(fileData.data, null, 2)}`)
+
+      const fileObj = {
+        hasBeenPaid: fileData.data.file.hasBeenPaid,
+        satCost: fileData.data.file.hostingCost,
+        bchAddr: fileData.data.file.bchAddr,
+        ipfsHash: fileData.data.file.payloadLink,
+        fileId: fileData.data.file._id,
+        fileName: fileData.data.file.fileName
+      }
+
+      return fileObj
+    } catch (err) {
+      console.error(`Error in getStatus()`)
+      throw err
+    }
+  }
 }
 
 module.exports = IPFS
