@@ -12,7 +12,8 @@ const uploadData = {
       meta: {
         test: "avatar",
         name: "ipfs.js",
-        type: "application/octet-stream"
+        type: "application/octet-stream",
+        fileModelId: "5ec562319bfacc745e8d8a52"
       },
       type: "application/octet-stream",
       progress: {

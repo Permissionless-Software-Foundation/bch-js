@@ -55,11 +55,17 @@ class IPFS {
   // DEPRECATED
   // Upload a file to the FullStack.cash IPFS server. If successful, it will
   // return an object with an ID, a BCH address, and an amount of BCH to pay.
-  async uploadFile(path) {
+  async uploadFile(path, modelId) {
     try {
       // Ensure the file exists.
       if (!_this.fs.existsSync(path))
         throw new Error(`Could not find this file: ${path}`)
+
+      if (!modelId) {
+        throw new Error(
+          `Must include a file model ID in order to upload a file.`
+        )
+      }
 
       // Read in the file.
       const fileBuf = _this.fs.readFileSync(path)
@@ -68,33 +74,32 @@ class IPFS {
       const splitPath = path.split("/")
       const fileName = splitPath[splitPath.length - 1]
 
+      // Prepare the upload object. Get a file ID from Uppy.
       const id = _this.uppy.addFile({
         name: fileName,
         data: fileBuf,
         source: "Local",
         isRemote: false
       })
+      // console.log(`id: ${JSON.stringify(id, null, 2)}`)
 
-      console.log(`id: ${JSON.stringify(id, null, 2)}`)
+      // Add the model ID, required to be allowed to upload the file.
+      _this.uppy.setFileMeta(id, { fileModelId: modelId })
 
+      // Upload the file to the server.
       const upData = await _this.uppy.upload()
-
-      // console.log(`
-      //   Files Successful : ${upData.successful.length}
-      //   Files Failed : ${upData.failed.length}
-      //   `)
 
       if (upData.failed.length)
         throw new Error("The file could not be uploaded")
 
       if (upData.successful.length) {
         delete upData.successful[0].data
-        console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
+        // console.log(`upData: ${JSON.stringify(upData, null, 2)}`)
 
         const fileObj = {
           schemaVersion: 1,
           size: upData.successful[0].progress.bytesTotal,
-          fileId: upData.successful[0].id,
+          fileId: upData.successful[0].meta.fileModelId,
           fileName: upData.successful[0].name,
           fileExtension: upData.successful[0].extension
         }
@@ -111,22 +116,9 @@ class IPFS {
     }
   }
 
-  // DEPRECATED
-  // Call this after uploadFile().
-  async getPaymentInfo(fileObj) {
-    try {
-      const fileData = await _this.axios.post(`${this.IPFS_API}/files`, {
-        file: fileObj
-      })
-      // console.log(`fileData.data: ${JSON.stringify(fileData.data, null, 2)}`)
-
-      return fileData.data
-    } catch (err) {
-      console.error(`Error in getPaymentInfo()`)
-      throw err
-    }
-  }
-
+  // Creates a new model on the server. If successful, will return an object
+  // with file data. That object contains a BCH address, payment amount, and
+  // _id required to be able to upload a file.
   async createFileModel(path) {
     try {
       // Ensure the file exists.
@@ -150,7 +142,6 @@ class IPFS {
       const fileObj = {
         schemaVersion: 1,
         size: fileBuf.length,
-        // fileId: upData.successful[0].id,
         fileName: fileName,
         fileExtension: fileExt
       }
