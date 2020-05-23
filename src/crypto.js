@@ -29,6 +29,7 @@ class Crypto {
   static sha256(buffer) {
     return Bitcoin.crypto.sha256(buffer)
   }
+
   /**
    * @api Crypto.ripemd160() ripemd160()-Utility for creating ripemd160 hash.
    * @apiName ripemd160
@@ -54,6 +55,7 @@ class Crypto {
   static ripemd160(buffer) {
     return Bitcoin.crypto.ripemd160(buffer)
   }
+
   /**
    * @api Crypto.hash256() hash256() - Utility for creating double sha256 hash.
    * @apiName hash256
@@ -79,6 +81,7 @@ class Crypto {
   static hash256(buffer) {
     return Bitcoin.crypto.hash256(buffer)
   }
+
   /**
    * @api Crypto.hash160() hash160() - Utility for creating ripemd160(sha256()) hash.
    * @apiName hash160
@@ -104,6 +107,7 @@ class Crypto {
   static hash160(buffer) {
     return Bitcoin.crypto.hash160(buffer)
   }
+
   /**
    * @api Crypto.randomBytes() randomBytes() - Generates cryptographically strong pseudo-random data.
    * @apiName randomBytes

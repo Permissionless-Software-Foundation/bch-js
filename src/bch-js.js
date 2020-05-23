@@ -31,7 +31,9 @@ const Wallet = require("./wallet")
 const Schnorr = require("./schnorr")
 const SLP = require("./slp/slp")
 const IPFS = require("./ipfs")
+const Encryption = require("./encryption")
 
+// Indexers
 const Blockbook = require("./blockbook")
 const OpenBazaar = require("./openbazaar")
 const Ninsight = require("./ninsight")
@@ -84,6 +86,7 @@ class BCHJS {
     this.Crypto = Crypto
     this.ECPair = ECPair
     this.ECPair.setAddress(this.Address)
+    this.encryption = new Encryption(libConfig)
     this.Generating = new Generating(libConfig)
     this.HDNode = new HDNode(this.Address)
     this.Mnemonic = new Mnemonic(this.Address)
