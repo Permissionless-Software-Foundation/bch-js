@@ -18,9 +18,6 @@ describe("#Encryption", () => {
   afterEach(() => sandbox.restore())
 
   describe("#getPubKey", () => {
-    // Failure address:
-    // bitcoincash:qpxqr2pmcverj4vukgjqssvk2zju8tp9xsgz2nqagx
-
     it("should throw error if BCH address is not provided.", async () => {
       try {
         await bchjs.encryption.getPubKey()
