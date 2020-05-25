@@ -17,7 +17,7 @@ describe("#Encryption", () => {
     })
 
     it("should report when public key can not be found", async () => {
-      const addr = "bitcoincash:qpxqr2pmcverj4vukgjqssvk2zju8tp9xsgz2nqagx"
+      const addr = "bitcoincash:qrgqqkky28jdkv3w0ctrah0mz3jcsnsklc34gtukrh"
 
       const result = await bchjs.encryption.getPubKey(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
