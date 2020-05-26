@@ -10,11 +10,11 @@
 const assert = require("chai").assert
 
 const JWT_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkYmY4MjA1YTYwODliMjliYTlhZjc1OSIsImlhdCI6MTU3MjgzMjEwNywiZXhwIjoxNTc1NDI0MTA3fQ.UD-36TKwN65-zePwNzujGmHeQ60fKqYPunawGxktwws"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODhhY2JmMDIyMWMxMDAxMmFkOTNmZiIsImVtYWlsIjoiY2hyaXMudHJvdXRuZXJAZ21haWwuY29tIiwiYXBpTGV2ZWwiOjQwLCJyYXRlTGltaXQiOjMsImlhdCI6MTU5MDQzMjIxNywiZXhwIjoxNTkzMDI0MjE3fQ.R0Euhutd5FHCxLlSzjq1TYsGjI6iua_AguWIeLK2xCU"
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
-  restURL: `https://api.bchjs.cash/v3/`,
+  restURL: `https://api.fullstack.cash/v3/`,
   // restURL: `http://localhost:3000/v3/`,
   apiToken: JWT_TOKEN
 })
