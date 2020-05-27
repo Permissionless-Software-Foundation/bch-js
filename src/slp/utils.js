@@ -1050,9 +1050,6 @@ class Utils {
    * @apiGroup SLP
    * @apiDescription Determine if UTXO belongs to an SLP transaction.
    *
-   * Expects an array of UTXO objects as input. Returns an array of Boolean
-   * values indicating if a UTXO is associated with SLP tokens (true) or not
-   * (false).
    * Expects an array of UTXO objects as input. Returns the same array with
    * additional properties for each UTXO, including an isSlp property which
    * will be true or false indicating if the UTXO belongs to a valid SLP
@@ -1062,24 +1059,38 @@ class Utils {
    *
    * (async () => {
    * try {
-   *  const u = await bchjs.Insight.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
-   *  const utxos = u.utxos
+   *  const addr = 'bitcoincash:qqkpnx2rff4q5jranf3wk9jsprhae9unxckq07gph4'
+   *  const utxos = await bchjs.Blockbook.utxo(addr)
    *
    *  const isSLPUtxo = await bchjs.SLP.Utils.isTokenUtxo(utxos)
    *
-   *  console.log(`isSLPUtxo: ${JSON.stringify(isSLPUtxo,null,2)}`)
+   *  console.log(`${JSON.stringify(isSLPUtxo,null,2)}`)
    * } catch (error) {
    *  console.error(error)
    * }
    * })()
    *
    * // returns
-   * {
-   *  transactionId: 'c7078a6c7400518a513a0bde1f4158cf740d08d3b5bfb19aa7b6657e2f4160de',
-   *  inputTotal: 100000100,
-   *  outputTotal: 100000000,
-   *  burnTotal: 100
-   * }
+   * [
+   *  {
+   *   "txid": "99093e8a19e0a649bf943dbc33d926feb09c02e61258c1bdaf2caffa7183c730",
+   *   "vout": 1,
+   *   "value": "546",
+   *   "height": 636885,
+   *   "confirmations": 123,
+   *   "satoshis": 546,
+   *   "isSlp": true
+   *  },
+   *  {
+   *   "txid": "2069e99a90499693e42cd1db82147e3e0acfe5e7315c6cc2f0252432f45300d7",
+   *   "vout": 0,
+   *   "value": "600",
+   *   "height": 636885,
+   *   "confirmations": 123,
+   *   "satoshis": 600,
+   *   "isSlp": false
+   *  }
+   * ]
    */
 
   // Note: There is no way to validate SLP UTXOs without inspecting the OP_RETURN.
@@ -1123,7 +1134,7 @@ class Utils {
           }
         }
 
-        if (!utxo.vout) {
+        if (!Number.isInteger(utxo.vout)) {
           if (Number.isInteger(utxo.tx_pos)) {
             utxo.vout = utxo.tx_pos
           } else {
@@ -1145,6 +1156,7 @@ class Utils {
 
         // Validate the txid for the UTXO using SLPDB.
         const isValid = await _this.validateTxid(utxo.txid)
+        // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
         // If SLPDB says the UTXOs TXID is invalid, mark the UTXO and move on.
         if (!isValid) {
@@ -1153,11 +1165,11 @@ class Utils {
           continue
         }
 
+        // Decode the OP_RETURN.
         let slpData = {}
         try {
-          // Decode the OP_RETURN.
           slpData = await _this.decodeOpReturn2(utxo.txid)
-          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`decodeOpReturn2 error: `, err)
           // If that function throws an error, then mark the UTXO as false.
