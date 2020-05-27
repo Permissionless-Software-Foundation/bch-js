@@ -808,7 +808,7 @@ describe("#SLP Utils", () => {
         ])
 
         // Stub the calls to decodeOpReturn.
-        sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
+        sandbox.stub(slp.Utils, "decodeOpReturn2").resolves({
           tokenType: 1,
           transactionType: "genesis",
           ticker: "SLPSDK",
@@ -870,7 +870,7 @@ describe("#SLP Utils", () => {
         ])
 
         // Stub the calls to decodeOpReturn.
-        sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
+        sandbox.stub(slp.Utils, "decodeOpReturn2").resolves({
           tokenType: 1,
           transactionType: "send",
           tokenId:

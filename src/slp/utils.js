@@ -1053,11 +1053,10 @@ class Utils {
    * Expects an array of UTXO objects as input. Returns an array of Boolean
    * values indicating if a UTXO is associated with SLP tokens (true) or not
    * (false).
-   * Note: There is no way to validate SLP UTXOs without inspecting the OP_RETURN.
-   * If a UTXO returns false when its txid is passed to validateTxid(), then the
-   * UTXO is not associated with SLP. This is a fast and quick check.
-   * If a UTXO returns true though, the OP_RETURN has to be inspected to determine
-   * for sure that it *is* associated with an SLP transaction not just change.
+   * Expects an array of UTXO objects as input. Returns the same array with
+   * additional properties for each UTXO, including an isSlp property which
+   * will be true or false indicating if the UTXO belongs to a valid SLP
+   * transaction.
    *
    * @apiExample Example usage:
    *
@@ -1082,6 +1081,12 @@ class Utils {
    *  burnTotal: 100
    * }
    */
+
+  // Note: There is no way to validate SLP UTXOs without inspecting the OP_RETURN.
+  // If a UTXO returns false when its txid is passed to validateTxid(), then the
+  // UTXO is not associated with SLP. This is a fast and quick check.
+  // If a UTXO returns true though, the OP_RETURN has to be inspected to determine
+  // for sure that it *is* associated with an SLP transaction not just change.
   async isTokenUtxo(utxos) {
     try {
       // Throw error if input is not an array.
@@ -1092,58 +1097,107 @@ class Utils {
       for (let i = 0; i < utxos.length; i++) {
         const utxo = utxos[i]
 
-        // Throw error if utxo does not have a satoshis property.
-        if (!utxo.satoshis)
-          throw new Error(`utxo ${i} does not have a satoshis property.`)
-
-        // Throw error if utxo does not have a txid property.
-        if (!utxo.txid)
-          throw new Error(`utxo ${i} does not have a txid property.`)
-      }
-
-      // Create an array of txid strings to feed to validateTxid
-      const txids = utxos.map(x => x.txid)
-
-      // Validate the array of txids.
-      let validations = await this.validateTxid(txids)
-      //console.log(`validations: ${JSON.stringify(validations, null, 2)}`)
-
-      // Extract the boolean result
-      validations = validations.map(x => x.valid)
-
-      // Loop through each element in the array and validate the input before
-      // further processing.
-      for (let i = 0; i < utxos.length; i++) {
-        const thisValidation = validations[i]
-        const utxo = utxos[i]
-
-        // Only need to worry about validations that are still true.
-        if (thisValidation) {
-          const slpData = await this.decodeOpReturn(utxo.txid)
-          //console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
-
-          // Handle Genesis and Mint SLP transactions.
-          if (
-            slpData.transactionType === "genesis" ||
-            slpData.transactionType === "mint"
-          ) {
-            if (
-              utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-              utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
+        if (!utxo.satoshis) {
+          // If Electrumx, convert the value to satoshis.
+          if (utxo.value) {
+            utxo.satoshis = utxo.value
+          }
+          // If there is neither a satoshis or value property, throw an error.
+          else {
+            throw new Error(
+              `utxo ${i} does not have a satoshis or value property.`
             )
-              // Can safely be marked as false.
-              validations[i] = false
-          } else if (slpData.transactionType === "send") {
-            // Filter out any vouts that match.
-            const voutMatch = slpData.spendData.filter(
-              x => utxo.vout === x.vout
-            )
-            //console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
-
-            // If there are no vout matches, the UTXO can safely be marked as false.
-            if (voutMatch.length === 0) validations[i] = false
           }
         }
+
+        if (!utxo.txid) {
+          // If Electrumx, convert the tx_hash property to txid.
+          if (utxo.tx_hash) {
+            utxo.txid = utxo.tx_hash
+          }
+          // If there is neither a txid or tx_hash property, throw an error.
+          else {
+            throw new Error(
+              `utxo ${i} does not have a txid or tx_hash property.`
+            )
+          }
+        }
+
+        if (!utxo.vout) {
+          if (Number.isInteger(utxo.tx_pos)) {
+            utxo.vout = utxo.tx_pos
+          } else {
+            throw new Error(
+              `utxo ${i} does not have a vout or tx_pos property.`
+            )
+          }
+        }
+      }
+
+      const validatedSlpUtxos = []
+
+      // Loop through each utxo.
+      for (let i = 0; i < utxos.length; i++) {
+        const utxo = utxos[i]
+
+        // console.log(`thisValidation: `, thisValidation)
+        // console.log(`utxo: `, utxo)
+
+        // Validate the txid for the UTXO using SLPDB.
+        const isValid = await _this.validateTxid(utxo.txid)
+
+        // If SLPDB says the UTXOs TXID is invalid, mark the UTXO and move on.
+        if (!isValid) {
+          utxo.isSlp = false
+          validatedSlpUtxos.push(utxo)
+          continue
+        }
+
+        let slpData = {}
+        try {
+          // Decode the OP_RETURN.
+          slpData = await _this.decodeOpReturn2(utxo.txid)
+          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+        } catch (err) {
+          // console.log(`decodeOpReturn2 error: `, err)
+          // If that function throws an error, then mark the UTXO as false.
+          utxo.isSlp = false
+          validatedSlpUtxos.push(utxo)
+          continue
+        }
+
+        const txType = slpData.txType.toLowerCase()
+
+        // Handle Genesis and Mint SLP transactions.
+        if (txType === "genesis" || txType === "mint") {
+          if (
+            utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
+            utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
+          ) {
+            // Can safely be marked as false.
+            utxo.isSlp = false
+            validatedSlpUtxos.push(utxo)
+            continue
+          }
+          //
+
+          // Handle Send transactions.
+        } else if (txType === "send") {
+          const slpOutputs = slpData.amounts.length
+
+          // If the UTXO vout value does not line up with an SLP output in the
+          // OP_RETURN, then it is not an SLP UTXO.
+          if (utxo.vout > slpOutputs) {
+            utxo.isSlp = false
+            validatedSlpUtxos.push(utxo)
+            continue
+          }
+        }
+
+        // If code path gets to this point and it hasn't been marked false,
+        // then it can safely be marked as true.
+        utxo.isSlp = true
+        validatedSlpUtxos.push(utxo)
 
         // Below is deprecated, but kept for posterity:
         // Invalidate the utxo if it contains more than dust, since SLP token
@@ -1153,7 +1207,7 @@ class Utils {
         //if (utxo.satoshis > 546) validations[i] = false
       }
 
-      return validations
+      return validatedSlpUtxos
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
