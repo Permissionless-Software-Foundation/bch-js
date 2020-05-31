@@ -66,6 +66,7 @@ describe("#SLP TokenType1", () => {
         tokenUtxos,
         1
       )
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.hasAllKeys(result, ["script", "outputs"])
       assert.isNumber(result.outputs)
@@ -150,6 +151,41 @@ describe("#SLP TokenType1", () => {
       // This transaction failed due to a floating point error. This is expressed
       // by the script[6] being length 2 (incorrect) instead of 8 (correct).
       assert.equal(script[6].length, 8)
+    })
+  })
+
+  describe("#generateSendOpReturn2", () => {
+    it("should generate send OP_RETURN code", async () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          txid:
+            "a8eb788b8ddda6faea00e6e2756624b8feb97655363d0400dd66839ea619d36e",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546,
+          utxoType: "token",
+          transactionType: "send",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          tokenTicker: "TOK-CH",
+          tokenName: "TokyoCash",
+          tokenDocumentUrl: "",
+          tokenDocumentHash: "",
+          decimals: 8,
+          tokenQty: 7
+        }
+      ]
+
+      const result = await bchjs.SLP.TokenType1.generateSendOpReturn2(
+        tokenUtxos,
+        1
+      )
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
     })
   })
 
