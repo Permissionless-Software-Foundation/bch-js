@@ -5,6 +5,8 @@ const Address = require("./address")
 const Script = require("../script")
 
 const BigNumber = require("bignumber.js")
+const slpMdm = require("slp-mdm")
+
 // const addy = new Address()
 let addy
 const TransactionBuilder = require("../transaction-builder")
@@ -101,6 +103,69 @@ class TokenType1 {
       return { script, outputs }
     } catch (err) {
       console.log(`Error in generateSendOpReturn()`)
+      throw err
+    }
+  }
+
+  // New version using slp-mdm
+  generateSendOpReturn2(tokenUtxos, sendQty) {
+    try {
+      const tokenId = tokenUtxos[0].tokenId
+      const decimals = tokenUtxos[0].decimals
+
+      // Calculate the total amount of tokens owned by the wallet.
+      let totalTokens = 0
+      for (let i = 0; i < tokenUtxos.length; i++)
+        totalTokens += tokenUtxos[i].tokenQty
+
+      const change = totalTokens - sendQty
+      // console.log(`change: ${change}`)
+
+      let script
+      let outputs = 1
+
+      // The normal case, when there is token change to return to sender.
+      if (change > 0) {
+        outputs = 2
+
+        // Convert the send quantity to the format expected by slp-mdm.
+        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
+        baseQty = baseQty.absoluteValue()
+        baseQty = Math.floor(baseQty)
+        baseQty = baseQty.toString()
+        console.log(`baseQty: `, baseQty)
+
+        // Convert the change quantity to the format expected by slp-mdm.
+        let baseChange = new BigNumber(change).times(10 ** decimals)
+        baseChange = baseChange.absoluteValue()
+        baseChange = Math.floor(baseChange)
+        baseChange = baseChange.toString()
+        console.log(`baseChange: `, baseChange)
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.TokenType1.send(tokenId, [
+          new slpMdm.BN(baseQty),
+          new slpMdm.BN(baseChange)
+        ])
+        //
+
+        // Corner case, when there is no token change to send back.
+      } else {
+        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
+        baseQty = baseQty.absoluteValue()
+        baseQty = Math.floor(baseQty)
+        baseQty = baseQty.toString()
+        console.log(`baseQty: `, baseQty)
+
+        // console.log(`baseQty: ${baseQty.toString()}`)
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
+      }
+
+      return { script, outputs }
+    } catch (err) {
+      console.log(`Error in generateSendOpReturn2()`)
       throw err
     }
   }

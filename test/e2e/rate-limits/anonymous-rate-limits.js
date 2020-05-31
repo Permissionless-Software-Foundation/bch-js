@@ -8,7 +8,7 @@
 
 const assert = require("chai").assert
 
-const RESTURL = `https://api.bchjs.cash/v3/`
+const RESTURL = `https://api.fullstack.cash/v3/`
 // const RESTURL = `http://localhost:3000/v3/`
 
 const BCHJS = require("../../../src/bch-js")
