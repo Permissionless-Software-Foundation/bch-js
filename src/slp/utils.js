@@ -1366,11 +1366,11 @@ class Utils {
           else {
             // Minting Baton
             if (utxo.vout === slpData.mintBatonVout) {
-              utxo.tokenType = "minting-baton"
+              utxo.utxoType = "minting-baton"
             }
             // Tokens
             else {
-              utxo.tokenType = "token"
+              utxo.utxoType = "token"
               utxo.tokenQty = slpData.qty / Math.pow(10, slpData.decimals)
             }
 
