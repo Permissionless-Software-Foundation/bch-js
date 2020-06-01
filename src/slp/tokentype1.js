@@ -288,13 +288,19 @@ class TokenType1 {
       // let baseQtyHex = baseQty.toString(16)
       // baseQtyHex = baseQtyHex.padStart(16, "0")
 
+      // Prevent error if user fails to add the document hash.
+      if (!configObj.documentHash) configObj.documentHash = ""
+
+      // If mint baton is not specified, then replace it with null.
+      if (!configObj.mintBatonVout) configObj.mintBatonVout = null
+
       const script = slpMdm.TokenType1.genesis(
         configObj.ticker,
         configObj.name,
         configObj.documentUrl,
         configObj.documentHash,
         configObj.decimals,
-        null,
+        configObj.mintBatonVout,
         new slpMdm.BN(baseQty)
       )
 
