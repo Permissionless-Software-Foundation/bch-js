@@ -1531,10 +1531,14 @@ class Utils {
           // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
           else {
             // Minting Baton
-            if (utxo.vout === slpData.mintBatonVout)
+            if (utxo.vout === slpData.mintBatonVout) {
               utxo.tokenType = "minting-baton"
+            }
             // Tokens
-            else utxo.tokenType = "token"
+            else {
+              utxo.tokenType = "token"
+              utxo.tokenQty = slpData.qty / Math.pow(10, slpData.decimals)
+            }
 
             utxo.tokenId = utxo.txid
             utxo.tokenTicker = slpData.ticker

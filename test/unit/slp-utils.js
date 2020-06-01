@@ -2052,6 +2052,7 @@ describe("#SLP Utils", () => {
 
       assert2.isArray(data)
       assert2.equal(data[0].tokenType, "token")
+      assert2.equal(data[0].tokenQty, 100)
       assert2.equal(data[1].tokenType, "minting-baton")
       assert2.equal(false, data[2])
     })
