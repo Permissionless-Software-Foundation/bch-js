@@ -119,7 +119,7 @@ class TokenType1 {
         totalTokens += tokenUtxos[i].tokenQty
 
       const change = totalTokens - sendQty
-      // console.log(`change: ${change}`)
+      console.log(`change: ${change}`)
 
       let script
       let outputs = 1
