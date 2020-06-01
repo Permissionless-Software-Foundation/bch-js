@@ -671,7 +671,7 @@ describe(`#SLP`, () => {
         assert.property(data[1], "satoshis")
         assert.property(data[1], "height")
         assert.property(data[1], "confirmations")
-        assert.property(data[1], "tokenType")
+        assert.property(data[1], "utxoType")
         assert.property(data[1], "tokenId")
         assert.property(data[1], "tokenTicker")
         assert.property(data[1], "tokenName")
