@@ -1530,7 +1530,12 @@ class Utils {
 
           // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
           else {
-            utxo.tokenType = "minting-baton"
+            // Minting Baton
+            if (utxo.vout === slpData.mintBatonVout)
+              utxo.tokenType = "minting-baton"
+            // Tokens
+            else utxo.tokenType = "token"
+
             utxo.tokenId = utxo.txid
             utxo.tokenTicker = slpData.ticker
             utxo.tokenName = slpData.name
