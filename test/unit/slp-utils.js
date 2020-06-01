@@ -1958,11 +1958,10 @@ describe("#SLP Utils", () => {
 
     it("should return false for BCH-only UTXOs", async () => {
       // Mock live network calls
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(slp.Utils, "decodeOpReturn2")
-          .throws(new Error("scriptpubkey not op_return"))
-      }
+
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn2")
+        .throws(new Error("scriptpubkey not op_return"))
 
       const utxos = [
         {
@@ -1991,6 +1990,70 @@ describe("#SLP Utils", () => {
       assert2.isArray(data)
       assert2.equal(false, data[0])
       assert2.equal(false, data[1])
+    })
+
+    it("should decode a Genesis transaction", async () => {
+      const slpData = {
+        tokenType: 1,
+        txType: "GENESIS",
+        ticker: "SLPTEST",
+        name: "SLP Test Token",
+        tokenId:
+          "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 8,
+        mintBatonVout: 2,
+        qty: "10000000000"
+      }
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox.stub(slp.Utils, "decodeOpReturn2").resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox.stub(slp.Utils, "validateTxid").resolves([
+        {
+          txid:
+            "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
+          valid: true
+        }
+      ])
+
+      const utxos = [
+        {
+          txid:
+            "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
+          vout: 3,
+          value: "12178",
+          confirmations: 0,
+          satoshis: 12178
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails2(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+      assert2.equal(data[0].tokenType, "token")
+      assert2.equal(data[1].tokenType, "minting-baton")
+      assert2.equal(false, data[2])
     })
   })
 
