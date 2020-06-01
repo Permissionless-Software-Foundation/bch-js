@@ -231,24 +231,26 @@ class TokenType1 {
       let baseQty = new BigNumber(remainder).times(10 ** decimals)
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
-      let baseQtyHex = baseQty.toString(16)
-      baseQtyHex = baseQtyHex.padStart(16, "0")
+      baseQty = baseQty.toString()
 
       // console.log(`baseQty: ${baseQty.toString()}`)
 
-      const script = [
-        this.Script.opcodes.OP_RETURN,
-        Buffer.from("534c5000", "hex"),
-        //BITBOX.Script.opcodes.OP_1,
-        Buffer.from("01", "hex"),
-        Buffer.from(`SEND`),
-        Buffer.from(tokenId, "hex"),
-        Buffer.from(baseQtyHex, "hex")
-      ]
+      // const script = [
+      //   this.Script.opcodes.OP_RETURN,
+      //   Buffer.from("534c5000", "hex"),
+      //   //BITBOX.Script.opcodes.OP_1,
+      //   Buffer.from("01", "hex"),
+      //   Buffer.from(`SEND`),
+      //   Buffer.from(tokenId, "hex"),
+      //   Buffer.from(baseQtyHex, "hex")
+      // ]
+
+      // Generate the OP_RETURN as a Buffer.
+      const script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
 
       return script
     } catch (err) {
-      console.log(`Error in generateSendOpReturn()`)
+      console.log(`Error in generateBurnOpReturn()`)
       throw err
     }
   }
@@ -268,6 +270,7 @@ class TokenType1 {
    *    ticker: (string) ticker symbol for the new token class.
    *    name: (string) name of the token.
    *    documentUrl: (string) a website url that you'd like to attach to the token.
+   *    documentHash: (string) optional.
    * }
    *
    * Note: document hash is currently not supported.
@@ -276,34 +279,42 @@ class TokenType1 {
     try {
       // TODO: Add input validation.
 
-      let decimals = configObj.decimals.toString(16)
-      decimals = decimals.padStart(2, "0")
-
       let baseQty = new BigNumber(configObj.initialQty).times(
         10 ** configObj.decimals
       )
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
-      let baseQtyHex = baseQty.toString(16)
-      baseQtyHex = baseQtyHex.padStart(16, "0")
+      baseQty = baseQty.toString()
+      // let baseQtyHex = baseQty.toString(16)
+      // baseQtyHex = baseQtyHex.padStart(16, "0")
 
-      const script = [
-        this.Script.opcodes.OP_RETURN,
-        Buffer.from("534c5000", "hex"), // Lokad ID
-        Buffer.from("01", "hex"), // Token Type 1
-        Buffer.from(`GENESIS`),
-        Buffer.from(configObj.ticker),
-        Buffer.from(configObj.name),
-        Buffer.from(configObj.documentUrl),
+      const script = slpMdm.TokenType1.genesis(
+        configObj.ticker,
+        configObj.name,
+        configObj.documentUrl,
+        configObj.documentHash,
+        configObj.decimals,
+        null,
+        new slpMdm.BN(baseQty)
+      )
 
-        // Create an empty document hash.
-        this.Script.opcodes.OP_PUSHDATA1, // Hex 4c
-        this.Script.opcodes.OP_0, // Hex 00
-
-        Buffer.from(decimals, "hex"),
-        Buffer.from("02", "hex"), // Mint baton vout
-        Buffer.from(baseQtyHex, "hex")
-      ]
+      // const script = [
+      //   this.Script.opcodes.OP_RETURN,
+      //   Buffer.from("534c5000", "hex"), // Lokad ID
+      //   Buffer.from("01", "hex"), // Token Type 1
+      //   Buffer.from(`GENESIS`),
+      //   Buffer.from(configObj.ticker),
+      //   Buffer.from(configObj.name),
+      //   Buffer.from(configObj.documentUrl),
+      //
+      //   // Create an empty document hash.
+      //   this.Script.opcodes.OP_PUSHDATA1, // Hex 4c
+      //   this.Script.opcodes.OP_0, // Hex 00
+      //
+      //   Buffer.from(decimals, "hex"),
+      //   Buffer.from("02", "hex"), // Mint baton vout
+      //   Buffer.from(baseQtyHex, "hex")
+      // ]
 
       return script
     } catch (err) {

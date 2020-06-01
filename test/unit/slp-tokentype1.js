@@ -221,8 +221,9 @@ describe("#SLP TokenType1", () => {
         1
       )
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: `, result)
 
-      assert.isArray(result)
+      assert.equal(Buffer.isBuffer(result), true)
     })
   })
 
@@ -232,6 +233,7 @@ describe("#SLP TokenType1", () => {
         name: "SLP Test Token",
         ticker: "SLPTEST",
         documentUrl: "https://bchjs.cash",
+        documentHash: "",
         decimals: 8,
         initialQty: 10
       }
@@ -239,9 +241,9 @@ describe("#SLP TokenType1", () => {
       const result = await bchjs.SLP.TokenType1.generateGenesisOpReturn(
         configObj
       )
+      // console.log(`result: `, result)
 
-      assert.isArray(result)
-      assert.equal(Buffer.isBuffer(result[1]), true)
+      assert.equal(Buffer.isBuffer(result), true)
     })
   })
 })
