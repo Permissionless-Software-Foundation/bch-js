@@ -731,222 +731,222 @@ class Utils {
     }
   }
 
+  // /**
+  //  * @api SLP.Utils.decodeOpReturn() decodeOpReturn() - Read the OP_RETURN data from an SLP transaction.
+  //  * @apiName decodeOpReturn
+  //  * @apiGroup SLP
+  //  * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
+  //  *
+  //  * Returns an object with properties corresponding to the SLP spec:
+  //  * https://github.com/simpleledger/slp-specifications/blob/master/slp-token-type-1.md
+  //  *
+  //  * Throws an error if given a non-SLP txid.
+  //  *
+  //  * Note: At some point, this method will be deprecated in favor of decodeOpReturn2().
+  //  * At that time, decodeOpReturn2() will be rename to decodeOpReturn().
+  //  *
+  //  * @apiExample Example usage:
+  //  *
+  //  * (async () => {
+  //  * try {
+  //  *  const txid =
+  //  *   "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
+  //  *
+  //  *  const data = await slp.Utils.decodeOpReturn(txid)
+  //  *
+  //  *  console.log(`Decoded OP_RETURN data: ${JSON.stringify(data,null,2)}`)
+  //  * } catch (error) {
+  //  *  console.error(error)
+  //  * }
+  //  * })()
+  //  *
+  //  * // returns
+  //  * {
+  //  *  "tokenType": 1,
+  //  *  "transactionType": "genesis",
+  //  *  "ticker": "SLPSDK",
+  //  *  "name": "SLP SDK example using BITBOX",
+  //  *  "documentUrl": "developer.bitcoin.com",
+  //  *  "documentHash": "",
+  //  *  "decimals": 8,
+  //  *  "mintBatonVout": 2,
+  //  *  "initialQty": 507,
+  //  *  "tokensSentTo": "bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05",
+  //  *  "batonHolder": "bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05"
+  //  * }
+  //  */
+  // async decodeOpReturn(txid) {
+  //   try {
+  //     if (!txid || txid === "" || typeof txid !== "string")
+  //       throw new Error(`txid string must be included.`)
+  //
+  //     const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
+  //     const lokadIdHex = "534c5000"
+  //
+  //     // Create an empty output object that will be populated with metadata.
+  //     const outObj = {}
+  //
+  //     // Retrieve the transaction object from the full node.
+  //     const response = await axios.get(path, _this.axiosOptions)
+  //     const txDetails = response.data
+  //     //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+  //
+  //     // Retrieve the OP_RETURN data.
+  //     const script = scriptLib
+  //       .toASM(Buffer.from(txDetails.vout[0].scriptPubKey.hex, "hex"))
+  //       .split(" ")
+  //
+  //     if (script[0] !== "OP_RETURN") throw new Error("Not an OP_RETURN")
+  //
+  //     if (script[1] !== lokadIdHex) throw new Error("Not a SLP OP_RETURN")
+  //
+  //     // Validate token type.
+  //     if (script[2] !== "OP_1" && script[2] !== "01" && script[2] !== "0001") {
+  //       // NOTE: bitcoincashlib-js converts hex 01 to OP_1 due to BIP62.3 enforcement
+  //       throw new Error("Unknown token type")
+  //     }
+  //     outObj.tokenType = 1
+  //
+  //     const type = Buffer.from(script[3], "hex")
+  //       .toString("ascii")
+  //       .toLowerCase()
+  //     script[3] = type
+  //     //console.log(`type: ${type}`)
+  //
+  //     // Decode a GENSIS SLP transaction.
+  //     if (type === "genesis") {
+  //       //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+  //       //console.log(`script: ${JSON.stringify(script, null, 2)}`)
+  //
+  //       outObj.transactionType = "genesis"
+  //
+  //       // Convert the next four entries into ascii.
+  //       for (let i = 4; i < 8; i++)
+  //         script[i] = Buffer.from(script[i], "hex").toString("ascii")
+  //       //.toLowerCase()
+  //
+  //       outObj.ticker = script[4]
+  //       outObj.name = script[5]
+  //       outObj.documentUrl = script[6]
+  //       outObj.documentHash = script[7]
+  //
+  //       // decimal precision of the token.
+  //       if (typeof script[8] === "string" && script[8].startsWith("OP_"))
+  //         script[8] = parseInt(script[8].slice(3)).toString(16)
+  //
+  //       const decimals = Number(script[8])
+  //       outObj.decimals = decimals
+  //
+  //       // Mint Baton vout.
+  //       if (typeof script[9] === "string" && script[9].startsWith("OP_"))
+  //         script[9] = parseInt(script[9].slice(3)).toString(16)
+  //       outObj.mintBatonVout = Number(script[9])
+  //
+  //       // Initial quantity of tokens created.
+  //       let qty = new BigNumber(script[10], 16)
+  //       qty = qty / Math.pow(10, decimals)
+  //       script[10] = qty
+  //       outObj.initialQty = qty
+  //
+  //       // Address initial tokens were sent to.
+  //       outObj.tokensSentTo = txDetails.vout[1].scriptPubKey.addresses[0]
+  //
+  //       // Mint baton address holder.
+  //       if (!outObj.mintBatonVout) {
+  //         outObj.batonHolder = "NEVER_CREATED"
+  //       } else {
+  //         outObj.batonHolder =
+  //           txDetails.vout[outObj.mintBatonVout].scriptPubKey.addresses[0]
+  //       }
+  //
+  //       // Mint type transaction
+  //     } else if (type === "mint") {
+  //       //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+  //
+  //       outObj.transactionType = "mint"
+  //       outObj.tokenId = script[4]
+  //
+  //       // Locate the vout UTXO containing the minting baton.
+  //       let mintBatonVout = 0
+  //       // Dev note: Haven't seen this if-statement in the wild. Copied from
+  //       // someone elses code.
+  //       if (typeof script[5] === "string" && script[5].startsWith("OP_"))
+  //         mintBatonVout = parseInt(script[5].slice(3))
+  //       // This is the common use case I see.
+  //       else mintBatonVout = parseInt(script[5])
+  //
+  //       outObj.mintBatonVout = mintBatonVout
+  //
+  //       // Check if baton was passed or destroyed.
+  //       // Dev Note: There should be some more extensive checking here. The most
+  //       // common way of 'burning' the minting baton is to set script[5] to a
+  //       // value of 0, but it could also point to a non-existant vout.
+  //       // TODO: Add checking if script[5] refers to a non-existant vout.
+  //       outObj.batonStillExists = false // false by default.
+  //       if (mintBatonVout > 1) outObj.batonStillExists = true
+  //
+  //       // Parse the quantity generated in this minting operation.
+  //       // Returns a string. But without the decimals information included,
+  //       // I'm not sure how to properly represent the quantity.
+  //       if (typeof script[6] === "string" && script[6].startsWith("OP_"))
+  //         script[6] = parseInt(script[6].slice(3)).toString(16)
+  //
+  //       outObj.quantity = new BigNumber(script[6], 16)
+  //
+  //       // Report the reciever of the minted tokens.
+  //       outObj.tokensSentTo = txDetails.vout[1].scriptPubKey.addresses[0]
+  //
+  //       // Report the address that controls the mint baton.
+  //       if (outObj.batonStillExists) {
+  //         outObj.batonHolder =
+  //           txDetails.vout[mintBatonVout].scriptPubKey.addresses[0]
+  //       }
+  //
+  //       // Send tokens.
+  //     } else if (type === "send") {
+  //       //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+  //       //console.log(`script: ${JSON.stringify(script,null,2)}`)
+  //
+  //       if (script.length <= 4) throw new Error("Not a SLP txout")
+  //
+  //       outObj.transactionType = "send"
+  //
+  //       // Retrieve the token ID.
+  //       outObj.tokenId = script[4]
+  //
+  //       // Loop through each output.
+  //       const spendData = []
+  //       for (let i = 5; i < script.length; i++) {
+  //         let thisScript = script[i]
+  //         const spendObj = {}
+  //
+  //         if (typeof thisScript === "string" && thisScript.startsWith("OP_"))
+  //           thisScript = parseInt(thisScript.slice(3)).toString(16)
+  //
+  //         // Compute the quantity of tokens.
+  //         spendObj.quantity = new BigNumber(thisScript, 16)
+  //
+  //         // Calculate which vouts are SLP UTXOs.
+  //         const thisVout = i - 4
+  //         spendObj.sentTo = txDetails.vout[thisVout].scriptPubKey.addresses[0]
+  //         spendObj.vout = thisVout
+  //
+  //         spendData.push(spendObj)
+  //       }
+  //
+  //       outObj.spendData = spendData
+  //     }
+  //
+  //     return outObj
+  //   } catch (error) {
+  //     if (error.response && error.response.data) throw error.response.data
+  //     throw error
+  //   }
+  // }
+
   /**
    * @api SLP.Utils.decodeOpReturn() decodeOpReturn() - Read the OP_RETURN data from an SLP transaction.
    * @apiName decodeOpReturn
-   * @apiGroup SLP
-   * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
-   *
-   * Returns an object with properties corresponding to the SLP spec:
-   * https://github.com/simpleledger/slp-specifications/blob/master/slp-token-type-1.md
-   *
-   * Throws an error if given a non-SLP txid.
-   *
-   * Note: At some point, this method will be deprecated in favor of decodeOpReturn2().
-   * At that time, decodeOpReturn2() will be rename to decodeOpReturn().
-   *
-   * @apiExample Example usage:
-   *
-   * (async () => {
-   * try {
-   *  const txid =
-   *   "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
-   *
-   *  const data = await slp.Utils.decodeOpReturn(txid)
-   *
-   *  console.log(`Decoded OP_RETURN data: ${JSON.stringify(data,null,2)}`)
-   * } catch (error) {
-   *  console.error(error)
-   * }
-   * })()
-   *
-   * // returns
-   * {
-   *  "tokenType": 1,
-   *  "transactionType": "genesis",
-   *  "ticker": "SLPSDK",
-   *  "name": "SLP SDK example using BITBOX",
-   *  "documentUrl": "developer.bitcoin.com",
-   *  "documentHash": "",
-   *  "decimals": 8,
-   *  "mintBatonVout": 2,
-   *  "initialQty": 507,
-   *  "tokensSentTo": "bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05",
-   *  "batonHolder": "bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05"
-   * }
-   */
-  async decodeOpReturn(txid) {
-    try {
-      if (!txid || txid === "" || typeof txid !== "string")
-        throw new Error(`txid string must be included.`)
-
-      const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
-      const lokadIdHex = "534c5000"
-
-      // Create an empty output object that will be populated with metadata.
-      const outObj = {}
-
-      // Retrieve the transaction object from the full node.
-      const response = await axios.get(path, _this.axiosOptions)
-      const txDetails = response.data
-      //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
-
-      // Retrieve the OP_RETURN data.
-      const script = scriptLib
-        .toASM(Buffer.from(txDetails.vout[0].scriptPubKey.hex, "hex"))
-        .split(" ")
-
-      if (script[0] !== "OP_RETURN") throw new Error("Not an OP_RETURN")
-
-      if (script[1] !== lokadIdHex) throw new Error("Not a SLP OP_RETURN")
-
-      // Validate token type.
-      if (script[2] !== "OP_1" && script[2] !== "01" && script[2] !== "0001") {
-        // NOTE: bitcoincashlib-js converts hex 01 to OP_1 due to BIP62.3 enforcement
-        throw new Error("Unknown token type")
-      }
-      outObj.tokenType = 1
-
-      const type = Buffer.from(script[3], "hex")
-        .toString("ascii")
-        .toLowerCase()
-      script[3] = type
-      //console.log(`type: ${type}`)
-
-      // Decode a GENSIS SLP transaction.
-      if (type === "genesis") {
-        //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
-        //console.log(`script: ${JSON.stringify(script, null, 2)}`)
-
-        outObj.transactionType = "genesis"
-
-        // Convert the next four entries into ascii.
-        for (let i = 4; i < 8; i++)
-          script[i] = Buffer.from(script[i], "hex").toString("ascii")
-        //.toLowerCase()
-
-        outObj.ticker = script[4]
-        outObj.name = script[5]
-        outObj.documentUrl = script[6]
-        outObj.documentHash = script[7]
-
-        // decimal precision of the token.
-        if (typeof script[8] === "string" && script[8].startsWith("OP_"))
-          script[8] = parseInt(script[8].slice(3)).toString(16)
-
-        const decimals = Number(script[8])
-        outObj.decimals = decimals
-
-        // Mint Baton vout.
-        if (typeof script[9] === "string" && script[9].startsWith("OP_"))
-          script[9] = parseInt(script[9].slice(3)).toString(16)
-        outObj.mintBatonVout = Number(script[9])
-
-        // Initial quantity of tokens created.
-        let qty = new BigNumber(script[10], 16)
-        qty = qty / Math.pow(10, decimals)
-        script[10] = qty
-        outObj.initialQty = qty
-
-        // Address initial tokens were sent to.
-        outObj.tokensSentTo = txDetails.vout[1].scriptPubKey.addresses[0]
-
-        // Mint baton address holder.
-        if (!outObj.mintBatonVout) {
-          outObj.batonHolder = "NEVER_CREATED"
-        } else {
-          outObj.batonHolder =
-            txDetails.vout[outObj.mintBatonVout].scriptPubKey.addresses[0]
-        }
-
-        // Mint type transaction
-      } else if (type === "mint") {
-        //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
-
-        outObj.transactionType = "mint"
-        outObj.tokenId = script[4]
-
-        // Locate the vout UTXO containing the minting baton.
-        let mintBatonVout = 0
-        // Dev note: Haven't seen this if-statement in the wild. Copied from
-        // someone elses code.
-        if (typeof script[5] === "string" && script[5].startsWith("OP_"))
-          mintBatonVout = parseInt(script[5].slice(3))
-        // This is the common use case I see.
-        else mintBatonVout = parseInt(script[5])
-
-        outObj.mintBatonVout = mintBatonVout
-
-        // Check if baton was passed or destroyed.
-        // Dev Note: There should be some more extensive checking here. The most
-        // common way of 'burning' the minting baton is to set script[5] to a
-        // value of 0, but it could also point to a non-existant vout.
-        // TODO: Add checking if script[5] refers to a non-existant vout.
-        outObj.batonStillExists = false // false by default.
-        if (mintBatonVout > 1) outObj.batonStillExists = true
-
-        // Parse the quantity generated in this minting operation.
-        // Returns a string. But without the decimals information included,
-        // I'm not sure how to properly represent the quantity.
-        if (typeof script[6] === "string" && script[6].startsWith("OP_"))
-          script[6] = parseInt(script[6].slice(3)).toString(16)
-
-        outObj.quantity = new BigNumber(script[6], 16)
-
-        // Report the reciever of the minted tokens.
-        outObj.tokensSentTo = txDetails.vout[1].scriptPubKey.addresses[0]
-
-        // Report the address that controls the mint baton.
-        if (outObj.batonStillExists) {
-          outObj.batonHolder =
-            txDetails.vout[mintBatonVout].scriptPubKey.addresses[0]
-        }
-
-        // Send tokens.
-      } else if (type === "send") {
-        //console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
-        //console.log(`script: ${JSON.stringify(script,null,2)}`)
-
-        if (script.length <= 4) throw new Error("Not a SLP txout")
-
-        outObj.transactionType = "send"
-
-        // Retrieve the token ID.
-        outObj.tokenId = script[4]
-
-        // Loop through each output.
-        const spendData = []
-        for (let i = 5; i < script.length; i++) {
-          let thisScript = script[i]
-          const spendObj = {}
-
-          if (typeof thisScript === "string" && thisScript.startsWith("OP_"))
-            thisScript = parseInt(thisScript.slice(3)).toString(16)
-
-          // Compute the quantity of tokens.
-          spendObj.quantity = new BigNumber(thisScript, 16)
-
-          // Calculate which vouts are SLP UTXOs.
-          const thisVout = i - 4
-          spendObj.sentTo = txDetails.vout[thisVout].scriptPubKey.addresses[0]
-          spendObj.vout = thisVout
-
-          spendData.push(spendObj)
-        }
-
-        outObj.spendData = spendData
-      }
-
-      return outObj
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      throw error
-    }
-  }
-
-  /**
-   * @api SLP.Utils.decodeOpReturn2() decodeOpReturn2() - Read the OP_RETURN data from an SLP transaction.
-   * @apiName decodeOpReturn2
    * @apiGroup SLP
    * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
    *
@@ -985,7 +985,7 @@ class Utils {
    * }
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn2(txid) {
+  async decodeOpReturn(txid) {
     try {
       // Validate the txid input.
       if (!txid || txid === "" || typeof txid !== "string")
@@ -1168,7 +1168,7 @@ class Utils {
         // Decode the OP_RETURN.
         let slpData = {}
         try {
-          slpData = await _this.decodeOpReturn2(utxo.txid)
+          slpData = await _this.decodeOpReturn(utxo.txid)
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`decodeOpReturn2 error: `, err)
@@ -1244,8 +1244,7 @@ class Utils {
    *
    * (async () => {
    * try {
-   *  const u = await bchjs.Blockbook.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
-   *  const utxos = u.utxos
+   *  const utxos = await bchjs.Blockbook.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
    *
    *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
@@ -1277,174 +1276,9 @@ class Utils {
 
   // CT 1/11/20: Refactored to comply with this GitHub Issue:
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
+
+  // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails(utxos) {
-    try {
-      // Throw error if input is not an array.
-      if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
-
-      // Loop through each element in the array and validate the input before
-      // further processing.
-      for (let i = 0; i < utxos.length; i++) {
-        const utxo = utxos[i]
-
-        // Convert Blockbook UTXOs to Insight format.
-        if (utxo.value) utxo.satoshis = Number(utxo.value)
-
-        // Throw error if utxo does not have a satoshis property.
-        if (!utxo.satoshis)
-          throw new Error(`utxo ${i} does not have a satoshis property.`)
-
-        // Throw error if utxo does not have a txid property.
-        if (!utxo.txid)
-          throw new Error(`utxo ${i} does not have a txid property.`)
-      }
-
-      // Output Array
-      const outAry = []
-
-      // Loop through each utxo
-      for (let i = 0; i < utxos.length; i++) {
-        const utxo = utxos[i]
-
-        // Get raw transaction data from the full node and attempt to decode
-        // the OP_RETURN data.
-        // If there is no OP_RETURN, mark the UTXO as false.
-        let slpData = false
-        try {
-          slpData = await this.decodeOpReturn(utxo.txid)
-          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
-        } catch (err) {
-          // console.log(`decodeOpReturn err: `, err)
-
-          if (
-            err.message === "Not an OP_RETURN" ||
-            err.message === "Not a SLP OP_RETURN"
-          ) {
-            // An error will be thrown if the txid is not SLP.
-            // Mark as false and continue the loop.
-            outAry.push(false)
-
-            continue
-          } else {
-            throw err
-          }
-        }
-
-        // If there is an OP_RETURN, attempt to decode it.
-        // Handle Genesis SLP transactions.
-        if (slpData.transactionType === "genesis") {
-          if (
-            utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-            utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
-          ) {
-            // Can safely be marked as false.
-            outAry[i] = false
-          }
-
-          // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
-          else {
-            utxo.tokenType = "minting-baton"
-            utxo.tokenId = utxo.txid
-            utxo.tokenTicker = slpData.ticker
-            utxo.tokenName = slpData.name
-            utxo.tokenDocumentUrl = slpData.documentUrl
-            utxo.tokenDocumentHash = slpData.documentHash
-            utxo.decimals = slpData.decimals
-
-            // something
-            outAry[i] = utxo
-          }
-        }
-
-        // Handle Mint SLP transactions.
-        if (slpData.transactionType === "mint") {
-          if (
-            utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
-            utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
-          ) {
-            // Can safely be marked as false.
-            outAry[i] = false
-          }
-
-          // If UTXO passes validation, then return formatted token data.
-          else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId)
-
-            // Hydrate the UTXO object with information about the SLP token.
-            utxo.utxoType = "token"
-            utxo.transactionType = "mint"
-            utxo.tokenId = slpData.tokenId
-
-            utxo.tokenTicker = genesisData.ticker
-            utxo.tokenName = genesisData.name
-            utxo.tokenDocumentUrl = genesisData.documentUrl
-            utxo.tokenDocumentHash = genesisData.documentHash
-            utxo.decimals = genesisData.decimals
-
-            utxo.mintBatonVout = slpData.mintBatonVout
-            utxo.batonStillExists = slpData.batonStillExists
-
-            // Calculate the real token quantity.
-            utxo.tokenQty = slpData.quantity / Math.pow(10, utxo.decimals)
-
-            outAry[i] = utxo
-          }
-        }
-
-        // Handle Send SLP transactions.
-        if (slpData.transactionType === "send") {
-          // Filter out any vouts that match.
-          const voutMatch = slpData.spendData.filter(x => utxo.vout === x.vout)
-          // console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
-
-          // If there are no vout matches, the UTXO can safely be marked as false.
-          if (voutMatch.length === 0) {
-            outAry[i] = false
-          }
-
-          // If UTXO passes validation, then return formatted token data.
-          else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId)
-            // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
-
-            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
-
-            // Hydrate the UTXO object with information about the SLP token.
-            utxo.utxoType = "token"
-            utxo.transactionType = "send"
-            utxo.tokenId = slpData.tokenId
-            utxo.tokenTicker = genesisData.ticker
-            utxo.tokenName = genesisData.name
-            utxo.tokenDocumentUrl = genesisData.documentUrl
-            utxo.tokenDocumentHash = genesisData.documentHash
-            utxo.decimals = genesisData.decimals
-
-            // Calculate the real token quantity.
-            utxo.tokenQty = voutMatch[0].quantity / Math.pow(10, utxo.decimals)
-
-            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
-
-            outAry[i] = utxo
-          }
-        }
-
-        // Finally, validate the SLP txid with SLPDB.
-        if (outAry[i]) {
-          const isValid = await this.validateTxid(utxo.txid)
-          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
-
-          outAry[i].isValid = isValid[0].valid
-        }
-      }
-
-      return outAry
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      throw error
-    }
-  }
-
-  async tokenUtxoDetails2(utxos) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
@@ -1503,7 +1337,7 @@ class Utils {
         // If there is no OP_RETURN, mark the UTXO as false.
         let slpData = false
         try {
-          slpData = await this.decodeOpReturn2(utxo.txid)
+          slpData = await this.decodeOpReturn(utxo.txid)
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error: `, err)
@@ -1564,7 +1398,7 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn2(slpData.tokenId)
+            const genesisData = await this.decodeOpReturn(slpData.tokenId)
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // Hydrate the UTXO object with information about the SLP token.
@@ -1609,7 +1443,7 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn2(slpData.tokenId)
+            const genesisData = await this.decodeOpReturn(slpData.tokenId)
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
