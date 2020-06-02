@@ -1338,7 +1338,7 @@ class Utils {
         let slpData = false
         try {
           slpData = await this.decodeOpReturn(utxo.txid)
-          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error: `, err)
           // An error will be thrown if the txid is not SLP.
