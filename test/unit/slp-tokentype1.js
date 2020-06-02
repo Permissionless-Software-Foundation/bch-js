@@ -245,5 +245,55 @@ describe("#SLP TokenType1", () => {
 
       assert.equal(Buffer.isBuffer(result), true)
     })
+
+    it("should work if user does not specify doc hash", async () => {
+      const configObj = {
+        name: "SLP Test Token",
+        ticker: "SLPTEST",
+        documentUrl: "https://bchjs.cash",
+        decimals: 8,
+        initialQty: 10
+      }
+
+      const result = await bchjs.SLP.TokenType1.generateGenesisOpReturn(
+        configObj
+      )
+      // console.log(`result: `, result)
+
+      assert.equal(Buffer.isBuffer(result), true)
+    })
+  })
+
+  describe("#generateMintOpReturn", () => {
+    it("should generate genesis OP_RETURN code", async () => {
+      tokenUtxo = [
+        {
+          txid:
+            "9d35c1803ed3ab8bd23c198b027f7b3b530586494dc265de6391b74a6b090136",
+          vout: 2,
+          value: "546",
+          height: 637625,
+          confirmations: 207,
+          satoshis: 546,
+          utxoType: "minting-baton",
+          tokenId:
+            "9d35c1803ed3ab8bd23c198b027f7b3b530586494dc265de6391b74a6b090136",
+          tokenTicker: "SLPTEST",
+          tokenName: "SLP Test Token",
+          tokenDocumentUrl: "https://FullStack.cash",
+          tokenDocumentHash: "",
+          decimals: 8,
+          isValid: true
+        }
+      ]
+
+      const result = await bchjs.SLP.TokenType1.generateMintOpReturn(
+        tokenUtxo,
+        100
+      )
+      // console.log(`result: `, result)
+
+      assert.equal(Buffer.isBuffer(result), true)
+    })
   })
 })

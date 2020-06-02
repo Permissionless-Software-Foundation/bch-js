@@ -23,80 +23,6 @@ class TokenType1 {
     TransactionBuilder.setAddress(addy)
   }
 
-  // generateSendOpReturn(tokenUtxos, sendQty) {
-  //   try {
-  //     const tokenId = tokenUtxos[0].tokenId
-  //     const decimals = tokenUtxos[0].decimals
-  //
-  //     // Calculate the total amount of tokens owned by the wallet.
-  //     let totalTokens = 0
-  //     for (let i = 0; i < tokenUtxos.length; i++)
-  //       totalTokens += tokenUtxos[i].tokenQty
-  //
-  //     const change = totalTokens - sendQty
-  //     // console.log(`change: ${change}`)
-  //
-  //     let script
-  //     let outputs = 1
-  //
-  //     // The normal case, when there is token change to return to sender.
-  //     if (change > 0) {
-  //       outputs = 2
-  //
-  //       let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-  //       baseQty = baseQty.absoluteValue()
-  //       baseQty = Math.floor(baseQty)
-  //       let baseQtyHex = baseQty.toString(16)
-  //       baseQtyHex = baseQtyHex.padStart(16, "0")
-  //
-  //       let baseChange = new BigNumber(change).times(10 ** decimals)
-  //       baseChange = baseChange.absoluteValue()
-  //       baseChange = Math.floor(baseChange)
-  //       // console.log(`baseChange: ${baseChange.toString()}`)
-  //
-  //       let baseChangeHex = baseChange.toString(16)
-  //       baseChangeHex = baseChangeHex.padStart(16, "0")
-  //       // console.log(`baseChangeHex padded: ${baseChangeHex}`)
-  //
-  //       script = [
-  //         this.Script.opcodes.OP_RETURN,
-  //         Buffer.from("534c5000", "hex"),
-  //         //BITBOX.Script.opcodes.OP_1,
-  //         Buffer.from("01", "hex"),
-  //         Buffer.from(`SEND`),
-  //         Buffer.from(tokenId, "hex"),
-  //         Buffer.from(baseQtyHex, "hex"),
-  //         Buffer.from(baseChangeHex, "hex")
-  //       ]
-  //     } else {
-  //       // Corner case, when there is no token change to send back.
-  //
-  //       let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-  //       baseQty = baseQty.absoluteValue()
-  //       baseQty = Math.floor(baseQty)
-  //       let baseQtyHex = baseQty.toString(16)
-  //       baseQtyHex = baseQtyHex.padStart(16, "0")
-  //
-  //       // console.log(`baseQty: ${baseQty.toString()}`)
-  //
-  //       script = [
-  //         this.Script.opcodes.OP_RETURN,
-  //         Buffer.from("534c5000", "hex"),
-  //         //BITBOX.Script.opcodes.OP_1,
-  //         Buffer.from("01", "hex"),
-  //         Buffer.from(`SEND`),
-  //         Buffer.from(tokenId, "hex"),
-  //         Buffer.from(baseQtyHex, "hex")
-  //       ]
-  //     }
-  //
-  //     return { script, outputs }
-  //   } catch (err) {
-  //     console.log(`Error in generateSendOpReturn()`)
-  //     throw err
-  //   }
-  // }
-
   /**
    * @api SLP.TokenType1.generateSendOpReturn() generateSendOpReturn() - OP_RETURN code for SLP Send tx
    * @apiName generateSendOpReturn
@@ -235,16 +161,6 @@ class TokenType1 {
 
       // console.log(`baseQty: ${baseQty.toString()}`)
 
-      // const script = [
-      //   this.Script.opcodes.OP_RETURN,
-      //   Buffer.from("534c5000", "hex"),
-      //   //BITBOX.Script.opcodes.OP_1,
-      //   Buffer.from("01", "hex"),
-      //   Buffer.from(`SEND`),
-      //   Buffer.from(tokenId, "hex"),
-      //   Buffer.from(baseQtyHex, "hex")
-      // ]
-
       // Generate the OP_RETURN as a Buffer.
       const script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
 
@@ -273,7 +189,6 @@ class TokenType1 {
    *    documentHash: (string) optional.
    * }
    *
-   * Note: document hash is currently not supported.
    */
   generateGenesisOpReturn(configObj) {
     try {
@@ -285,8 +200,6 @@ class TokenType1 {
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
       baseQty = baseQty.toString()
-      // let baseQtyHex = baseQty.toString(16)
-      // baseQtyHex = baseQtyHex.padStart(16, "0")
 
       // Prevent error if user fails to add the document hash.
       if (!configObj.documentHash) configObj.documentHash = ""
@@ -304,27 +217,54 @@ class TokenType1 {
         new slpMdm.BN(baseQty)
       )
 
-      // const script = [
-      //   this.Script.opcodes.OP_RETURN,
-      //   Buffer.from("534c5000", "hex"), // Lokad ID
-      //   Buffer.from("01", "hex"), // Token Type 1
-      //   Buffer.from(`GENESIS`),
-      //   Buffer.from(configObj.ticker),
-      //   Buffer.from(configObj.name),
-      //   Buffer.from(configObj.documentUrl),
-      //
-      //   // Create an empty document hash.
-      //   this.Script.opcodes.OP_PUSHDATA1, // Hex 4c
-      //   this.Script.opcodes.OP_0, // Hex 00
-      //
-      //   Buffer.from(decimals, "hex"),
-      //   Buffer.from("02", "hex"), // Mint baton vout
-      //   Buffer.from(baseQtyHex, "hex")
-      // ]
-
       return script
     } catch (err) {
       console.log(`Error in generateGenesisOpReturn()`)
+      throw err
+    }
+  }
+
+  // Expects tokenUtxos to be an array of UTXOs. Must contain a UTXO with the
+  // minting baton.
+  // mintQty is the number of new coins to mint.
+  // destroyBaton is an option Boolean. If true, will destroy the baton. By
+  // default it is false and will pass the baton.
+  generateMintOpReturn(tokenUtxos, mintQty, destroyBaton = false) {
+    try {
+      // TODO: Add input validation.
+
+      // Loop through the tokenUtxos array and find the minting baton.
+      let mintBatonUtxo
+      for (let i = 0; i < tokenUtxos.length; i++) {
+        if (tokenUtxos[i].utxoType === "minting-baton")
+          mintBatonUtxo = tokenUtxos[i]
+      }
+
+      // Throw an error if the minting baton could not be found.
+      if (!mintBatonUtxo)
+        throw new Error(`Minting baton could not be found in tokenUtxos array.`)
+
+      const tokenId = mintBatonUtxo.tokenId
+      const decimals = mintBatonUtxo.decimals
+
+      let baseQty = new BigNumber(mintQty).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      baseQty = baseQty.toString()
+
+      // Signal that the baton should be passed or detroyed.
+      let batonVout = 2
+      if (destroyBaton) batonVout = null
+
+      const script = slpMdm.TokenType1.mint(
+        tokenId,
+        batonVout,
+        new slpMdm.BN(baseQty)
+      )
+
+      return script
+    } catch (err) {
+      console.log(`Error in generateMintOpReturn()`)
       throw err
     }
   }
