@@ -791,16 +791,21 @@ describe("#SLP Utils", () => {
     it("should return false for change in an SLP token creation transaction", async () => {
       // Mock the call to the REST API
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      const validateStub = [
         {
           txid:
             "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
           valid: true
         }
-      ])
+      ]
+      sandbox
+        .stub(slp.Utils, "validateTxid")
+        .resolves(validateStub)
+        .onCall(1)
+        .resolves(validateStub)
 
-      // Stub the calls to decodeOpReturn2.
-      sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
+      // Stub the calls to decodeOpReturn.
+      const decodeStub = {
         tokenType: 1,
         txType: "GENESIS",
         ticker: "SLPSDK",
@@ -812,7 +817,12 @@ describe("#SLP Utils", () => {
         decimals: 8,
         mintBatonVout: 2,
         qty: "50700000000"
-      })
+      }
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(decodeStub)
+        .onCall(1)
+        .resolves(decodeStub)
 
       const utxos = [
         {
