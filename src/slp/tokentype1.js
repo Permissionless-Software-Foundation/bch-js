@@ -231,7 +231,9 @@ class TokenType1 {
   // default it is false and will pass the baton.
   generateMintOpReturn(tokenUtxos, mintQty, destroyBaton = false) {
     try {
-      // TODO: Add input validation.
+      // Throw error if input is not an array.
+      if (!Array.isArray(tokenUtxos))
+        throw new Error(`tokenUtxos must be an array.`)
 
       // Loop through the tokenUtxos array and find the minting baton.
       let mintBatonUtxo
@@ -246,6 +248,11 @@ class TokenType1 {
 
       const tokenId = mintBatonUtxo.tokenId
       const decimals = mintBatonUtxo.decimals
+
+      if (!tokenId)
+        throw new Error(`tokenId property not found in mint-baton UTXO.`)
+      if (!decimals)
+        throw new Error(`decimals property not found in mint-baton UTXO.`)
 
       let baseQty = new BigNumber(mintQty).times(10 ** decimals)
       baseQty = baseQty.absoluteValue()
@@ -264,7 +271,7 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      console.log(`Error in generateMintOpReturn()`)
+      // console.log(`Error in generateMintOpReturn()`)
       throw err
     }
   }
