@@ -1999,6 +1999,97 @@ describe("#SLP Utils", () => {
       assert2.equal(data[1].utxoType, "minting-baton")
       assert2.equal(false, data[2])
     })
+
+    it("should decode a Mint transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 1,
+        txType: "MINT",
+        tokenId:
+          "9d35c1803ed3ab8bd23c198b027f7b3b530586494dc265de6391b74a6b090136",
+        mintBatonVout: 2,
+        qty: "10000000000"
+      }
+
+      const genesisData = {
+        tokenType: 1,
+        txType: "GENESIS",
+        ticker: "SLPTEST",
+        name: "SLP Test Token",
+        tokenId:
+          "9d35c1803ed3ab8bd23c198b027f7b3b530586494dc265de6391b74a6b090136",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 8,
+        mintBatonVout: 2,
+        qty: "10000000000"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "880587f01e3112e779c0fdf1b9b859c242a28e56ead85483eeedcaa52f051a04",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(genesisData)
+        .onCall(2)
+        .resolves(slpData)
+        .onCall(3)
+        .resolves(genesisData)
+        .onCall(4)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox
+        .stub(slp.Utils, "validateTxid")
+        .resolves(stubValid)
+        .onCall(1)
+        .resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "880587f01e3112e779c0fdf1b9b859c242a28e56ead85483eeedcaa52f051a04",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "880587f01e3112e779c0fdf1b9b859c242a28e56ead85483eeedcaa52f051a04",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "880587f01e3112e779c0fdf1b9b859c242a28e56ead85483eeedcaa52f051a04",
+          vout: 3,
+          value: "10552",
+          confirmations: 0,
+          satoshis: 10552
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].tokenQty, 100)
+      assert2.equal(data[1].utxoType, "minting-baton")
+      assert2.equal(false, data[2])
+    })
   })
 
   describe("#txDetails", () => {
