@@ -1,6 +1,6 @@
 {
   "name": "@chris.troutner/bch-js",
-  "version": "2.1.7",
+  "version": "3.0.0",
   "description": "Bitcoin Cash JavaScript Library based on BITBOX",
   "author": "Chris Troutner <chris.troutner@gmail.com>",
   "contributors": [
