@@ -1401,8 +1401,17 @@ class Utils {
             const genesisData = await this.decodeOpReturn(slpData.tokenId)
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
+            // Minting Baton
+            if (utxo.vout === slpData.mintBatonVout) {
+              utxo.utxoType = "minting-baton"
+            }
+            // Tokens
+            else {
+              utxo.utxoType = "token"
+              utxo.tokenQty = slpData.qty / Math.pow(10, genesisData.decimals)
+            }
+
             // Hydrate the UTXO object with information about the SLP token.
-            utxo.utxoType = "token"
             utxo.transactionType = "mint"
             utxo.tokenId = slpData.tokenId
 
@@ -1413,10 +1422,6 @@ class Utils {
             utxo.decimals = genesisData.decimals
 
             utxo.mintBatonVout = slpData.mintBatonVout
-
-            // Calculate the real token quantity.
-            utxo.tokenQty =
-              Number(slpData.qty) / Math.pow(10, genesisData.decimals)
 
             outAry[i] = utxo
           }
