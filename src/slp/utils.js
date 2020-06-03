@@ -25,9 +25,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.list() list() - List all tokens or list single token by id.
+   * @api SLP.Utils.list() list()
    * @apiName list
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription List all tokens or list single token by id.
    *
    * @apiExample Example usage:
@@ -217,9 +217,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.balancesForAddress() balancesForAddress() - Return all balances for an address.
+   * @api SLP.Utils.balancesForAddress() balancesForAddress()
    * @apiName balancesForAddress
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Return all balances for an address or array of addresses.
    *
    * @apiExample Example usage:
@@ -324,9 +324,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.balancesForToken() balancesForToken() - List all balances for tokenId.
+   * @api SLP.Utils.balancesForToken() balancesForToken()
    * @apiName balancesForToken
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription List all balances for tokenId.
    *
    * @apiExample Example usage:
@@ -371,9 +371,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.balance() balance() - Return single balance for an address by token id.
+   * @api SLP.Utils.balance() balance()
    * @apiName balance
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Return single balance for an address by token id.
    *
    * @apiExample Example usage:
@@ -449,9 +449,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.validateTxid() validateTxid() - Validate that txid is an SLP transaction.
+   * @api SLP.Utils.validateTxid() validateTxid()
    * @apiName validateTxid
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Validate that txid is an SLP transaction.
    *
    * @apiExample Example usage:
@@ -534,9 +534,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.tokenStats() tokenStats() - Stats for token by tokenId.
+   * @api SLP.Utils.tokenStats() tokenStats()
    * @apiName tokenStats
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Stats for token by tokenId.
    *
    * @apiExample Example usage:
@@ -581,9 +581,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.transactions() transactions() - SLP Transactions by tokenId and address.
+   * @api SLP.Utils.transactions() transactions()
    * @apiName transactions
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription SLP Transactions by tokenId and address.
    *
    * @apiExample Example usage:
@@ -651,9 +651,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.burnTotal() burnTotal() - List input, output and burn total for slp transaction.
+   * @api SLP.Utils.burnTotal() burnTotal()
    * @apiName burnTotal
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription List input, output and burn total for slp transaction.
    *
    * @apiExample Example usage:
@@ -690,9 +690,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.txDetails() txDetails() - SLP transaction details
+   * @api SLP.Utils.txDetails() txDetails()
    * @apiName txDetails
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Transaction details on a token transfer.
    * There is no bulk method for this endpoint. Can only get one tx at a time.
    *
@@ -732,9 +732,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.decodeOpReturn() decodeOpReturn() - Read the OP_RETURN data from an SLP transaction.
+   * @api SLP.Utils.decodeOpReturn() decodeOpReturn()
    * @apiName decodeOpReturn
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
    *
    * Similar to decodeOpReturn(), except decodeOpReturn2() uses the slp-parser
@@ -832,9 +832,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.isTokenUtxo() isTokenUtxo() - Determine if UTXO belongs to an SLP transaction.
+   * @api SLP.Utils.isTokenUtxo() isTokenUtxo()
    * @apiName isTokenUtxo
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Determine if UTXO belongs to an SLP transaction.
    *
    * Expects an array of UTXO objects as input. Returns the same array with
@@ -1014,9 +1014,9 @@ class Utils {
   }
 
   /**
-   * @api SLP.Utils.tokenUtxoDetails() tokenUtxoDetails() - Get token details on a UTXO
+   * @api SLP.Utils.tokenUtxoDetails() tokenUtxoDetails()
    * @apiName tokenUtxoDetails
-   * @apiGroup SLP
+   * @apiGroup SLP Utils
    * @apiDescription Hydrate a UTXO with SLP token metadata.
    *
    * Expects an array of UTXO objects as input. Returns an array of equal size.
