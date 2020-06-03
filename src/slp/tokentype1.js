@@ -24,24 +24,22 @@ class TokenType1 {
   }
 
   /**
-   * @api SLP.TokenType1.generateSendOpReturn() generateSendOpReturn() - OP_RETURN code for SLP Send tx
+   * @api SLP.TokenType1.generateSendOpReturn() generateSendOpReturn()
    * @apiName generateSendOpReturn
-   * @apiGroup SLP
+   * @apiGroup SLP TokenType1
    * @apiDescription Generate the OP_RETURN value needed to create an SLP Send transaction.
    * It's assumed all elements in the tokenUtxos array belong to the same token.
-   * Returns an object with two properties:
-   *  - script: an array of Bufers that is ready to fed into bchjs.Script.encode() to be turned into a transaction output.
-   *  - outputs: an integer with a value of 1 or 2. If 2, indicates there needs to be an extra output to send token change.
+   *
+   * Returns a Buffer representing a transaction output, ready to be added to
+   * the Transaction Builder.
    *
    * @apiExample Example usage:
    *
-   * (async () => {
-   * try {
    *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails2(utxos);
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
    *
    *  // Filter out the token UTXOs that match the user-provided token ID.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -54,11 +52,10 @@ class TokenType1 {
    *  });
    *
    *  // Generate the SEND OP_RETURN
-   *  const slpSendObj = bchjs.SLP.TokenType1.generateSendOpReturn(
+   *  const slpData = bchjs.SLP.TokenType1.generateSendOpReturn(
    *    tokenUtxos,
    *    TOKENQTY
    *  );
-   *  const slpData = slpSendObj.script;
    *
    *  ...
    *  // Add OP_RETURN as first output.
@@ -130,17 +127,50 @@ class TokenType1 {
   }
 
   /**
-   * @api SLP.TokenType1.generateBurnOpReturn() generateBurnOpReturn() - OP_RETURN code for SLP Send tx
+   * @api SLP.TokenType1.generateBurnOpReturn() generateBurnOpReturn()
    * @apiName generateBurnOpReturn
-   * @apiGroup SLP
-   * @apiDescription Generate the OP_RETURN value needed to create an SLP Send transaction that burns tokens.
-   * This is a slight variation of generateSendOpReturn(). It generates an SLP
+   * @apiGroup SLP TokenType1
+   * @apiDescription Generate the OP_RETURN value needed to create a SLP Send
+   * transaction that burns tokens.
+   * This is a slight variation of generateSendOpReturn(). It generates a SLP
    * SEND transaction designed to burn a select quantity of tokens.
    *
    * It's assumed all elements in the tokenUtxos array belong to the same token.
-   * Returns an object with two properties:
-   *  - script: an array of Bufers that is ready to fed into bchjs.Script.encode() to be turned into a transaction output.
-   *  - outputs: an integer with a value of 1. There is no token change to be sent with this transaction.
+   *
+   * Returns a Buffer representing a transaction output, ready to be added to
+   * the Transaction Builder.
+   *
+   * @apiExample Example usage:
+   *
+   *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
+   *  const utxos = await bchjs.Blockbook.utxos(addr)
+   *
+   *  // Identify the SLP token UTXOs.
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *
+   *  // Filter out the token UTXOs that match the user-provided token ID.
+   *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
+   *    if (
+   *      utxo && // UTXO is associated with a token.
+   *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
+   *      utxo.tokenType === "token" // UTXO is not a minting baton.
+   *    )
+   *    return true;
+   *  });
+   *
+   *  // Generate the SEND OP_RETURN
+   *  const slpData = bchjs.SLP.TokenType1.generateBurnOpReturn(
+   *    tokenUtxos,
+   *    10 // Burn 10 tokens
+   *  );
+   *
+   *  ...
+   *  // Add OP_RETURN as first output.
+   *  transactionBuilder.addOutput(slpData, 0);
+   *
+   *  // See additional code here:
+   *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/burn-tokens/burn-tokens.js
+   *
    */
   generateBurnOpReturn(tokenUtxos, burnQty) {
     try {
@@ -172,22 +202,37 @@ class TokenType1 {
   }
 
   /**
-   * @api SLP.TokenType1.generateGenesisOpReturn() generateGenesisOpReturn() - OP_RETURN code for SLP Genesis tx
+   * @api SLP.TokenType1.generateGenesisOpReturn() generateGenesisOpReturn()
    * @apiName generateGenesisOpReturn
-   * @apiGroup SLP
+   * @apiGroup SLP TokenType1
    * @apiDescription Generate the OP_RETURN value needed to create a new SLP token class.
-   * It's assumed all elements in the tokenUtxos array belong to the same token.
-   * Returns an array of Buffers that is ready to be fed into bchjs.Script.encode() to be
-   * turned into a transaction output.
-   * Expects a config object as input, with the following properties:
-   * configObj = {
-   *    decimals: (integer) decimal precision of the token. Value of 8 recommended.
-   *    initialQty: (integer) initial quantity of tokens to create.
-   *    ticker: (string) ticker symbol for the new token class.
-   *    name: (string) name of the token.
-   *    documentUrl: (string) a website url that you'd like to attach to the token.
-   *    documentHash: (string) optional.
-   * }
+   *
+   * Expects a config object as input, see the example for properties.:
+   *
+   * Returns a Buffer representing a transaction output, ready to be added to
+   * the Transaction Builder.
+   *
+   * @apiExample Example usage:
+   *
+   *   const configObj = {
+   *     name: "SLP Test Token",
+   *     ticker: "SLPTEST",
+   *     documentUrl: "https://bchjs.cash",
+   *     documentHash: "",
+   *     decimals: 8,
+   *     initialQty: 10
+   *   }
+   *
+   *   const result = await bchjs.SLP.TokenType1.generateGenesisOpReturn(
+   *     configObj
+   *   )
+   *
+   *  ...
+   *  // Add OP_RETURN as first output.
+   *  transactionBuilder.addOutput(slpData, 0);
+   *
+   *  // See additional code here:
+   *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/create-token/create-token.js
    *
    */
   generateGenesisOpReturn(configObj) {
@@ -229,6 +274,47 @@ class TokenType1 {
   // mintQty is the number of new coins to mint.
   // destroyBaton is an option Boolean. If true, will destroy the baton. By
   // default it is false and will pass the baton.
+  /**
+   * @api SLP.TokenType1.generateMintOpReturn() generateMintOpReturn()
+   * @apiName generateMintOpReturn
+   * @apiGroup SLP TokenType1
+   * @apiDescription Generate the OP_RETURN value needed to create an SLP Mint transaction.
+   * It's assumed all elements in the tokenUtxos array belong to the same token.
+   *
+   * Returns a Buffer representing a transaction output, ready to be added to
+   * the Transaction Builder.
+   *
+   * @apiExample Example usage:
+   *
+   *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
+   *  const utxos = await bchjs.Blockbook.utxos(addr)
+   *
+   *  // Identify the SLP token UTXOs.
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *
+   *  // Filter out the minting baton.
+   *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
+   *    if (
+   *      utxo && // UTXO is associated with a token.
+   *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
+   *      utxo.utxoType === "minting-baton" // UTXO is not a minting baton.
+   *    )
+   *    return true;
+   *  });
+   *
+   *  // Generate the SLP OP_RETURN
+   *  const slpData = bchjs.SLP.TokenType1.generateMintOpReturn(
+   *    tokenUtxos,
+   *    100 // Mint 100 new tokens.
+   *  );
+   *
+   *  ...
+   *  // Add OP_RETURN as first output.
+   *  transactionBuilder.addOutput(slpData, 0);
+   *
+   *  // See additional code here:
+   *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
+   */
   generateMintOpReturn(tokenUtxos, mintQty, destroyBaton = false) {
     try {
       // Throw error if input is not an array.
