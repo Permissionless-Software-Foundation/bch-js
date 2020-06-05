@@ -354,177 +354,6 @@ describe("#SLP Utils", () => {
     })
   })
 
-  // describe("#decodeOpReturn", () => {
-  //   it("should throw an error for a non-string input", async () => {
-  //     try {
-  //       const txid = 53423 // Not a string.
-  //
-  //       await slp.Utils.decodeOpReturn(txid)
-  //
-  //       assert2.equal(true, false, "Unexpected result.")
-  //     } catch (err) {
-  //       //console.log(`err: ${util.inspect(err)}`)
-  //       assert2.include(err.message, `txid string must be included`)
-  //     }
-  //   })
-  //
-  //   it("should throw an error for non-SLP transaction", async () => {
-  //     try {
-  //       // Mock the call to the REST API
-  //       if (process.env.TEST === "unit") {
-  //         sandbox
-  //           .stub(axios, "get")
-  //           .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
-  //       }
-  //
-  //       const txid =
-  //         "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
-  //
-  //       await slp.Utils.decodeOpReturn(txid)
-  //
-  //       assert2.equal(true, false, "Unexpected result.")
-  //     } catch (err) {
-  //       assert2.include(err.message, `Not an OP_RETURN`)
-  //       //console.log(`err: ${util.inspect(err)}`)
-  //     }
-  //   })
-  //
-  //   it("should throw an error for non-SLP transaction with OP_RETURN", async () => {
-  //     try {
-  //       // Mock the call to the REST API
-  //       if (process.env.TEST === "unit") {
-  //         sandbox
-  //           .stub(axios, "get")
-  //           .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
-  //       }
-  //
-  //       const txid =
-  //         "2ff74c48a5d657cf45f699601990bffbbe7a2a516d5480674cbf6c6a4497908f"
-  //
-  //       await slp.Utils.decodeOpReturn(txid)
-  //
-  //       assert2.equal(true, false, "Unexpected result.")
-  //     } catch (err) {
-  //       assert2.include(err.message, `Not a SLP OP_RETURN`)
-  //       //console.log(`err: ${util.inspect(err)}`)
-  //     }
-  //   })
-  //
-  //   it("should decode a genesis transaction", async () => {
-  //     // Mock the call to the REST API
-  //     if (process.env.TEST === "unit") {
-  //       sandbox
-  //         .stub(axios, "get")
-  //         .resolves({ data: mockData.txDetailsSLPGenesis })
-  //     }
-  //
-  //     const txid =
-  //       "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
-  //
-  //     const data = await slp.Utils.decodeOpReturn(txid)
-  //     //console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  //
-  //     assert2.hasAnyKeys(data, [
-  //       "tokenType",
-  //       "transactionType",
-  //       "ticker",
-  //       "name",
-  //       "documentUrl",
-  //       "documentHash",
-  //       "decimals",
-  //       "mintBatonVout",
-  //       "initialQty",
-  //       "tokensSentTo",
-  //       "batonHolder"
-  //     ])
-  //   })
-  //
-  //   it("should decode a mint transaction", async () => {
-  //     // Mock the call to the REST API
-  //     if (process.env.TEST === "unit")
-  //       sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPMint })
-  //
-  //     const txid =
-  //       "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
-  //
-  //     const data = await slp.Utils.decodeOpReturn(txid)
-  //     //console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  //
-  //     assert2.hasAnyKeys(data, [
-  //       "transactionType",
-  //       "tokenType",
-  //       "tokenId",
-  //       "mintBatonVout",
-  //       "batonStillExists",
-  //       "quantity",
-  //       "tokensSentTo",
-  //       "batonHolder"
-  //     ])
-  //   })
-  //
-  //   it("should decode a send transaction", async () => {
-  //     // Mock the call to the REST API
-  //     if (process.env.TEST === "unit")
-  //       sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPSend })
-  //
-  //     const txid =
-  //       "4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa"
-  //
-  //     const data = await slp.Utils.decodeOpReturn(txid)
-  //     //console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  //
-  //     assert2.hasAnyKeys(data, [
-  //       "transactionType",
-  //       "tokenType",
-  //       "tokenId",
-  //       "spendData"
-  //     ])
-  //     assert2.isArray(data.spendData)
-  //     assert2.hasAnyKeys(data.spendData[0], ["quantity", "sentTo", "vout"])
-  //   })
-  //
-  //   it("should properly decode a Genesis transaction with no minting baton", async () => {
-  //     // Mock the call to the REST API.
-  //     if (process.env.TEST === "unit") {
-  //       sandbox
-  //         .stub(axios, "get")
-  //         .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
-  //     }
-  //
-  //     const txid =
-  //       "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
-  //
-  //     const data = await slp.Utils.decodeOpReturn(txid)
-  //     //console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  //
-  //     assert2.include(data.batonHolder, "NEVER_CREATED")
-  //   })
-  //
-  //   it("should decode a send transaction with alternate encoding", async () => {
-  //     // Mock the call to rest.bitcoin.com
-  //     if (process.env.TEST === "unit") {
-  //       sandbox
-  //         .stub(axios, "get")
-  //         .resolves({ data: mockData.txDetailsSLPSendAlt })
-  //     }
-  //
-  //     const txid =
-  //       "d94357179775425ebc59c93173bd6dc9854095f090a2eb9dcfe9797398bc8eae"
-  //
-  //     const data = await slp.Utils.decodeOpReturn(txid)
-  //     //console.log(`data: ${JSON.stringify(data, null, 2)}`)
-  //
-  //     assert2.hasAnyKeys(data, [
-  //       "transactionType",
-  //       "tokenType",
-  //       "tokenId",
-  //       "spendData"
-  //     ])
-  //     assert2.isArray(data.spendData)
-  //     assert2.hasAnyKeys(data.spendData[0], ["quantity", "sentTo", "vout"])
-  //   })
-  // })
-
   describe("#decodeOpReturn", () => {
     it("should throw an error for a non-string input", async () => {
       try {
@@ -704,6 +533,62 @@ describe("#SLP Utils", () => {
         assert2.include(err.message, "amount string size not 8 bytes")
       }
     })
+
+    it("should decode a NFT Parent transaction", async () => {
+      // Mock the call to the REST API.
+      sandbox
+        .stub(axios, "get")
+        .resolves({ data: mockData.txDetailsSLPNftGenesis })
+
+      const txid =
+        "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4"
+
+      const data = await slp.Utils.decodeOpReturn(txid)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.property(data, "tokenType")
+      assert2.property(data, "txType")
+      assert2.property(data, "ticker")
+      assert2.property(data, "name")
+      assert2.property(data, "tokenId")
+      assert2.property(data, "documentUri")
+      assert2.property(data, "documentHash")
+      assert2.property(data, "decimals")
+      assert2.property(data, "mintBatonVout")
+      assert2.property(data, "qty")
+
+      assert2.equal(data.tokenType, 129)
+      assert2.equal(data.mintBatonVout, 2)
+      assert2.equal(data.qty, 1)
+    })
+
+    // it("should decode a NFT Child transaction", async () => {
+    //   // Mock the call to the REST API.
+    //   // sandbox
+    //   //   .stub(axios, "get")
+    //   //   .resolves({ data: mockData.txDetailsSLPNftGenesis })
+    //
+    //   const txid =
+    //     "3de3766b10506c9156533f1639979e49d1884521543c13e4af73647df1ed3f76"
+    //
+    //   const data = await slp.Utils.decodeOpReturn(txid)
+    //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
+    //
+    //   // assert2.property(data, "tokenType")
+    //   // assert2.property(data, "txType")
+    //   // assert2.property(data, "ticker")
+    //   // assert2.property(data, "name")
+    //   // assert2.property(data, "tokenId")
+    //   // assert2.property(data, "documentUri")
+    //   // assert2.property(data, "documentHash")
+    //   // assert2.property(data, "decimals")
+    //   // assert2.property(data, "mintBatonVout")
+    //   // assert2.property(data, "qty")
+    //   //
+    //   // assert2.equal(data.tokenType, 129)
+    //   // assert2.equal(data.mintBatonVout, 2)
+    //   // assert2.equal(data.qty, 1)
+    // })
   })
 
   describe("#isTokenUtxo", () => {
@@ -1603,6 +1488,96 @@ describe("#SLP Utils", () => {
       assert2.equal(data[0].tokenQty, 100)
       assert2.equal(data[1].utxoType, "minting-baton")
       assert2.equal(false, data[2])
+    })
+
+    it("should decode a NFT Parent transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 129,
+        txType: "GENESIS",
+        ticker: "NFTTT",
+        name: "NFT Test Token",
+        tokenId:
+          "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 0,
+        mintBatonVout: 2,
+        qty: "1"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(slpData)
+        .onCall(2)
+        .resolves(slpData)
+        .onCall(3)
+        .resolves(slpData)
+        .onCall(4)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox
+        .stub(slp.Utils, "validateTxid")
+        .resolves(stubValid)
+        .onCall(1)
+        .resolves(stubValid)
+        .onCall(2)
+        .resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4",
+          vout: 3,
+          value: "15620",
+          height: 638207,
+          confirmations: 3,
+          satoshis: 15620
+        },
+        {
+          txid:
+            "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4",
+          vout: 2,
+          value: "546",
+          height: 638207,
+          confirmations: 3,
+          satoshis: 546
+        },
+        {
+          txid:
+            "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4",
+          vout: 1,
+          value: "546",
+          height: 638207,
+          confirmations: 3,
+          satoshis: 546
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+      assert2.equal(data[0], false)
+
+      assert2.equal(data[1].utxoType, "minting-baton")
+      assert2.equal(data[1].tokenType, 129)
+
+      assert2.equal(data[2].utxoType, "token")
+      assert2.equal(data[2].tokenType, 129)
     })
   })
 
