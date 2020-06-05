@@ -39,7 +39,7 @@ describe("#SLP TokenType1", () => {
   })
 
   describe("#generateSendOpReturn", () => {
-    it("should generate send OP_RETURN code", async () => {
+    it("should generate send OP_RETURN code", () => {
       // Mock UTXO.
       const tokenUtxos = [
         {
@@ -62,10 +62,7 @@ describe("#SLP TokenType1", () => {
         }
       ]
 
-      const result = await bchjs.SLP.TokenType1.generateSendOpReturn(
-        tokenUtxos,
-        1
-      )
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(tokenUtxos, 1)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.hasAllKeys(result, ["script", "outputs"])
@@ -74,7 +71,7 @@ describe("#SLP TokenType1", () => {
   })
 
   describe("#generateBurnOpReturn", () => {
-    it("should generate burn OP_RETURN code", async () => {
+    it("should generate burn OP_RETURN code", () => {
       // Mock UTXO.
       const tokenUtxos = [
         {
@@ -97,10 +94,7 @@ describe("#SLP TokenType1", () => {
         }
       ]
 
-      const result = await bchjs.SLP.TokenType1.generateBurnOpReturn(
-        tokenUtxos,
-        1
-      )
+      const result = bchjs.SLP.TokenType1.generateBurnOpReturn(tokenUtxos, 1)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       // console.log(`result: `, result)
 
@@ -109,7 +103,7 @@ describe("#SLP TokenType1", () => {
   })
 
   describe("#generateGenesisOpReturn", () => {
-    it("should generate genesis OP_RETURN code", async () => {
+    it("should generate genesis OP_RETURN code", () => {
       const configObj = {
         name: "SLP Test Token",
         ticker: "SLPTEST",
@@ -119,15 +113,13 @@ describe("#SLP TokenType1", () => {
         initialQty: 10
       }
 
-      const result = await bchjs.SLP.TokenType1.generateGenesisOpReturn(
-        configObj
-      )
+      const result = bchjs.SLP.TokenType1.generateGenesisOpReturn(configObj)
       // console.log(`result: `, result)
 
       assert.equal(Buffer.isBuffer(result), true)
     })
 
-    it("should work if user does not specify doc hash", async () => {
+    it("should work if user does not specify doc hash", () => {
       const configObj = {
         name: "SLP Test Token",
         ticker: "SLPTEST",
@@ -136,9 +128,7 @@ describe("#SLP TokenType1", () => {
         initialQty: 10
       }
 
-      const result = await bchjs.SLP.TokenType1.generateGenesisOpReturn(
-        configObj
-      )
+      const result = bchjs.SLP.TokenType1.generateGenesisOpReturn(configObj)
       // console.log(`result: `, result)
 
       assert.equal(Buffer.isBuffer(result), true)
@@ -146,9 +136,9 @@ describe("#SLP TokenType1", () => {
   })
 
   describe("#generateMintOpReturn", () => {
-    it("should throw error if tokenUtxos is not an array.", async () => {
+    it("should throw error if tokenUtxos is not an array.", () => {
       try {
-        await bchjs.SLP.TokenType1.generateMintOpReturn({}, 100)
+        bchjs.SLP.TokenType1.generateMintOpReturn({}, 100)
 
         assert.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -160,7 +150,7 @@ describe("#SLP TokenType1", () => {
       }
     })
 
-    it("should throw error if minting baton is not in UTXOs.", async () => {
+    it("should throw error if minting baton is not in UTXOs.", () => {
       try {
         const utxos = [
           {
@@ -184,7 +174,7 @@ describe("#SLP TokenType1", () => {
           }
         ]
 
-        await bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
+        bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
 
         assert.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -196,7 +186,7 @@ describe("#SLP TokenType1", () => {
       }
     })
 
-    it("should throw error if tokenId is not included in minting-baton UTXO.", async () => {
+    it("should throw error if tokenId is not included in minting-baton UTXO.", () => {
       try {
         const utxos = [
           {
@@ -217,7 +207,7 @@ describe("#SLP TokenType1", () => {
           }
         ]
 
-        await bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
+        bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
 
         assert.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -229,7 +219,7 @@ describe("#SLP TokenType1", () => {
       }
     })
 
-    it("should throw error if decimals is not included in minting-baton UTXO.", async () => {
+    it("should throw error if decimals is not included in minting-baton UTXO.", () => {
       try {
         const utxos = [
           {
@@ -251,7 +241,7 @@ describe("#SLP TokenType1", () => {
           }
         ]
 
-        await bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
+        bchjs.SLP.TokenType1.generateMintOpReturn(utxos, 100)
 
         assert.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -263,7 +253,7 @@ describe("#SLP TokenType1", () => {
       }
     })
 
-    it("should generate genesis OP_RETURN code", async () => {
+    it("should generate genesis OP_RETURN code", () => {
       tokenUtxo = [
         {
           txid:
@@ -285,10 +275,7 @@ describe("#SLP TokenType1", () => {
         }
       ]
 
-      const result = await bchjs.SLP.TokenType1.generateMintOpReturn(
-        tokenUtxo,
-        100
-      )
+      const result = bchjs.SLP.TokenType1.generateMintOpReturn(tokenUtxo, 100)
       // console.log(`result: `, result)
 
       assert.equal(Buffer.isBuffer(result), true)
