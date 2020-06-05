@@ -2,7 +2,6 @@
 //const bchjs = new BCHJS()
 
 const Address = require("./address")
-const Script = require("../script")
 
 const BigNumber = require("bignumber.js")
 const slpMdm = require("slp-mdm")
@@ -14,8 +13,6 @@ const TransactionBuilder = require("../transaction-builder")
 class TokenType1 {
   constructor(config) {
     this.restURL = config.restURL
-
-    this.Script = new Script()
 
     addy = new Address(config)
 
@@ -358,61 +355,6 @@ class TokenType1 {
       return script
     } catch (err) {
       // console.log(`Error in generateMintOpReturn()`)
-      throw err
-    }
-  }
-
-  // Parent NFT
-  generateNFTGenesisOpReturn(configObj) {
-    try {
-      // TODO: Add input validation.
-
-      // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = ""
-
-      // If mint baton is not specified, then replace it with null.
-      if (!configObj.mintBatonVout) configObj.mintBatonVout = null
-
-      const script = slpMdm.NFT1.Group.genesis(
-        configObj.ticker,
-        configObj.name,
-        configObj.documentUrl,
-        configObj.documentHash,
-        0,
-        configObj.mintBatonVout,
-        new slpMdm.BN("1")
-      )
-
-      return script
-    } catch (err) {
-      console.log(`Error in generateNFTGenesisOpReturn()`)
-      throw err
-    }
-  }
-
-  generateNFTChildOpReturn(configObj) {
-    try {
-      // TODO: Add input validation.
-
-      // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = ""
-
-      // If mint baton is not specified, then replace it with null.
-      if (!configObj.mintBatonVout) configObj.mintBatonVout = null
-
-      const script = slpMdm.NFT1.Group.genesis(
-        configObj.ticker,
-        configObj.name,
-        configObj.documentUrl,
-        configObj.documentHash,
-        0,
-        configObj.mintBatonVout,
-        new slpMdm.BN("1")
-      )
-
-      return script
-    } catch (err) {
-      console.log(`Error in generateNFTChildOpReturn()`)
       throw err
     }
   }
