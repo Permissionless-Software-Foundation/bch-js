@@ -1167,6 +1167,7 @@ class Utils {
             utxo.tokenDocumentUrl = slpData.documentUri
             utxo.tokenDocumentHash = slpData.documentHash
             utxo.decimals = slpData.decimals
+            utxo.tokenType = slpData.tokenType
 
             // something
             outAry[i] = utxo
@@ -1201,6 +1202,7 @@ class Utils {
             // Hydrate the UTXO object with information about the SLP token.
             utxo.transactionType = "mint"
             utxo.tokenId = slpData.tokenId
+            utxo.tokenType = slpData.tokenType
 
             utxo.tokenTicker = genesisData.ticker
             utxo.tokenName = genesisData.name
@@ -1249,6 +1251,7 @@ class Utils {
             utxo.tokenDocumentUrl = genesisData.documentUri
             utxo.tokenDocumentHash = genesisData.documentHash
             utxo.decimals = genesisData.decimals
+            utxo.tokenType = slpData.tokenType
 
             // Calculate the real token quantity.
             utxo.tokenQty = tokenQty / Math.pow(10, genesisData.decimals)

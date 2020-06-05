@@ -12,6 +12,7 @@ const Address = require("./address")
 const ECPair = require("./ecpair")
 // const HDNode = require("./hdnode")
 const TokenType1 = require("./tokentype1")
+const NFT1 = require("./nft1")
 const Utils = require("./utils")
 
 // SLP is a superset of BITBOX
@@ -31,6 +32,7 @@ class SLP {
     this.Address = new Address(tmp)
     this.ECPair = ECPair
     this.TokenType1 = new TokenType1(this.restURL)
+    this.NFT1 = new NFT1(this.restURL)
     this.Utils = new Utils(tmp)
   }
 }
