@@ -413,4 +413,40 @@ describe("#SLP TokenType1", () => {
       assert.equal(Buffer.isBuffer(result), true)
     })
   })
+
+  describe("#generateNFTOpReturn", () => {
+    it("should generate NFT Genesis OP_RETURN code", async () => {
+      const configObj = {
+        name: "SLP Test Token",
+        ticker: "SLPTEST",
+        documentUrl: "https://bchjs.cash",
+        documentHash: ""
+      }
+
+      const result = await bchjs.SLP.TokenType1.generateNFTGenesisOpReturn(
+        configObj
+      )
+      // console.log(`result: `, result)
+
+      assert.equal(Buffer.isBuffer(result), true)
+    })
+  })
+
+  describe("#generateNFTChildOpReturn", () => {
+    it("should generate NFT Genesis OP_RETURN code", async () => {
+      const configObj = {
+        name: "SLP Test Token",
+        ticker: "SLPTEST",
+        documentUrl: "https://bchjs.cash",
+        documentHash: ""
+      }
+
+      const result = await bchjs.SLP.TokenType1.generateNFTChildOpReturn(
+        configObj
+      )
+      // console.log(`result: `, result)
+
+      assert.equal(Buffer.isBuffer(result), true)
+    })
+  })
 })
