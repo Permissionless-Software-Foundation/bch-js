@@ -45,7 +45,7 @@ class TokenType1 {
         configObj.documentHash,
         0,
         configObj.mintBatonVout,
-        new slpMdm.BN("1")
+        new slpMdm.BN(configObj.initialQty)
       )
 
       return script
@@ -95,7 +95,7 @@ class TokenType1 {
     }
   }
 
-  generateNFTChildOpReturn(configObj) {
+  generateNFTChildGenesisOpReturn(configObj) {
     try {
       // TODO: Add input validation.
 
@@ -117,7 +117,107 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      console.log(`Error in generateNFTChildOpReturn()`)
+      console.log(`Error in generateNFTChildGenesisOpReturn()`)
+      throw err
+    }
+  }
+
+  // Generate the OP_RETURN for sending an NFT Child token.
+  // Assumes all tokenUtxos have the same tokenId in common. It does not filter
+  // the input.
+  generateNFTChildSendOpReturn(tokenUtxos, sendQty) {
+    try {
+      // TODO: Add input validation.
+
+      const tokenId = tokenUtxos[0].tokenId
+
+      // Calculate the total amount of tokens owned by the wallet.
+      let totalTokens = 0
+      for (let i = 0; i < tokenUtxos.length; i++)
+        totalTokens += tokenUtxos[i].tokenQty
+
+      const change = totalTokens - sendQty
+
+      let script
+      let outputs = 1
+
+      // The normal case, when there is token change to return to sender.
+      if (change > 0) {
+        outputs = 2
+
+        // Convert to integer string.
+        const sendStr = Math.floor(sendQty).toString()
+        const changeStr = Math.floor(change).toString()
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.NFT1.Child.send(tokenId, [
+          new slpMdm.BN(sendStr),
+          new slpMdm.BN(changeStr)
+        ])
+        //
+
+        // Corner case, when there is no token change to send back.
+      } else {
+        // Convert to integer string.
+        const sendStr = Math.floor(sendQty).toString()
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.NFT1.Child.send(tokenId, [new slpMdm.BN(sendStr)])
+      }
+
+      return { script, outputs }
+    } catch (err) {
+      console.log(`Error in generateNFTChildSendOpReturn()`)
+      throw err
+    }
+  }
+
+  // Generate the OP_RETURN for sending an NFT Group token.
+  // Assumes all tokenUtxos have the same tokenId in common, it does not filter
+  // the input.
+  generateNFTGroupSendOpReturn(tokenUtxos, sendQty) {
+    try {
+      // TODO: Add input validation.
+
+      const tokenId = tokenUtxos[0].tokenId
+
+      // Calculate the total amount of tokens owned by the wallet.
+      let totalTokens = 0
+      for (let i = 0; i < tokenUtxos.length; i++)
+        totalTokens += tokenUtxos[i].tokenQty
+
+      const change = totalTokens - sendQty
+
+      let script
+      let outputs = 1
+
+      // The normal case, when there is token change to return to sender.
+      if (change > 0) {
+        outputs = 2
+
+        // Convert to integer string.
+        const sendStr = Math.floor(sendQty).toString()
+        const changeStr = Math.floor(change).toString()
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.NFT1.Group.send(tokenId, [
+          new slpMdm.BN(sendStr),
+          new slpMdm.BN(changeStr)
+        ])
+        //
+
+        // Corner case, when there is no token change to send back.
+      } else {
+        // Convert to integer string.
+        const sendStr = Math.floor(sendQty).toString()
+
+        // Generate the OP_RETURN as a Buffer.
+        script = slpMdm.NFT1.Group.send(tokenId, [new slpMdm.BN(sendStr)])
+      }
+
+      return { script, outputs }
+    } catch (err) {
+      console.log(`Error in generateNFTGroupSendOpReturn()`)
       throw err
     }
   }
