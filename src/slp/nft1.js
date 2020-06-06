@@ -44,6 +44,7 @@ class TokenType1 {
    *     name: "SLP Test Token",
    *     ticker: "SLPTEST",
    *     documentUrl: "https://FullStack.cash",
+   *     initialQty: 1
    *   }
    *
    *   const result = await bchjs.SLP.NFT1.newNFTGroupOpReturn(
@@ -226,9 +227,6 @@ class TokenType1 {
     }
   }
 
-  // Generate the OP_RETURN for sending an NFT Child token.
-  // Assumes all tokenUtxos have the same tokenId in common. It does not filter
-  // the input.
   /**
    * @api SLP.NFT1.generateNFTChildSendOpReturn() generateNFTChildSendOpReturn()
    * @apiName generateNFTChildSendOpReturn
@@ -319,9 +317,6 @@ class TokenType1 {
     }
   }
 
-  // Generate the OP_RETURN for sending an NFT Group token.
-  // Assumes all tokenUtxos have the same tokenId in common, it does not filter
-  // the input.
   /**
    * @api SLP.NFT1.generateNFTGroupSendOpReturn() generateNFTGroupSendOpReturn()
    * @apiName generateNFTGroupSendOpReturn
