@@ -591,278 +591,6 @@ describe("#SLP Utils", () => {
     // })
   })
 
-  describe("#isTokenUtxo", () => {
-    it("should throw error if input is not an array.", async () => {
-      try {
-        await slp.Utils.isTokenUtxo("test")
-
-        assert2.equal(true, false, "Unexpected result.")
-      } catch (err) {
-        assert2.include(
-          err.message,
-          `Input must be an array`,
-          "Expected error message."
-        )
-      }
-    })
-
-    it("should throw error if utxo does not have satoshis or value property.", async () => {
-      try {
-        const utxos = [
-          {
-            txid:
-              "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-            vout: 3,
-            amount: 0.00002015,
-            satoshis: 2015,
-            height: 594892,
-            confirmations: 5
-          },
-          {
-            txid:
-              "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-            vout: 2,
-            amount: 0.00000546,
-            height: 594892,
-            confirmations: 5
-          }
-        ]
-
-        await slp.Utils.isTokenUtxo(utxos)
-
-        assert2.equal(true, false, "Unexpected result.")
-      } catch (err) {
-        assert2.include(
-          err.message,
-          `utxo 1 does not have a satoshis or value property`,
-          "Expected error message."
-        )
-      }
-    })
-
-    it("should throw error if utxo does not have txid or tx_hash property.", async () => {
-      try {
-        const utxos = [
-          {
-            txid:
-              "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-            vout: 3,
-            amount: 0.00002015,
-            satoshis: 2015,
-            height: 594892,
-            confirmations: 5
-          },
-          {
-            vout: 2,
-            amount: 0.00000546,
-            satoshis: 546,
-            height: 594892,
-            confirmations: 5
-          }
-        ]
-
-        await slp.Utils.isTokenUtxo(utxos)
-
-        assert2.equal(true, false, "Unexpected result.")
-      } catch (err) {
-        assert2.include(
-          err.message,
-          `utxo 1 does not have a txid or tx_hash property`,
-          "Expected error message."
-        )
-      }
-    })
-
-    it("should return false for change in an SLP token creation transaction", async () => {
-      // Mock the call to the REST API
-      // Stub the call to validateTxid
-      const validateStub = [
-        {
-          txid:
-            "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-          valid: true
-        }
-      ]
-      sandbox
-        .stub(slp.Utils, "validateTxid")
-        .resolves(validateStub)
-        .onCall(1)
-        .resolves(validateStub)
-
-      // Stub the calls to decodeOpReturn.
-      const decodeStub = {
-        tokenType: 1,
-        txType: "GENESIS",
-        ticker: "SLPSDK",
-        name: "SLP SDK example using BITBOX",
-        tokenId:
-          "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-        documentUri: "developer.bitcoin.com",
-        documentHash: "",
-        decimals: 8,
-        mintBatonVout: 2,
-        qty: "50700000000"
-      }
-      sandbox
-        .stub(slp.Utils, "decodeOpReturn")
-        .resolves(decodeStub)
-        .onCall(1)
-        .resolves(decodeStub)
-
-      const utxos = [
-        {
-          txid:
-            "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-          vout: 3,
-          amount: 0.00002015,
-          satoshis: 2015,
-          height: 594892,
-          confirmations: 5
-        },
-        {
-          txid:
-            "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
-          vout: 2,
-          amount: 0.00000546,
-          satoshis: 546,
-          height: 594892,
-          confirmations: 5
-        }
-      ]
-
-      const data = await slp.Utils.isTokenUtxo(utxos)
-      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
-
-      assert.equal(
-        data[0].isSlp,
-        false,
-        "Change should not be identified as SLP utxo."
-      )
-      assert.equal(data[1].isSlp, true, "SLP UTXO correctly identified.")
-    })
-
-    it("should return true for a simple SEND SLP token utxo", async () => {
-      // Mock the call to the REST API
-
-      // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
-        {
-          txid:
-            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
-          valid: true
-        }
-      ])
-
-      // Stub the calls to decodeOpReturn.
-      sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
-        tokenType: 1,
-        txType: "SEND",
-        tokenId:
-          "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
-        amounts: ["200000000", "99887500000000"]
-      })
-
-      // Input object.
-      const utxos = [
-        {
-          txid:
-            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
-          vout: 1,
-          amount: 0.00000546,
-          satoshis: 546,
-          height: 596089,
-          confirmations: 748
-        }
-      ]
-
-      const data = await slp.Utils.isTokenUtxo(utxos)
-      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
-
-      assert.equal(data[0].isSlp, true, "Simple send UTXO correctly identified")
-    })
-
-    it("should accurately analyze non-slp UTXO from Electrumx", async () => {
-      try {
-        // Mock the call to the REST API
-        // Stub the call to validateTxid
-        sandbox.stub(slp.Utils, "validateTxid").resolves([
-          {
-            txid:
-              "2069e99a90499693e42cd1db82147e3e0acfe5e7315c6cc2f0252432f45300d7",
-            valid: false
-          }
-        ])
-
-        // Simulate the utxos array returned by Electrumx.
-        const utxos = [
-          {
-            height: 636885,
-            tx_hash:
-              "2069e99a90499693e42cd1db82147e3e0acfe5e7315c6cc2f0252432f45300d7",
-            tx_pos: 0,
-            value: 600
-          }
-        ]
-
-        const isTokenUtxos = await slp.Utils.isTokenUtxo(utxos)
-        // console.log(`isTokenUtxos: ${JSON.stringify(isTokenUtxos, null, 2)}`)
-
-        assert.equal(
-          isTokenUtxos[0].isSlp,
-          false,
-          "Non-slp UTXO correctly identified"
-        )
-      } catch (err) {
-        console.log(`Error: `, err)
-      }
-    })
-
-    it("should accurately analyze slp UTXO from Electrumx", async () => {
-      try {
-        // Mock the call to the REST API
-        // Stub the call to validateTxid
-        sandbox.stub(slp.Utils, "validateTxid").resolves([
-          {
-            txid:
-              "99093e8a19e0a649bf943dbc33d926feb09c02e61258c1bdaf2caffa7183c730",
-            valid: true
-          }
-        ])
-
-        // Stub the calls to decodeOpReturn.
-        sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
-          tokenType: 1,
-          txType: "SEND",
-          tokenId:
-            "a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2",
-          amounts: ["100", "198999900"]
-        })
-
-        // Simulate the utxos array returned by Electrumx.
-        const utxos = [
-          {
-            height: 636885,
-            tx_hash:
-              "99093e8a19e0a649bf943dbc33d926feb09c02e61258c1bdaf2caffa7183c730",
-            tx_pos: 1,
-            value: 546
-          }
-        ]
-
-        const isTokenUtxos = await slp.Utils.isTokenUtxo(utxos)
-        // console.log(`isTokenUtxos: ${JSON.stringify(isTokenUtxos, null, 2)}`)
-
-        assert.equal(
-          isTokenUtxos[0].isSlp,
-          true,
-          "Slp UTXO correctly identified"
-        )
-      } catch (err) {
-        console.log(`Error: `, err)
-      }
-    })
-  })
-
   describe("#tokenUtxoDetails", () => {
     it("should throw error if input is not an array.", async () => {
       try {
@@ -1667,7 +1395,7 @@ describe("#SLP Utils", () => {
       ]
 
       const data = await slp.Utils.tokenUtxoDetails(utxos)
-      console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
       assert2.equal(data[0], false)
@@ -1682,12 +1410,12 @@ describe("#SLP Utils", () => {
     it("should decode a NFT Child Genesis transaction", async () => {
       // Define stubbed data.
       const slpData = {
-        tokenType: 129,
+        tokenType: 65,
         txType: "GENESIS",
         ticker: "NFTC",
         name: "NFT Child",
         tokenId:
-          "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
         documentUri: "https://FullStack.cash",
         documentHash: "",
         decimals: 0,
@@ -1698,7 +1426,7 @@ describe("#SLP Utils", () => {
       const stubValid = [
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
           valid: true
         }
       ]
@@ -1717,21 +1445,19 @@ describe("#SLP Utils", () => {
       const utxos = [
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
-          vout: 2,
-          value: "16712",
-          height: 638273,
-          confirmations: 42,
-          satoshis: 16712
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
         },
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
-          vout: 1,
-          value: "546",
-          height: 638273,
-          confirmations: 42,
-          satoshis: 546
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+          vout: 2,
+          value: "13478",
+          confirmations: 0,
+          satoshis: 13478
         }
       ]
 
@@ -1739,10 +1465,182 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
-      assert2.equal(data[0], false)
+      assert2.equal(data[1], false)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].tokenType, 65)
+    })
+
+    it("should decode an NFT Child Send transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 65,
+        txType: "SEND",
+        tokenId:
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+        amounts: ["1"]
+      }
+
+      const genesisData = {
+        tokenType: 65,
+        txType: "GENESIS",
+        ticker: "NFTC",
+        name: "NFT Child",
+        tokenId:
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 0,
+        mintBatonVout: 0,
+        qty: "1"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(genesisData)
+        .onCall(2)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox.stub(slp.Utils, "validateTxid").resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          vout: 2,
+          value: "12136",
+          confirmations: 0,
+          satoshis: 12136
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].transactionType, "send")
+      assert2.equal(data[0].tokenType, 65)
+
+      assert2.equal(data[1], false)
+    })
+
+    it("should decode an NFT Group Send transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 129,
+        txType: "SEND",
+        tokenId:
+          "eee4b82e4bb7113eca433829144363fc45f110693c286494fbf5b5c8043cc981",
+        amounts: ["1", "8"]
+      }
+
+      const genesisData = {
+        tokenType: 129,
+        txType: "GENESIS",
+        ticker: "NFTTT",
+        name: "NFT Test Token",
+        tokenId:
+          "eee4b82e4bb7113eca433829144363fc45f110693c286494fbf5b5c8043cc981",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 0,
+        mintBatonVout: 2,
+        qty: "1"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(genesisData)
+        .onCall(2)
+        .resolves(slpData)
+        .onCall(3)
+        .resolves(genesisData)
+        .onCall(4)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox
+        .stub(slp.Utils, "validateTxid")
+        .resolves(stubValid)
+        .onCall(1)
+        .resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 3,
+          value: "10794",
+          confirmations: 0,
+          satoshis: 10794
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].transactionType, "send")
+      assert2.equal(data[0].tokenType, 129)
 
       assert2.equal(data[1].utxoType, "token")
+      assert2.equal(data[1].transactionType, "send")
       assert2.equal(data[1].tokenType, 129)
+
+      assert2.equal(data[2], false)
     })
   })
 
