@@ -1667,7 +1667,7 @@ describe("#SLP Utils", () => {
       ]
 
       const data = await slp.Utils.tokenUtxoDetails(utxos)
-      console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
       assert2.equal(data[0], false)
@@ -1682,12 +1682,12 @@ describe("#SLP Utils", () => {
     it("should decode a NFT Child Genesis transaction", async () => {
       // Define stubbed data.
       const slpData = {
-        tokenType: 129,
+        tokenType: 65,
         txType: "GENESIS",
         ticker: "NFTC",
         name: "NFT Child",
         tokenId:
-          "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
         documentUri: "https://FullStack.cash",
         documentHash: "",
         decimals: 0,
@@ -1698,7 +1698,7 @@ describe("#SLP Utils", () => {
       const stubValid = [
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
           valid: true
         }
       ]
@@ -1717,21 +1717,19 @@ describe("#SLP Utils", () => {
       const utxos = [
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
-          vout: 2,
-          value: "16712",
-          height: 638273,
-          confirmations: 42,
-          satoshis: 16712
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
         },
         {
           txid:
-            "81955624a8eb7011769ff5faa607f78f84b0f8152b9145e7db8b1e521c895ee3",
-          vout: 1,
-          value: "546",
-          height: 638273,
-          confirmations: 42,
-          satoshis: 546
+            "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+          vout: 2,
+          value: "13478",
+          confirmations: 0,
+          satoshis: 13478
         }
       ]
 
@@ -1739,10 +1737,182 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
-      assert2.equal(data[0], false)
+      assert2.equal(data[1], false)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].tokenType, 65)
+    })
+
+    it("should decode an NFT Child Send transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 65,
+        txType: "SEND",
+        tokenId:
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+        amounts: ["1"]
+      }
+
+      const genesisData = {
+        tokenType: 65,
+        txType: "GENESIS",
+        ticker: "NFTC",
+        name: "NFT Child",
+        tokenId:
+          "9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 0,
+        mintBatonVout: 0,
+        qty: "1"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(genesisData)
+        .onCall(2)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox.stub(slp.Utils, "validateTxid").resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a",
+          vout: 2,
+          value: "12136",
+          confirmations: 0,
+          satoshis: 12136
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].transactionType, "send")
+      assert2.equal(data[0].tokenType, 65)
+
+      assert2.equal(data[1], false)
+    })
+
+    it("should decode an NFT Group Send transaction", async () => {
+      // Define stubbed data.
+      const slpData = {
+        tokenType: 129,
+        txType: "SEND",
+        tokenId:
+          "eee4b82e4bb7113eca433829144363fc45f110693c286494fbf5b5c8043cc981",
+        amounts: ["1", "8"]
+      }
+
+      const genesisData = {
+        tokenType: 129,
+        txType: "GENESIS",
+        ticker: "NFTTT",
+        name: "NFT Test Token",
+        tokenId:
+          "eee4b82e4bb7113eca433829144363fc45f110693c286494fbf5b5c8043cc981",
+        documentUri: "https://FullStack.cash",
+        documentHash: "",
+        decimals: 0,
+        mintBatonVout: 2,
+        qty: "1"
+      }
+
+      const stubValid = [
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          valid: true
+        }
+      ]
+
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .resolves(slpData)
+        .onCall(1)
+        .resolves(genesisData)
+        .onCall(2)
+        .resolves(slpData)
+        .onCall(3)
+        .resolves(genesisData)
+        .onCall(4)
+        .resolves(slpData)
+
+      // Stub the call to validateTxid
+      sandbox
+        .stub(slp.Utils, "validateTxid")
+        .resolves(stubValid)
+        .onCall(1)
+        .resolves(stubValid)
+
+      const utxos = [
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 1,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 2,
+          value: "546",
+          confirmations: 0,
+          satoshis: 546
+        },
+        {
+          txid:
+            "57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766",
+          vout: 3,
+          value: "10794",
+          confirmations: 0,
+          satoshis: 10794
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.isArray(data)
+
+      assert2.equal(data[0].utxoType, "token")
+      assert2.equal(data[0].transactionType, "send")
+      assert2.equal(data[0].tokenType, 129)
 
       assert2.equal(data[1].utxoType, "token")
+      assert2.equal(data[1].transactionType, "send")
       assert2.equal(data[1].tokenType, 129)
+
+      assert2.equal(data[2], false)
     })
   })
 

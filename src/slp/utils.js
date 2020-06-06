@@ -1125,7 +1125,7 @@ class Utils {
         let slpData = false
         try {
           slpData = await this.decodeOpReturn(utxo.txid)
-          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error: `, err)
           // An error will be thrown if the txid is not SLP.
@@ -1187,7 +1187,7 @@ class Utils {
           // If UTXO passes validation, then return formatted token data.
           else {
             const genesisData = await this.decodeOpReturn(slpData.tokenId)
-            console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
+            // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // Minting Baton
             if (utxo.vout === slpData.mintBatonVout) {
@@ -1265,7 +1265,7 @@ class Utils {
         // Finally, validate the SLP txid with SLPDB.
         if (outAry[i]) {
           const isValid = await this.validateTxid(utxo.txid)
-          console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
           outAry[i].isValid = isValid[0].valid
         }
