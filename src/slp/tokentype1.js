@@ -214,7 +214,7 @@ class TokenType1 {
    *   const configObj = {
    *     name: "SLP Test Token",
    *     ticker: "SLPTEST",
-   *     documentUrl: "https://bchjs.cash",
+   *     documentUrl: "https://FullStack.cash",
    *     documentHash: "",
    *     decimals: 8,
    *     initialQty: 10
