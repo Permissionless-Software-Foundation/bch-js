@@ -105,7 +105,7 @@ class TokenType1 {
       // If mint baton is not specified, then replace it with null.
       if (!configObj.mintBatonVout) configObj.mintBatonVout = null
 
-      const script = slpMdm.NFT1.Group.genesis(
+      const script = slpMdm.NFT1.Child.genesis(
         configObj.ticker,
         configObj.name,
         configObj.documentUrl,
