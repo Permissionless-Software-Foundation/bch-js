@@ -68,12 +68,7 @@ describe(`#SLP`, () => {
       const result = await bchjs.SLP.Utils.decodeOpReturn(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.hasAllKeys(result, [
-        "tokenType",
-        "transactionType",
-        "tokenId",
-        "spendData"
-      ])
+      assert.hasAllKeys(result, ["amounts", "tokenType", "tokenId", "txType"])
     })
   })
 
