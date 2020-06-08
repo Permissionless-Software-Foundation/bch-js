@@ -101,7 +101,7 @@ describe("#Script", () => {
           Buffer.from("00000001", "hex")
         ]
 
-        const data = bchjs.Script.encode(scriptArr)
+        const data = bchjs.Script.encode2(scriptArr)
 
         // convert data to a hex string
         let str = ""

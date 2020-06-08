@@ -35,7 +35,7 @@ class Script {
   }
 
   /**
-   * @api Script.classifyInput() classifyInput() - Classify transaction input.
+   * @api Script.classifyInput() classifyInput()
    * @apiName classifyInput
    * @apiGroup Script
    * @apiDescription
@@ -63,7 +63,7 @@ class Script {
   }
 
   /**
-   * @api Script.classifyOutput() classifyOutput() - Classify transaction output.
+   * @api Script.classifyOutput() classifyOutput()
    * @apiName classifyOutput
    * @apiGroup Script
    * @apiDescription
@@ -95,7 +95,7 @@ class Script {
   }
 
   /**
-   * @api Script.decode() decode() - Decode a Script buffer.
+   * @api Script.decode() decode()
    * @apiName decode
    * @apiGroup Script
    * @apiDescription
@@ -121,11 +121,14 @@ class Script {
   }
 
   /**
-   * @api Script.encode() encode() - Encode a Script buffer.
+   * @api Script.encode() encode()
    * @apiName encode
    * @apiGroup Script
    * @apiDescription
-   * Encode a Script buffer.
+   * Encode a Script buffer with minimal push data. This function is used for
+   * Script files like CashScript. However, it will mangle the OP_RETURN of
+   * an SLP token transaction and will burn the tokens as a result. Use encode2()
+   * instead for that.
    *
    * @apiExample Example usage:
    * // encode P2PKH scriptSig to buffer
@@ -156,7 +159,44 @@ class Script {
   }
 
   /**
-   * @api Script.toASM() toASM() - Script buffer to ASM.
+   * @api Script.encode2() encode2()
+   * @apiName encode2
+   * @apiGroup Script
+   * @apiDescription
+   * Encode a Script buffer without minimal push data. This should be used if
+   * encode() does not produce the desired results. This should be used for compiling
+   * SLP OP_RETURNs.
+   *
+   * @apiExample Example usage:
+   * // encode P2PKH scriptSig to buffer
+   * let scriptSig = [
+   * Buffer.from('3045022100877e2f9c28421f0a850cc8ff66ba1d0f6c8dbe9e63e199c2c2600c9c15bf9d4402204d35b13d3cc202aa25722b2b1791442ebc5c39d898b609515260ad08f0e766a601', 'hex'),
+   * Buffer.from('02fb721b92025e775b1b84774e65d568d24645cb633275f5c26f5c3101b214a8fb', 'hex')
+   * ]
+   * bchjs.Script.encode2(scriptSig);
+   * // <Buffer 48 30 45 02 21 00 87 7e 2f 9c 28 42 1f 0a 85 0c c8 ff 66 ba 1d 0f 6c 8d be 9e 63 e1 99 c2 c2 60 0c 9c 15 bf 9d 44 02 20 4d 35 b1 3d 3c c2 02 aa 25 72 ... >
+   *
+   * // encode P2PKH scriptPubKey to buffer
+   * let scriptPubKey = [
+   * 118,
+   * 169,
+   * Buffer.from('24e9c07804d0ee7e5bda934e0a3ae8710fc007dd', 'hex'),
+   * 136,
+   * 172
+   * ];
+   * bchjs.Script.encode2(scriptPubKey);
+   * // <Buffer 76 a9 14 24 e9 c0 78 04 d0 ee 7e 5b da 93 4e 0a 3a e8 71 0f c0 07 dd 88 ac>
+   */
+  encode2(scriptChunks) {
+    const arr = []
+    scriptChunks.forEach(chunk => {
+      arr.push(chunk)
+    })
+    return Bitcoin.script.compile2(arr)
+  }
+
+  /**
+   * @api Script.toASM() toASM()
    * @apiName toASM
    * @apiGroup Script
    * @apiDescription
@@ -178,7 +218,7 @@ class Script {
   }
 
   /**
-   * @api Script.fromASM() fromASM() - Script ASM to buffer.
+   * @api Script.fromASM() fromASM()
    * @apiName fromASM
    * @apiGroup Script
    * @apiDescription
