@@ -12,7 +12,8 @@ class Ninsight {
     // this.restURL = config.restURL
     // this.apiToken = config.apiToken
 
-    this.ninsightURL = `https://bch-explorer.api.bitcoin.com/v1/`
+    // this.ninsightURL = `https://bch-explorer.api.bitcoin.com/v1/`
+    this.ninsightURL = `https://rest.bitcoin.com/v2`
 
     // Add JWT token to the authorization header.
     this.axiosOptions = {
@@ -65,7 +66,7 @@ class Ninsight {
         throw new Error(`address needs to be a string.`)
 
       const response = await axios.get(
-        `${this.ninsightURL}addr/${address}/utxo`,
+        `${this.ninsightURL}/address/utxo/${address}`,
         _this.axiosOptions
       )
 
