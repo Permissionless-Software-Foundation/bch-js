@@ -61,6 +61,20 @@ let bchjs = new BCHJS({
 })
 ```
 
+### Gatsby
+bch-js is included in this [gatsby-ipfs-template](https://github.com/Permissionless-Software-Foundation/gatsby-ipfs-template) for building uncensorable web apps that can interact with the blockchain. When building a Gatsby (or other front-end app that uses Webpack), you'll need to add these lines to your `gatsby-node.js` file, as per [this issue](https://github.com/gatsbyjs/gatsby/issues/564):
+```
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    node: {
+      fs: 'empty'
+    }
+  })
+}
+```
+
+This is because the new IPFS class in bch-js uses the fs library for uploading files, which is not supported by Gatsby.
+
 ## Features
 This library sets itself apart from BITBOX with the following features:
 
