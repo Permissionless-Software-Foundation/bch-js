@@ -14,7 +14,7 @@ Here are two YouTube walk-through videos to help you get started:
 
 ### Quick Links
 - [npm Library](https://www.npmjs.com/package/@chris.troutner/bch-js)
-- [Documentation](https://bchjs.cash/bch-js/index.html)
+- [Documentation](https://bchjs.fullstack.cash/)
 - [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
 - [api.fullstack.cash](https://api.fullstack.cash) - The REST API this library talks to by default.
 - [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
