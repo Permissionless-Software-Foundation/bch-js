@@ -725,7 +725,15 @@ describe("#SLP Utils", () => {
       const data = await slp.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.equal(data[0], false, "Change UTXO marked as false.")
+      // assert2.equal(data[0], false, "Change UTXO marked as false.")
+      assert2.property(data[0], "txid")
+      assert2.property(data[0], "vout")
+      assert2.property(data[0], "amount")
+      assert2.property(data[0], "satoshis")
+      assert2.property(data[0], "height")
+      assert2.property(data[0], "confirmations")
+      assert2.property(data[0], "isValid")
+      assert2.equal(data[0].isValid, false)
 
       assert2.property(data[1], "txid")
       assert2.property(data[1], "vout")
@@ -953,8 +961,19 @@ describe("#SLP Utils", () => {
 
       assert2.isArray(result)
       assert2.equal(result.length, 2)
-      assert2.equal(result[0], false)
+
+      assert2.property(result[0], "txid")
+      assert2.property(result[0], "vout")
+      assert2.property(result[0], "value")
+      assert2.property(result[0], "satoshis")
+      assert2.property(result[0], "height")
+      assert2.property(result[0], "confirmations")
+      assert2.property(result[0], "isValid")
+      assert2.equal(result[0].isValid, false)
+
       assert.equal(result[1].isValid, true)
+      assert.equal(result[1].utxoType, "token")
+      assert.equal(result[1].transactionType, "send")
     })
 
     it("should handle problematic utxos", async () => {
@@ -1022,11 +1041,22 @@ describe("#SLP Utils", () => {
 
       assert2.isArray(result)
       assert2.equal(result.length, 2)
-      assert2.equal(result[0], false)
+
+      assert2.property(result[0], "txid")
+      assert2.property(result[0], "vout")
+      assert2.property(result[0], "amount")
+      assert2.property(result[0], "satoshis")
+      assert2.property(result[0], "height")
+      assert2.property(result[0], "confirmations")
+      assert2.property(result[0], "isValid")
+      assert2.equal(result[0].isValid, false)
+
       assert2.equal(result[1].isValid, true)
+      assert.equal(result[1].utxoType, "token")
+      assert.equal(result[1].transactionType, "send")
     })
 
-    it("should return false for BCH-only UTXOs", async () => {
+    it("should return isValid=false for BCH-only UTXOs", async () => {
       // Mock live network calls
 
       sandbox
@@ -1054,12 +1084,26 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
-      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      const result = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(data)
-      assert2.equal(false, data[0])
-      assert2.equal(false, data[1])
+      assert2.isArray(result)
+
+      assert2.property(result[0], "txid")
+      assert2.property(result[0], "vout")
+      assert2.property(result[0], "amount")
+      assert2.property(result[0], "satoshis")
+      assert2.property(result[0], "confirmations")
+      assert2.property(result[0], "isValid")
+      assert2.equal(result[0].isValid, false)
+
+      assert2.property(result[1], "txid")
+      assert2.property(result[1], "vout")
+      assert2.property(result[1], "amount")
+      assert2.property(result[1], "satoshis")
+      assert2.property(result[1], "confirmations")
+      assert2.property(result[1], "isValid")
+      assert2.equal(result[1].isValid, false)
     })
 
     it("should decode a Genesis transaction", async () => {
@@ -1121,10 +1165,17 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
+
       assert2.equal(data[0].utxoType, "token")
       assert2.equal(data[0].tokenQty, 100)
+      assert2.equal(data[0].isValid, true)
+      assert2.equal(data[0].tokenType, 1)
+
       assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(false, data[2])
+      assert2.equal(data[1].isValid, true)
+      assert2.equal(data[1].tokenType, 1)
+
+      assert2.equal(data[2].isValid, false)
     })
 
     it("should decode a Mint transaction", async () => {
@@ -1212,10 +1263,17 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
+
       assert2.equal(data[0].utxoType, "token")
       assert2.equal(data[0].tokenQty, 100)
+      assert2.equal(data[0].isValid, true)
+      assert2.equal(data[0].tokenType, 1)
+
       assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(false, data[2])
+      assert2.equal(data[1].isValid, true)
+      assert2.equal(data[1].tokenType, 1)
+
+      assert2.equal(data[2].isValid, false)
     })
 
     it("should decode a NFT Group Genesis transaction", async () => {
@@ -1299,13 +1357,16 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
-      assert2.equal(data[0], false)
+
+      assert2.equal(data[0].isValid, false)
 
       assert2.equal(data[1].utxoType, "minting-baton")
+      assert2.equal(data[1].isValid, true)
       assert2.equal(data[1].tokenType, 129)
 
       assert2.equal(data[2].utxoType, "token")
       assert2.equal(data[2].tokenType, 129)
+      assert2.equal(data[1].isValid, true)
     })
 
     it("should decode a NFT Group Mint transaction", async () => {
@@ -1398,13 +1459,16 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
-      assert2.equal(data[0], false)
+
+      assert2.equal(data[0].isValid, false)
 
       assert2.equal(data[1].utxoType, "minting-baton")
       assert2.equal(data[1].tokenType, 129)
+      assert2.equal(data[1].isValid, true)
 
       assert2.equal(data[2].utxoType, "token")
       assert2.equal(data[2].tokenType, 129)
+      assert2.equal(data[2].isValid, true)
     })
 
     it("should decode a NFT Child Genesis transaction", async () => {
@@ -1465,10 +1529,12 @@ describe("#SLP Utils", () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
-      assert2.equal(data[1], false)
 
       assert2.equal(data[0].utxoType, "token")
       assert2.equal(data[0].tokenType, 65)
+      assert2.equal(data[0].isValid, true)
+
+      assert2.equal(data[1].isValid, false)
     })
 
     it("should decode an NFT Child Send transaction", async () => {
@@ -1543,8 +1609,9 @@ describe("#SLP Utils", () => {
       assert2.equal(data[0].utxoType, "token")
       assert2.equal(data[0].transactionType, "send")
       assert2.equal(data[0].tokenType, 65)
+      assert2.equal(data[0].isValid, true)
 
-      assert2.equal(data[1], false)
+      assert2.equal(data[1].isValid, false)
     })
 
     it("should decode an NFT Group Send transaction", async () => {
@@ -1635,12 +1702,14 @@ describe("#SLP Utils", () => {
       assert2.equal(data[0].utxoType, "token")
       assert2.equal(data[0].transactionType, "send")
       assert2.equal(data[0].tokenType, 129)
+      assert2.equal(data[0].isValid, true)
 
       assert2.equal(data[1].utxoType, "token")
       assert2.equal(data[1].transactionType, "send")
       assert2.equal(data[1].tokenType, 129)
+      assert2.equal(data[1].isValid, true)
 
-      assert2.equal(data[2], false)
+      assert2.equal(data[2].isValid, false)
     })
   })
 

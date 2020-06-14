@@ -14,7 +14,7 @@ Here are two YouTube walk-through videos to help you get started:
 
 ### Quick Links
 - [npm Library](https://www.npmjs.com/package/@chris.troutner/bch-js)
-- [Documentation](https://bchjs.cash/bch-js/index.html)
+- [Documentation](https://bchjs.fullstack.cash/)
 - [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
 - [api.fullstack.cash](https://api.fullstack.cash) - The REST API this library talks to by default.
 - [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
@@ -81,8 +81,7 @@ This library sets itself apart from BITBOX with the following features:
 - [ECMAScript 2017 standard JavaScript](https://en.wikipedia.org/wiki/ECMAScript#8th_Edition_-_ECMAScript_2017) used instead of TypeScript. Works
 natively with node.js v10 or higher.
 
-- [slp-sdk](https://github.com/Bitcoin-com/slp-sdk) features are integrated
-into this library too. Currently only simple token sending is supported. If you need SLP token functionality, you should use [slp-sdk](https://github.com/Bitcoin-com/slp-sdk), [slp-cli-wallet](https://www.npmjs.com/package/slp-cli-wallet).
+- Full SLP tokens support: bch-js has full support for all SLP token functionality, including send, mint, and genesis transactions. It also fully support all aspects of [non-fugible tokans (NFTs)](https://www.youtube.com/watch?v=vvlpYUx6HRs).
 
 - [Semantic Release](https://github.com/semantic-release/semantic-release) for
 continuous delivery using semantic versioning.
@@ -98,7 +97,7 @@ dependencies in case they are ever inaccessible from GitHub or npm.
 ## Documentation:
 
 Full documentation for this library can be found here:
-- [Documentation](https://bchjs.cash/bch-js/index.html)
+- [Documentation](https://bchjs.fullstack.cash/)
 
 Original documentation on BITBOX is available at:
 

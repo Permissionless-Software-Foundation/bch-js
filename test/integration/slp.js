@@ -255,7 +255,7 @@ describe(`#SLP`, () => {
         const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
         // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-        assert.equal(data[0], false, "Change UTXO marked as false.")
+        assert.equal(data[0].isValid, false, "Change UTXO marked as false.")
 
         assert.property(data[1], "txid")
         assert.property(data[1], "vout")
@@ -373,7 +373,7 @@ describe(`#SLP`, () => {
 
         assert.isArray(result)
         assert.equal(result.length, 2)
-        assert.equal(result[0], false)
+        assert.equal(result[0].isValid, false)
         assert.equal(result[1].isValid, true)
       })
 
@@ -404,7 +404,7 @@ describe(`#SLP`, () => {
 
         assert.isArray(result)
         assert.equal(result.length, 2)
-        assert.equal(result[0], false)
+        assert.equal(result[0].isValid, false)
         assert.equal(result[1].isValid, true)
       })
 
@@ -434,8 +434,8 @@ describe(`#SLP`, () => {
         // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
         assert.isArray(data)
-        assert.equal(false, data[0])
-        assert.equal(false, data[1])
+        assert.equal(data[0].isValid, false)
+        assert.equal(data[1].isValid, false)
       })
     })
 
