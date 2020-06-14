@@ -948,7 +948,9 @@ class Utils {
           // console.log(`error: `, err)
           // An error will be thrown if the txid is not SLP.
           // Mark as false and continue the loop.
-          outAry.push(false)
+          // outAry.push(false)
+          utxo.isValid = false
+          outAry.push(utxo)
           continue
         }
 
@@ -964,7 +966,9 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            outAry[i] = false
+            // outAry[i] = false
+            utxo.isValid = false
+            outAry[i] = utxo
           }
 
           // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
@@ -999,7 +1003,9 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            outAry[i] = false
+            // outAry[i] = false
+            utxo.isValid = false
+            outAry[i] = utxo
           }
 
           // If UTXO passes validation, then return formatted token data.
@@ -1040,17 +1046,14 @@ class Utils {
           // const voutMatch = slpData.spendData.filter(x => utxo.vout === x.vout)
           // console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
 
-          // If there are no vout matches, the UTXO can safely be marked as false.
-          // if (voutMatch.length === 0) {
-          //   outAry[i] = false
-          // }
-
           // Figure out what token quantity is represented by this utxo.
           const tokenQty = slpData.amounts[utxo.vout - 1]
           // console.log(`tokenQty: `, tokenQty)
 
           if (!tokenQty) {
-            outAry[i] = false
+            // outAry[i] = false
+            utxo.isValid = false
+            outAry[i] = utxo
           }
 
           // If UTXO passes validation, then return formatted token data.
@@ -1081,7 +1084,7 @@ class Utils {
         }
 
         // Finally, validate the SLP txid with SLPDB.
-        if (outAry[i]) {
+        if (outAry[i].tokenType) {
           const isValid = await this.validateTxid(utxo.txid)
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
