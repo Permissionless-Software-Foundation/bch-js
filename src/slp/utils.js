@@ -838,10 +838,12 @@ class Utils {
    * @apiDescription Hydrate a UTXO with SLP token metadata.
    *
    * Expects an array of UTXO objects as input. Returns an array of equal size.
+   * Returns UTXO data hydrated with token information.
    * If the
-   * UTXO does not belong to a SLP transaction, it will return false.
+   * UTXO does not belong to a SLP transaction, it will return an `isValid` property
+   * set to false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
-   * with additional SLP information attached. An isValid property will be included.
+   * with additional SLP information attached. An `isValid` property will be included.
    * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
    * then SLPDB has not yet processed that txid and validity has not been confirmed.
    *
