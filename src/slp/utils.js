@@ -877,7 +877,8 @@ class Utils {
    *  "tokenDocumentHash": "",
    *  "decimals": 8,
    *  "tokenQty": 2,
-   *  "isValid": true
+   *  "isValid": true,
+   *  "tokenType": 1
    * }
    */
 
