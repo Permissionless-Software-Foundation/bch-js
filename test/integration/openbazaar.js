@@ -107,7 +107,8 @@ describe(`#OpenBazaar`, () => {
         "valueOut",
         "valueIn",
         "fees",
-        "hex"
+        "hex",
+        "time"
       ])
       assert.isArray(result.vin)
       assert.isArray(result.vout)
