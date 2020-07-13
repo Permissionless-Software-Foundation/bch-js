@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export RESTURL=https://free-api.fullstack.cash/v3/
+export RESTURL=https://free-main.fullstack.cash/v3/
 #export RESTURL=http://localhost:3000/v3/
 
 cd test/integration/
