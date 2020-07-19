@@ -6,20 +6,34 @@ const Script = require("../script")
 
 const BigNumber = require("bignumber.js")
 const slpMdm = require("slp-mdm")
+const axios = require("axios")
 
 // const addy = new Address()
 let addy
 const TransactionBuilder = require("../transaction-builder")
 
+let _this // local global
+
 class TokenType1 {
   constructor(config) {
     this.restURL = config.restURL
+    this.apiToken = config.apiToken
 
     addy = new Address(config)
     this.Script = new Script()
 
+    this.axios = axios
+    // Add JWT token to the authorization header.
+    this.axiosOptions = {
+      headers: {
+        authorization: `Token ${this.apiToken}`
+      }
+    }
+
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
+
+    _this = this
   }
 
   /**
@@ -357,6 +371,76 @@ class TokenType1 {
       return script
     } catch (err) {
       // console.log(`Error in generateMintOpReturn()`)
+      throw err
+    }
+  }
+
+  /**
+   * @api SLP.TokenType1.getHexOpReturn() getOpReturnHex()
+   * @apiName getOpReturnHex
+   * @apiGroup SLP TokenType1
+   * @apiDescription Get hex representation of an SLP OP_RETURN
+   * This command returns a hex encoded OP_RETURN for SLP Send (Token Type 1)
+   * transactions. Rather than computing it directly, it calls bch-api to do
+   * the heavy lifting. This is easier and lighter weight for web apps.
+   *
+   * @apiExample Example usage:
+   *
+   *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
+   *  const utxos = await bchjs.Blockbook.utxos(addr)
+   *
+   *  // Identify the SLP token UTXOs.
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *
+   *  // Filter out the minting baton.
+   *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
+   *    if (
+   *      utxo && // UTXO is associated with a token.
+   *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
+   *      utxo.utxoType === "minting-baton" // UTXO is not a minting baton.
+   *    )
+   *    return true;
+   *  });
+   *
+   *  // Generate the SLP OP_RETURN
+   *  const slpData = bchjs.SLP.TokenType1.generateMintOpReturn(
+   *    tokenUtxos,
+   *    100 // Mint 100 new tokens.
+   *  );
+   *
+   *  ...
+   *  // Add OP_RETURN as first output.
+   *  transactionBuilder.addOutput(slpData, 0);
+   *
+   *  // See additional code here:
+   *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
+   */
+  // Gets an OP_RETURN object that has scripts and outputs
+  async getHexOpReturn(tokenUtxos, sendQty) {
+    try {
+      // TODO: Add input filtering.
+
+      const data = {
+        tokenUtxos,
+        sendQty
+      }
+
+      const result = await _this.axios.post(
+        `${this.restURL}slp/generatesendopreturn`,
+        data,
+        _this.axiosOptions
+      )
+
+      const slpSendObj = result.data
+
+      // const script = _this.Buffer.from(slpSendObj.script)
+      //
+      // slpSendObj.script = script
+      // return slpSendObj
+
+      return slpSendObj
+    } catch (err) {
+      console.log(err)
       throw err
     }
   }

@@ -31,7 +31,7 @@ class SLP {
 
     this.Address = new Address(tmp)
     this.ECPair = ECPair
-    this.TokenType1 = new TokenType1(this.restURL)
+    this.TokenType1 = new TokenType1(tmp)
     this.NFT1 = new NFT1(this.restURL)
     this.Utils = new Utils(tmp)
   }
