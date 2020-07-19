@@ -376,8 +376,8 @@ class TokenType1 {
   }
 
   /**
-   * @api SLP.TokenType1.getHexOpReturn() getOpReturnHex()
-   * @apiName getOpReturnHex
+   * @api SLP.TokenType1.getHexOpReturn() getHexOpReturn()
+   * @apiName getHexOpReturn
    * @apiGroup SLP TokenType1
    * @apiDescription Get hex representation of an SLP OP_RETURN
    * This command returns a hex encoded OP_RETURN for SLP Send (Token Type 1)
@@ -386,36 +386,22 @@ class TokenType1 {
    *
    * @apiExample Example usage:
    *
-   *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
-   *  const utxos = await bchjs.Blockbook.utxos(addr)
+   *  const tokenUtxos = [{
+   *   tokenId: "0a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1",
+   *   decimals: 0,
+   *   tokenQty: 2
+   *  }]
    *
-   *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *  const sendQty = 1.5
    *
-   *  // Filter out the minting baton.
-   *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
-   *    if (
-   *      utxo && // UTXO is associated with a token.
-   *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
-   *      utxo.utxoType === "minting-baton" // UTXO is not a minting baton.
-   *    )
-   *    return true;
-   *  });
+   *  const result = await bchjs.SLP.TokenType1.getHexOpReturn(tokenUtxos, sendQty)
    *
-   *  // Generate the SLP OP_RETURN
-   *  const slpData = bchjs.SLP.TokenType1.generateMintOpReturn(
-   *    tokenUtxos,
-   *    100 // Mint 100 new tokens.
-   *  );
-   *
-   *  ...
-   *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0);
-   *
-   *  // See additional code here:
-   *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
+   *  // result:
+   *  {
+   *    "script": "6a04534c500001010453454e44200a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1080000000000000001080000000000000000",
+   *    "outputs": 2
+   *  }
    */
-  // Gets an OP_RETURN object that has scripts and outputs
   async getHexOpReturn(tokenUtxos, sendQty) {
     try {
       // TODO: Add input filtering.
