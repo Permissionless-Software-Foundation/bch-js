@@ -6,20 +6,34 @@ const Script = require("../script")
 
 const BigNumber = require("bignumber.js")
 const slpMdm = require("slp-mdm")
+const axios = require("axios")
 
 // const addy = new Address()
 let addy
 const TransactionBuilder = require("../transaction-builder")
 
+let _this // local global
+
 class TokenType1 {
   constructor(config) {
     this.restURL = config.restURL
+    this.apiToken = config.apiToken
 
     addy = new Address(config)
     this.Script = new Script()
 
+    this.axios = axios
+    // Add JWT token to the authorization header.
+    this.axiosOptions = {
+      headers: {
+        authorization: `Token ${this.apiToken}`
+      }
+    }
+
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
+
+    _this = this
   }
 
   /**
@@ -121,90 +135,6 @@ class TokenType1 {
       return { script, outputs }
     } catch (err) {
       console.log(`Error in generateSendOpReturn()`)
-      throw err
-    }
-  }
-
-  /**
-   * @api SLP.TokenType1.generateSendOpReturnWeb() generateSendOpReturnWeb() - Web-friendly OP_RETURN code for SLP Send tx
-   * @apiName generateSendOpReturnWeb
-   * @apiGroup SLP
-   * @apiDescription Generate the OP_RETURN value needed to create an SLP Send transaction.
-   * It's assumed all elements in the tokenUtxos array belong to the same token.
-   * Returns an object with two properties:
-   *  - script: an array of Bufers that is ready to fed into bchjs.Script.encode2() to be turned into a transaction output.
-   *  - outputs: an integer with a value of 1 or 2. If 2, indicates there needs to be an extra output to send token change.
-   */
-  generateSendOpReturnWeb(tokenUtxos, sendQty) {
-    try {
-      const tokenId = tokenUtxos[0].tokenId
-      const decimals = tokenUtxos[0].decimals
-
-      // Calculate the total amount of tokens owned by the wallet.
-      let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
-        totalTokens += tokenUtxos[i].tokenQty
-
-      const change = totalTokens - sendQty
-      // console.log(`change: ${change}`)
-
-      let script
-      let outputs = 1
-
-      // The normal case, when there is token change to return to sender.
-      if (change > 0) {
-        outputs = 2
-
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        let baseQtyHex = baseQty.toString(16)
-        baseQtyHex = baseQtyHex.padStart(16, "0")
-
-        let baseChange = new BigNumber(change).times(10 ** decimals)
-        baseChange = baseChange.absoluteValue()
-        baseChange = Math.floor(baseChange)
-        // console.log(`baseChange: ${baseChange.toString()}`)
-
-        let baseChangeHex = baseChange.toString(16)
-        baseChangeHex = baseChangeHex.padStart(16, "0")
-        // console.log(`baseChangeHex padded: ${baseChangeHex}`)
-
-        script = [
-          this.Script.opcodes.OP_RETURN,
-          Buffer.from("534c5000", "hex"),
-          //BITBOX.Script.opcodes.OP_1,
-          Buffer.from("01", "hex"),
-          Buffer.from(`SEND`),
-          Buffer.from(tokenId, "hex"),
-          Buffer.from(baseQtyHex, "hex"),
-          Buffer.from(baseChangeHex, "hex")
-        ]
-      } else {
-        // Corner case, when there is no token change to send back.
-
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        let baseQtyHex = baseQty.toString(16)
-        baseQtyHex = baseQtyHex.padStart(16, "0")
-
-        // console.log(`baseQty: ${baseQty.toString()}`)
-
-        script = [
-          this.Script.opcodes.OP_RETURN,
-          Buffer.from("534c5000", "hex"),
-          //BITBOX.Script.opcodes.OP_1,
-          Buffer.from("01", "hex"),
-          Buffer.from(`SEND`),
-          Buffer.from(tokenId, "hex"),
-          Buffer.from(baseQtyHex, "hex")
-        ]
-      }
-
-      return { script, outputs }
-    } catch (err) {
-      console.log(`Error in generateSendOpReturnWeb()`)
       throw err
     }
   }
@@ -441,6 +371,62 @@ class TokenType1 {
       return script
     } catch (err) {
       // console.log(`Error in generateMintOpReturn()`)
+      throw err
+    }
+  }
+
+  /**
+   * @api SLP.TokenType1.getHexOpReturn() getHexOpReturn()
+   * @apiName getHexOpReturn
+   * @apiGroup SLP TokenType1
+   * @apiDescription Get hex representation of an SLP OP_RETURN
+   * This command returns a hex encoded OP_RETURN for SLP Send (Token Type 1)
+   * transactions. Rather than computing it directly, it calls bch-api to do
+   * the heavy lifting. This is easier and lighter weight for web apps.
+   *
+   * @apiExample Example usage:
+   *
+   *  const tokenUtxos = [{
+   *   tokenId: "0a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1",
+   *   decimals: 0,
+   *   tokenQty: 2
+   *  }]
+   *
+   *  const sendQty = 1.5
+   *
+   *  const result = await bchjs.SLP.TokenType1.getHexOpReturn(tokenUtxos, sendQty)
+   *
+   *  // result:
+   *  {
+   *    "script": "6a04534c500001010453454e44200a321bff9761f28e06a268b14711274bb77617410a16807bd0437ef234a072b1080000000000000001080000000000000000",
+   *    "outputs": 2
+   *  }
+   */
+  async getHexOpReturn(tokenUtxos, sendQty) {
+    try {
+      // TODO: Add input filtering.
+
+      const data = {
+        tokenUtxos,
+        sendQty
+      }
+
+      const result = await _this.axios.post(
+        `${this.restURL}slp/generatesendopreturn`,
+        data,
+        _this.axiosOptions
+      )
+
+      const slpSendObj = result.data
+
+      // const script = _this.Buffer.from(slpSendObj.script)
+      //
+      // slpSendObj.script = script
+      // return slpSendObj
+
+      return slpSendObj
+    } catch (err) {
+      console.log(err)
       throw err
     }
   }
