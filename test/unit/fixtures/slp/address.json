@@ -1,0 +1,93 @@
+{
+  "mainnet": {
+    "legacyP2PKH": [
+      "18xHZ8g2feo4ceejGpvzHkvXT79fi2ZdTG",
+      "1K7Qb1dWkiYwPrZhLws3uUKhxKEU7dRnbQ",
+      "1Au7gWXS2zAgFSdWwT5QnTNeasye16kxoG",
+      "174uecjfRgh1XkVBYFzZymkV1JwmFQ91s9",
+      "1KLXUPMdq4vaU3VoQzSvLUx2mub5qzFkTc"
+    ],
+    "legacyP2SH": [
+      "3DA6RBcFgLwLTpnF6BRAee8w6a9H6JQLCm",
+      "3AbtU1JSaiQijyGT21stxpBRZj1hixWcGB",
+      "3KfgmLeczB525pV2tJLQ6RM5qFMLaB2Kn1",
+      "3Bsr5dvAJ2Q8CpHxJSZkNdgD12Tkb9TaR7",
+      "3J78iYD4i4ht8Btp8pyRx71jg5yrRTkQaM"
+    ],
+    "cashAddressP2PKH": [
+      "bitcoincash:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh",
+      "bitcoincash:qrr2suh9yjsrkl2qp3p967uhfg6u0r6xxsn9h5vuvr",
+      "bitcoincash:qpkfg4kck99wksyss6nvaqtafeahfnyrpsj0ed372t",
+      "bitcoincash:qppgmuuwy07g0x39sx2z0x2u8e34tvfdxvy0c2jvx7",
+      "bitcoincash:qryj8x4s7vfsc864jm0xaak9qfe8qgk245y9ska57l"
+    ],
+    "cashAddressP2SH": [
+      "bitcoincash:pp7ushdxf5we8mcpaa3wqgsuqt639cu59ur5xu5fug",
+      "bitcoincash:ppsup5akyvql5w46q9eszd9fxpx970acpyqkw79vq2",
+      "bitcoincash:prznrkhnf6zqsap6l664ayzu2xue67ue4gv686sjyu",
+      "bitcoincash:pphmm80pznl6pnkmzakz3ahafydmvhwzcslea4v5mz",
+      "bitcoincash:pz6pr25g6mulp0kes9xnmsda0u4rf442ase2un89pl"
+    ],
+    "slpAddressP2PKH": [
+      "simpleledger:qptnmya5wkly7xf97wm5ak23yqdsz3l2cy79a7ey6f",
+      "simpleledger:qrr2suh9yjsrkl2qp3p967uhfg6u0r6xxsl7u0euja",
+      "simpleledger:qpkfg4kck99wksyss6nvaqtafeahfnyrps75jky754",
+      "simpleledger:qppgmuuwy07g0x39sx2z0x2u8e34tvfdxvg5n38vcq",
+      "simpleledger:qryj8x4s7vfsc864jm0xaak9qfe8qgk245g7mdg5qp"
+    ],
+    "slpAddressP2SH": [
+      "simpleledger:pp7ushdxf5we8mcpaa3wqgsuqt639cu59u00d8pfzk",
+      "simpleledger:ppsup5akyvql5w46q9eszd9fxpx970acpyvd99sv75",
+      "simpleledger:prznrkhnf6zqsap6l664ayzu2xue67ue4gqpvp9j6z",
+      "simpleledger:pphmm80pznl6pnkmzakz3ahafydmvhwzcsnzkwe59u",
+      "simpleledger:pz6pr25g6mulp0kes9xnmsda0u4rf442as43hgj9lp"
+    ],
+    "slpTxids": [
+      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+    ]
+  },
+  "testnet": {
+    "legacyP2PKH": [
+      "mhTg9sgNgvAGfmJs192oUzQWqAXHH5nqLE",
+      "mmpjQ24UyGGfJ39k44prH6W2A7y1qVaQti",
+      "muEnSveRwu8cEJSvXzDTJZQWrr7y9i331i",
+      "n3jZn7rb3Bjepap4TWo8pyqcwuxAw439HW",
+      "mqHUen3SUNjQkAPjMxZfSnuyd8cmcbL6fq"
+    ],
+    "legacyP2SH": [
+      "2N7euSnwuJP93QmK5TD4AkWmaTfBbBLrxUs",
+      "2N38BPRHX4ejA7QJEfYGikw2PM7QRaVnFg3",
+      "2N46fAZgsFSwKxM5reRdQCmmtAXaotVqakP",
+      "2MzFSj4mQM3bCFYEKmhxSecuoPA3aziudov",
+      "2N4Y11CqifLKEDfCFRHa6Dt36X9BKCP2K2o"
+    ],
+    "cashAddressP2PKH": [
+      "bchtest:qq24rpar9qas3vc9r8d4p0prhwaf7jmx2u22nzt946",
+      "bchtest:qpzj67wmlsq8uttddddapjjawyusureca59ug9cak8",
+      "bchtest:qztg9c4u3ldhg68mqgzrple6ae92hwnfe5m6kyejfd",
+      "bchtest:qrem2cg43ksmvlampheur8gfgdhhk57mygy26y7f2e",
+      "bchtest:qp4jf3n740kffkladul96xnq5dtrflg4x5w5rfy22r"
+    ],
+    "cashAddressP2SH": [
+      "bchtest:pz0qcslrqn7hr44hsszwl4lw5r6udkg6zqh2hmtpyr",
+      "bchtest:ppk9ctxq9feg56vmwyznlgqs8sk6astknq75a27y9c",
+      "bchtest:ppms42pganhr9fqnkfz7xnwcj7emxng3u5526prj59",
+      "bchtest:ppxd8qmgse5h2gy03vf7swxg4rrfpxckx5mnszkjw8",
+      "bchtest:ppaat8w24kdu74782fu8jr27k42dwhem45ycrhxgae"
+    ],
+    "slpAddressP2PKH": [
+      "slptest:qq24rpar9qas3vc9r8d4p0prhwaf7jmx2u375e3j88",
+      "slptest:qpzj67wmlsq8uttddddapjjawyusureca57g07z2y6",
+      "slptest:qztg9c4u3ldhg68mqgzrple6ae92hwnfe5qw3lr9ms",
+      "slptest:qrem2cg43ksmvlampheur8gfgdhhk57mygl7aly7cy",
+      "slptest:qp4jf3n740kffkladul96xnq5dtrflg4x54qyj7ac7"
+    ],
+    "slpAddressP2SH": [
+      "slptest:pz0qcslrqn7hr44hsszwl4lw5r6udkg6zqv7sq3kk7",
+      "slptest:ppk9ctxq9feg56vmwyznlgqs8sk6astknq9q63ynh9",
+      "slptest:ppms42pganhr9fqnkfz7xnwcj7emxng3u507a6e9xc",
+      "slptest:ppxd8qmgse5h2gy03vf7swxg4rrfpxckx5q8hev9u6",
+      "slptest:ppaat8w24kdu74782fu8jr27k42dwhem45lvyvul0y"
+    ]
+  }
+}

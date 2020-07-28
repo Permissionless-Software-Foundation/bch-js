@@ -1,0 +1,28 @@
+{
+  "name": "sendrawtransaction",
+  "version": "1.0.0",
+  "description": "e2e test - Send two transactions in parallel.",
+  "main": "sendrawtransaction.js",
+  "scripts": {
+    "test": "echo no tests yet",
+    "start": "node sendrawtransaction.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bitcoin-com/bitbox-javascript-sdk.git"
+  },
+  "keywords": [
+    "bitbox",
+    "bch",
+    "bitcoin",
+    "bitcoin cash",
+    "bitcoin.com",
+    "javascript"
+  ],
+  "author": "Chris Troutner <chris.troutner@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bitcoin-com/bitbox-javascript-sdk/issues"
+  },
+  "homepage": "https://github.com/Bitcoin-com/bitbox-javascript-sdk/blob/master/README.md"
+}

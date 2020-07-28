@@ -1,0 +1,30 @@
+# This is a node.js v8+ JavaScript project
+language: node_js
+node_js:
+  - "10"
+
+# Build on Ubuntu Xenial (16.04)
+# https://docs.travis-ci.com/user/reference/trusty/#javascript-and-nodejs-images
+dist: xenial
+sudo: required
+
+# Use Docker
+services:
+  - docker
+
+before_install:
+  #- ./install-mongo
+  #- npm install -g mocha
+
+# https://github.com/greenkeeperio/greenkeeper-lockfile/issues/156
+install: case $TRAVIS_BRANCH in greenkeeper*) npm i;; *) npm ci;; esac;
+
+# Send coverage data to Coveralls
+after_success:
+  - npm run coverage
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+    - npx semantic-release
