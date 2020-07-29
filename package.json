@@ -1,7 +1,7 @@
 {
-  "name": "@chris.troutner/bch-js",
-  "version": "3.0.0",
-  "description": "Bitcoin Cash JavaScript Library based on BITBOX",
+  "name": "@psf/bch-js",
+  "version": "3.4.0",
+  "description": "The FullStack.cash JavaScript library for Bitcoin Cash and SLP Tokens",
   "author": "Chris Troutner <chris.troutner@gmail.com>",
   "contributors": [
     "Gabriel Cardona <gabriel@bitcoin.com>"
@@ -22,10 +22,10 @@
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
   },
   "license": "MIT",
-  "homepage": "https://github.com/christroutner/bch-js",
+  "homepage": "https://github.com/Permissionless-Software-Foundation/bch-js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/christroutner/bch-js.git"
+    "url": "git+https://github.com/Permissionless-Software-Foundation/bch-js.git"
   },
   "dependencies": {
     "@uppy/core": "^1.10.4",
