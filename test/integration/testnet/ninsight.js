@@ -1,12 +1,9 @@
 const chai = require("chai")
 const assert = chai.assert
-const axios = require("axios")
 const sinon = require("sinon")
 
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
-
-const mockData = require("./fixtures/ninsight-mock")
+const BCHJS = require("../../../src/bch-js")
+const bchjs = new BCHJS({ ninsightURL: "https://trest.bitcoin.com/v2" })
 
 describe(`#Ninsight`, () => {
   let sandbox
@@ -14,26 +11,8 @@ describe(`#Ninsight`, () => {
   afterEach(() => sandbox.restore())
 
   describe(`#utxo`, () => {
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Ninsight.utxo(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings.`
-        )
-      }
-    })
-
     it(`should GET utxos for a single address`, async () => {
-      // Stub the network call.
-      sandbox.stub(axios, "get").resolves({ data: mockData.utxo })
-
-      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr"
 
       const result = await bchjs.Ninsight.utxo(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -56,12 +35,9 @@ describe(`#Ninsight`, () => {
     })
 
     it(`should POST utxo details for an array of addresses`, async () => {
-      // Mock the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.utxoPost })
-
       const addr = [
-        "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
-        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+        "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr",
+        "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"
       ]
 
       const result = await bchjs.Ninsight.utxo(addr)
@@ -76,6 +52,14 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "slpAddress")
       assert.property(result[0], "scriptPubKey")
       assert.property(result[0], "asm")
+
+      // assert.hasAnyKeys(result[0][0], [
+      //   "txid",
+      //   "vout",
+      //   "value",
+      //   "height",
+      //   "confirmations"
+      // ])
     })
   })
 })

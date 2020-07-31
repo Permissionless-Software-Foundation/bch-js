@@ -21,6 +21,9 @@ const utxo = {
     "OP_DUP OP_HASH160 2fe2c4c5ef359bb2fe1a849f891cecffbcfb4f77 OP_EQUALVERIFY OP_CHECKSIG"
 }
 
+const utxoPost = [utxo, utxo]
+
 module.exports = {
-  utxo
+  utxo,
+  utxoPost
 }

@@ -13,7 +13,11 @@ class Ninsight {
     // this.apiToken = config.apiToken
 
     // this.ninsightURL = `https://bch-explorer.api.bitcoin.com/v1/`
-    this.ninsightURL = `https://rest.bitcoin.com/v2`
+    if (config) {
+      this.ninsightURL = config.ninsightURL
+        ? config.ninsightURL
+        : `https://rest.bitcoin.com/v2`
+    }
 
     // Add JWT token to the authorization header.
     this.axiosOptions = {
@@ -62,15 +66,38 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      if (typeof address !== "string")
-        throw new Error(`address needs to be a string.`)
+      // if (typeof address !== "string")
+      //   throw new Error(`address needs to be a string.`)
+      //
+      // const response = await axios.get(
+      //   `${this.ninsightURL}/address/utxo/${address}`,
+      //   _this.axiosOptions
+      // )
 
-      const response = await axios.get(
-        `${this.ninsightURL}/address/utxo/${address}`,
-        _this.axiosOptions
-      )
+      // return response.data
 
-      return response.data
+      // Handle single address.
+      if (typeof address === "string") {
+        const response = await axios.get(
+          `${this.ninsightURL}/address/utxo/${address}`,
+          _this.axiosOptions
+        )
+        return response.data
+
+        // Handle array of addresses.
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.ninsightURL}/address/utxo`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
