@@ -31,7 +31,7 @@ describe(`#Ninsight`, () => {
 
     it(`should GET utxos for a single address`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "get").resolves({ data: mockData.utxo })
+      sandbox.stub(axios, "post").resolves({ data: mockData.utxo })
 
       const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
 
