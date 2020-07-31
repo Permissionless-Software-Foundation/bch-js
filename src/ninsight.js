@@ -68,8 +68,11 @@ class Ninsight {
     try {
       // Handle single address.
       if (typeof address === "string") {
-        const response = await axios.get(
+        const response = await axios.post(
           `${this.ninsightURL}/address/utxo/${address}`,
+          {
+            addresses: [address]
+          },
           _this.axiosOptions
         )
         return response.data
