@@ -22,7 +22,10 @@ describe(`#Ninsight`, () => {
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         //console.log(`err: `, err)
-        assert.include(err.message, `address needs to be a string`)
+        assert.include(
+          err.message,
+          `Input address must be a string or array of strings.`
+        )
       }
     })
 
@@ -50,6 +53,29 @@ describe(`#Ninsight`, () => {
       assert.property(result.utxos[0], "satoshis")
       assert.property(result.utxos[0], "height")
       assert.property(result.utxos[0], "confirmations")
+    })
+
+    it(`should POST utxo details for an array of addresses`, async () => {
+      // Mock the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.utxoPost })
+
+      const addr = [
+        "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
+        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+      ]
+
+      const result = await bchjs.Ninsight.utxo(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.isArray(result[0].utxos)
+
+      assert.property(result[0], "utxos")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "slpAddress")
+      assert.property(result[0], "scriptPubKey")
+      assert.property(result[0], "asm")
     })
   })
 })

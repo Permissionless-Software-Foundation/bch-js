@@ -69,7 +69,7 @@ class BCHJS {
     this.OpenBazaar = new OpenBazaar(libConfig)
 
     // Bitcoin.com Ninsight indexer
-    this.Ninsight = new Ninsight()
+    this.Ninsight = new Ninsight(config)
 
     // ElectrumX indexer
     this.Electrumx = new Electrumx(libConfig)
