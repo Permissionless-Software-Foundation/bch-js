@@ -3,7 +3,7 @@ const assert = chai.assert
 const sinon = require("sinon")
 
 const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
+const bchjs = new BCHJS({ ninsightURL: "https://rest.bitcoin.com/v2" })
 
 describe(`#Ninsight`, () => {
   let sandbox

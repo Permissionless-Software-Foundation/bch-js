@@ -66,16 +66,6 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      // if (typeof address !== "string")
-      //   throw new Error(`address needs to be a string.`)
-      //
-      // const response = await axios.get(
-      //   `${this.ninsightURL}/address/utxo/${address}`,
-      //   _this.axiosOptions
-      // )
-
-      // return response.data
-
       // Handle single address.
       if (typeof address === "string") {
         const response = await axios.get(
