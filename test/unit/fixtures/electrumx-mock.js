@@ -119,11 +119,52 @@ const transactions = {
   ]
 }
 
+const unconfirmed = {
+  success: true,
+  utxos: [
+    {
+      height: 602405,
+      tx_hash:
+        "2b37bdb3b63dd0bca720437754a36671431a950e684b64c44ea910ea9d5297c7",
+      fee: 34100
+    }
+  ]
+}
+
+const unconfirmedArray = {
+  success: true,
+  utxos: [
+    {
+      utxos: [
+        {
+          height: 604392,
+          tx_hash:
+            "7774e449c5a3065144cefbc4c0c21e6b69c987f095856778ef9f45ddd8ae1a41",
+          fee: 34210
+        },
+        {
+          height: 630834,
+          tx_hash:
+            "4fe60a51e0d8f5134bfd8e5f872d6e502d7f01b28a6afebb27f4438a4f638d53",
+          value: 3000
+        }
+      ],
+      address: "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf"
+    },
+    {
+      utxos: [],
+      address: "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+    }
+  ]
+}
+
 module.exports = {
   utxo,
   utxos,
   balance,
   balances,
   transaction,
-  transactions
+  transactions,
+  unconfirmed,
+  unconfirmedArray
 }
