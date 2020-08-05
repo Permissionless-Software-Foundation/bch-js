@@ -196,4 +196,68 @@ describe(`#ElectrumX`, () => {
       assert.property(result.transactions[0].transactions[0], "tx_hash")
     })
   })
+
+  describe(`#unconfirmed`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.Electrumx.unconfirmed(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input address must be a string or array of strings`
+        )
+      }
+    })
+
+    it(`should GET unconfirmed utxos for a single address`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "get").resolves({ data: mockData.unconfirmed })
+
+      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "height")
+      assert.property(result.utxos[0], "tx_hash")
+      assert.property(result.utxos[0], "fee")
+    })
+
+    it(`should POST unconfirmed utxo details for an array of addresses`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.unconfirmedArray })
+
+      const addr = [
+        "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf",
+        "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+      ]
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "utxos")
+      assert.isArray(result.utxos[0].utxos)
+      assert.property(result.utxos[0], "address")
+
+      assert.property(result.utxos[0].utxos[0], "height")
+      assert.property(result.utxos[0].utxos[0], "tx_hash")
+      assert.property(result.utxos[0].utxos[0], "fee")
+    })
+  })
 })

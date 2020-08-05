@@ -178,4 +178,66 @@ describe(`#ElectrumX`, () => {
       }
     })
   })
+
+  describe(`#unconfirmed`, () => {
+    // These tests won't work because unconfirmed transactions are transient in nature.
+    /*
+    it(`should GET unconfirmed UTXOs (mempool) for a single address`, async () => {
+      const addr = "bitcoincash:qqy6qwk3wpne95hhv8uzwr4cn8m7c06cqgchl77dnv"
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "height")
+      assert.property(result.utxos[0], "tx_hash")
+      assert.property(result.utxos[0], "fee")
+    })
+
+    it(`should POST request for unconfirmed UTXOs (mempool) for an array of addresses`, async () => {
+      const addr = [
+        "bitcoincash:qqy6qwk3wpne95hhv8uzwr4cn8m7c06cqgchl77dnv",
+        "bitcoincash:qpyrtsl9msdu2klgfpcmn2v5r22w9rk24g8pal74ts"
+      ]
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "utxos")
+      assert.isArray(result.utxos[0].utxos)
+      assert.property(result.utxos[0], "address")
+
+      assert.property(result.utxos[0].utxos[0], "height")
+      assert.property(result.utxos[0].utxos[0], "tx_hash")
+      assert.property(result.utxos[0].utxos[0], "fee")
+    })
+    */
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf")
+
+        await bchjs.Electrumx.unconfirmed(addr)
+
+        // console.log(`result: ${util.inspect(result)}`)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
+    })
+  })
 })
