@@ -180,6 +180,8 @@ describe(`#ElectrumX`, () => {
   })
 
   describe(`#unconfirmed`, () => {
+    // These tests won't work because unconfirmed transactions are transient in nature.
+    /*
     it(`should GET unconfirmed UTXOs (mempool) for a single address`, async () => {
       const addr = "bitcoincash:qqy6qwk3wpne95hhv8uzwr4cn8m7c06cqgchl77dnv"
 
@@ -220,6 +222,7 @@ describe(`#ElectrumX`, () => {
       assert.property(result.utxos[0].utxos[0], "tx_hash")
       assert.property(result.utxos[0].utxos[0], "fee")
     })
+    */
 
     it(`should throw error on array size rate limit`, async () => {
       try {
@@ -227,9 +230,9 @@ describe(`#ElectrumX`, () => {
         for (let i = 0; i < 25; i++)
           addr.push("bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf")
 
-        const result = await bchjs.Electrumx.unconfirmed(addr)
+        await bchjs.Electrumx.unconfirmed(addr)
 
-        console.log(`result: ${util.inspect(result)}`)
+        // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         assert.hasAnyKeys(err, ["error"])
