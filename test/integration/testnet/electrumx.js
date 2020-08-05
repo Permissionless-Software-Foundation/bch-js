@@ -182,4 +182,63 @@ describe(`#ElectrumX`, () => {
       }
     })
   })
+
+  describe(`#unconfirmed`, () => {
+    it(`should GET unconfirmed UTXOs (mempool) for a single address`, async () => {
+      const addr = "bchtest:qp25k20dgcljrz4hkdz43partam3j5httyprjp23qd"
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "height")
+      assert.property(result.utxos[0], "tx_hash")
+      assert.property(result.utxos[0], "fee")
+    })
+
+    it(`should POST unconfirmed UTXO details for an array of addresses`, async () => {
+      const addr = [
+        "bchtest:qp25k20dgcljrz4hkdz43partam3j5httyprjp23qd",
+        "bchtest:qpkl3xylrjx4jup6m66e7zg7whlaucsxeudxeqawdj"
+      ]
+
+      const result = await bchjs.Electrumx.unconfirmed(addr)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "utxos")
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "utxos")
+      assert.isArray(result.utxos[0].utxos)
+      assert.property(result.utxos[0], "address")
+
+      assert.property(result.utxos[0].utxos[0], "height")
+      assert.property(result.utxos[0].utxos[0], "tx_hash")
+      assert.property(result.utxos[0].utxos[0], "fee")
+    })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const addr = []
+        for (let i = 0; i < 25; i++)
+          addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
+
+        const result = await bchjs.Electrumx.unconfirmed(addr)
+        //console.log(`result: ${util.inspect(result)}`)
+
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
+    })
+  })
 })

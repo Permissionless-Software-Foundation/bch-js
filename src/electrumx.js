@@ -299,6 +299,98 @@ class ElectrumX {
       else throw error
     }
   }
+
+  /**
+   * @api Electrumx.unconfirmed() unconfirmed() - Get a list of unconfirmed uxtos (mempool) for an address.
+   * @apiName ElectrumX Unconfirmed
+   * @apiGroup ElectrumX
+   * @apiDescription Return a list of unconfirmed uxtos (mempool) for an address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let mempool = await bchjs.Electrumx.unconfirmed('bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9');
+   *     console.log(mempool);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * mempool = {
+   *  "success": true,
+   *  "utxos": [
+   *    {
+   *      "height": 602405,
+   *      "tx_hash": "2b37bdb3b63dd0bca720437754a36671431a950e684b64c44ea910ea9d5297c7",
+   *      "fee": 24310
+   *    }
+   *  ]
+   * }
+   *
+   * (async () => {
+   *   try {
+   *     let mempool = await bchjs.Electrumx.unconfirmed(['bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf', 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v']);
+   *     console.log(mempool);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *   mempool = {
+   *     "success": true,
+   *     "utxos": [
+   *       {
+   *         "utxos": [
+   *           {
+   *             "height": 604392,
+   *             "tx_hash": "7774e449c5a3065144cefbc4c0c21e6b69c987f095856778ef9f45ddd8ae1a41",
+   *             "fee": 24310
+   *           },
+   *           {
+   *             "height": 630834,
+   *             "tx_hash": "4fe60a51e0d8f5134bfd8e5f872d6e502d7f01b28a6afebb27f4438a4f638d53",
+   *             "fee": 3000
+   *           }
+   *         ],
+   *         "address": "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf"
+   *       },
+   *       {
+   *         "utxos": [],
+   *         "address": "bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v"
+   *       }
+   *     ]
+   *   }
+   *
+   */
+  async unconfirmed(address) {
+    try {
+      // Handle single address.
+      if (typeof address === "string") {
+        const response = await axios.get(
+          `${this.restURL}electrumx/unconfirmed/${address}`,
+          _this.axiosOptions
+        )
+        return response.data
+
+      // Handle array of addresses.
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.restURL}electrumx/unconfirmed`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = ElectrumX
