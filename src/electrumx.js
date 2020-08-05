@@ -24,7 +24,7 @@ class ElectrumX {
   }
 
   /**
-   * @api Electrumx.utxo()  utxo() - Get a list of uxto for an address.
+   * @api Electrumx.utxo()  utxo()
    * @apiName ElectrumX Utxo
    * @apiGroup ElectrumX
    * @apiDescription Return a list of uxtos for an address.
@@ -119,7 +119,7 @@ class ElectrumX {
   }
 
   /**
-   * @api Electrumx.balance()  balance() - Get the balance for an address.
+   * @api Electrumx.balance()  balance()
    * @apiName ElectrumX Balance
    * @apiGroup ElectrumX
    * @apiDescription Return a list of balances for an address.
@@ -203,7 +203,7 @@ class ElectrumX {
   }
 
   /**
-   * @api Electrumx.transactions()  transactions() - Get the transaction history for an address.
+   * @api Electrumx.transactions()  transactions()
    * @apiName ElectrumX Transactions
    * @apiGroup ElectrumX
    * @apiDescription Return a transaction history for an address.
@@ -301,7 +301,7 @@ class ElectrumX {
   }
 
   /**
-   * @api Electrumx.unconfirmed() unconfirmed() - Get a list of unconfirmed uxtos (mempool) for an address.
+   * @api Electrumx.unconfirmed() unconfirmed()
    * @apiName ElectrumX Unconfirmed
    * @apiGroup ElectrumX
    * @apiDescription Return a list of unconfirmed uxtos (mempool) for an address.
@@ -372,7 +372,7 @@ class ElectrumX {
         )
         return response.data
 
-      // Handle array of addresses.
+        // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
           `${this.restURL}electrumx/unconfirmed`,
