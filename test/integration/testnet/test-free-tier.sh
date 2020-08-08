@@ -6,3 +6,4 @@ export NETWORK=testnet
 
 cd test/integration/testnet/
 mocha --timeout 30000 blockchain.js control.js electrumx.js openbazaar.js rawtransaction.js slp.js util.js
+#mocha --timeout 30000 blockchain.js

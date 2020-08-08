@@ -231,22 +231,6 @@ describe("#SLP Utils", () => {
     })
   })
 
-  describe("#balance", () => {
-    it(`should fetch balance of single token for address: simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9`, async () => {
-      // Mock the call to the REST API
-      if (process.env.TEST === "unit")
-        sandbox.stub(axios, "get").resolves({ data: mockData.mockBalance })
-
-      const balance = await slp.Utils.balance(
-        "simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9",
-        "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
-      )
-      //console.log(`balance: ${JSON.stringify(balance, null, 2)}`)
-
-      assert2.hasAllKeys(balance, ["tokenId", "balance", "balanceString"])
-    })
-  })
-
   describe("#validateTxid", () => {
     it(`should validate slp txid`, async () => {
       // Mock the call to the REST API
