@@ -12,30 +12,26 @@ describe(`#Ninsight`, () => {
 
   describe(`#utxo`, () => {
     it(`should GET utxos for a single address`, async () => {
-      try {
-        const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
 
-        const result = await bchjs.Ninsight.utxo(addr)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      const result = await bchjs.Ninsight.utxo(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-        assert.property(result, "utxos")
-        assert.property(result, "legacyAddress")
-        assert.property(result, "cashAddress")
-        assert.property(result, "slpAddress")
-        assert.property(result, "scriptPubKey")
-        assert.property(result, "asm")
+      assert.property(result[0], "utxos")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "slpAddress")
+      assert.property(result[0], "scriptPubKey")
+      assert.property(result[0], "asm")
 
-        assert.isArray(result.utxos)
+      assert.isArray(result[0].utxos)
 
-        assert.property(result.utxos[0], "txid")
-        assert.property(result.utxos[0], "vout")
-        assert.property(result.utxos[0], "amount")
-        assert.property(result.utxos[0], "satoshis")
-        assert.property(result.utxos[0], "height")
-        assert.property(result.utxos[0], "confirmations")
-      } catch (err) {
-        console.error("Error in test: ", err)
-      }
+      assert.property(result[0].utxos[0], "txid")
+      assert.property(result[0].utxos[0], "vout")
+      assert.property(result[0].utxos[0], "amount")
+      assert.property(result[0].utxos[0], "satoshis")
+      assert.property(result[0].utxos[0], "height")
+      assert.property(result[0].utxos[0], "confirmations")
     })
 
     it(`should POST utxo details for an array of addresses`, async () => {
