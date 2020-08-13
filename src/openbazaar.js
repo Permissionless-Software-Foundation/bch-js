@@ -23,7 +23,7 @@ class OpenBazaar {
   }
 
   /**
-   * @api OpenBazaar.balance() balance() - Balance about an address.
+   * @api OpenBazaar.balance() balance()
    * @apiName OpenBazaar Balance
    * @apiGroup OpenBazaar
    * @apiDescription Return Balance about an address.
@@ -83,7 +83,7 @@ class OpenBazaar {
   }
 
   /**
-   * @api OpenBazaar.utxo()  utxo() - Get list of uxto for address.
+   * @api OpenBazaar.utxo()  utxo()
    * @apiName OpenBazaar Utxo
    * @apiGroup OpenBazaar
    * @apiDescription Return list of uxto for address.
@@ -135,7 +135,7 @@ class OpenBazaar {
   }
 
   /**
-   * @api OpenBazaar.tx()  tx() - Get details on a transaction.
+   * @api OpenBazaar.tx()  tx()
    * @apiName OpenBazaar Tx
    * @apiGroup OpenBazaar
    * @apiDescription Get details on a transaction.

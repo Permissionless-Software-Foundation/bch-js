@@ -18,7 +18,7 @@ class RawTransactions {
   }
 
   /**
-   * @api RawTransactions.decodeRawTransaction() decodeRawTransaction() - Return an Array of JSON objects representing the serialized, hex-encoded transactions.
+   * @api RawTransactions.decodeRawTransaction() decodeRawTransaction()
    * @apiName decodeRawTransaction
    * @apiGroup RawTransactions
    * @apiDescription
@@ -115,7 +115,7 @@ class RawTransactions {
   }
 
   /**
-   * @api RawTransactions.decodeScript() decodeScript() - Decode hex-encoded scripts.
+   * @api RawTransactions.decodeScript() decodeScript()
    * @apiName decodeScript
    * @apiGroup RawTransactions
    * @apiDescription
@@ -182,7 +182,7 @@ class RawTransactions {
   }
 
   /**
-   * @api RawTransactions.getRawTransaction() getRawTransaction() - Return the raw transaction data.
+   * @api RawTransactions.getRawTransaction() getRawTransaction()
    * @apiName getRawTransaction
    * @apiGroup RawTransactions
    * @apiDescription
@@ -279,7 +279,7 @@ class RawTransactions {
   }
 
   /**
-   * @api RawTransactions.sendRawTransaction() sendRawTransaction() - Submits raw transaction (serialized, hex-encoded) to local node and network.
+   * @api RawTransactions.sendRawTransaction() sendRawTransaction()
    * @apiName sendRawTransaction
    * @apiGroup RawTransactions
    * @apiDescription
