@@ -15,7 +15,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.toSatoshi() toSatoshi() - Converting Bitcoin Cash units to satoshi units.
+   * @api BitcoinCash.toSatoshi() toSatoshi()
    * @apiName toSatoshi
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -48,7 +48,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.toBitcoinCash() toBitcoinCash() - Converting satoshi units to Bitcoin Cash units.
+   * @api BitcoinCash.toBitcoinCash() toBitcoinCash()
    * @apiName toBitcoinCash
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -81,7 +81,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.toBits() toBits() - Converting satoshi units to Bits denomination.
+   * @api BitcoinCash.toBits() toBits()
    * @apiName toBits
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -133,7 +133,7 @@ class BitcoinCash {
   // }
 
   /**
-   * @api BitcoinCash.signMessageWithPrivKey() signMessageWithPrivKey() - Sign message with private key.
+   * @api BitcoinCash.signMessageWithPrivKey() signMessageWithPrivKey()
    * @apiName signMessageWithPrivKey
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -165,7 +165,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.verifyMessage() verifyMessage() - Verify message.
+   * @api BitcoinCash.verifyMessage() verifyMessage()
    * @apiName verifyMessage
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -189,7 +189,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.encodeBase58Check() encodeBase58Check() - Encodes hex string as base58Check.
+   * @api BitcoinCash.encodeBase58Check() encodeBase58Check()
    * @apiName encodeBase58Check
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -227,7 +227,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.decodeBase58Check() decodeBase58Check() - Decodes base58Check encoded string to hex.
+   * @api BitcoinCash.decodeBase58Check() decodeBase58Check()
    * @apiName decodeBase58Check
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -265,7 +265,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.encodeBIP21() encodeBIP21() - Encodes address and options as BIP21 uri.
+   * @api BitcoinCash.encodeBIP21() encodeBIP21()
    * @apiName encodeBIP21
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -306,7 +306,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.decodeBIP21() decodeBIP21() - Decodes BIP21 uri.
+   * @api BitcoinCash.decodeBIP21() decodeBIP21()
    * @apiName decodeBIP21
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -340,7 +340,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.getByteCount() getByteCount() - Get byte count of transaction.
+   * @api BitcoinCash.getByteCount() getByteCount()
    * @apiName getByteCount
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -458,7 +458,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.encryptBIP38() encryptBIP38() - BIP38 encrypt privkey WIFs.
+   * @api BitcoinCash.encryptBIP38() encryptBIP38()
    * @apiName encryptBIP38
    * @apiGroup BitcoinCash
    * @apiDescription
@@ -486,7 +486,7 @@ class BitcoinCash {
   }
 
   /**
-   * @api BitcoinCash.decryptBIP38() decryptBIP38() - BIP38 encrypt privkey WIFs.
+   * @api BitcoinCash.decryptBIP38() decryptBIP38()
    * @apiName decryptBIP38
    * @apiGroup BitcoinCash
    * @apiDescription

@@ -13,7 +13,7 @@ class ECPair extends BCHJSECPair {
   }
   */
   /**
-   * @api SLP.ECPair.toSLPAddress() toSLPAddress() - Get slp address of ECPair.
+   * @api SLP.ECPair.toSLPAddress() toSLPAddress()
    * @apiName toSLPAddress
    * @apiGroup SLP
    * @apiDescription Get slp address of ECPair.

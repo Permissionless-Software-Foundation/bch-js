@@ -31,7 +31,7 @@ class Ninsight {
   }
 
   /**
-   * @api Ninsight.utxo()  utxo() - Get list of uxto for address.
+   * @api Ninsight.utxo()  utxo()
    * @apiName Ninsight Utxo
    * @apiGroup Ninsight
    * @apiDescription Return list of uxto for address.

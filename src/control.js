@@ -22,7 +22,7 @@ class Control {
   }
 
   /**
-   * @api Control.getNetworkInfo() getNetworkInfo() - Get Network info
+   * @api Control.getNetworkInfo() getNetworkInfo()
    * @apiName getNetworkInfo
    * @apiGroup Control
    * @apiDescription Returns an object containing various network info.

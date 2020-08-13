@@ -53,7 +53,7 @@ class IPFS {
   }
 
   /**
-   * @api IPFS.createFileModelServer()  createFileModelServer() - Create a file model
+   * @api IPFS.createFileModelServer()  createFileModelServer()
    * @apiName createFileModelServer()
    * @apiGroup IPFS
    * @apiDescription Creates a new model on the server. If successful, will
@@ -131,7 +131,7 @@ class IPFS {
   }
 
   /**
-   * @api IPFS.uploadFileServer()  uploadFileServer() - Upload a file to IPFS
+   * @api IPFS.uploadFileServer()  uploadFileServer()
    * @apiName uploadFile()
    * @apiGroup IPFS
    * @apiDescription Upload a file to the FullStack.cash IPFS server. If
@@ -219,7 +219,7 @@ class IPFS {
   }
 
   /**
-   * @api IPFS.getStatus()  getStatus() - Check status of file upload
+   * @api IPFS.getStatus()  getStatus()
    * @apiName getStatus()
    * @apiGroup IPFS
    * @apiDescription Gets the status of the uploaded file. Will return an object
@@ -271,7 +271,7 @@ class IPFS {
     }
   }
   /**
-   * @api IPFS.createFileModelWeb()  createFileModelWeb() - Create a file model
+   * @api IPFS.createFileModelWeb()  createFileModelWeb()
    * @apiName createFileModelWeb()
    * @apiGroup IPFS
    * @apiDescription Creates a new model on the server. If successful, will
@@ -348,7 +348,7 @@ class IPFS {
   }
 
   /**
-   * @api IPFS.uploadFileWeb()  uploadFileWeb() - Upload a file to IPFS
+   * @api IPFS.uploadFileWeb()  uploadFileWeb()
    * @apiName uploadFileWeb()
    * @apiGroup IPFS
    * @apiDescription Upload a file to the FullStack.cash IPFS server. If

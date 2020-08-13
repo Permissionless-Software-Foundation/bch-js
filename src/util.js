@@ -18,7 +18,7 @@ class Util {
   }
 
   /**
-   * @api util.validateAddress() validateAddress() - Get information about the given bitcoin address.
+   * @api util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util
    * @apiDescription Return information about the given bitcoin address.
