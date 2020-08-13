@@ -10,7 +10,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.generate() generate() - Generate BIP39 mnemonic from entropy.
+   * @api Mnemonic.generate() generate()
    * @apiName generate
    * @apiGroup Mnemonic
    * @apiDescription
@@ -50,7 +50,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.fromEntropy() fromEntropy() - Create mnemonic from entropy.
+   * @api Mnemonic.fromEntropy() fromEntropy()
    * @apiName fromEntropy
    * @apiGroup Mnemonic
    * @apiDescription
@@ -104,7 +104,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.toEntropy() toEntropy() - Turn mnemonic to entropy.
+   * @api Mnemonic.toEntropy() toEntropy()
    * @apiName toEntropy
    * @apiGroup Mnemonic
    * @apiDescription
@@ -141,7 +141,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.validate() validate() - Validate mnemonic.
+   * @api Mnemonic.validate() validate()
    * @apiName validate
    * @apiGroup Mnemonic
    * @apiDescription
@@ -181,7 +181,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.toSeed() toSeed() - Create root seed from mnemonic
+   * @api Mnemonic.toSeed() toSeed()
    * @apiName toSeed
    * @apiGroup Mnemonic
    * @apiDescription
@@ -208,7 +208,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.wordLists() wordLists() - Return mnemonic word lists.
+   * @api Mnemonic.wordLists() wordLists()
    * @apiName wordLists
    * @apiGroup Mnemonic
    * @apiDescription
@@ -234,7 +234,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.toKeypairs() toKeypairs() - Returns an array of privateKeyWIF/publicAddress pairs.
+   * @api Mnemonic.toKeypairs() toKeypairs()
    * @apiName toKeypairs
    * @apiGroup Mnemonic
    * @apiDescription
@@ -290,7 +290,7 @@ class Mnemonic {
   }
 
   /**
-   * @api Mnemonic.findNearestWord() findNearestWord() - Returns nearest matching word from provided word list.
+   * @api Mnemonic.findNearestWord() findNearestWord()
    * @apiName findNearestWord
    * @apiGroup Mnemonic
    * @apiDescription

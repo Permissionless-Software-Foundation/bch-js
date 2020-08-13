@@ -6,7 +6,7 @@ class ECPair {
     ECPair._address = address
   }
   /**
-   * @api Ecpair.fromWIF() fromWIF() - Generates an ECPair from a private key in wallet import format (WIF).
+   * @api Ecpair.fromWIF() fromWIF()
    * @apiName fromWIF
    * @apiGroup ECPair
    * @apiDescription Generates an ECPair from a private key in wallet import format (WIF). Follow these steps to go from a private key to a WIF. This method only works with a compressed private key.
@@ -35,7 +35,7 @@ class ECPair {
     return Bitcoin.ECPair.fromWIF(privateKeyWIF, bitcoincashBitcoinJSLib)
   }
   /**
-   * @api Ecpair.toWIF() toWIF() - Gets a private key in wallet import format from an ECPair.
+   * @api Ecpair.toWIF() toWIF()
    * @apiName toWIF
    * @apiGroup ECPair
    * @apiDescription Gets a private key in wallet import format from an ECPair.
@@ -69,7 +69,7 @@ class ECPair {
     return ecpair.verify(buffer, signature)
   }
   /**
-   * @api Ecpair.fromPublicKey() fromPublicKey() - Generates an ECPair from a public key buffer.
+   * @api Ecpair.fromPublicKey() fromPublicKey()
    * @apiName fromPublicKey
    * @apiGroup ECPair
    * @apiDescription Generates an ECPair from a public key buffer.
@@ -87,7 +87,7 @@ class ECPair {
     return Bitcoin.ECPair.fromPublicKeyBuffer(pubkeyBuffer)
   }
   /**
-   * @api Ecpair.toPublicKey() toPublicKey() - Get the public key of an ECPair as a buffer.
+   * @api Ecpair.toPublicKey() toPublicKey()
    * @apiName toPublicKey
    * @apiGroup ECPair
    * @apiDescription Get the public key of an ECPair as a buffer.
@@ -109,7 +109,7 @@ class ECPair {
     return ecpair.getPublicKeyBuffer()
   }
   /**
-   * @api Ecpair.toLegacyAddress() toLegacyAddress() - Get legacy address of ECPair.
+   * @api Ecpair.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
    * @apiGroup ECPair
    * @apiDescription Get legacy address of ECPair.
@@ -135,7 +135,7 @@ class ECPair {
     return ecpair.getAddress()
   }
   /**
-   * @api Ecpair.toCashAddress() toCashAddress() - Get cash address of ECPair.
+   * @api Ecpair.toCashAddress() toCashAddress()
    * @apiName toCashAddress
    * @apiGroup ECPair
    * @apiDescription Get cash address of ECPair.

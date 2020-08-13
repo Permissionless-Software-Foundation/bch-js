@@ -24,7 +24,7 @@ class Blockbook {
   }
 
   /**
-   * @api Blockbook.balance() balance() - Balance about an address.
+   * @api Blockbook.balance() balance()
    * @apiName Blockbook Balance
    * @apiGroup Blockbook
    * @apiDescription Return Balance about an address.
@@ -221,7 +221,7 @@ class Blockbook {
   }
 
   /**
-   * @api Blockbook.utxo()  utxo() - Get list of uxto for address.
+   * @api Blockbook.utxo()  utxo()
    * @apiName Blockbook Utxo
    * @apiGroup Blockbook
    * @apiDescription Return list of uxto for address.
@@ -307,7 +307,7 @@ class Blockbook {
   }
 
   /**
-   * @api Blockbook.tx()  tx() - Get details on a transaction.
+   * @api Blockbook.tx()  tx()
    * @apiName Blockbook Tx
    * @apiGroup Blockbook
    * @apiDescription Get details on a transaction.

@@ -37,7 +37,7 @@ class TransactionBuilder {
   }
 
   /**
-   * @api Transaction-Builder.addInput() addInput() - Add input to transaction.
+   * @api Transaction-Builder.addInput() addInput()
    * @apiName AddInput
    * @apiGroup TransactionBuilder
    * @apiDescription Add input to transaction.
@@ -66,7 +66,7 @@ class TransactionBuilder {
     this.p2shInput = true
   }
   /**
-   * @api Transaction-Builder.addOutput() addOutput() - Add output to transaction.
+   * @api Transaction-Builder.addOutput() addOutput()
    * @apiName AddOutput
    * @apiGroup TransactionBuilder
    * @apiDescription Add output to transaction.
@@ -90,7 +90,7 @@ class TransactionBuilder {
     }
   }
   /**
-   * @api Transaction-Builder.setLockTime() setLockTime() - Set locktime.
+   * @api Transaction-Builder.setLockTime() setLockTime()
    * @apiName SetLockTime
    * @apiGroup TransactionBuilder
    * @apiDescription Set locktime.
@@ -108,7 +108,7 @@ class TransactionBuilder {
     this.transaction.setLockTime(locktime)
   }
   /**
-   * @api Transaction-Builder.sign() sign() - Sign transaction..
+   * @api Transaction-Builder.sign() sign()
    * @apiName Sign.
    * @apiGroup TransactionBuilder
    * @apiDescription Sign transaction. It creates the unlocking script needed to spend an input. Each input has its own script and thus 'sign' must be called for each input even if the keyPair is the same..
@@ -145,7 +145,7 @@ class TransactionBuilder {
     )
   }
   /**
-   * @api Transaction-Builder.build() build() - Build transaction.
+   * @api Transaction-Builder.build() build()
    * @apiName Build.
    * @apiGroup TransactionBuilder
    * @apiDescription Build transaction.

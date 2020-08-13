@@ -9,7 +9,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.fromSeed() fromSeed() - Create HDNode from Seed Buffer.
+   * @api HDNode.fromSeed() fromSeed()
    * @apiName fromSeed
    * @apiGroup HDNode
    * @apiDescription
@@ -46,7 +46,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toLegacyAddress() toLegacyAddress() - Get legacy address of HDNode.
+   * @api HDNode.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
    * @apiGroup HDNode
    * @apiDescription
@@ -80,7 +80,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toCashAddress() toCashAddress() - Get cash address of HDNode
+   * @api HDNode.toCashAddress() toCashAddress()
    * @apiName toCashAddress
    * @apiGroup HDNode
    * @apiDescription
@@ -114,7 +114,7 @@ class HDNode {
   }
 
   /**
-   * @api SLP.HDNode.toSLPAddress() toSLPAddress() - Get slp address of HDNode.
+   * @api SLP.HDNode.toSLPAddress() toSLPAddress()
    * @apiName toSLPAddress
    * @apiGroup SLP
    * @apiDescription Get slp address of HDNode.
@@ -148,7 +148,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toWIF() toWIF() - Get private key in wallet import format (WIF) of HDNode.
+   * @api HDNode.toWIF() toWIF()
    * @apiName toWIF
    * @apiGroup HDNode
    * @apiDescription
@@ -182,7 +182,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toXPub() toXPub() - Get extended public key of HDNode.
+   * @api HDNode.toXPub() toXPub()
    * @apiName toXPub
    * @apiGroup HDNode
    * @apiDescription
@@ -216,7 +216,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toXPriv() toXPriv() - Get extended private key of HDNode.
+   * @api HDNode.toXPriv() toXPriv()
    * @apiName toXPriv
    * @apiGroup HDNode
    * @apiDescription
@@ -250,7 +250,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toKeyPair() toKeyPair() - Get the ECPair of an HDNode.
+   * @api HDNode.toKeyPair() toKeyPair()
    * @apiName toKeyPair
    * @apiGroup HDNode
    * @apiDescription
@@ -282,7 +282,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toPublicKey() toPublicKey() - Get the public key of an HDNode as a buffer.
+   * @api HDNode.toPublicKey() toPublicKey()
    * @apiName toPublicKey
    * @apiGroup HDNode
    * @apiDescription
@@ -316,7 +316,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.fromXPriv() fromXPriv() - Generate HDNode from extended private key.
+   * @api HDNode.fromXPriv() fromXPriv()
    * @apiName fromXPriv
    * @apiGroup HDNode
    * @apiDescription
@@ -339,7 +339,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.fromXPub() fromXPub() - Generate HDNode from extended public key.
+   * @api HDNode.fromXPub() fromXPub()
    * @apiName fromXPub
    * @apiGroup HDNode
    * @apiDescription
@@ -362,7 +362,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.derivePath() derivePath() - Derive child HDNode from path.
+   * @api HDNode.derivePath() derivePath()
    * @apiName derivePath
    * @apiGroup HDNode
    * @apiDescription
@@ -383,7 +383,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.derive() derive() - Derive non hardened child HDNode.
+   * @api HDNode.derive() derive()
    * @apiName derive
    * @apiGroup HDNode
    * @apiDescription
@@ -404,7 +404,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.deriveHardened() deriveHardened() - Derive hardened child HDNode.
+   * @api HDNode.deriveHardened() deriveHardened()
    * @apiName deriveHardened
    * @apiGroup HDNode
    * @apiDescription
@@ -425,7 +425,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.sign() sign() - Sign 32 byte hash encoded as a buffer.
+   * @api HDNode.sign() sign()
    * @apiName sign
    * @apiGroup HDNode
    * @apiDescription
@@ -455,7 +455,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.verify() verify() - Verify signed 32 byte hash encoded as a buffer.
+   * @api HDNode.verify() verify()
    * @apiName verify
    * @apiGroup HDNode
    * @apiDescription
@@ -499,7 +499,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.isPublic() isPublic() - Check if an HDNode can only derive public keys and children.
+   * @api HDNode.isPublic() isPublic()
    * @apiName isPublic
    * @apiGroup HDNode
    * @apiDescription
@@ -535,7 +535,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.isPrivate() isPrivate() - Check if an HDNode can derive both public and private keys and children.
+   * @api HDNode.isPrivate() isPrivate()
    * @apiName isPrivate
    * @apiGroup HDNode
    * @apiDescription
@@ -571,7 +571,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.toIdentifier() toIdentifier() - hash160 of Node’s public key.
+   * @api HDNode.toIdentifier() toIdentifier()
    * @apiName toIdentifier
    * @apiGroup HDNode
    * @apiDescription
@@ -607,7 +607,7 @@ class HDNode {
   }
 
   /**
-   * @api HDNode.createAccount() createAccount() - Create BIP32 account.
+   * @api HDNode.createAccount() createAccount()
    * @apiName createAccount
    * @apiGroup HDNode
    * @apiDescription

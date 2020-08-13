@@ -3,7 +3,7 @@ const Bitcoin = require("bitcoincashjs-lib")
 
 class Crypto {
   /**
-   * @api Crypto.sha256() sha256() - Utility for creating sha256 hash.
+   * @api Crypto.sha256() sha256()
    * @apiName sha256
    * @apiGroup Crypto
    * @apiDescription Utility for creating sha256 hash digests of data
@@ -31,7 +31,7 @@ class Crypto {
   }
 
   /**
-   * @api Crypto.ripemd160() ripemd160()-Utility for creating ripemd160 hash.
+   * @api Crypto.ripemd160() ripemd160()
    * @apiName ripemd160
    * @apiGroup Crypto
    * @apiDescription Utility for creating ripemd160 hash digests of data
@@ -57,7 +57,7 @@ class Crypto {
   }
 
   /**
-   * @api Crypto.hash256() hash256() - Utility for creating double sha256 hash.
+   * @api Crypto.hash256() hash256()
    * @apiName hash256
    * @apiGroup Crypto
    * @apiDescription Utility for creating double sha256 hash digests of data.
@@ -83,7 +83,7 @@ class Crypto {
   }
 
   /**
-   * @api Crypto.hash160() hash160() - Utility for creating ripemd160(sha256()) hash.
+   * @api Crypto.hash160() hash160()
    * @apiName hash160
    * @apiGroup Crypto
    * @apiDescription Utility for creating ripemd160(sha256()) hash digests of data.
@@ -109,7 +109,7 @@ class Crypto {
   }
 
   /**
-   * @api Crypto.randomBytes() randomBytes() - Generates cryptographically strong pseudo-random data.
+   * @api Crypto.randomBytes() randomBytes()
    * @apiName randomBytes
    * @apiGroup Crypto
    * @apiDescription Generates cryptographically strong pseudo-random data. The size argument is a number indicating the number of bytes to generate.

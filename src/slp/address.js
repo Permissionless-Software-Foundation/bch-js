@@ -14,7 +14,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.toSLPAddress() toSLPAddress() - Converting  to slpAddress format.
+   * @api SLP.Address.toSLPAddress() toSLPAddress()
    * @apiName toSLPAddress
    * @apiGroup SLP
    * @apiDescription Converting legacy or cashaddr to slpAddress format.
@@ -60,7 +60,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.toCashAddress() toCashAddress() - Converting to cashAddress format.
+   * @api SLP.Address.toCashAddress() toCashAddress()
    * @apiName toCashAddress
    * @apiGroup SLP
    * @apiDescription Converting legacy or slpaddr to cashAddress format.
@@ -106,7 +106,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.toLegacyAddress() toLegacyAddress() - Converting to legacy address format.
+   * @api SLP.Address.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
    * @apiGroup SLP
    * @apiDescription Converting cashaddr or slpaddr to legacy address format.
@@ -164,7 +164,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.isSLPAddress() isSLPAddress() - Detect if slpAddr encoded address.
+   * @api SLP.Address.isSLPAddress() isSLPAddress()
    * @apiName isSLPAddress
    * @apiGroup SLP
    * @apiDescription Detect if slpAddr encoded address.
@@ -201,7 +201,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.isMainnetAddress() isMainnetAddress() - Detect if mainnet address.
+   * @api SLP.Address.isMainnetAddress() isMainnetAddress()
    * @apiName isMainnetAddress
    * @apiGroup SLP
    * @apiDescription Detect if mainnet address.
@@ -255,7 +255,7 @@ class Address extends BCHJSAddress {
   }
 
   /**
-   * @api SLP.Address.isTestnetAddress() isTestnetAddress() - Detect if testnet address.
+   * @api SLP.Address.isTestnetAddress() isTestnetAddress()
    * @apiName isTestnetAddress
    * @apiGroup SLP
    * @apiDescription Detect if testnet address.
@@ -307,7 +307,7 @@ class Address extends BCHJSAddress {
     return bchAddress.isTestnetAddress(cashAddr)
   }
   /**
-   * @api SLP.Address.isP2PKHAddress() isP2PKHAddress() - Detect if p2pkh address.
+   * @api SLP.Address.isP2PKHAddress() isP2PKHAddress()
    * @apiName isP2PKHAddress
    * @apiGroup SLP
    * @apiDescription Detect if p2pkh address.
@@ -359,7 +359,7 @@ class Address extends BCHJSAddress {
     return bchAddress.isP2PKHAddress(cashAddr)
   }
   /**
-   * @api SLP.Address.isP2SHAddress() isP2SHAddress() - Detect if p2sh address.
+   * @api SLP.Address.isP2SHAddress() isP2SHAddress()
    * @apiName isP2SHAddress
    * @apiGroup SLP
    * @apiDescription Detect if p2sh address.
@@ -411,7 +411,7 @@ class Address extends BCHJSAddress {
     return bchAddress.isP2SHAddress(cashAddr)
   }
   /**
-   * @api SLP.Address.detectAddressFormat() detectAddressFormat() - Detect address format.
+   * @api SLP.Address.detectAddressFormat() detectAddressFormat()
    * @apiName detectAddressFormat
    * @apiGroup SLP
    * @apiDescription Detect address format.
@@ -464,7 +464,7 @@ class Address extends BCHJSAddress {
     return bchAddress.detectAddressFormat(address)
   }
   /**
-   * @api SLP.Address.detectAddressNetwork() detectAddressNetwork() - Detect address network.
+   * @api SLP.Address.detectAddressNetwork() detectAddressNetwork()
    * @apiName detectAddressNetwork
    * @apiGroup SLP
    * @apiDescription Detect address network.
@@ -516,7 +516,7 @@ class Address extends BCHJSAddress {
     return bchAddress.detectAddressNetwork(cashAddr)
   }
   /**
-   * @api SLP.Address.detectAddressType() detectAddressType() - Detect address type.
+   * @api SLP.Address.detectAddressType() detectAddressType()
    * @apiName detectAddressType
    * @apiGroup SLP
    * @apiDescription Detect address type.

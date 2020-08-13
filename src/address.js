@@ -14,7 +14,7 @@ class Address {
   }
 
   /**
-   * @api Address.toLegacyAddress() toLegacyAddress() - Convert to Legacy Address
+   * @api Address.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
    * @apiGroup Address
    * @apiDescription Convert cashaddr to legacy address format
@@ -73,7 +73,7 @@ class Address {
   }
 
   /**
-   * @api Address.toCashAddress() toCashAddress() - Convert to bitcoincash: format
+   * @api Address.toCashAddress() toCashAddress()
    * @apiName toCashAddress
    * @apiGroup Address
    * @apiDescription Convert legacy to cashAddress format
@@ -120,7 +120,7 @@ class Address {
   }
 
   /**
-   * @api Address.hash160ToLegacy() hash160ToLegacy() - Convert hash160 to legacy address.
+   * @api Address.hash160ToLegacy() hash160ToLegacy()
    * @apiName hash160ToLegacy
    * @apiGroup Address
    * @apiDescription Convert hash160 to legacy address.
@@ -146,7 +146,7 @@ class Address {
   }
 
   /**
-   * @api Address.hash160ToCash() hash160ToCash() - Convert hash160 to cash address.
+   * @api Address.hash160ToCash() hash160ToCash()
    * @apiName hash160ToCash
    * @apiGroup Address
    * @apiDescription Convert hash160 to cash address.
@@ -255,7 +255,7 @@ class Address {
   }
 
   /**
-   * @api Address.isLegacyAddress() isLegacyAddress() - Detect if legacy address.
+   * @api Address.isLegacyAddress() isLegacyAddress()
    * @apiName isLegacyAddress
    * @apiGroup Address
    * @apiDescription Detect if legacy base58check encoded address.
@@ -291,7 +291,7 @@ class Address {
   }
 
   /**
-   * @api Address.isCashAddress() isCashAddress() - Detect if cashAddr address.
+   * @api Address.isCashAddress() isCashAddress()
    * @apiName isCashAddress
    * @apiGroup Address
    * @apiDescription Detect if cashAddr encoded address.
@@ -326,7 +326,7 @@ class Address {
   }
 
   /**
-   * @api Address.isHash160() isHash160() - Detect if an addess is a hash160.
+   * @api Address.isHash160() isHash160()
    * @apiName isHash160
    * @apiGroup Address
    * @apiDescription Detect if an addess is a hash160.
@@ -345,7 +345,7 @@ class Address {
   }
 
   /**
-   * @api Address.isMainnetAddress() isMainnetAddress() - Detect if mainnet address.
+   * @api Address.isMainnetAddress() isMainnetAddress()
    * @apiName isMainnetAddress
    * @apiGroup Address
    * @apiDescription Detect if mainnet address .
@@ -384,7 +384,7 @@ class Address {
   }
 
   /**
-   * @api Address.isTestnetAddress() isTestnetAddress() - Detect if testnet address.
+   * @api Address.isTestnetAddress() isTestnetAddress()
    * @apiName isTestnetAddress
    * @apiGroup Address
    * @apiDescription Detect if testnet address.
@@ -422,7 +422,7 @@ class Address {
   }
 
   /**
-   * @api Address.isRegTestAddress() isRegTestAddress() - Detect if regtest address.
+   * @api Address.isRegTestAddress() isRegTestAddress()
    * @apiName isRegTestAddress
    * @apiGroup Address
    * @apiDescription Detect if regtest address.
@@ -461,7 +461,7 @@ class Address {
   }
 
   /**
-   * @api Address.isP2PKHAddress() isP2PKHAddress() - Detect if p2pkh address.
+   * @api Address.isP2PKHAddress() isP2PKHAddress()
    * @apiName isP2PKHAddress
    * @apiGroup Address
    * @apiDescription Detect if p2pkh address.
@@ -498,7 +498,7 @@ class Address {
   }
 
   /**
-   * @api Address.isP2SHAddress() isP2SHAddress() - Detect if p2sh address.
+   * @api Address.isP2SHAddress() isP2SHAddress()
    * @apiName isP2SHAddress
    * @apiGroup Address
    * @apiDescription Detect if p2sh address.
@@ -534,7 +534,7 @@ class Address {
   }
 
   /**
-   * @api Address.detectAddressFormat() detectAddressFormat() - Detect address format.
+   * @api Address.detectAddressFormat() detectAddressFormat()
    * @apiName detectAddressFormat
    * @apiGroup Address
    * @apiDescription Detect address format.
@@ -572,7 +572,7 @@ class Address {
   }
 
   /**
-   * @api Address.detectAddressNetwork() detectAddressNetwork() - Detect address network.
+   * @api Address.detectAddressNetwork() detectAddressNetwork()
    * @apiName detectAddressNetwork
    * @apiGroup Address
    * @apiDescription Detect address network.
@@ -622,7 +622,7 @@ class Address {
   }
 
   /**
-   * @api Address.detectAddressType() detectAddressType() - Detect address type.
+   * @api Address.detectAddressType() detectAddressType()
    * @apiName detectAddressType
    * @apiGroup Address
    * @apiDescription Detect address type.
@@ -660,7 +660,7 @@ class Address {
   }
 
   /**
-   * @api Address.fromXPub() fromXPub() - Generates an address (xpub).
+   * @api Address.fromXPub() fromXPub()
    * @apiName fromXPub
    * @apiGroup Address
    * @apiDescription Generates an address for an extended public key (xpub).
@@ -698,7 +698,7 @@ class Address {
   }
 
   /**
-   * @api Address.fromOutputScript() fromOutputScript() - Detect an addess from an OutputScript..
+   * @api Address.fromOutputScript() fromOutputScript()
    * @apiName fromOutputScript
    * @apiGroup Address
    * @apiDescription Detect an addess from an OutputScript..
