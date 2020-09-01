@@ -158,6 +158,11 @@ const unconfirmedArray = {
   ]
 }
 
+const blockHeaders = [
+  '010000008b52bbd72c2f49569059f559c1b1794de5192e4f7d6d2b03c7482bad0000000083e4f8a9d502ed0c419075c1abb5d56f878a2e9079e5612bfb76a2dc37d9c42741dd6849ffff001d2b909dd6',
+  '01000000f528fac1bcb685d0cd6c792320af0300a5ce15d687c7149548904e31000000004e8985a786d864f21e9cbb7cbdf4bc9265fe681b7a0893ac55a8e919ce035c2f85de6849ffff001d385ccb7c'
+]
+
 module.exports = {
   utxo,
   utxos,
@@ -166,5 +171,6 @@ module.exports = {
   transaction,
   transactions,
   unconfirmed,
-  unconfirmedArray
+  unconfirmedArray,
+  blockHeaders
 }
