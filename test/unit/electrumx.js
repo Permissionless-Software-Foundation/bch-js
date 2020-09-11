@@ -272,6 +272,7 @@ describe(`#ElectrumX`, () => {
         assert.include(err.error, `height must be a positive number`)
       }
     })
+
     it(`should throw an error for improper count input`, async () => {
       try {
         const height = 42
@@ -284,6 +285,7 @@ describe(`#ElectrumX`, () => {
         assert.include(err.error, `count must be a positive number`)
       }
     })
+
     it(`should GET block headers for a given height`, async () => {
       // Stub the network call.
       sandbox.stub(axios, "get").resolves({ data: mockData.blockHeaders })
@@ -294,6 +296,76 @@ describe(`#ElectrumX`, () => {
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       assert.isArray(result)
       assert.equal(result.length, 2)
+    })
+  })
+
+  describe(`#txData`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const txid = 12345
+
+        await bchjs.Electrumx.txData(txid)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input txId must be a string or array of strings`
+        )
+      }
+    })
+
+    it(`should GET details data for a single transaction`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "get").resolves({ data: mockData.details })
+
+      const txid = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+
+      const result = await bchjs.Electrumx.txData(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "details")
+      assert.isObject(result.details)
+
+      assert.property(result.details, "blockhash")
+      assert.property(result.details, "hash")
+      assert.property(result.details, "hex")
+      assert.property(result.details, "vin")
+      assert.property(result.details, "vout")
+      assert.equal(result.details.hash, txid)
+    })
+
+    it(`should POST details for an array of transactions`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.detailsArray })
+
+      const txids = [
+        "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+        "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+      ]
+
+      const result = await bchjs.Electrumx.txData(txids)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "transactions")
+      assert.isArray(result.transactions)
+
+      assert.property(result.transactions[0], "txid")
+      assert.property(result.transactions[0], "details")
+
+      assert.property(result.transactions[0].details, "blockhash")
+      assert.property(result.transactions[0].details, "hash")
+      assert.property(result.transactions[0].details, "hex")
+      assert.property(result.transactions[0].details, "vin")
+      assert.property(result.transactions[0].details, "vout")
+
+      assert.equal(result.transactions.length, 2, "2 outputs for 2 inputs")
     })
   })
 })

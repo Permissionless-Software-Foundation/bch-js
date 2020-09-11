@@ -445,6 +445,104 @@ class ElectrumX {
       else throw error
     }
   }
+
+  /**
+   * @api Electrumx.txData() txData()
+   * @apiName ElectrumX txData
+   * @apiGroup ElectrumX
+   * @apiDescription Returns an object with transaction details of the TXID
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let result = await bchjs.Electrumx.txData('4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251')
+   *     console.log(result);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * result = {
+   *   "success": true,
+   *   "details": {
+   *      "blockhash": "0000000000000000002aaf94953da3b487317508ebd1003a1d75d6d6ec2e75cc",
+   *      "blocktime": 1578327094,
+   *      "confirmations": 31861,
+   *      "hash": "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+   *      ...
+   *      "vin": [
+   *        {
+   *          "scriptSig": {
+   *          ...
+   *      "vout": [
+   *        {
+   *          "n": 0,
+   *          "scriptPubKey": {
+   *          "addresses": [
+   *             "bitcoincash: pqvfecpwxvj53ayqfwkxtjaxsgpvnklcyg8xewk9hl"
+   *          ],
+   *        }
+   *      ...
+   * }
+   *
+   *    (async () => {
+   *   try {
+   *     let result = await bchjs.Electrumx.txData(['4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251', '4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251'])
+   *     console.log(result);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * result = {
+   *   "transactions": [
+   *     {
+   *        "txid": "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+   *        "details": {
+   *           "blockhash": "0000000000000000002aaf94953da3b487317508ebd1003a1d75d6d6ec2e75cc",
+   *           "blocktime": 1578327094,
+   *           "confirmations": 31861,
+   *           "hash": "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+   *           ...
+   *        }
+   *     },
+   *     {
+   *        "txid": "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+   *        "details": {
+   *           "blockhash": "0000000000000000002aaf94953da3b487317508ebd1003a1d75d6d6ec2e75cc",
+   *           "blocktime": 1578327094,
+   *        ...
+   *     }
+   *   ]
+   * }
+  */
+  async txData(txid) {
+    try {
+      // Handle single transaction.
+      if (typeof txid === "string") {
+        const response = await axios.get(
+          `${this.restURL}electrumx/tx/data/${txid}`,
+          _this.axiosOptions
+        )
+        return response.data
+      } else if (Array.isArray(txid)) {
+        const response = await axios.post(
+          `${this.restURL}electrumx/tx/data`,
+          {
+            txids: txid
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input txId must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = ElectrumX

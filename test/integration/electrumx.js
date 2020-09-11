@@ -255,6 +255,7 @@ describe(`#ElectrumX`, () => {
       assert.isArray(result.headers)
       assert.equal(result.headers.length, 2)
     })
+
     it(`should GET block headers for given height with default count = 1`, async () => {
       const height = 42
 
@@ -265,6 +266,69 @@ describe(`#ElectrumX`, () => {
       assert.property(result, "headers")
       assert.isArray(result.headers)
       assert.equal(result.headers.length, 1)
+    })
+  })
+
+  describe(`#txData`, () => {
+    it(`should GET details for a single transaction`, async () => {
+      const txid = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+
+      const result = await bchjs.Electrumx.txData(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "details")
+      assert.isObject(result.details)
+
+      assert.property(result.details, "blockhash")
+      assert.property(result.details, "hash")
+      assert.property(result.details, "hex")
+      assert.property(result.details, "vin")
+      assert.property(result.details, "vout")
+      assert.equal(result.details.hash, txid)
+    })
+
+    it(`should POST details for an array of transactions`, async () => {
+      const txids = [
+        "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+        "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+      ]
+
+      const result = await bchjs.Electrumx.txData(txids)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "transactions")
+      assert.isArray(result.transactions)
+
+      assert.property(result.transactions[0], "txid")
+      assert.property(result.transactions[0], "details")
+
+      assert.property(result.transactions[0].details, "blockhash")
+      assert.property(result.transactions[0].details, "hash")
+      assert.property(result.transactions[0].details, "hex")
+      assert.property(result.transactions[0].details, "vin")
+      assert.property(result.transactions[0].details, "vout")
+    })
+
+    it(`should throw error on array size rate limit`, async () => {
+      try {
+        const txids = []
+        for (let i = 0; i < 25; i++)
+          txids.push("4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251")
+
+        await bchjs.Electrumx.txData(txids)
+
+        console.log(`result: ${util.inspect(result)}`)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.hasAnyKeys(err, ["error"])
+        assert.include(err.error, "Array too large")
+      }
     })
   })
 })
