@@ -260,4 +260,40 @@ describe(`#ElectrumX`, () => {
       assert.property(result.utxos[0].utxos[0], "fee")
     })
   })
+
+  describe(`#blockHeader`, () => {
+    it(`should throw an error for improper height input`, async () => {
+      try {
+        const height = -10
+        await bchjs.Electrumx.blockHeader(height)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(err.error, `height must be a positive number`)
+      }
+    })
+    it(`should throw an error for improper count input`, async () => {
+      try {
+        const height = 42
+        const count = -10
+
+        await bchjs.Electrumx.blockHeader(height, count)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(err.error, `count must be a positive number`)
+      }
+    })
+    it(`should GET block headers for a given height`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "get").resolves({ data: mockData.blockHeaders })
+
+      const height = 42
+
+      const result = await bchjs.Electrumx.blockHeader(height)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      assert.isArray(result)
+      assert.equal(result.length, 2)
+    })
+  })
 })

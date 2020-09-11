@@ -240,4 +240,31 @@ describe(`#ElectrumX`, () => {
       }
     })
   })
+
+  describe(`#blockHeader`, () => {
+    it(`should GET block headers for given height and count`, async () => {
+      const height = 42
+      const count = 2
+
+      const result = await bchjs.Electrumx.blockHeader(height, count)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "headers")
+      assert.isArray(result.headers)
+      assert.equal(result.headers.length, 2)
+    })
+    it(`should GET block headers for given height with default count = 1`, async () => {
+      const height = 42
+
+      const result = await bchjs.Electrumx.blockHeader(height)
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "headers")
+      assert.isArray(result.headers)
+      assert.equal(result.headers.length, 1)
+    })
+  })
 })
