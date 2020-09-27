@@ -777,7 +777,7 @@ class Utils {
    *
    *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
-   *  console.log(`utxoInfo: ${JSON.stringify(isSLPUtxo,null,2)}`)
+   *  console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
    * } catch (error) {
    *  console.error(error)
    * }
@@ -1021,6 +1021,81 @@ class Utils {
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
+    }
+  }
+
+  /**
+   * @api SLP.Utils.hydrateUtxos() hydrateUtxos()
+   * @apiName hydrateUtxos
+   * @apiGroup SLP Utils
+   * @apiDescription Hydrate a UTXO with SLP token metadata.
+   *
+   * The same as tokenUtxoDetails(), but uses bch-api to do the heavy lifting,
+   * which greatly reduces the number of API calls.
+   *
+   * Expects an array of UTXO objects as input. Returns an array of equal size.
+   * Returns UTXO data hydrated with token information.
+   * If the
+   * UTXO does not belong to a SLP transaction, it will return an `isValid` property
+   * set to false.
+   * If the UTXO is part of an SLP transaction, it will return the UTXO object
+   * with additional SLP information attached. An `isValid` property will be included.
+   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed.
+   *
+   * @apiExample Example usage:
+   *
+   * (async () => {
+   * try {
+   *  const utxos = await bchjs.Electrumx.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
+   *
+   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos)
+   *
+   *  console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
+   * } catch (error) {
+   *  console.error(error)
+   * }
+   * })()
+   *
+   * // returns
+   * {
+   *  "txid": "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+   *  "vout": 1,
+   *  "amount": 0.00000546,
+   *  "satoshis": 546,
+   *  "height": 596089,
+   *  "confirmations": 748,
+   *  "utxoType": "token",
+   *  "tokenId": "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+   *  "tokenTicker": "TOK-CH",
+   *  "tokenName": "TokyoCash",
+   *  "tokenDocumentUrl": "",
+   *  "tokenDocumentHash": "",
+   *  "decimals": 8,
+   *  "tokenQty": 2,
+   *  "isValid": true,
+   *  "tokenType": 1
+   * }
+   */
+  // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
+  // do the heavy lifting.
+  async hydrateUtxos(utxos) {
+    try {
+      // Throw error if input is not an array.
+      if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
+
+      const response = await axios.post(
+        `${this.restURL}slp/hydrateUtxos`,
+        {
+          utxos: utxos
+        },
+        _this.axiosOptions
+      )
+
+      return response.data
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
     }
   }
 }
