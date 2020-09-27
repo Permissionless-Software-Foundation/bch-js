@@ -1760,4 +1760,19 @@ describe("#SLP Utils", () => {
       ])
     })
   })
+
+  describe("#hydrateUtxos", () => {
+    it("should throw an error if input is not an array", async () => {
+      try {
+        const utxos = 1234
+
+        await slp.Utils.hydrateUtxos(utxos)
+
+        assert2.equal(true, false, "Uh oh. Code path should not end here.")
+      } catch (err) {
+        // console.log(`Error: `, err)
+        assert2.include(err.message, `Input must be an array.`)
+      }
+    })
+  })
 })
