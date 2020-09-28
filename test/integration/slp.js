@@ -510,22 +510,26 @@ describe(`#SLP`, () => {
       it("should hydrate UTXOs", async () => {
         const utxos = [
           {
-            txid:
-              "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
-            vout: 3,
-            value: "6816",
-            height: 606848,
-            confirmations: 13,
-            satoshis: 6816
-          },
-          {
-            txid:
-              "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
-            vout: 2,
-            value: "546",
-            height: 606848,
-            confirmations: 13,
-            satoshis: 546
+            utxos: [
+              {
+                txid:
+                  "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
+                vout: 3,
+                value: "6816",
+                height: 606848,
+                confirmations: 13,
+                satoshis: 6816
+              },
+              {
+                txid:
+                  "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
+                vout: 2,
+                value: "546",
+                height: 606848,
+                confirmations: 13,
+                satoshis: 546
+              }
+            ]
           }
         ]
 
@@ -534,36 +538,58 @@ describe(`#SLP`, () => {
 
         // Test the general structure of the output.
         assert.isArray(result.slpUtxos)
-        assert.equal(result.slpUtxos.length, 2)
+        assert.equal(result.slpUtxos.length, 1)
+        assert.equal(result.slpUtxos[0].utxos.length, 2)
 
         // Test the non-slp UTXO.
-        assert.property(result.slpUtxos[0], "txid")
-        assert.property(result.slpUtxos[0], "vout")
-        assert.property(result.slpUtxos[0], "value")
-        assert.property(result.slpUtxos[0], "height")
-        assert.property(result.slpUtxos[0], "confirmations")
-        assert.property(result.slpUtxos[0], "satoshis")
-        assert.property(result.slpUtxos[0], "isValid")
-        assert.equal(result.slpUtxos[0].isValid, false)
+        assert.property(result.slpUtxos[0].utxos[0], "txid")
+        assert.property(result.slpUtxos[0].utxos[0], "vout")
+        assert.property(result.slpUtxos[0].utxos[0], "value")
+        assert.property(result.slpUtxos[0].utxos[0], "height")
+        assert.property(result.slpUtxos[0].utxos[0], "confirmations")
+        assert.property(result.slpUtxos[0].utxos[0], "satoshis")
+        assert.property(result.slpUtxos[0].utxos[0], "isValid")
+        assert.equal(result.slpUtxos[0].utxos[0].isValid, false)
 
         // Test the slp UTXO.
-        assert.property(result.slpUtxos[1], "txid")
-        assert.property(result.slpUtxos[1], "vout")
-        assert.property(result.slpUtxos[1], "value")
-        assert.property(result.slpUtxos[1], "height")
-        assert.property(result.slpUtxos[1], "confirmations")
-        assert.property(result.slpUtxos[1], "satoshis")
-        assert.property(result.slpUtxos[1], "isValid")
-        assert.equal(result.slpUtxos[1].isValid, true)
-        assert.property(result.slpUtxos[1], "transactionType")
-        assert.property(result.slpUtxos[1], "tokenId")
-        assert.property(result.slpUtxos[1], "tokenTicker")
-        assert.property(result.slpUtxos[1], "tokenName")
-        assert.property(result.slpUtxos[1], "tokenDocumentUrl")
-        assert.property(result.slpUtxos[1], "tokenDocumentHash")
-        assert.property(result.slpUtxos[1], "decimals")
-        assert.property(result.slpUtxos[1], "tokenType")
-        assert.property(result.slpUtxos[1], "tokenQty")
+        assert.property(result.slpUtxos[0].utxos[1], "txid")
+        assert.property(result.slpUtxos[0].utxos[1], "vout")
+        assert.property(result.slpUtxos[0].utxos[1], "value")
+        assert.property(result.slpUtxos[0].utxos[1], "height")
+        assert.property(result.slpUtxos[0].utxos[1], "confirmations")
+        assert.property(result.slpUtxos[0].utxos[1], "satoshis")
+        assert.property(result.slpUtxos[0].utxos[1], "isValid")
+        assert.equal(result.slpUtxos[0].utxos[1].isValid, true)
+        assert.property(result.slpUtxos[0].utxos[1], "transactionType")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenId")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenTicker")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenName")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenDocumentUrl")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenDocumentHash")
+        assert.property(result.slpUtxos[0].utxos[1], "decimals")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenType")
+        assert.property(result.slpUtxos[0].utxos[1], "tokenQty")
+      })
+
+      it("should process data directly from Electrumx", async () => {
+        const addrs = [
+          "bitcoincash:qq6mvsm7l92d77zpymmltvaw09p5uzghyuyx7spygg",
+          "bitcoincash:qpjdrs8qruzh8xvusdfmutjx62awcepnhyperm3g89",
+          "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
+        ]
+
+        const utxos = await bchjs.Electrumx.utxo(addrs)
+        // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
+
+        const result = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        // Test the general structure of the output.
+        assert.isArray(result.slpUtxos)
+        assert.equal(result.slpUtxos.length, 3)
+        assert.equal(result.slpUtxos[0].utxos.length, 1)
+        assert.equal(result.slpUtxos[1].utxos.length, 1)
+        assert.equal(result.slpUtxos[2].utxos.length, 2)
       })
     })
   })
