@@ -1047,11 +1047,15 @@ class Utils {
    *
    * (async () => {
    * try {
-   *  const utxos = await bchjs.Electrumx.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
+   *  const utxos = await bchjs.Electrumx.utxo([
+   *   "bitcoincash:qq6mvsm7l92d77zpymmltvaw09p5uzghyuyx7spygg",
+   *   "bitcoincash:qpjdrs8qruzh8xvusdfmutjx62awcepnhyperm3g89",
+   *   "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
+   *  ])
    *
-   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos)
+   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
    *
-   *  console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
+   *  console.log(`${JSON.stringify(utxoInfo, null, 2)}`)
    * } catch (error) {
    *  console.error(error)
    * }
@@ -1059,23 +1063,65 @@ class Utils {
    *
    * // returns
    * {
-   *  "txid": "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
-   *  "vout": 1,
-   *  "amount": 0.00000546,
-   *  "satoshis": 546,
-   *  "height": 596089,
-   *  "confirmations": 748,
-   *  "utxoType": "token",
-   *  "tokenId": "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
-   *  "tokenTicker": "TOK-CH",
-   *  "tokenName": "TokyoCash",
-   *  "tokenDocumentUrl": "",
-   *  "tokenDocumentHash": "",
-   *  "decimals": 8,
-   *  "tokenQty": 2,
-   *  "isValid": true,
-   *  "tokenType": 1
+   *  "slpUtxos": [
+   *   {
+   *    "utxos": [
+   *      {
+   *        "height": 654522,
+   *         "tx_hash": "516e763932061f9e868652d727045b714db1ecac459e84cd52b5b4cb39572ecc",
+   *        "tx_pos": 0,
+   *        "value": 6000,
+   *        "satoshis": 6000,
+   *        "txid": "516e763932061f9e868652d727045b714db1ecac459e84cd52b5b4cb39572ecc",
+   *        "vout": 0,
+   *        "isValid": false
+   *      }
+   *    ],
+   *    "address": "bitcoincash:qq6mvsm7l92d77zpymmltvaw09p5uzghyuyx7spygg"
+   *   },
+   *   {
+   *    "utxos": [
+   *      {
+   *        "height": 654522,
+   *        "tx_hash": "8ec01d851d9df9fb4b4331275e2ff680257c224100d0081cec6fbeedf982f738",
+   *        "tx_pos": 1,
+   *        "value": 546,
+   *        "satoshis": 546,
+   *        "txid": "8ec01d851d9df9fb4b4331275e2ff680257c224100d0081cec6fbeedf982f738",
+   *        "vout": 1,
+   *        "isValid": false
+   *      }
+   *    ],
+   *    "address": "bitcoincash:qpjdrs8qruzh8xvusdfmutjx62awcepnhyperm3g89"
+   *   },
+   *   {
+   *    "utxos": [
+   *      {
+   *        "height": 654522,
+   *        "tx_hash": "072a1e2c2d5f1309bf4eef7f88684e4ecd544a903b386b07f3e04b91b13d8af1",
+   *        "tx_pos": 0,
+   *        "value": 6999,
+   *        "satoshis": 6999,
+   *        "txid": "072a1e2c2d5f1309bf4eef7f88684e4ecd544a903b386b07f3e04b91b13d8af1",
+   *        "vout": 0,
+   *        "isValid": false
+   *      },
+   *      {
+   *        "height": 654522,
+   *        "tx_hash": "a72db6a0883ecb8e379f317231b2571e41e041b7b1107e3e54c2e0b3386ac6ca",
+   *        "tx_pos": 1,
+   *        "value": 546,
+   *        "satoshis": 546,
+   *        "txid": "a72db6a0883ecb8e379f317231b2571e41e041b7b1107e3e54c2e0b3386ac6ca",
+   *        "vout": 1,
+   *        "isValid": false
+   *      }
+   *    ],
+   *    "address": "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
+   *   }
+   *  ]
    * }
+   *
    */
   // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
   // do the heavy lifting.
