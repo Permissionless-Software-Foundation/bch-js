@@ -748,6 +748,7 @@ class Utils {
 
       return tokenData
     } catch (error) {
+      // console.log('decodeOpReturn error: ', error)
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
@@ -766,14 +767,16 @@ class Utils {
    * set to false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
    * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed.
+   * If its value is true, the UTXO is a valid SLP UTXO.
+   * If the isValid value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed,
+   * or a 429 rate-limit error was enountered during the processing of the request.
    *
    * @apiExample Example usage:
    *
    * (async () => {
    * try {
-   *  const utxos = await bchjs.Blockbook.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
+   *  const utxos = await bchjs.Electrumx.utxo(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
    *
    *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
@@ -870,12 +873,29 @@ class Utils {
           slpData = await this.decodeOpReturn(utxo.txid)
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          // console.log(`error: `, err)
+          // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+
           // An error will be thrown if the txid is not SLP.
-          // Mark as false and continue the loop.
-          // outAry.push(false)
-          utxo.isValid = false
-          outAry.push(utxo)
+          // If error is for some other reason, like a 429 error, mark utxo as 'null'
+          // to display the unknown state.
+          if (
+            !err.message ||
+            err.message.indexOf("scriptpubkey not op_return") === -1
+          ) {
+            // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+
+            utxo.isValid = null
+            outAry.push(utxo)
+
+            // If error is thrown because there is no OP_RETURN, then it's not
+            // an SLP UTXO.
+            // Mark as false and continue the loop.
+          } else {
+            utxo.isValid = false
+            outAry.push(utxo)
+          }
+
+          // Halt the execution of the loop and increase to the next index.
           continue
         }
 
@@ -1040,8 +1060,10 @@ class Utils {
    * set to false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
    * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed.
+   * If its value is true, the UTXO is a valid SLP UTXO. \
+   * If the isValid value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed,
+   * or a 429 rate-limit error was enountered during the processing of the request.
    *
    * @apiExample Example usage:
    *

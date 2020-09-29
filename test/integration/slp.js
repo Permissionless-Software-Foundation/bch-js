@@ -582,7 +582,7 @@ describe(`#SLP`, () => {
         // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
 
         const result = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
         // Test the general structure of the output.
         assert.isArray(result.slpUtxos)
