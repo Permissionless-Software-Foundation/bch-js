@@ -767,14 +767,16 @@ class Utils {
    * set to false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
    * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed.
+   * If its value is true, the UTXO is a valid SLP UTXO.
+   * If the isValid value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed,
+   * or a 429 rate-limit error was enountered during the processing of the request.
    *
    * @apiExample Example usage:
    *
    * (async () => {
    * try {
-   *  const utxos = await bchjs.Blockbook.utxos(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
+   *  const utxos = await bchjs.Electrumx.utxo(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
    *
    *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
@@ -1058,8 +1060,10 @@ class Utils {
    * set to false.
    * If the UTXO is part of an SLP transaction, it will return the UTXO object
    * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO. If the value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed.
+   * If its value is true, the UTXO is a valid SLP UTXO. \
+   * If the isValid value is null,
+   * then SLPDB has not yet processed that txid and validity has not been confirmed,
+   * or a 429 rate-limit error was enountered during the processing of the request.
    *
    * @apiExample Example usage:
    *

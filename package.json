@@ -15,7 +15,7 @@
     "test:integration:testnet:local": "RESTURL=http://localhost:4000/v3/ mocha --timeout 30000 test/integration/testnet",
     "test:integration:free": "bash test/integration/test-free-tier.sh",
     "test:integration:free:testnet": "bash test/integration/testnet/test-free-tier.sh",
-    "test:temp": "mocha --timeout 30000 -g '#tokenUtxoDetails' test/integration/slp.js",
+    "test:temp": "mocha --timeout 30000 -g '#hydrateUtxos' test/integration/slp.js",
     "test:integration:api": "RESTURL=https://api.fullstack.cash/v3/ mocha --timeout 30000 test/integration",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
