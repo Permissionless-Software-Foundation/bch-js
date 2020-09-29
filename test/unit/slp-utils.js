@@ -1695,6 +1695,46 @@ describe("#SLP Utils", () => {
 
       assert2.equal(data[2].isValid, false)
     })
+
+    it("should return null value when 429 recieved", async () => {
+      const utxos = [
+        {
+          height: 654522,
+          tx_hash:
+            "072a1e2c2d5f1309bf4eef7f88684e4ecd544a903b386b07f3e04b91b13d8af1",
+          tx_pos: 0,
+          value: 6999,
+          satoshis: 6999,
+          txid:
+            "072a1e2c2d5f1309bf4eef7f88684e4ecd544a903b386b07f3e04b91b13d8af1",
+          vout: 0
+        },
+        {
+          height: 654522,
+          tx_hash:
+            "a72db6a0883ecb8e379f317231b2571e41e041b7b1107e3e54c2e0b3386ac6ca",
+          tx_pos: 1,
+          value: 546,
+          satoshis: 546,
+          txid:
+            "a72db6a0883ecb8e379f317231b2571e41e041b7b1107e3e54c2e0b3386ac6ca",
+          vout: 1
+        }
+      ]
+
+      sandbox.stub(slp.Utils, "decodeOpReturn").rejects({
+        error:
+          "Too many requests. Your limits are currently 3 requests per minute. Increase rate limits at https://fullstack.cash"
+      })
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      // Values should be 'null' to signal that a determination could not be made
+      // due to a throttling issue.
+      assert.equal(data[0].isValid, null)
+      assert.equal(data[1].isValid, null)
+    })
   })
 
   describe("#txDetails", () => {
