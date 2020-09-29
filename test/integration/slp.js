@@ -582,7 +582,7 @@ describe(`#SLP`, () => {
         // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
 
         const result = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
-        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
         // Test the general structure of the output.
         assert.isArray(result.slpUtxos)
@@ -590,6 +590,21 @@ describe(`#SLP`, () => {
         assert.equal(result.slpUtxos[0].utxos.length, 1)
         assert.equal(result.slpUtxos[1].utxos.length, 1)
         assert.equal(result.slpUtxos[2].utxos.length, 2)
+
+        try {
+          // Test the expected values.
+          assert.equal(result.slpUtxos[0].utxos[0].isValid, false)
+          assert.equal(result.slpUtxos[1].utxos[0].isValid, true)
+          assert.equal(result.slpUtxos[1].utxos[0].tokenTicker, "TROUT")
+          assert.equal(result.slpUtxos[2].utxos[0].isValid, false)
+          assert.equal(result.slpUtxos[2].utxos[1].isValid, true)
+          assert.equal(result.slpUtxos[2].utxos[1].tokenTicker, "VALENTINE")
+        } catch (err) {
+          console.error(
+            'The hydrateUtxos call may hitting rate limits, or SLPDB may be having issues if "isValid" results are "null"'
+          )
+          console.log("Error: ", err)
+        }
       })
     })
   })
