@@ -1111,7 +1111,17 @@ class Utils {
    *        "satoshis": 546,
    *        "txid": "8ec01d851d9df9fb4b4331275e2ff680257c224100d0081cec6fbeedf982f738",
    *        "vout": 1,
-   *        "isValid": false
+   *        "utxoType": "token",
+   *        "transactionType": "send",
+   *        "tokenId": "a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2",
+   *        "tokenTicker": "TROUT",
+   *        "tokenName": "Trout's test token",
+   *        "tokenDocumentUrl": "troutsblog.com",
+   *        "tokenDocumentHash": "",
+   *        "decimals": 2,
+   *        "tokenType": 1,
+   *        "tokenQty": 10,
+   *        "isValid": true
    *      }
    *    ],
    *    "address": "bitcoincash:qpjdrs8qruzh8xvusdfmutjx62awcepnhyperm3g89"
@@ -1136,7 +1146,17 @@ class Utils {
    *        "satoshis": 546,
    *        "txid": "a72db6a0883ecb8e379f317231b2571e41e041b7b1107e3e54c2e0b3386ac6ca",
    *        "vout": 1,
-   *        "isValid": false
+   *        "utxoType": "token",
+   *        "transactionType": "send",
+   *        "tokenId": "6201f3efe486c577433622817b99645e1d473cd3882378f9a0efc128ab839a82",
+   *        "tokenTicker": "VALENTINE",
+   *        "tokenName": "Valentine day token",
+   *        "tokenDocumentUrl": "fullstack.cash",
+   *        "tokenDocumentHash": "",
+   *        "decimals": 2,
+   *        "tokenType": 1,
+   *        "tokenQty": 5,
+   *        "isValid": true
    *      }
    *    ],
    *    "address": "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
