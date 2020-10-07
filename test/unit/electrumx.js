@@ -368,4 +368,35 @@ describe(`#ElectrumX`, () => {
       assert.equal(result.transactions.length, 2, "2 outputs for 2 inputs")
     })
   })
+  describe(`#broadcast`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const txHex = 12345
+
+        await bchjs.Electrumx.broadcast(txHex)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input txHex must be a string.`
+        )
+      }
+    })
+    it(`should broadcast a single transaction`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.broadcast })
+
+      const tx = mockData.details
+      const txid = tx.details.txid
+      const result = await bchjs.Electrumx.broadcast(tx.details.hex)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "success")
+      assert.equal(result.success, true)
+
+      assert.property(result, "txid")
+      assert.equal(result.txid, txid)
+    })
+  })
 })

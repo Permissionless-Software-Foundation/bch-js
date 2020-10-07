@@ -250,6 +250,11 @@ const detailsArray = {
   ]
 }
 
+const broadcast = {
+  success: true,
+  txid: txDetails.txid
+}
+
 module.exports = {
   utxo,
   utxos,
@@ -261,5 +266,6 @@ module.exports = {
   unconfirmedArray,
   blockHeaders,
   details,
-  detailsArray
+  detailsArray,
+  broadcast
 }
