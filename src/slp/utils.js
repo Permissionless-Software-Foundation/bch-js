@@ -1,10 +1,10 @@
 const axios = require("axios")
 const slpParser = require("slp-parser")
 
-const Script = require("../script")
-const scriptLib = new Script()
+// const Script = require("../script")
+// const scriptLib = new Script()
 
-const BigNumber = require("bignumber.js")
+// const BigNumber = require("bignumber.js")
 
 let _this
 
@@ -698,12 +698,20 @@ class Utils {
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
   async decodeOpReturn(txid, cache = null) {
+    // The cache object is an in-memory cache (JS Object) that can be passed
+    // into this function. It helps if multiple vouts from the same TXID are
+    // being evaluated. In that case, it can significantly reduce the number
+    // of API calls.
+    // To use: add the output of this function to the cache object:
+    // cache[txid] = returnValue
+    // Then pass that cache object back into this function every time its called.
     if (cache) {
       if (!(cache instanceof Object))
         throw new Error(`decodeOpReturn cache parameter must be Object`)
       const cachedVal = cache[txid]
       if (cachedVal) return cachedVal
     }
+
     try {
       // Validate the txid input.
       if (!txid || txid === "" || typeof txid !== "string")
@@ -754,7 +762,9 @@ class Utils {
         }
       }
       // console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
+
       if (cache) cache[txid] = tokenData
+
       return tokenData
     } catch (error) {
       // console.log('decodeOpReturn error: ', error)
@@ -825,7 +835,7 @@ class Utils {
       // utxo list may have duplicate tx_hash, varying tx_pos
       // only need to call decodeOpReturn once for those
       const decodeOpReturnCache = {}
-      const cachedTxValidation = {}  
+      const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
 
@@ -968,7 +978,10 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId, decodeOpReturnCache)
+            const genesisData = await this.decodeOpReturn(
+              slpData.tokenId,
+              decodeOpReturnCache
+            )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // Minting Baton
@@ -1016,7 +1029,10 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId, decodeOpReturnCache)
+            const genesisData = await this.decodeOpReturn(
+              slpData.tokenId,
+              decodeOpReturnCache
+            )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
