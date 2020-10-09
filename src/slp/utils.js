@@ -1,10 +1,10 @@
 const axios = require("axios")
 const slpParser = require("slp-parser")
 
-const Script = require("../script")
-const scriptLib = new Script()
+// const Script = require("../script")
+// const scriptLib = new Script()
 
-const BigNumber = require("bignumber.js")
+// const BigNumber = require("bignumber.js")
 
 let _this
 
@@ -662,6 +662,9 @@ class Utils {
    * Similar to decodeOpReturn(), except decodeOpReturn2() uses the slp-parser
    * library maintained by JT Freeman. Outputs have slightly different format.
    *
+   * If optional associative array parameter cache is used, will cache and
+   * reuse responses for the same input.
+   *
    * Throws an error if given a non-SLP txid.
    *
    * In a future version of bch-js, this method will replace the origonal
@@ -694,7 +697,21 @@ class Utils {
    * }
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn(txid) {
+  async decodeOpReturn(txid, cache = null) {
+    // The cache object is an in-memory cache (JS Object) that can be passed
+    // into this function. It helps if multiple vouts from the same TXID are
+    // being evaluated. In that case, it can significantly reduce the number
+    // of API calls.
+    // To use: add the output of this function to the cache object:
+    // cache[txid] = returnValue
+    // Then pass that cache object back into this function every time its called.
+    if (cache) {
+      if (!(cache instanceof Object))
+        throw new Error(`decodeOpReturn cache parameter must be Object`)
+      const cachedVal = cache[txid]
+      if (cachedVal) return cachedVal
+    }
+
     try {
       // Validate the txid input.
       if (!txid || txid === "" || typeof txid !== "string")
@@ -745,6 +762,8 @@ class Utils {
         }
       }
       // console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
+
+      if (cache) cache[txid] = tokenData
 
       return tokenData
     } catch (error) {
@@ -813,6 +832,10 @@ class Utils {
   // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails(utxos) {
     try {
+      // utxo list may have duplicate tx_hash, varying tx_pos
+      // only need to call decodeOpReturn once for those
+      const decodeOpReturnCache = {}
+      const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
 
@@ -870,7 +893,7 @@ class Utils {
         // If there is no OP_RETURN, mark the UTXO as false.
         let slpData = false
         try {
-          slpData = await this.decodeOpReturn(utxo.txid)
+          slpData = await this.decodeOpReturn(utxo.txid, decodeOpReturnCache)
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
@@ -955,7 +978,10 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId)
+            const genesisData = await this.decodeOpReturn(
+              slpData.tokenId,
+              decodeOpReturnCache
+            )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // Minting Baton
@@ -1003,7 +1029,10 @@ class Utils {
 
           // If UTXO passes validation, then return formatted token data.
           else {
-            const genesisData = await this.decodeOpReturn(slpData.tokenId)
+            const genesisData = await this.decodeOpReturn(
+              slpData.tokenId,
+              decodeOpReturnCache
+            )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
@@ -1030,7 +1059,11 @@ class Utils {
 
         // Finally, validate the SLP txid with SLPDB.
         if (outAry[i].tokenType) {
-          const isValid = await this.validateTxid(utxo.txid)
+          var isValid = cachedTxValidation[utxo.txid]
+          if (isValid == null) {
+            isValid = await this.validateTxid(utxo.txid)
+            cachedTxValidation[utxo.txid] = isValid
+          }
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
           outAry[i].isValid = isValid[0].valid
