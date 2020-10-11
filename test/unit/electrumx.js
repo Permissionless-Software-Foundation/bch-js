@@ -264,17 +264,38 @@ describe(`#ElectrumX`, () => {
   describe(`#blockHeader`, () => {
     it(`should throw an error for improper height input`, async () => {
       try {
+        // Mock network calls.
+        sandbox.stub(axios, "get").rejects({
+          response: {
+            data: {
+              success: false,
+              error: "height must be a positive number"
+            }
+          }
+        })
+
         const height = -10
         await bchjs.Electrumx.blockHeader(height)
+
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(err.error, `height must be a positive number`)
+        assert.include(err.message, `height must be a positive number`)
       }
     })
 
     it(`should throw an error for improper count input`, async () => {
       try {
+        // Mock network calls.
+        sandbox.stub(axios, "get").rejects({
+          response: {
+            data: {
+              success: false,
+              error: "count must be a positive number"
+            }
+          }
+        })
+
         const height = 42
         const count = -10
 
@@ -282,7 +303,7 @@ describe(`#ElectrumX`, () => {
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(err.error, `count must be a positive number`)
+        assert.include(err.message, `count must be a positive number`)
       }
     })
 
@@ -319,7 +340,8 @@ describe(`#ElectrumX`, () => {
       // Stub the network call.
       sandbox.stub(axios, "get").resolves({ data: mockData.details })
 
-      const txid = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+      const txid =
+        "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
 
       const result = await bchjs.Electrumx.txData(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -377,10 +399,7 @@ describe(`#ElectrumX`, () => {
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input txHex must be a string.`
-        )
+        assert.include(err.message, `Input txHex must be a string.`)
       }
     })
     it(`should broadcast a single transaction`, async () => {

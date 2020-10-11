@@ -441,8 +441,14 @@ class ElectrumX {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      // console.log("error: ", error)
+      if (error.response && error.response.data) {
+        if (error.response && error.response.data)
+          throw new Error(error.response.data.error)
+        else throw error.response.data
+      } else {
+        throw error
+      }
     }
   }
 
@@ -515,7 +521,7 @@ class ElectrumX {
    *     }
    *   ]
    * }
-  */
+   */
   async txData(txid) {
     try {
       // Handle single transaction.
@@ -564,7 +570,7 @@ class ElectrumX {
    *  "success": true,
    *  "txid": "..."
    * }
-  */
+   */
   async broadcast(txHex) {
     try {
       if (typeof txHex === "string") {
