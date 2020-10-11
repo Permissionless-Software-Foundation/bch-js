@@ -1815,4 +1815,103 @@ describe("#SLP Utils", () => {
       }
     })
   })
+
+  describe("#validateTxid2", () => {
+    it("should throw an error if the input is an array", async () => {
+      try {
+        const txid = [
+          "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
+        ]
+
+        await slp.Utils.validateTxid2(txid)
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.message, "txid must be 64 character string")
+      }
+    })
+
+    it("should throw an error for a malformed txid", async () => {
+      try {
+        const txid =
+          "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783"
+
+        await slp.Utils.validateTxid2(txid)
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.message, "txid must be 64 character string")
+      }
+    })
+
+    it("should invalidate a known invalid TXID", async () => {
+      const txid =
+        "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
+
+      // Mock live network calls.
+      sandbox.stub(axios, "get").resolves({
+        data: {
+          txid: txid,
+          isValid: false,
+          msg: ""
+        }
+      })
+
+      const result = await slp.Utils.validateTxid2(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.property(result, "txid")
+      assert2.equal(result.txid, txid)
+
+      assert2.property(result, "isValid")
+      assert2.equal(result.isValid, false)
+    })
+
+    it("should validate a known valid TXID", async () => {
+      const txid =
+        "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
+
+      // Mock live network calls.
+      sandbox.stub(axios, "get").resolves({
+        data: {
+          txid: txid,
+          isValid: true,
+          msg: ""
+        }
+      })
+
+      const result = await slp.Utils.validateTxid2(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.property(result, "txid")
+      assert2.equal(result.txid, txid)
+
+      assert2.property(result, "isValid")
+      assert2.equal(result.isValid, true)
+    })
+
+    // slp-validate can take a long time. bch-api cuts it off if it fails to
+    // return is less than 10 seconds. This test case handle this situation.
+    it("should handle timeout errors", async () => {
+      try {
+        const txid =
+          "eacb1085dfa296fef6d4ae2c0f4529a1bef096dd2325bdcc6dcb5241b3bdb579"
+
+        // Mock live network calls.
+        sandbox.stub(axios, "get").rejects({
+          error:
+            "Network error: Could not communicate with full node or other external service."
+        })
+
+        await slp.Utils.validateTxid2(txid)
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.message, "slp-validate timed out")
+      }
+    })
+  })
 })

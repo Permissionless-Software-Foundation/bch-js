@@ -456,6 +456,66 @@ class Utils {
   }
 
   /**
+   * @api SLP.Utils.validateTxid2() validateTxid2()
+   * @apiName validateTxid2
+   * @apiGroup SLP Utils
+   * @apiDescription Validate that txid is an SLP transaction.
+   *
+   * This second validatoin version uses the slp-validate slp library. It is
+   * much slower and less efficient than SLPDB and is prone to time-outs for
+   * tokens with large DAGs. However, it operates independently of SLPDB and
+   * is a great second validation option, particularly when SLPDB returns 'null'
+   * values.
+   *
+   * Due to the inefficiency of this call, only a single TXID can be input at a
+   * time. This call will throw an error if the input is an array.
+   *
+   * @apiExample Example usage:
+   *
+   * // validate single SLP txid
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.validateTxid(
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+   *    );
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * [ { txid:
+   * 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+   * valid: true } ]
+   */
+  async validateTxid2(txid) {
+    try {
+      // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
+
+      if (
+        !txid ||
+        txid === "" ||
+        typeof txid !== "string" ||
+        txid.length !== 64
+      )
+        throw new Error(`txid must be 64 character string.`)
+
+      const path = `${this.restURL}slp/validateTxid2/${txid}`
+
+      const response = await axios.get(path, _this.axiosOptions)
+      return response.data
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+
+      if (error.error && error.error.indexOf("Network error") > -1)
+        throw new Error("slp-validate timed out")
+
+      throw error
+    }
+  }
+
+  /**
    * @api SLP.Utils.tokenStats() tokenStats()
    * @apiName tokenStats
    * @apiGroup SLP Utils
