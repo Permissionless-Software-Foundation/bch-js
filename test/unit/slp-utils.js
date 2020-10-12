@@ -1735,6 +1735,36 @@ describe("#SLP Utils", () => {
       assert.equal(data[0].isValid, null)
       assert.equal(data[1].isValid, null)
     })
+
+    // it("should handle a dust attack", async () => {
+    it("#dustattack", async () => {
+      // Mock external dependencies.
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .rejects(new Error("lokad id wrong size"))
+
+      const utxos = [
+        {
+          height: 655965,
+          tx_hash:
+            "a675af87dcd8d39be782737aa52e0076b52eb2f5ce355ffcb5567a64dd96b77e",
+          tx_pos: 151,
+          value: 547,
+          satoshis: 547,
+          txid:
+            "a675af87dcd8d39be782737aa52e0076b52eb2f5ce355ffcb5567a64dd96b77e",
+          vout: 151,
+          address: "bitcoincash:qq4dw3sm8qvglspy6w2qg0u2ugsy9zcfcqrpeflwww",
+          hdIndex: 11
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert.equal(data[0].isValid, false)
+    })
   })
 
   describe("#txDetails", () => {
