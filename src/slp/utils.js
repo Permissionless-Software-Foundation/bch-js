@@ -194,7 +194,7 @@ class Utils {
       path = `${this.restURL}slp/list`
     }
 
-    //console.log(`path: ${path}`)
+    // console.log(`path: ${path}`)
 
     try {
       let response
@@ -316,7 +316,7 @@ class Utils {
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error("Input address must be a string or array of strings.")
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
@@ -499,7 +499,7 @@ class Utils {
         typeof txid !== "string" ||
         txid.length !== 64
       )
-        throw new Error(`txid must be 64 character string.`)
+        throw new Error("txid must be 64 character string.")
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
@@ -700,7 +700,7 @@ class Utils {
         typeof txid !== "string" ||
         txid.length !== 64
       )
-        throw new Error(`txid string must be included.`)
+        throw new Error("txid string must be included.")
 
       // console.log(`this.restURL: ${this.restURL}`)
       const path = `${this.restURL}slp/txDetails/${txid}`
@@ -767,7 +767,8 @@ class Utils {
     // Then pass that cache object back into this function every time its called.
     if (cache) {
       if (!(cache instanceof Object))
-        throw new Error(`decodeOpReturn cache parameter must be Object`)
+        throw new Error("decodeOpReturn cache parameter must be Object")
+
       const cachedVal = cache[txid]
       if (cachedVal) return cachedVal
     }
@@ -775,7 +776,7 @@ class Utils {
     try {
       // Validate the txid input.
       if (!txid || txid === "" || typeof txid !== "string")
-        throw new Error(`txid string must be included.`)
+        throw new Error("txid string must be included.")
 
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
@@ -897,7 +898,7 @@ class Utils {
       const decodeOpReturnCache = {}
       const cachedTxValidation = {}
       // Throw error if input is not an array.
-      if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
+      if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
       // Loop through each element in the array and validate the input before
       // further processing.
@@ -963,7 +964,8 @@ class Utils {
           // to display the unknown state.
           if (
             !err.message ||
-            err.message.indexOf("scriptpubkey not op_return") === -1
+            (err.message.indexOf("scriptpubkey not op_return") === -1 &&
+              err.message.indexOf("lokad id") === -1)
           ) {
             // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
 
@@ -1263,7 +1265,7 @@ class Utils {
   async hydrateUtxos(utxos) {
     try {
       // Throw error if input is not an array.
-      if (!Array.isArray(utxos)) throw new Error(`Input must be an array.`)
+      if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
       const response = await axios.post(
         `${this.restURL}slp/hydrateUtxos`,
