@@ -1259,6 +1259,48 @@ class Utils {
    *  ]
    * }
    *
+   * (async () => {
+   * try {
+   *   const utxos = [
+   *     {
+   *       utxos: [
+   *         {
+   *           txid: "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
+   *           vout: 3,
+   *           value: "6816",
+   *           height: 606848,
+   *           confirmations: 13,
+   *           satoshis: 6816
+   *         }
+   *       ]
+   *    }
+   *  ]
+   *
+   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos)
+   *
+   *  console.log(`${JSON.stringify(utxoInfo, null, 2)}`)
+   * } catch (error) {
+   *  console.error(error)
+   * }
+   * })()
+   *
+   * // returns
+   * {
+   *  "slpUtxos": [
+   *   {
+   *    "utxos": [
+   *      {
+   *        "txid": "d56a2b446d8149c39ca7e06163fe8097168c3604915f631bc58777d669135a56",
+   *        "vout": 3,
+   *        "value": "6816",
+   *        "height": 606848,
+   *        "confirmations": 13,
+   *        "satoshis": 6816,
+   *        "isValid": false
+   *      }
+   *    ]
+   *  }
+   *  ]
    */
   // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
   // do the heavy lifting.
