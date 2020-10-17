@@ -6,7 +6,7 @@ const chai = require("chai")
 const assert = chai.assert
 
 const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
+let bchjs
 
 // Inspect utility used for debugging.
 const util = require("util")
@@ -25,6 +25,8 @@ describe(`#SLP`, () => {
   beforeEach(async () => {
     // Introduce a delay so that the BVT doesn't trip the rate limits.
     await sleep(1000)
+
+    bchjs = new BCHJS()
   })
 
   describe("#util", () => {
