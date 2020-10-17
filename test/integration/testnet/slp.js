@@ -89,7 +89,7 @@ describe(`#SLP`, () => {
       }
     })
 
-    it(`should fetch all balances for address: simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9`, async () => {
+    it(`should fetch all balances for address: slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9`, async () => {
       // Mock the call to rest.bitcoin.com
       if (process.env.TEST === "unit") {
         sandbox
@@ -137,6 +137,60 @@ describe(`#SLP`, () => {
         "decimalCount",
         "slpAddress"
       ])
+    })
+  })
+
+  describe("#tokenUtxoDetails", () => {
+    it("should hydrate UTXOs", async () => {
+      const bchAddr = bchjs.SLP.Address.toCashAddress(
+        "slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9"
+      )
+
+      const utxos = await bchjs.Electrumx.utxo([bchAddr])
+      // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
+
+      const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(
+        utxos.utxos[0].utxos
+      )
+      // console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
+
+      assert.isArray(utxoInfo)
+
+      // first UTXO should be a PSF test token.
+      assert.equal(utxoInfo[0].isValid, true)
+    })
+  })
+
+  describe("#hydrateUtxos", () => {
+    // This test will error out if the LOCAL_RESTURL settings is not set properly
+    // in bch-api.
+    it("should hydrate UTXOs", async () => {
+      const bchAddr = bchjs.SLP.Address.toCashAddress(
+        "slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9"
+      )
+
+      const utxos = await bchjs.Electrumx.utxo([bchAddr])
+      // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
+
+      const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
+      // console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
+
+      assert.isArray(utxoInfo.slpUtxos[0].utxos)
+
+      // first UTXO should be a PSF test token.
+      assert.equal(utxoInfo.slpUtxos[0].utxos[0].isValid, true)
+    })
+  })
+
+  describe("#validateTxid2", () => {
+    it("should validate a token txid", async () => {
+      const txid =
+        "ad28116e0818339342dddfc5f58ca8a5379ceb9679b4e4cbd72f4de905415ec1"
+
+      const validated = await bchjs.SLP.Utils.validateTxid(txid)
+      // console.log(validated)
+
+      assert.equal(validated[0].valid, true)
     })
   })
 })

@@ -116,7 +116,7 @@ class HDNode {
   /**
    * @api SLP.HDNode.toSLPAddress() toSLPAddress()
    * @apiName toSLPAddress
-   * @apiGroup SLP
+   * @apiGroup HDNode
    * @apiDescription Get slp address of HDNode.
    *
    * @apiExample Example usage:
