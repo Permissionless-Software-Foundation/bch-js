@@ -90,7 +90,7 @@ class BCHJS {
     this.Generating = new Generating(libConfig)
     this.HDNode = new HDNode(this.Address)
     this.Mnemonic = new Mnemonic(this.Address)
-    this.Price = new Price()
+    this.Price = new Price(libConfig)
     this.Script = new Script()
     this.TransactionBuilder = TransactionBuilder
     this.TransactionBuilder.setAddress(this.Address)

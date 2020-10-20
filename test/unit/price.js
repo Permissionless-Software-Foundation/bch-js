@@ -1,28 +1,59 @@
-const chai = require("chai")
-const assert = require("assert")
+const assert = require("chai").assert
 const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
-const axios = require("axios")
 const sinon = require("sinon")
 
+const mockDataLib = require("./fixtures/price-mocks")
+let mockData
+
 describe("#Price", () => {
+  let sandbox
+  let bchjs
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox()
+
+    bchjs = new BCHJS()
+
+    mockData = Object.assign({}, mockDataLib)
+  })
+
+  afterEach(() => sandbox.restore())
+
   describe("#current", () => {
-    describe("#single currency", () => {
-      let sandbox
-      beforeEach(() => (sandbox = sinon.createSandbox()))
-      afterEach(() => sandbox.restore())
+    it("should get current price for single currency", async () => {
+      sandbox
+        .stub(bchjs.Price.axios, "get")
+        .resolves({ data: { price: 24905 } })
 
-      it("should get current price for single currency", done => {
-        const data = 46347
-        const resolved = new Promise(r => r({ data: data }))
-        sandbox.stub(axios, "get").returns(resolved)
+      const result = await bchjs.Price.current("usd")
+      // console.log(result)
 
-        bchjs.Price.current("usd")
-          .then(result => {
-            assert.deepEqual(data.price, result)
-          })
-          .then(done, done)
-      })
+      assert.isNumber(result)
+    })
+  })
+
+  describe("#getUsd", () => {
+    it("should get the USD price of BCH", async () => {
+      sandbox.stub(bchjs.Price.axios, "get").resolves({ data: { usd: 249.87 } })
+
+      const result = await bchjs.Price.getUsd()
+      // console.log(result)
+
+      assert.isNumber(result)
+    })
+  })
+
+  describe("#rates", () => {
+    it("should get the price of BCH in several currencies", async () => {
+      sandbox
+        .stub(bchjs.Price.axios, "get")
+        .resolves({ data: mockData.mockRates })
+
+      const result = await bchjs.Price.rates()
+      // console.log(result)
+
+      assert.property(result, "USD")
+      assert.property(result, "CAD")
     })
   })
 })
