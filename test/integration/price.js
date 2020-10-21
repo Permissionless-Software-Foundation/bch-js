@@ -17,7 +17,17 @@ describe("#price", () => {
       const result = await bchjs.Price.getUsd()
       // console.log(result)
 
-      assert.isNumber(result.usd)
+      assert.isNumber(result)
+    })
+  })
+
+  describe("#rates", () => {
+    it("should get the price of BCH in several currencies", async () => {
+      const result = await bchjs.Price.rates()
+      // console.log(result)
+
+      assert.property(result, "USD")
+      assert.property(result, "CAD")
     })
   })
 })
