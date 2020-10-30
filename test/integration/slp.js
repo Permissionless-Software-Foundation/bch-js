@@ -599,9 +599,9 @@ describe(`#SLP`, () => {
 
       it("should process data directly from Electrumx", async () => {
         const addrs = [
-          "bitcoincash:qq6mvsm7l92d77zpymmltvaw09p5uzghyuyx7spygg",
-          "bitcoincash:qpjdrs8qruzh8xvusdfmutjx62awcepnhyperm3g89",
-          "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
+          "bitcoincash:qqnt53cfw990u6y38xgezm0lfa8hknw0wueezcpagp",
+          "bitcoincash:qrh3qgtax6adegzc7zxm6m4sgrv9wq28yqnfn33ce5",
+          "bitcoincash:qqcaee5w4ws77n8s2gzy6fwtma6uxd7ctq8553e495"
         ]
 
         const utxos = await bchjs.Electrumx.utxo(addrs)
