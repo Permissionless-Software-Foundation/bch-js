@@ -346,7 +346,10 @@ describe(`#ElectrumX`, () => {
       } catch (err) {
         assert.property(err, "success")
         assert.equal(err.success, false)
-        assert.include(err.error, "Missing inputs")
+        assert.include(
+          err.error,
+          "the transaction was rejected by network rules"
+        )
       }
     })
   })
