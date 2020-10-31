@@ -275,7 +275,8 @@ describe(`#ElectrumX`, () => {
 
   describe(`#txData`, () => {
     it(`should GET details for a single transaction`, async () => {
-      const txid = "76d2ee0ebd8b978742f6478ff9a12f478c34e4cee0a2b919059101d961bd01ee"
+      const txid =
+        "76d2ee0ebd8b978742f6478ff9a12f478c34e4cee0a2b919059101d961bd01ee"
 
       const result = await bchjs.Electrumx.txData(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -322,8 +323,11 @@ describe(`#ElectrumX`, () => {
     it(`should throw error on array size rate limit`, async () => {
       try {
         const txids = []
-        for (let i = 0; i < 25; i++)
-          txids.push("76d2ee0ebd8b978742f6478ff9a12f478c34e4cee0a2b919059101d961bd01ee")
+        for (let i = 0; i < 25; i++) {
+          txids.push(
+            "76d2ee0ebd8b978742f6478ff9a12f478c34e4cee0a2b919059101d961bd01ee"
+          )
+        }
 
         await bchjs.Electrumx.txData(txids)
 
@@ -338,14 +342,18 @@ describe(`#ElectrumX`, () => {
 
   describe(`#broadcast`, () => {
     it(`should broadcast a single transaction`, async () => {
-      const txHex = "020000000265d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667010000006441dd1dd72770cadede1a7fd0363574846c48468a398ddfa41a9677c74cac8d2652b682743725a3b08c6c2021a629011e11a264d9036e9d5311e35b5f4937ca7b4e4121020797d8fd4d2fa6fd7cdeabe2526bfea2b90525d6e8ad506ec4ee3c53885aa309ffffffff65d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667000000006441347d7f218c11c04487c1ad8baac28928fb10e5054cd4494b94d078cfa04ccf68e064fb188127ff656c0b98e9ce87f036d183925d0d0860605877d61e90375f774121028a53f95eb631b460854fc836b2e5d31cad16364b4dc3d970babfbdcc3f2e4954ffffffff035ac355000000000017a914189ce02e332548f4804bac65cba68202c9dbf822878dfd0800000000001976a914285bb350881b21ac89724c6fb6dc914d096cd53b88acf9ef3100000000001976a91445f1f1c4a9b9419a5088a3e9c24a293d7a150e6488ac00000000"
+      const txHex =
+        "020000000265d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667010000006441dd1dd72770cadede1a7fd0363574846c48468a398ddfa41a9677c74cac8d2652b682743725a3b08c6c2021a629011e11a264d9036e9d5311e35b5f4937ca7b4e4121020797d8fd4d2fa6fd7cdeabe2526bfea2b90525d6e8ad506ec4ee3c53885aa309ffffffff65d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667000000006441347d7f218c11c04487c1ad8baac28928fb10e5054cd4494b94d078cfa04ccf68e064fb188127ff656c0b98e9ce87f036d183925d0d0860605877d61e90375f774121028a53f95eb631b460854fc836b2e5d31cad16364b4dc3d970babfbdcc3f2e4954ffffffff035ac355000000000017a914189ce02e332548f4804bac65cba68202c9dbf822878dfd0800000000001976a914285bb350881b21ac89724c6fb6dc914d096cd53b88acf9ef3100000000001976a91445f1f1c4a9b9419a5088a3e9c24a293d7a150e6488ac00000000"
 
       try {
         await bchjs.Electrumx.broadcast(txHex)
       } catch (err) {
         assert.property(err, "success")
         assert.equal(err.success, false)
-        assert.include(err.error, "Missing inputs")
+        assert.include(
+          err.error,
+          "the transaction was rejected by network rules"
+        )
       }
     })
   })

@@ -2,7 +2,7 @@ const chai = require("chai")
 const assert = chai.assert
 const sinon = require("sinon")
 
-const BCHJS = require("../../src/bch-js")
+const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS()
 
 describe(`#ElectrumX`, () => {
