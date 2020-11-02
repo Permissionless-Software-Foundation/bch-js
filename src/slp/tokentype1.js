@@ -426,7 +426,7 @@ class TokenType1 {
 
       return slpSendObj
     } catch (err) {
-      console.log(err)
+      // console.log(err)
       throw err
     }
   }

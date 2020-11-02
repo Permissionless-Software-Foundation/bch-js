@@ -26,6 +26,10 @@ util.inspect.defaultOptions = {
 }
 
 describe("#rawtransaction", () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe("#decodeRawTransaction", () => {
     it("should decode tx for a single hex", async () => {
       const hex =
@@ -68,21 +72,6 @@ describe("#rawtransaction", () => {
       ])
       assert.isArray(result[0].vin)
       assert.isArray(result[0].vout)
-    })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.decodeRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
     })
 
     it(`should throw error on array size rate limit`, async () => {
@@ -240,22 +229,6 @@ describe("#rawtransaction", () => {
       console.log(`result ${JSON.stringify(result, null, 2)}`)
     })
 */
-    /*
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.decodeRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
-    })
-*/
   })
 
   /*
@@ -299,21 +272,6 @@ describe("#rawtransaction", () => {
       }
     })
 
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.sendRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input hex must be a string or array of strings`
-        )
-      }
-    })
-
     it(`should throw error on array size rate limit`, async () => {
       try {
         const dataMock =
@@ -332,3 +290,7 @@ describe("#rawtransaction", () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

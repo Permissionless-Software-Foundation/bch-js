@@ -7,7 +7,13 @@ const bchjs = new BCHJS({ ninsightURL: "https://rest.bitcoin.com/v2" })
 
 describe(`#Ninsight`, () => {
   let sandbox
-  beforeEach(() => (sandbox = sinon.createSandbox()))
+
+  beforeEach(async () => {
+    sandbox = sinon.createSandbox()
+
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   afterEach(() => sandbox.restore())
 
   describe(`#utxo`, () => {
@@ -55,3 +61,7 @@ describe(`#Ninsight`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

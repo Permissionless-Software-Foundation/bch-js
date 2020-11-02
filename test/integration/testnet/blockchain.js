@@ -12,7 +12,7 @@ const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
-  : `https://tapi.fullstack.cash/v3/`
+  : "https://tapi.fullstack.cash/v3/"
 // if (process.env.RESTURL) RESTURL = process.env.RESTURL
 
 const BCHJS = require("../../../src/bch-js")
@@ -27,11 +27,15 @@ util.inspect.defaultOptions = {
   depth: 3
 }
 
-describe(`#blockchain`, () => {
-  describe(`#getBestBlockHash`, () => {
-    it(`should GET best block hash`, async () => {
+describe("#blockchain", () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
+  describe("#getBestBlockHash", () => {
+    it("should GET best block hash", async () => {
       const result = await bchjs.Blockchain.getBestBlockHash()
-      //console.log(`result: ${util.inspect(result)}`)
+      // console.log(`result: ${util.inspect(result)}`)
 
       assert.isString(result)
       assert.equal(result.length, 64, "Specific hash length")
@@ -39,7 +43,7 @@ describe(`#blockchain`, () => {
   })
 
   describe("#getBlockHeader", () => {
-    it(`should GET block header for a single hash`, async () => {
+    it("should GET block header for a single hash", async () => {
       const hash =
         "000000000000c57178ace90210289e6b5383134c5b5306e1cdd8395176e10aaf"
 
@@ -64,7 +68,7 @@ describe(`#blockchain`, () => {
       ])
     })
 
-    it(`should GET block headers for an array of hashes`, async () => {
+    it("should GET block headers for an array of hashes", async () => {
       const hash = [
         "000000000000c57178ace90210289e6b5383134c5b5306e1cdd8395176e10aaf",
         "00000000000b7db4cbae48d852fcbef32f728014582094ad613fe12af6600ff2"
@@ -92,21 +96,7 @@ describe(`#blockchain`, () => {
       ])
     })
 
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const hash = 12345
-
-        await bchjs.Blockchain.getBlockHeader(hash)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input hash must be a string or array of strings`
-        )
-      }
-    })
-
-    it(`should throw error on array size rate limit`, async () => {
+    it("should throw error on array size rate limit", async () => {
       try {
         const data = []
         for (let i = 0; i < 25; i++) {
@@ -115,7 +105,7 @@ describe(`#blockchain`, () => {
           )
         }
 
-        const result = await bchjs.Blockchain.getBlockHeader(data)
+        await bchjs.Blockchain.getBlockHeader(data)
 
         // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, "Unexpected result!")
@@ -178,7 +168,7 @@ describe(`#blockchain`, () => {
     })
     */
 
-    it(`should throw an error if txid is not in mempool`, async () => {
+    it("should throw an error if txid is not in mempool", async () => {
       try {
         const txid =
           "1f121fb6a33f48cd426dde06aa20ce589dd97becabb835a8d33071cbf40c7d04"
@@ -187,39 +177,25 @@ describe(`#blockchain`, () => {
 
         assert.equal(true, false, "Unexpected result!")
       } catch (err) {
-        //console.log(`err: ${util.inspect(err)}`)
+        // console.log(`err: ${util.inspect(err)}`)
         assert.hasAnyKeys(err, ["error"])
-        assert.include(err.error, `Transaction not in mempool`)
-      }
-    })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.getMempoolEntry(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
+        assert.include(err.error, "Transaction not in mempool")
       }
     })
   })
 
-  describe(`#getTxOutProof`, () => {
-    it(`should get single tx out proof`, async () => {
+  describe("#getTxOutProof", () => {
+    it("should get single tx out proof", async () => {
       const txid =
         "1f121fb6a33f48cd426dde06aa20ce589dd97becabb835a8d33071cbf40c7d04"
 
       const result = await bchjs.Blockchain.getTxOutProof(txid)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isString(result)
     })
 
-    it(`should get an array of tx out proofs`, async () => {
+    it("should get an array of tx out proofs", async () => {
       const txid = [
         "1f121fb6a33f48cd426dde06aa20ce589dd97becabb835a8d33071cbf40c7d04",
         "fc4f696c0ebb3d0994b3975f57d85be75ef752b9fd52c17e361ec3be2fa3e752"
@@ -231,27 +207,13 @@ describe(`#blockchain`, () => {
       assert.isArray(result)
       assert.isString(result[0])
     })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.getTxOutProof(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
-      }
-    })
   })
 
-  describe(`#verifyTxOutProof`, () => {
+  describe("#verifyTxOutProof", () => {
     const mockTxOutProof =
       "00000020ac86ce8f2bda235c0dc135d18f6a777c44b121e8f41db8a51ca65000000000000cd4de3c49337712f3a1092c47c3bf73ec2f9b1cfd289ee991ede0b6eab4df229d5b8c5dffff001d82ce005b0700000003ec55d9142eac2c1d2229e5af24898b2590c111b62e2787fa1998d3d713fd432fd557124ed758fa156a6cdc6d317d5575aec2b86dfb159c62ecb4743f28bef1cb52e7a32fbec31e367ec152fdb952f75ee75bd8575f97b394093dbb0e6c694ffc0135"
 
-    it(`should verify a single proof`, async () => {
+    it("should verify a single proof", async () => {
       const result = await bchjs.Blockchain.verifyTxOutProof(mockTxOutProof)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
@@ -263,10 +225,10 @@ describe(`#blockchain`, () => {
       )
     })
 
-    it(`should verify an array of proofs`, async () => {
+    it("should verify an array of proofs", async () => {
       const proofs = [mockTxOutProof, mockTxOutProof]
       const result = await bchjs.Blockchain.verifyTxOutProof(proofs)
-      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
       assert.isString(result[0])
@@ -276,21 +238,7 @@ describe(`#blockchain`, () => {
       )
     })
 
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.verifyTxOutProof(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
-      }
-    })
-
-    it(`should throw error on array size rate limit`, async () => {
+    it("should throw error on array size rate limit", async () => {
       try {
         const data = []
         for (let i = 0; i < 25; i++) data.push(mockTxOutProof)
@@ -306,3 +254,7 @@ describe(`#blockchain`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

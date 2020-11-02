@@ -21,6 +21,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#blockchain`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#getBestBlockHash`, () => {
     it(`should GET best block hash`, async () => {
       const result = await bchjs.Blockchain.getBestBlockHash()
@@ -83,20 +87,6 @@ describe(`#blockchain`, () => {
         "nextblockhash",
         "nTx"
       ])
-    })
-
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const hash = 12345
-
-        await bchjs.Blockchain.getBlockHeader(hash)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input hash must be a string or array of strings`
-        )
-      }
     })
 
     it(`should throw error on array size rate limit`, async () => {
@@ -185,20 +175,6 @@ describe(`#blockchain`, () => {
         assert.include(err.error, `Transaction not in mempool`)
       }
     })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.getMempoolEntry(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
-      }
-    })
   })
 
   describe(`#getTxOutProof`, () => {
@@ -223,20 +199,6 @@ describe(`#blockchain`, () => {
 
       assert.isArray(result)
       assert.isString(result[0])
-    })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.getTxOutProof(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
-      }
     })
   })
 
@@ -267,20 +229,6 @@ describe(`#blockchain`, () => {
         result[0],
         "03f69502ca32e7927fd4f38c1d3f950bff650c1eea3d09a70e9df5a9d7f989f7"
       )
-    })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const txid = 12345
-
-        await bchjs.Blockchain.verifyTxOutProof(txid)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings`
-        )
-      }
     })
 
     it(`should throw error on array size rate limit`, async () => {
@@ -329,3 +277,7 @@ describe(`#blockchain`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
