@@ -17,6 +17,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#util`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#validateAddress`, () => {
     it(`should return false for testnet addr on mainnet`, async () => {
       const address = `bchtest:qqqk4y6lsl5da64sg5qc3xezmplyu5kmpyz2ysaa5y`
@@ -92,3 +96,7 @@ describe(`#util`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

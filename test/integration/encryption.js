@@ -4,6 +4,10 @@ const BCHJS = require("../../src/bch-js")
 const bchjs = new BCHJS()
 
 describe("#Encryption", () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe("#getPubKey", () => {
     it("should get a public key", async () => {
       const addr = "bitcoincash:qpf8jv9hmqcda0502gjp7nm3g24y5h5s4unutghsxq"
@@ -29,3 +33,7 @@ describe("#Encryption", () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

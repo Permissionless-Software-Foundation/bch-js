@@ -24,6 +24,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#util`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#validateAddress`, () => {
     it(`should return false for testnet addr on mainnet`, async () => {
       const address = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peu`
@@ -82,21 +86,6 @@ describe(`#util`, () => {
       ])
     })
 
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const address = 15432
-
-        await bchjs.Util.validateAddress(address)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
-    })
-
     it(`should throw error on array size rate limit`, async () => {
       try {
         const dataMock = `bchtest:pq6k9969f6v6sg7a75jkru4n7wn9sknv5cztcp0dnh`
@@ -114,3 +103,7 @@ describe(`#util`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

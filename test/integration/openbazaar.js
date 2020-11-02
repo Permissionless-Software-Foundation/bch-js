@@ -8,6 +8,10 @@ const BCHJS = require("../../src/bch-js")
 const bchjs = new BCHJS()
 
 describe(`#OpenBazaar`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#Balance`, () => {
     it(`should GET balance for a single address`, async () => {
       const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
@@ -79,3 +83,7 @@ describe(`#OpenBazaar`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

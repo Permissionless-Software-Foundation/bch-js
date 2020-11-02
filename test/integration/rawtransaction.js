@@ -19,6 +19,10 @@ util.inspect.defaultOptions = {
 }
 
 describe("#rawtransaction", () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe("#decodeRawTransaction", () => {
     it("should decode tx for a single hex", async () => {
       const hex =
@@ -279,3 +283,7 @@ describe("#rawtransaction", () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

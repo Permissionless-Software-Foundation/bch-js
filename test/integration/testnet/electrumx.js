@@ -11,7 +11,13 @@ const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe(`#ElectrumX`, () => {
   let sandbox
-  beforeEach(() => (sandbox = sinon.createSandbox()))
+
+  beforeEach(async () => {
+    sandbox = sinon.createSandbox()
+
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   afterEach(() => sandbox.restore())
 
   describe(`#utxo`, () => {
@@ -358,3 +364,7 @@ describe(`#ElectrumX`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
