@@ -75,21 +75,6 @@ describe(`#util`, () => {
       ])
     })
 
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const address = 15432
-
-        await bchjs.Util.validateAddress(address)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
-    })
-
     it(`should throw error on array size rate limit`, async () => {
       try {
         const dataMock = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z`

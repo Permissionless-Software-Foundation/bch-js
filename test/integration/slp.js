@@ -466,22 +466,6 @@ describe(`#SLP`, () => {
     })
 
     describe("#balancesForAddress", () => {
-      it(`should throw an error if input is not a string or array of strings`, async () => {
-        try {
-          const address = 1234
-
-          await bchjs.SLP.Utils.balancesForAddress(address)
-
-          assert.equal(true, false, "Uh oh. Code path should not end here.")
-        } catch (err) {
-          //console.log(`Error: `, err)
-          assert.include(
-            err.message,
-            `Input address must be a string or array of strings`
-          )
-        }
-      })
-
       it(`should fetch all balances for address: simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9`, async () => {
         const balances = await bchjs.SLP.Utils.balancesForAddress(
           "simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9"
@@ -520,19 +504,6 @@ describe(`#SLP`, () => {
     })
 
     describe("#hydrateUtxos", () => {
-      it("should throw an error if input is not an array", async () => {
-        try {
-          const utxos = 1234
-
-          await bchjs.SLP.Utils.hydrateUtxos(utxos)
-
-          assert.equal(true, false, "Uh oh. Code path should not end here.")
-        } catch (err) {
-          // console.log(`Error: `, err)
-          assert.include(err.message, `Input must be an array.`)
-        }
-      })
-
       it("should hydrate UTXOs", async () => {
         const utxos = [
           {

@@ -63,21 +63,6 @@ describe("#rawtransaction", () => {
       assert.isArray(result[0].vout)
     })
 
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.decodeRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
-    })
-
     it(`should throw error on array size rate limit`, async () => {
       try {
         const data = []
@@ -233,22 +218,6 @@ describe("#rawtransaction", () => {
       console.log(`result ${JSON.stringify(result, null, 2)}`)
     })
 */
-    /*
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.decodeRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input must be a string or array of strings.`
-        )
-      }
-    })
-*/
   })
 
   /*
@@ -289,21 +258,6 @@ describe("#rawtransaction", () => {
 
         assert.hasAllKeys(err, ["error"])
         assert.include(err.error, "bad-txns-inputs-missingorspent (code 16)")
-      }
-    })
-
-    it(`should throw an error for improper single input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.RawTransactions.sendRawTransaction(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input hex must be a string or array of strings`
-        )
       }
     })
 
