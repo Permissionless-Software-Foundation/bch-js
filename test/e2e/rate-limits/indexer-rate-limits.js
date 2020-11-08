@@ -10,7 +10,7 @@
 const assert = require("chai").assert
 
 const JWT_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODhhY2JmMDIyMWMxMDAxMmFkOTNmZiIsImVtYWlsIjoiY2hyaXMudHJvdXRuZXJAZ21haWwuY29tIiwiYXBpTGV2ZWwiOjQwLCJyYXRlTGltaXQiOjMsImlhdCI6MTU5MDQzMjIxNywiZXhwIjoxNTkzMDI0MjE3fQ.R0Euhutd5FHCxLlSzjq1TYsGjI6iua_AguWIeLK2xCU"
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODhhY2JmMDIyMWMxMDAxMmFkOTNmZiIsImVtYWlsIjoiY2hyaXMudHJvdXRuZXJAZ21haWwuY29tIiwiYXBpTGV2ZWwiOjQwLCJyYXRlTGltaXQiOjMsImlhdCI6MTYwMzIyNzEwNCwiZXhwIjoxNjA1ODE5MTA0fQ.CV36grzdD36Ht3BwZGHG4XU40CVDzMRw9Ars1x1r27M"
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
@@ -20,8 +20,8 @@ const bchjs = new BCHJS({
 })
 
 describe("#full node rate limits", () => {
-  it("should allow more than 10 RPM to full node", async () => {
-    for (let i = 0; i < 20; i++) {
+  it("should allow more than 20 RPM to full node", async () => {
+    for (let i = 0; i < 22; i++) {
       const result = await bchjs.Control.getNetworkInfo()
 
       if (i === 5) {
@@ -34,12 +34,12 @@ describe("#full node rate limits", () => {
         assert.property(result, "version", "more than 10 calls allowed")
       }
     }
-  }).timeout(30000)
+  }).timeout(45000)
 
-  it("should allow more than 10 RPM to an indexer", async () => {
+  it("should allow more than 20 RPM to an indexer", async () => {
     const addr = "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf"
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 22; i++) {
       const result = await bchjs.Blockbook.balance(addr)
 
       if (i === 5) {
@@ -52,5 +52,5 @@ describe("#full node rate limits", () => {
         assert.property(result, "balance", "more than 10 calls allowed")
       }
     }
-  }).timeout(30000)
+  }).timeout(45000)
 })
