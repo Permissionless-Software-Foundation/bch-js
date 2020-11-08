@@ -4,6 +4,7 @@
 
   To Run Test:
   - Update the RESTURL for bch-api you want to test against.
+  - Ensure the BCHJSTOKEN environment variable is set to an empty string.
 */
 
 const assert = require("chai").assert
@@ -31,11 +32,11 @@ describe("#anonymous rate limits", () => {
 
   it("should throw error when rate limit exceeded", async () => {
     try {
-      for (let i = 0; i < 5; i++) await bchjs.Control.getNetworkInfo()
+      for (let i = 0; i < 22; i++) await bchjs.Control.getNetworkInfo()
 
-      assert.equal(true, false, "unexpected result")
+      assert.fail("Unexpected result")
     } catch (err) {
       assert.include(err.error, "Too many requests")
     }
-  }).timeout(5000)
+  }).timeout(20000)
 })
