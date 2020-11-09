@@ -108,7 +108,7 @@ class Ninsight {
       throw new Error(`Input address must be a string or array of strings.`)
   }
 
-  async _handleError() {
+  async _handleError(error) {
     if (error.response && error.response.data) throw error.response.data
       else throw error
   }
