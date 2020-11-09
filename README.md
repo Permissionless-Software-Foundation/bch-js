@@ -1,9 +1,9 @@
 # bch-js
 
-[![Build Status](https://travis-ci.org/christroutner/bch-js.svg?branch=master)](https://travis-ci.org/christroutner/bch-js)
+[![Build Status](https://travis-ci.org/Permissionless-Software-Foundation/bch-js.svg?branch=master)](https://travis-ci.org/Permissionless-Software-Foundation/bch-js)
 [![Version](https://img.shields.io/npm/v/@chris.troutner/bch-js)](https://www.npmjs.com/package/@chris.troutner/bch-js)
 [![Downloads/week](https://img.shields.io/npm/dw/@chris.troutner/bch-js)](https://npmjs.org/package/@chris.troutner/bch-js)
-[![License](https://img.shields.io/npm/l/@chris.troutner/bch-js)](https://github.com/christroutner/bch-js/blob/master/LICENSE.md)
+[![License](https://img.shields.io/npm/l/@chris.troutner/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
 
 [bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer).
 
@@ -37,7 +37,7 @@ bchjs = new BCHJS({ restURL: 'https://tapi.fullstack.cash/v3/' })
 ```
 
 This is a fork of the [BITBOX SDK](https://github.com/Bitcoin-com/bitbox-sdk) (which is maintained by Bitcoin.com). This library is intended to be paired with
-the [bch-api](https://github.com/christroutner/bch-api) REST API.
+the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API.
 
 If you need a backward-compatible instance of this library, you can use a
 'shim'. Do it like this:
@@ -47,7 +47,7 @@ const bitbox = BCHJS.BitboxShim({ restURL: 'https://api.fullstack.cash/v3/' })
 ```
 
 ### API Key
-The [bch-api](https://github.com/christroutner/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
+The [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
 rate limits when interacting with the back end server. See [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) if you want to understand the system-as-a-whole. The JWT token can be fed to bch-js *implicitly* or *explicitly*.
 
 - Implicitly: bch-js will detect your JWT token by setting the `BCHJSTOKEN` environment variable.
