@@ -103,7 +103,7 @@ class Ninsight {
    * @api Ninsight.unconfirmed()  unconfirmed()
    * @apiName Ninsight Unconfirmed Utxo
    * @apiGroup Ninsight
-   * @apiDescription Return list of unconfirmed uxto for address.
+   * @apiDescription Returns a list of unconfirmed UTXOs for an address.
    *
    * @apiExample Example usage:
    *    (async () => {
