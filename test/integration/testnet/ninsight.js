@@ -68,6 +68,41 @@ describe(`#Ninsight`, () => {
       // ])
     })
   })
+  describe(`#transactions`, () => {
+    it(`should POST transactions history for a single address`, async () => {
+      const addr = "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr"
+
+      const result = await bchjs.Ninsight.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "txs")
+      assert.isArray(result[0].txs)
+      assert.property(result[0].txs[0], "txid")
+      assert.property(result[0].txs[0], "vin")
+      assert.property(result[0].txs[0], "vout")
+    })
+    it(`should POST transactions history for an array of addresses`, async () => {
+      const addr = [
+        "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr",
+        "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"
+      ]
+
+      const result = await bchjs.Ninsight.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "txs")
+      assert.isArray(result[0].txs)
+      assert.property(result[0].txs[0], "txid")
+      assert.property(result[0].txs[0], "vin")
+      assert.property(result[0].txs[0], "vout")
+    })
+  })
 })
 
 function sleep(ms) {

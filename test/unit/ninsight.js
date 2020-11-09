@@ -78,4 +78,57 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "asm")
     })
   })
+  describe(`#transactions`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.Ninsight.transactions(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input address must be a string or array of strings.`
+        )
+      }
+    })
+    it(`should POST transaction history for a single address`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.transactionsPost })
+
+      const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
+
+      const result = await bchjs.Ninsight.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "txs")
+      assert.isArray(result[0].txs)
+      assert.property(result[0].txs[0], "txid")
+      assert.property(result[0].txs[0], "vin")
+      assert.property(result[0].txs[0], "vout")
+    })
+    it(`should POST transaction history for an array of addresses`, async () => {
+      // Mock the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.transactionsPost })
+
+      const addr = [
+        "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
+        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+      ]
+
+      const result = await bchjs.Ninsight.transactions(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "txs")
+      assert.isArray(result[0].txs)
+      assert.property(result[0].txs[0], "txid")
+    })
+  })
 })

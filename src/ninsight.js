@@ -96,6 +96,82 @@ class Ninsight {
       else throw error
     }
   }
+
+  /**
+   * @api Ninsight.transactions()  transactions()
+   * @apiName Ninsight TX History
+   * @apiGroup Ninsight
+   * @apiDescription Return transactions history for address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let txs = await bchjs.Ninsight.transactions('bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c');
+   *     console.log(txs);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *  // [
+   *  //   {
+   *  //     "pagesTotal": 1,
+   *  //     "txs": [
+   *  //       {
+   *  //         "txid": "ec7bc8349386e3e1939bbdc4f8092fdbdd6a380734e68486b558cd594c451d5b",
+   *  //         "version": 2,
+   *  //         "locktime": 0,
+   *  //         "vin": [
+   *  //           {
+   *  //             "txid": "4f1fc57c33659628938db740449bf92fb75799e1d5750a4aeef80eb52d6df1e0",
+   *  //             "vout": 0,
+   *  //             "sequence": 4294967295,
+   *  //             "n": 0,
+   *  //             ...
+   *  //           }
+   *  //           ...
+   *  //         ]
+   *  //         ...
+   *  //       }
+   *  //     ],
+   *  //     "legacyAddress": "1LpbYkEM5cryfhs58tH8c93p4SGzit7UrP",
+   *  //     "cashAddress": "bitcoincash:qrvk436u4r0ew2wj0rd9pnxhx4w90p2yfc29ta0d2n",
+   *  //     "currentPage": 0
+   *  //   }
+   *  // ]
+   *  //
+   *
+   */
+  async transactions(address) {
+    try {
+      if (typeof address === "string") {
+        const response = await axios.post(
+          `${this.ninsightURL}/address/transactions`,
+          {
+            addresses: [address]
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.ninsightURL}/address/transactions`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = Ninsight
