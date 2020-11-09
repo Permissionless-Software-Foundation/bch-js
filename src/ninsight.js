@@ -66,7 +66,7 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      _checkParam()
+      _checkParam(address)
       _callAxios(address, 'utxo')
     } catch (e) {
       _handleError(e)
@@ -96,19 +96,19 @@ class Ninsight {
    */
   async details(address) {
     try {
-      _checkParam()
+      _checkParam(address)
       _callAxios(address, 'details')
     } catch (e) {
       _handleError(e)
     }
   }
 
-  async _checkParam() {
+  _checkParam(address) {
     if (typeof address !== "string" && !Array.isArray(address))
       throw new Error(`Input address must be a string or array of strings.`)
   }
 
-  async _handleError(error) {
+  _handleError(error) {
     if (error.response && error.response.data) throw error.response.data
       else throw error
   }
