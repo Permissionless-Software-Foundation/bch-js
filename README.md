@@ -115,19 +115,9 @@ Have questions? Need help? Join our community support
 
 ## IPFS Releases
 
-I will periodically publish IPFS releases of this repository, including all
-dependencies in the `node_modules` folder. This ensures working copies of this
-repository can be retrieved in case there is any drift in dependency files, or
-if dependencies are pulled from npm or GitHub.
+Copies of this repository are also published on IPFS.
 
-- Initial fork on 5/9/2019:
-
-  - without node_modules folder: QmQFHfbBQdEHfhtiRLbXtX1NcgnfL45hZb7TbQimTXAuzG (4 MB)
-  - with node_modules folder: QmXq9Ds6Qdkg9xbRhcF8pay9KabA6QN2y7bx3wvSqiXifk (107 MB)
-
-- v1.0.0 - refactored to pure JavaScript:
-  - without node_modules folder: QmNjFsiTZRMAUa9rZpXqZqivv9JLaNicwLSPHjyLB7PVDk (1 MB)
-  - with node_modules folder: Qma9ScApwBtuL7dpdSk7jpBFTxbqRdiR921WjyP75SU7bT (100 MB)
+- v3.8.10: QmauhggzKDo9A9je5y2K6WRAp32JmGRFCw2ZFTiSnW8yot
 
 ## License
 
