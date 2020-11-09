@@ -5,7 +5,7 @@
 [![Downloads/week](https://img.shields.io/npm/dw/@psf/bch-js)](https://npmjs.org/package/@psf/bch-js)
 [![License](https://img.shields.io/npm/l/@psf/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
 
-[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer).
+[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Learn more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) about Full Stack Bitcoin Cash development.
 
 ### Quick Start Videos:
 Here are two YouTube walk-through videos to help you get started:
@@ -30,21 +30,19 @@ developers.
 - Instantiate the library in your code:
 ```
 const BCHJS = require("@psf/bch-js")
-let bchjs = new BCHJS()
+let bchjs = new BCHJS() // Default to BCHN network.
 
 // testnet
-bchjs = new BCHJS({ restURL: 'https://tapi.fullstack.cash/v3/' })
+bchjs = new BCHJS({ restURL: 'https://testnet3.fullstack.cash/v3/' })
 ```
 
-This is a fork of the [BITBOX SDK](https://github.com/Bitcoin-com/bitbox-sdk) (which is maintained by Bitcoin.com). This library is intended to be paired with
-the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API.
+This library is intended to be paired with
+the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API, and the infrastructure provided by [FullStack.cash](https://fullstack.cash). The `restURL` property can be changed to work with different Bitcoin Cash networks:
 
-If you need a backward-compatible instance of this library, you can use a
-'shim'. Do it like this:
-```
-const BCHJS = require("@psf/bch-js")
-const bitbox = BCHJS.BitboxShim({ restURL: 'https://api.fullstack.cash/v3/' })
-```
+- BCHN Mainnet REST API server: https://bchn.fullstack.cash/v3/
+- ABC Mainnet REST API server: https://abc.fullstack.cash/v3/
+- Testnet3 REST API server: https://testnet3.fullstack.cash/v3/
+- Check server status: https://metrics.fullstack.cash
 
 ### API Key
 The [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
