@@ -66,35 +66,63 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      // Handle single address.
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-        return response.data
-
-        // Handle array of addresses.
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _checkParam()
+      _callAxios(address, 'utxo')
+    } catch (e) {
+      _handleError(e)
     }
+  }
+
+  /**
+   * @api Ninsight.details()  details()
+   * @apiName Ninsight Details
+   * @apiGroup Ninsight
+   * @apiDescription Return details of address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let details = await bchjs.Ninsight.details('bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c');
+   *     console.log(details);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *  // [
+   *  //   //TODO PASTE LOG OUTPUT SAMPLE HERE
+   *  // ]
+   *
+   */
+  async details(address) {
+    try {
+      _checkParam()
+      _callAxios(address, 'details')
+    } catch (e) {
+      _handleError(e)
+    }
+  }
+
+  async _checkParam() {
+    if (typeof address !== "string" && !Array.isArray(address))
+      throw new Error(`Input address must be a string or array of strings.`)
+  }
+
+  async _handleError() {
+    if (error.response && error.response.data) throw error.response.data
+      else throw error
+  }
+
+  async _callAxios(address, type) {
+    const response = await axios.post(
+    `${this.ninsightURL}/address/${type}`,
+    {
+      addresses: address
+    },
+     _this.axiosOptions
+    )
+    console.log('SAMPLE: ${response.data}');
+    return response.data
   }
 }
 
