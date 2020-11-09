@@ -1,11 +1,11 @@
 # bch-js
 
 [![Build Status](https://travis-ci.org/Permissionless-Software-Foundation/bch-js.svg?branch=master)](https://travis-ci.org/Permissionless-Software-Foundation/bch-js)
-[![Version](https://img.shields.io/npm/v/@chris.troutner/bch-js)](https://www.npmjs.com/package/@chris.troutner/bch-js)
-[![Downloads/week](https://img.shields.io/npm/dw/@chris.troutner/bch-js)](https://npmjs.org/package/@chris.troutner/bch-js)
-[![License](https://img.shields.io/npm/l/@chris.troutner/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
+[![Version](https://img.shields.io/npm/v/@psf/bch-js)](https://www.npmjs.com/package/@psf/bch-js)
+[![Downloads/week](https://img.shields.io/npm/dw/@psf/bch-js)](https://npmjs.org/package/@psf/bch-js)
+[![License](https://img.shields.io/npm/l/@psf/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
 
-[bch-js](https://www.npmjs.com/package/@chris.troutner/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer).
+[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps for interacting with the Bitcoin Cash (BCH) blockchain. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Find out more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer).
 
 ### Quick Start Videos:
 Here are two YouTube walk-through videos to help you get started:
@@ -13,7 +13,7 @@ Here are two YouTube walk-through videos to help you get started:
 - [Working with the FullStack.cash JWT token](https://youtu.be/GD2i1ZUiyrk)
 
 ### Quick Links
-- [npm Library](https://www.npmjs.com/package/@chris.troutner/bch-js)
+- [npm Library](https://www.npmjs.com/package/@psf/bch-js)
 - [Documentation](https://bchjs.fullstack.cash/)
 - [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
 - [api.fullstack.cash](https://api.fullstack.cash) - The REST API this library talks to by default.
@@ -25,11 +25,11 @@ developers.
 
 ### Quick Notes
 
-- Install library: `npm install @chris.troutner/bch-js`
+- Install library: `npm install @psf/bch-js`
 
 - Instantiate the library in your code:
 ```
-const BCHJS = require("@chris.troutner/bch-js")
+const BCHJS = require("@psf/bch-js")
 let bchjs = new BCHJS()
 
 // testnet
@@ -42,7 +42,7 @@ the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) RES
 If you need a backward-compatible instance of this library, you can use a
 'shim'. Do it like this:
 ```
-const BCHJS = require("@chris.troutner/bch-js")
+const BCHJS = require("@psf/bch-js")
 const bitbox = BCHJS.BitboxShim({ restURL: 'https://api.fullstack.cash/v3/' })
 ```
 
@@ -54,7 +54,7 @@ rate limits when interacting with the back end server. See [this article](https:
 - Explicitly: You can directly feed in the JWT token with the `apiToken` property when instantiating the library. Here is an example:
 
 ```
-const BCHJS = require("@chris.troutner/bch-js")
+const BCHJS = require("@psf/bch-js")
 let bchjs = new BCHJS({
   restURL: 'https://api.fullstack.cash/v3/',
   apiToken: 'eyJhbGciO...' // Your JWT token here.
