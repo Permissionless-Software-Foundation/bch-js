@@ -91,7 +91,7 @@ class TokenType1 {
         new BigNumber(0)
       )
 
-      const change = new BigNumber(totalTokens).minus(sendQtyBig)
+      const change = totalTokens.minus(sendQtyBig)
       // console.log(`change: ${change}`)
 
       let script
@@ -102,18 +102,19 @@ class TokenType1 {
         outputs = 2
 
         // Convert the send quantity to the format expected by slp-mdm.
-        let baseQty = sendQtyBig
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
+        const baseQty = sendQtyBig.toString()
         // console.log(`baseQty: `, baseQty)
 
         // Convert the change quantity to the format expected by slp-mdm.
-        let baseChange = change
-        baseChange = baseChange.absoluteValue()
-        baseChange = Math.floor(baseChange)
-        baseChange = baseChange.toString()
+        const baseChange = change.toString()
         // console.log(`baseChange: `, baseChange)
+
+        // Check for potential burns
+        const outputQty = new BigNumber(baseChange).plus(new BigNumber(baseQty))
+        const inputQty = new BigNumber(totalTokens)
+        const tokenOutputDelta = outputQty.minus(inputQty).toString() !== "0"
+        if (tokenOutputDelta)
+          throw "Token transaction inputs do not match outputs, cannot send transaction"
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [
@@ -124,13 +125,16 @@ class TokenType1 {
 
         // Corner case, when there is no token change to send back.
       } else {
-        let baseQty = new BigNumber(sendQtyBig)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
+        const baseQty = sendQtyBig.toString()
         // console.log(`baseQty: `, baseQty)
 
-        // console.log(`baseQty: ${baseQty.toString()}`)
+        // Check for potential burns
+        const noChangeOutputQty = new BigNumber(baseQty)
+        const noChangeInputQty = new BigNumber(totalTokens)
+        const tokenSingleOutputError =
+          noChangeOutputQty.minus(noChangeInputQty).toString() !== "0"
+        if (tokenSingleOutputError)
+          throw "Token transaction inputs do not match outputs, cannot send transaction"
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])

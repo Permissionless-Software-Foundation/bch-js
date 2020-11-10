@@ -63,7 +63,404 @@ describe("#SLP TokenType1", () => {
       ]
 
       const result = bchjs.SLP.TokenType1.generateSendOpReturn(tokenUtxos, 1)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
+    })
+  })
+
+  describe("#generateSendOpReturn01", () => {
+    it("should generate send OP_RETURN code", () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1000000000,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "ff46ab7730194691b89301e7d5d4805c304db83522e8aa4e5fa8b592c8aecf41",
+          tx_pos: 1,
+          txid:
+            "ff46ab7730194691b89301e7d5d4805c304db83522e8aa4e5fa8b592c8aecf41",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        0.000000001
+      )
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
+    })
+  })
+
+  describe("#generateSendOpReturn02", () => {
+    it("should generate send OP_RETURN code", () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 660974,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1000000000,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          tx_pos: 1,
+          txid:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        1000000000
+      )
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
+    })
+  })
+
+  describe("#generateSendOpReturn03", () => {
+    it("should generate send OP_RETURN code", () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 660974,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1000000000,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          tx_pos: 1,
+          txid:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        0.000000001
+      )
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
+    })
+  })
+
+  describe("#generateSendOpReturn04", () => {
+    it("should generate send OP_RETURN code", () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 660974,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1000000000,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          tx_pos: 1,
+          txid:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1.000000001,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2ae85b47d9dc61bd90909048d057234efe9508bcc6a599708d029122ed113515",
+          tx_pos: 1,
+          txid:
+            "2ae85b47d9dc61bd90909048d057234efe9508bcc6a599708d029122ed113515",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "4ebd5acb0f3c4edefb9d15295cc2e14f4dada90a3ff0ee17cf77efc57e2940a1",
+          tx_pos: 1,
+          txid:
+            "4ebd5acb0f3c4edefb9d15295cc2e14f4dada90a3ff0ee17cf77efc57e2940a1",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "5ed96f59ae4fec31ee8fc96304bd610c3658f9df2fde35119aad6f44547420f9",
+          tx_pos: 1,
+          txid:
+            "5ed96f59ae4fec31ee8fc96304bd610c3658f9df2fde35119aad6f44547420f9",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "648465087cc8ba218ccf6b7261256924ef2dc1d20e5c10117a6d555065c01600",
+          tx_pos: 1,
+          txid:
+            "648465087cc8ba218ccf6b7261256924ef2dc1d20e5c10117a6d555065c01600",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        1000000004.000000001
+      )
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ["script", "outputs"])
+      assert.isNumber(result.outputs)
+    })
+  })
+
+  describe("#generateSendOpReturn05", () => {
+    it("should generate send OP_RETURN code", () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 660974,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1000000000,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          tx_pos: 1,
+          txid:
+            "2922728e4febc21523369902615165bc15753f79f7488d3f1a260808ff0e116d",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1.000000001,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "2ae85b47d9dc61bd90909048d057234efe9508bcc6a599708d029122ed113515",
+          tx_pos: 1,
+          txid:
+            "2ae85b47d9dc61bd90909048d057234efe9508bcc6a599708d029122ed113515",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "4ebd5acb0f3c4edefb9d15295cc2e14f4dada90a3ff0ee17cf77efc57e2940a1",
+          tx_pos: 1,
+          txid:
+            "4ebd5acb0f3c4edefb9d15295cc2e14f4dada90a3ff0ee17cf77efc57e2940a1",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "5ed96f59ae4fec31ee8fc96304bd610c3658f9df2fde35119aad6f44547420f9",
+          tx_pos: 1,
+          txid:
+            "5ed96f59ae4fec31ee8fc96304bd610c3658f9df2fde35119aad6f44547420f9",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        },
+        {
+          address: "bitcoincash:qpv9fx6mjdpgltygudnpw3tvmxdyzx7savhphtzswu",
+          decimals: 9,
+          height: 0,
+          isValid: true,
+          satoshis: 546,
+          tokenDocumentHash: "",
+          tokenDocumentUrl: "https://cashtabapp.com/",
+          tokenId:
+            "bef614aac85c0c866f4d39e4d12a96851267d38d1bca5bdd6488bbd42e28b6b1",
+          tokenName: "Cash Tab Points",
+          tokenQty: 1,
+          tokenTicker: "CTP",
+          tokenType: 1,
+          transactionType: "send",
+          tx_hash:
+            "648465087cc8ba218ccf6b7261256924ef2dc1d20e5c10117a6d555065c01600",
+          tx_pos: 1,
+          txid:
+            "648465087cc8ba218ccf6b7261256924ef2dc1d20e5c10117a6d555065c01600",
+          utxoType: "token",
+          value: 546,
+          vout: 1
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(
+        tokenUtxos,
+        1000000003.500000001
+      )
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.hasAllKeys(result, ["script", "outputs"])
       assert.isNumber(result.outputs)
