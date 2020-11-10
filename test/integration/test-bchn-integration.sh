@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#export RESTURL=https://bchn.fullstack.cash/v3/
+export RESTURL=https://bchn.fullstack.cash/v3/
 #export RESTURL=http://localhost:3000/v3/
 #export IS_USING_FREE_TIER=true
 
