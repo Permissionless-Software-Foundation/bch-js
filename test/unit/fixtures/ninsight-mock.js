@@ -21,12 +21,31 @@ const utxo = {
     "OP_DUP OP_HASH160 2fe2c4c5ef359bb2fe1a849f891cecffbcfb4f77 OP_EQUALVERIFY OP_CHECKSIG"
 }
 
+const unconfirmed = {
+  utxos: [
+    {
+      txid: "3904ffe6f8fba4ceda5e887130f60fcb18bdc7dcee10392a57f89475c5c108f1",
+      vout: 0,
+      amount: 0.03608203,
+      satoshis: 3608203,
+      confirmations: 0,
+      ts: 1559670801
+    }
+  ],
+  legacyAddress: "1AyWs8U4HUnTLmxxFiGoJbsXauRsvBrcKW",
+  cashAddress: "bitcoincash:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rku6usknlh5",
+  slpAddress: "simpleledger:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rkuk8mdxlf2",
+  scriptPubKey: "76a9146d695af951760b837c8e58b045b098f9c17e23b788ac"
+}
+
+const utxoPost = [utxo, utxo]
+const unconfirmedPost = [unconfirmed, unconfirmed]
+
 const transactions = {
   pagesTotal: 1,
   txs: [
     {
-      txid:
-        "ec7bc8349386e3e1939bbdc4f8092fdbdd6a380734e68486b558cd594c451d5b",
+      txid: "ec7bc8349386e3e1939bbdc4f8092fdbdd6a380734e68486b558cd594c451d5b",
       version: 2,
       locktime: 0,
       vin: [
@@ -95,12 +114,13 @@ const transactions = {
   currentPage: 0
 }
 
-const utxoPost = [utxo, utxo]
 const transactionsPost = [transactions, transactions]
 
 module.exports = {
   utxo,
   utxoPost,
+  unconfirmed,
+  unconfirmedPost,
   transactions,
   transactionsPost
 }

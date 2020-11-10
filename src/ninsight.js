@@ -50,14 +50,16 @@ class Ninsight {
    *  //   {
    *  //     "txid": "d31dc2cf66fe4d3d3ae18e1065def58a64920746b1702b52f060e5edeea9883b",
    *  //     "vout": 1,
-   *  //     "value": "1000000",
+   *  //     "amount": 0.03608203,
+   *  //     "satoshis": 3608203,
    *  //     "height": 585570,
    *  //     "confirmations": 10392
    *  //   },
    *  //   {
    *  //     "txid": "41e9a118765ecf7a1ba4487c0863e23dba343cc5880381a72f0365ac2546c5fa",
    *  //     "vout": 0,
-   *  //     "value": "1000000",
+   *  //     "amount": 0.03608203,
+   *  //     "satoshis": 3608203,
    *  //     "height": 577125,
    *  //     "confirmations": 18837
    *  //   }
@@ -81,6 +83,73 @@ class Ninsight {
       } else if (Array.isArray(address)) {
         const response = await axios.post(
           `${this.ninsightURL}/address/utxo`,
+          {
+            addresses: address
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Input address must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
+  /**
+   * @api Ninsight.unconfirmed()  unconfirmed()
+   * @apiName Ninsight Unconfirmed Utxo
+   * @apiGroup Ninsight
+   * @apiDescription Returns a list of unconfirmed UTXOs for an address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let utxo = await bchjs.Ninsight.unconfirmed('bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c');
+   *     console.log(utxo);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *  // [
+   *  //   {
+   *  //     "txid": "d31dc2cf66fe4d3d3ae18e1065def58a64920746b1702b52f060e5edeea9883b",
+   *  //     "vout": 1,
+   *  //     "amount": 0.03608203,
+   *  //     "satoshis": 3608203,
+   *  //     "confirmations": 0
+   *  //     "ts": 1559670801
+   *  //   },
+   *  //   {
+   *  //     "txid": "41e9a118765ecf7a1ba4487c0863e23dba343cc5880381a72f0365ac2546c5fa",
+   *  //     "vout": 0,
+   *  //     "amount": 0.03608203,
+   *  //     "satoshis": 3608203,
+   *  //     "confirmations": 0
+   *  //     "ts": 1559670902
+   *  //   }
+   *  // ]
+   *
+   */
+  async unconfirmed(address) {
+    try {
+      if (typeof address === "string") {
+        const response = await axios.post(
+          `${this.ninsightURL}/address/unconfirmed`,
+          {
+            addresses: [address]
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      } else if (Array.isArray(address)) {
+        const response = await axios.post(
+          `${this.ninsightURL}/address/unconfirmed`,
           {
             addresses: address
           },

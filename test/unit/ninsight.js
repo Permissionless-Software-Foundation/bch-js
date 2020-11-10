@@ -78,6 +78,70 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "asm")
     })
   })
+
+  describe("#unconfirmed", () => {
+    it("should throw an error for improper input", async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.Ninsight.unconfirmed(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        assert.include(
+          err.message,
+          "Input address must be a string or array of strings."
+        )
+      }
+    })
+
+    it(`should POST utxos for a single address`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.unconfirmed })
+
+      const addr = "bitcoincash:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rku6usknlh5"
+
+      const result = await bchjs.Ninsight.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "utxos")
+      assert.property(result, "legacyAddress")
+      assert.property(result, "cashAddress")
+      assert.property(result, "slpAddress")
+      assert.property(result, "scriptPubKey")
+
+      assert.isArray(result.utxos)
+
+      assert.property(result.utxos[0], "txid")
+      assert.property(result.utxos[0], "vout")
+      assert.property(result.utxos[0], "amount")
+      assert.property(result.utxos[0], "satoshis")
+      assert.property(result.utxos[0], "confirmations")
+      assert.property(result.utxos[0], "ts")
+    })
+
+    it(`should POST utxo details for an array of addresses`, async () => {
+      // Mock the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.unconfirmedPost })
+
+      const addr = [
+        "bitcoincash:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rku6usknlh5",
+        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+      ]
+
+      const result = await bchjs.Ninsight.unconfirmed(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.isArray(result[0].utxos)
+
+      assert.property(result[0], "utxos")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "slpAddress")
+      assert.property(result[0], "scriptPubKey")
+    })
+  })
+
   describe(`#transactions`, () => {
     it(`should throw an error for improper input`, async () => {
       try {
