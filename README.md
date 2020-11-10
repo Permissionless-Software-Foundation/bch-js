@@ -115,7 +115,7 @@ Have questions? Need help? Join our community support
 
 ## IPFS Releases
 
-Copies of this repository are also published on IPFS.
+Copies of this repository are also published on [IPFS](https://ipfs.io).
 
 - v3.8.10: QmauhggzKDo9A9je5y2K6WRAp32JmGRFCw2ZFTiSnW8yot
 
