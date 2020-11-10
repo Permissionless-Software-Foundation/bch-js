@@ -1,39 +1,39 @@
 //const BCHJS = require("../bch-js")
 //const bchjs = new BCHJS()
 
-const Address = require("./address");
-const Script = require("../script");
+const Address = require("./address")
+const Script = require("../script")
 
-const BigNumber = require("bignumber.js");
-const slpMdm = require("slp-mdm");
-const axios = require("axios");
+const BigNumber = require("bignumber.js")
+const slpMdm = require("slp-mdm")
+const axios = require("axios")
 
 // const addy = new Address()
-let addy;
-const TransactionBuilder = require("../transaction-builder");
+let addy
+const TransactionBuilder = require("../transaction-builder")
 
-let _this; // local global
+let _this // local global
 
 class TokenType1 {
   constructor(config) {
-    this.restURL = config.restURL;
-    this.apiToken = config.apiToken;
+    this.restURL = config.restURL
+    this.apiToken = config.apiToken
 
-    addy = new Address(config);
-    this.Script = new Script();
+    addy = new Address(config)
+    this.Script = new Script()
 
-    this.axios = axios;
+    this.axios = axios
     // Add JWT token to the authorization header.
     this.axiosOptions = {
       headers: {
         authorization: `Token ${this.apiToken}`,
       },
-    };
+    }
 
     // Instantiate the transaction builder.
-    TransactionBuilder.setAddress(addy);
+    TransactionBuilder.setAddress(addy)
 
-    _this = this;
+    _this = this
   }
 
   /**
@@ -52,7 +52,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
    *  // Filter out the token UTXOs that match the user-provided token ID.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -61,83 +61,83 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.tokenType === "token" // UTXO is not a minting baton.
    *    )
-   *    return true;
-   *  });
+   *    return true
+   *  })
    *
    *  // Generate the SEND OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateSendOpReturn(
    *    tokenUtxos,
    *    TOKENQTY
-   *  );
+   *  )
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0);
+   *  transactionBuilder.addOutput(slpData, 0)
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/send-token/send-token.js
    */
   generateSendOpReturn(tokenUtxos, sendQty) {
     try {
-      const tokenId = tokenUtxos[0].tokenId;
-      const decimals = tokenUtxos[0].decimals;
+      const tokenId = tokenUtxos[0].tokenId
+      const decimals = tokenUtxos[0].decimals
 
-      const sendQtyBig = new BigNumber(sendQty).times(10 ** decimals);
+      const sendQtyBig = new BigNumber(sendQty).times(10 ** decimals)
 
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = tokenUtxos.reduce((tot, txo) => {
-        return tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals));
-      }, new BigNumber(0));
+        return tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals))
+      }, new BigNumber(0))
 
-      const change = new BigNumber(totalTokens).minus(sendQtyBig);
+      const change = new BigNumber(totalTokens).minus(sendQtyBig)
       // console.log(`change: ${change}`)
 
-      let script;
-      let outputs = 1;
+      let script
+      let outputs = 1
 
       // The normal case, when there is token change to return to sender.
       if (change > 0) {
-        outputs = 2;
+        outputs = 2
 
         // Convert the send quantity to the format expected by slp-mdm.
-        let baseQty = sendQtyBig;
-        baseQty = baseQty.absoluteValue();
-        baseQty = Math.floor(baseQty);
-        baseQty = baseQty.toString();
+        let baseQty = sendQtyBig
+        baseQty = baseQty.absoluteValue()
+        baseQty = Math.floor(baseQty)
+        baseQty = baseQty.toString()
         // console.log(`baseQty: `, baseQty)
 
         // Convert the change quantity to the format expected by slp-mdm.
-        let baseChange = change;
-        baseChange = baseChange.absoluteValue();
-        baseChange = Math.floor(baseChange);
-        baseChange = baseChange.toString();
+        let baseChange = change
+        baseChange = baseChange.absoluteValue()
+        baseChange = Math.floor(baseChange)
+        baseChange = baseChange.toString()
         // console.log(`baseChange: `, baseChange)
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [
           new slpMdm.BN(baseQty),
           new slpMdm.BN(baseChange),
-        ]);
+        ])
         //
 
         // Corner case, when there is no token change to send back.
       } else {
-        let baseQty = new BigNumber(sendQtyBig);
-        baseQty = baseQty.absoluteValue();
-        baseQty = Math.floor(baseQty);
-        baseQty = baseQty.toString();
+        let baseQty = new BigNumber(sendQtyBig)
+        baseQty = baseQty.absoluteValue()
+        baseQty = Math.floor(baseQty)
+        baseQty = baseQty.toString()
         // console.log(`baseQty: `, baseQty)
 
         // console.log(`baseQty: ${baseQty.toString()}`)
 
         // Generate the OP_RETURN as a Buffer.
-        script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)]);
+        script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
       }
 
-      return { script, outputs };
+      return { script, outputs }
     } catch (err) {
-      console.log(`Error in generateSendOpReturn()`);
-      throw err;
+      console.log(`Error in generateSendOpReturn()`)
+      throw err
     }
   }
 
@@ -161,7 +161,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
    *  // Filter out the token UTXOs that match the user-provided token ID.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -170,18 +170,18 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.tokenType === "token" // UTXO is not a minting baton.
    *    )
-   *    return true;
-   *  });
+   *    return true
+   *  })
    *
    *  // Generate the SEND OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateBurnOpReturn(
    *    tokenUtxos,
    *    10 // Burn 10 tokens
-   *  );
+   *  )
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0);
+   *  transactionBuilder.addOutput(slpData, 0)
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/burn-tokens/burn-tokens.js
@@ -189,30 +189,30 @@ class TokenType1 {
    */
   generateBurnOpReturn(tokenUtxos, burnQty) {
     try {
-      const tokenId = tokenUtxos[0].tokenId;
-      const decimals = tokenUtxos[0].decimals;
+      const tokenId = tokenUtxos[0].tokenId
+      const decimals = tokenUtxos[0].decimals
 
       // Calculate the total amount of tokens owned by the wallet.
-      let totalTokens = 0;
-      for (let i = 0; i < tokenUtxos.length; i++)
-        totalTokens += tokenUtxos[i].tokenQty;
+      let totalTokens = 0
+      for (let i = 0 i < tokenUtxos.length i++)
+        totalTokens += tokenUtxos[i].tokenQty
 
-      const remainder = totalTokens - burnQty;
+      const remainder = totalTokens - burnQty
 
-      let baseQty = new BigNumber(remainder).times(10 ** decimals);
-      baseQty = baseQty.absoluteValue();
-      baseQty = Math.floor(baseQty);
-      baseQty = baseQty.toString();
+      let baseQty = new BigNumber(remainder).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      baseQty = baseQty.toString()
 
       // console.log(`baseQty: ${baseQty.toString()}`)
 
       // Generate the OP_RETURN as a Buffer.
-      const script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)]);
+      const script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
 
-      return script;
+      return script
     } catch (err) {
-      console.log(`Error in generateBurnOpReturn()`);
-      throw err;
+      console.log(`Error in generateBurnOpReturn()`)
+      throw err
     }
   }
 
@@ -244,7 +244,7 @@ class TokenType1 {
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0);
+   *  transactionBuilder.addOutput(slpData, 0)
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/create-token/create-token.js
@@ -256,16 +256,16 @@ class TokenType1 {
 
       let baseQty = new BigNumber(configObj.initialQty).times(
         10 ** configObj.decimals
-      );
-      baseQty = baseQty.absoluteValue();
-      baseQty = Math.floor(baseQty);
-      baseQty = baseQty.toString();
+      )
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      baseQty = baseQty.toString()
 
       // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = "";
+      if (!configObj.documentHash) configObj.documentHash = ""
 
       // If mint baton is not specified, then replace it with null.
-      if (!configObj.mintBatonVout) configObj.mintBatonVout = null;
+      if (!configObj.mintBatonVout) configObj.mintBatonVout = null
 
       const script = slpMdm.TokenType1.genesis(
         configObj.ticker,
@@ -275,12 +275,12 @@ class TokenType1 {
         configObj.decimals,
         configObj.mintBatonVout,
         new slpMdm.BN(baseQty)
-      );
+      )
 
-      return script;
+      return script
     } catch (err) {
-      console.log(`Error in generateGenesisOpReturn()`);
-      throw err;
+      console.log(`Error in generateGenesisOpReturn()`)
+      throw err
     }
   }
 
@@ -305,7 +305,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
    *
    *  // Filter out the minting baton.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -314,18 +314,18 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.utxoType === "minting-baton" // UTXO is not a minting baton.
    *    )
-   *    return true;
-   *  });
+   *    return true
+   *  })
    *
    *  // Generate the SLP OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateMintOpReturn(
    *    tokenUtxos,
    *    100 // Mint 100 new tokens.
-   *  );
+   *  )
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0);
+   *  transactionBuilder.addOutput(slpData, 0)
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
@@ -334,48 +334,48 @@ class TokenType1 {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(tokenUtxos))
-        throw new Error(`tokenUtxos must be an array.`);
+        throw new Error(`tokenUtxos must be an array.`)
 
       // Loop through the tokenUtxos array and find the minting baton.
-      let mintBatonUtxo;
-      for (let i = 0; i < tokenUtxos.length; i++) {
+      let mintBatonUtxo
+      for (let i = 0 i < tokenUtxos.length i++) {
         if (tokenUtxos[i].utxoType === "minting-baton")
-          mintBatonUtxo = tokenUtxos[i];
+          mintBatonUtxo = tokenUtxos[i]
       }
 
       // Throw an error if the minting baton could not be found.
       if (!mintBatonUtxo)
         throw new Error(
           `Minting baton could not be found in tokenUtxos array.`
-        );
+        )
 
-      const tokenId = mintBatonUtxo.tokenId;
-      const decimals = mintBatonUtxo.decimals;
+      const tokenId = mintBatonUtxo.tokenId
+      const decimals = mintBatonUtxo.decimals
 
       if (!tokenId)
-        throw new Error(`tokenId property not found in mint-baton UTXO.`);
+        throw new Error(`tokenId property not found in mint-baton UTXO.`)
       if (!decimals)
-        throw new Error(`decimals property not found in mint-baton UTXO.`);
+        throw new Error(`decimals property not found in mint-baton UTXO.`)
 
-      let baseQty = new BigNumber(mintQty).times(10 ** decimals);
-      baseQty = baseQty.absoluteValue();
-      baseQty = Math.floor(baseQty);
-      baseQty = baseQty.toString();
+      let baseQty = new BigNumber(mintQty).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      baseQty = baseQty.toString()
 
       // Signal that the baton should be passed or detroyed.
-      let batonVout = 2;
-      if (destroyBaton) batonVout = null;
+      let batonVout = 2
+      if (destroyBaton) batonVout = null
 
       const script = slpMdm.TokenType1.mint(
         tokenId,
         batonVout,
         new slpMdm.BN(baseQty)
-      );
+      )
 
-      return script;
+      return script
     } catch (err) {
       // console.log(`Error in generateMintOpReturn()`)
-      throw err;
+      throw err
     }
   }
 
@@ -413,27 +413,27 @@ class TokenType1 {
       const data = {
         tokenUtxos,
         sendQty,
-      };
+      }
 
       const result = await _this.axios.post(
         `${this.restURL}slp/generatesendopreturn`,
         data,
         _this.axiosOptions
-      );
+      )
 
-      const slpSendObj = result.data;
+      const slpSendObj = result.data
 
       // const script = _this.Buffer.from(slpSendObj.script)
       //
       // slpSendObj.script = script
       // return slpSendObj
 
-      return slpSendObj;
+      return slpSendObj
     } catch (err) {
       // console.log(err)
-      throw err;
+      throw err
     }
   }
 }
 
-module.exports = TokenType1;
+module.exports = TokenType1
