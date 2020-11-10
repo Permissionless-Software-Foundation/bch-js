@@ -26,8 +26,8 @@ class TokenType1 {
     // Add JWT token to the authorization header.
     this.axiosOptions = {
       headers: {
-        authorization: `Token ${this.apiToken}`,
-      },
+        authorization: `Token ${this.apiToken}`
+      }
     }
 
     // Instantiate the transaction builder.
@@ -52,7 +52,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
    *
    *  // Filter out the token UTXOs that match the user-provided token ID.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -61,18 +61,18 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.tokenType === "token" // UTXO is not a minting baton.
    *    )
-   *    return true
-   *  })
+   *    return true;
+   *  });
    *
    *  // Generate the SEND OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateSendOpReturn(
    *    tokenUtxos,
    *    TOKENQTY
-   *  )
+   *  );
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0)
+   *  transactionBuilder.addOutput(slpData, 0);
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/send-token/send-token.js
@@ -85,9 +85,11 @@ class TokenType1 {
       const sendQtyBig = new BigNumber(sendQty).times(10 ** decimals)
 
       // Calculate the total amount of tokens owned by the wallet.
-      let totalTokens = tokenUtxos.reduce((tot, txo) => {
-        return tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals))
-      }, new BigNumber(0))
+      const totalTokens = tokenUtxos.reduce(
+        (tot, txo) =>
+          tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals)),
+        new BigNumber(0)
+      )
 
       const change = new BigNumber(totalTokens).minus(sendQtyBig)
       // console.log(`change: ${change}`)
@@ -116,7 +118,7 @@ class TokenType1 {
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [
           new slpMdm.BN(baseQty),
-          new slpMdm.BN(baseChange),
+          new slpMdm.BN(baseChange)
         ])
         //
 
@@ -161,7 +163,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
    *
    *  // Filter out the token UTXOs that match the user-provided token ID.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -170,18 +172,18 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.tokenType === "token" // UTXO is not a minting baton.
    *    )
-   *    return true
-   *  })
+   *    return true;
+   *  });
    *
    *  // Generate the SEND OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateBurnOpReturn(
    *    tokenUtxos,
    *    10 // Burn 10 tokens
-   *  )
+   *  );
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0)
+   *  transactionBuilder.addOutput(slpData, 0);
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/burn-tokens/burn-tokens.js
@@ -194,7 +196,7 @@ class TokenType1 {
 
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = 0
-      for (let i = 0 i < tokenUtxos.length i++)
+      for (let i = 0; i < tokenUtxos.length; i++)
         totalTokens += tokenUtxos[i].tokenQty
 
       const remainder = totalTokens - burnQty
@@ -244,7 +246,7 @@ class TokenType1 {
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0)
+   *  transactionBuilder.addOutput(slpData, 0);
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/create-token/create-token.js
@@ -305,7 +307,7 @@ class TokenType1 {
    *  const utxos = await bchjs.Blockbook.utxos(addr)
    *
    *  // Identify the SLP token UTXOs.
-   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
    *
    *  // Filter out the minting baton.
    *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
@@ -314,18 +316,18 @@ class TokenType1 {
    *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
    *      utxo.utxoType === "minting-baton" // UTXO is not a minting baton.
    *    )
-   *    return true
-   *  })
+   *    return true;
+   *  });
    *
    *  // Generate the SLP OP_RETURN
    *  const slpData = bchjs.SLP.TokenType1.generateMintOpReturn(
    *    tokenUtxos,
    *    100 // Mint 100 new tokens.
-   *  )
+   *  );
    *
    *  ...
    *  // Add OP_RETURN as first output.
-   *  transactionBuilder.addOutput(slpData, 0)
+   *  transactionBuilder.addOutput(slpData, 0);
    *
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
@@ -338,16 +340,14 @@ class TokenType1 {
 
       // Loop through the tokenUtxos array and find the minting baton.
       let mintBatonUtxo
-      for (let i = 0 i < tokenUtxos.length i++) {
+      for (let i = 0; i < tokenUtxos.length; i++) {
         if (tokenUtxos[i].utxoType === "minting-baton")
           mintBatonUtxo = tokenUtxos[i]
       }
 
       // Throw an error if the minting baton could not be found.
       if (!mintBatonUtxo)
-        throw new Error(
-          `Minting baton could not be found in tokenUtxos array.`
-        )
+        throw new Error(`Minting baton could not be found in tokenUtxos array.`)
 
       const tokenId = mintBatonUtxo.tokenId
       const decimals = mintBatonUtxo.decimals
@@ -412,7 +412,7 @@ class TokenType1 {
 
       const data = {
         tokenUtxos,
-        sendQty,
+        sendQty
       }
 
       const result = await _this.axios.post(
