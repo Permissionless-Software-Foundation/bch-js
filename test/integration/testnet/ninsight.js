@@ -103,6 +103,42 @@ describe(`#Ninsight`, () => {
       assert.property(result[0].txs[0], "vout")
     })
   })
+  describe(`#txDetails`, () => {
+    it(`should POST transactions details for a single address`, async () => {
+      const txid = "76856d82e00b2696acd8d989e1fa6c46b431005046a285ce905814cac0ff8fea"
+
+      const result = await bchjs.Ninsight.txDetails(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "version")
+      assert.property(result[0], "locktime")
+      assert.property(result[0], "vin")
+      assert.property(result[0], "vout")
+      assert.property(result[0], "blockhash")
+      assert.property(result[0], "blockheight")
+      assert.property(result[0], "confirmations")
+      assert.property(result[0], "time")
+      assert.property(result[0], "blocktime")
+      assert.property(result[0], "valueOut")
+      assert.property(result[0], "size")
+    })
+    it(`should POST transactions details for an array of addresses`, async () => {
+      const txid = [
+        "f191d1062789d7071da6f2168ba306869a829294f6b1c09d03492db4ca3a8e77",
+        "76856d82e00b2696acd8d989e1fa6c46b431005046a285ce905814cac0ff8fea"
+      ]
+
+      const result = await bchjs.Ninsight.txDetails(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "vin")
+      assert.property(result[0], "vout")
+    })
+  })
 })
 
 function sleep(ms) {
