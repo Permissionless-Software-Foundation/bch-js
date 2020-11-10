@@ -195,4 +195,61 @@ describe(`#Ninsight`, () => {
       assert.property(result[0].txs[0], "txid")
     })
   })
+  describe(`#txDetails`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const txid = 12345
+
+        await bchjs.Ninsight.txDetails(txid)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Transaction ID must be a string or array of strings.`
+        )
+      }
+    })
+    it(`should POST transaction details for a single TxID`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.detailsPost })
+
+      const txid = "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33"
+
+      const result = await bchjs.Ninsight.txDetails(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "version")
+      assert.property(result[0], "locktime")
+      assert.property(result[0], "vin")
+      assert.property(result[0], "vout")
+      assert.property(result[0], "blockhash")
+      assert.property(result[0], "blockheight")
+      assert.property(result[0], "confirmations")
+      assert.property(result[0], "time")
+      assert.property(result[0], "blocktime")
+      assert.property(result[0], "isCoinBase")
+      assert.property(result[0], "valueOut")
+      assert.property(result[0], "size")
+    })
+    it(`should POST transaction details for an array of TxIDs`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({ data: mockData.detailsPost })
+
+      const txid = [
+        "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33",
+        "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33"
+      ]
+
+      const result = await bchjs.Ninsight.txDetails(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "vin")
+      assert.property(result[0], "vout")
+    })
+  })
 })

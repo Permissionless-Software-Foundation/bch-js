@@ -241,6 +241,79 @@ class Ninsight {
       else throw error
     }
   }
+
+  /**
+   * @api Ninsight.txDetails()  txDetails()
+   * @apiName Ninsight TX Details
+   * @apiGroup Ninsight
+   * @apiDescription Return transactions details for address(es).
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let result = await bchjs.Ninsight.txDetails('fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33');
+   *     console.log(result);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *  // [
+   *  //   {
+   *  //     "txid": "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33",
+   *  //     "version": 1,
+   *  //     "locktime": 0,
+   *  //     "vin": [
+   *  //       {
+   *  //         "sequence": 4294967295,
+   *  //         "n": 0
+   *  //       }
+   *  //     ],
+   *  //     "vout": [
+   *  //       ...
+   *  //     ],
+   *  //     "blockhash": "00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09",
+   *  //     "blockheight": 1000,
+   *  //     "confirmations": 659909,
+   *  //     "time": 1232346882,
+   *  //     "blocktime": 1232346882,
+   *  //     "firstSeenTime": null,
+   *  //     "valueOut": 50,
+   *  //     "size": 135
+   *  //   }
+   *  // ]
+   *
+   */
+  async txDetails(txid) {
+    try {
+      if (typeof txid === "string") {
+        const response = await axios.post(
+          `${this.ninsightURL}/transaction/details`,
+          {
+            txids: [txid]
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      } else if (Array.isArray(txid)) {
+        const response = await axios.post(
+          `${this.ninsightURL}/transaction/details`,
+          {
+            txids: txid
+          },
+          _this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error(`Transaction ID must be a string or array of strings.`)
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = Ninsight
