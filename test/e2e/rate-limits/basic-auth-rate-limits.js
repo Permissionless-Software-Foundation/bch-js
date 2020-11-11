@@ -13,9 +13,9 @@ const PRO_PASS = "testpassword"
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
-  restURL: `https://api.fullstack.cash/v3/`,
-  // restURL: `http://localhost:3000/v3/`,
-  apiToken: JWT_TOKEN
+  // restURL: `https://api.fullstack.cash/v3/`,
+  restURL: `http://localhost:3000/v3/`,
+  authPass: PRO_PASS
 })
 
 describe("#full node rate limits", () => {
