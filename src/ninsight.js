@@ -71,7 +71,7 @@ class Ninsight {
       // Handle single address.
       if (typeof address === "string") {
         const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
+          `${_this.ninsightURL}/address/utxo`,
           {
             addresses: [address]
           },
@@ -82,7 +82,7 @@ class Ninsight {
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
+          `${_this.ninsightURL}/address/utxo`,
           {
             addresses: address
           },
@@ -139,7 +139,7 @@ class Ninsight {
     try {
       if (typeof address === "string") {
         const response = await axios.post(
-          `${this.ninsightURL}/address/unconfirmed`,
+          `${_this.ninsightURL}/address/unconfirmed`,
           {
             addresses: [address]
           },
@@ -149,7 +149,7 @@ class Ninsight {
         return response.data
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.ninsightURL}/address/unconfirmed`,
+          `${_this.ninsightURL}/address/unconfirmed`,
           {
             addresses: address
           },
@@ -215,7 +215,7 @@ class Ninsight {
     try {
       if (typeof address === "string") {
         const response = await axios.post(
-          `${this.ninsightURL}/address/transactions`,
+          `${_this.ninsightURL}/address/transactions`,
           {
             addresses: [address]
           },
@@ -225,7 +225,7 @@ class Ninsight {
         return response.data
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.ninsightURL}/address/transactions`,
+          `${_this.ninsightURL}/address/transactions`,
           {
             addresses: address
           },
@@ -288,7 +288,7 @@ class Ninsight {
     try {
       if (typeof txid === "string") {
         const response = await axios.post(
-          `${this.ninsightURL}/transaction/details`,
+          `${_this.ninsightURL}/transaction/details`,
           {
             txids: [txid]
           },
@@ -298,7 +298,7 @@ class Ninsight {
         return response.data
       } else if (Array.isArray(txid)) {
         const response = await axios.post(
-          `${this.ninsightURL}/transaction/details`,
+          `${_this.ninsightURL}/transaction/details`,
           {
             txids: txid
           },
