@@ -3,7 +3,9 @@ const assert = chai.assert
 const sinon = require("sinon")
 
 const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS({ ninsightURL: "https://rest.bitcoin.com/v2" })
+const bchjs = new BCHJS({
+  ninsightURL: "https://rest.bitcoin.com/v2"
+})
 
 describe(`#Ninsight`, () => {
   let sandbox
@@ -129,6 +131,90 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "txid")
       assert.property(result[0], "vin")
       assert.property(result[0], "vout")
+    })
+  })
+  describe(`#detailsAddress`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.Ninsight.details(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input address must be a string or array of strings.`
+        )
+      }
+    })
+
+    it(`should GET details for a single address`, async () => {
+      const addr = "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7"
+
+      const result = await bchjs.Ninsight.details(addr)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      assert.property(result[0], "balance")
+      assert.property(result[0], "balanceSat")
+      assert.property(result[0], "totalReceived")
+      assert.property(result[0], "totalReceivedSat")
+      assert.property(result[0], "totalSent")
+      assert.property(result[0], "totalSentSat")
+      assert.property(result[0], "unconfirmedBalance")
+      assert.property(result[0], "unconfirmedBalanceSat")
+      assert.property(result[0], "unconfirmedTxApperances")
+      assert.property(result[0], "txApperances")
+      assert.property(result[0], "transactions")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "slpAddress")
+      assert.property(result[0], "currentPage")
+      assert.property(result[0], "pagesTotal")
+    })
+
+    it(`should GET details for an array of addresses`, async () => {
+      const addr = [
+        "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
+        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+      ]
+
+      const result = await bchjs.Ninsight.details(addr)
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], "balance")
+      assert.property(result[0], "balanceSat")
+      assert.property(result[0], "totalReceived")
+      assert.property(result[0], "totalReceivedSat")
+      assert.property(result[0], "totalSent")
+      assert.property(result[0], "totalSentSat")
+      assert.property(result[0], "unconfirmedBalance")
+      assert.property(result[0], "unconfirmedBalanceSat")
+      assert.property(result[0], "unconfirmedTxApperances")
+      assert.property(result[0], "txApperances")
+      assert.property(result[0], "transactions")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[1], "cashAddress")
+      assert.property(result[1], "slpAddress")
+      assert.property(result[1], "currentPage")
+      assert.property(result[1], "pagesTotal")
+
+      /*
+      If in any way possible, I would like to refactor this test
+      according to the DRY principle to share it with the integration tests too
+      Would that make sense or does that implicate anything unwanted?
+
+      assertDetails(result[0])
+
+      assertDetails(data) {
+        assert.property(data, "balance")
+        assert.property(data, "balanceSat")
+        assert.property(data, "totalReceived")
+        assert.property(data, "totalReceivedSat")
+        assert.property(data, "totalSent")
+        assert.property(data, "totalSentSat")
+      }
+      */
     })
   })
 })

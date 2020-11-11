@@ -31,7 +31,9 @@ describe(`#Ninsight`, () => {
 
     it(`should GET utxos for a single address`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.utxo })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.utxo
+      })
 
       const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
 
@@ -57,7 +59,9 @@ describe(`#Ninsight`, () => {
 
     it(`should POST utxo details for an array of addresses`, async () => {
       // Mock the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.utxoPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.utxoPost
+      })
 
       const addr = [
         "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
@@ -96,7 +100,9 @@ describe(`#Ninsight`, () => {
 
     it(`should POST utxos for a single address`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.unconfirmed })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.unconfirmed
+      })
 
       const addr = "bitcoincash:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rku6usknlh5"
 
@@ -121,7 +127,9 @@ describe(`#Ninsight`, () => {
 
     it(`should POST utxo details for an array of addresses`, async () => {
       // Mock the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.unconfirmedPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.unconfirmedPost
+      })
 
       const addr = [
         "bitcoincash:qpkkjkhe29mqhqmu3evtq3dsnruuzl3rku6usknlh5",
@@ -159,7 +167,9 @@ describe(`#Ninsight`, () => {
     })
     it(`should POST transaction history for a single address`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.transactionsPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.transactionsPost
+      })
 
       const addr = "bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9"
 
@@ -177,7 +187,9 @@ describe(`#Ninsight`, () => {
     })
     it(`should POST transaction history for an array of addresses`, async () => {
       // Mock the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.transactionsPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.transactionsPost
+      })
 
       const addr = [
         "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
@@ -212,7 +224,9 @@ describe(`#Ninsight`, () => {
     })
     it(`should POST transaction details for a single TxID`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.detailsPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.detailsPost
+      })
 
       const txid = "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33"
 
@@ -236,7 +250,9 @@ describe(`#Ninsight`, () => {
     })
     it(`should POST transaction details for an array of TxIDs`, async () => {
       // Stub the network call.
-      sandbox.stub(axios, "post").resolves({ data: mockData.detailsPost })
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.detailsPost
+      })
 
       const txid = [
         "fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33",
@@ -250,6 +266,103 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "txid")
       assert.property(result[0], "vin")
       assert.property(result[0], "vout")
+    })
+  })
+
+  describe(`#addrDetails`, () => {
+    it(`should throw an error for improper input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.Ninsight.details(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input address must be a string or array of strings.`
+        )
+      }
+    })
+
+    it(`should GET details for a single address`, async () => {
+      // Stub the network call.
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.addrDetail
+      })
+
+      const result = await bchjs.Ninsight.details("addr")
+      //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, "balance")
+      assert.property(result, "balanceSat")
+      assert.property(result, "totalReceived")
+      assert.property(result, "totalReceivedSat")
+      assert.property(result, "totalSent")
+      assert.property(result, "totalSentSat")
+      assert.property(result, "unconfirmedBalance")
+      assert.property(result, "unconfirmedBalanceSat")
+      assert.property(result, "unconfirmedTxApperances")
+      assert.property(result, "txApperances")
+      assert.property(result, "transactions")
+      assert.property(result, "legacyAddress")
+      assert.property(result, "cashAddress")
+      assert.property(result, "slpAddress")
+      assert.property(result, "currentPage")
+      assert.property(result, "pagesTotal")
+    })
+
+    it(`should GET details for an array of addresses`, async () => {
+      // Mock the network call.
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.addrDetailArray
+      })
+
+      const addr = [
+        "bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7",
+        "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr"
+      ]
+
+      const result = await bchjs.Ninsight.details(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+
+      assert.property(result[0], "balance")
+      assert.property(result[0], "balanceSat")
+      assert.property(result[0], "totalReceived")
+      assert.property(result[0], "totalReceivedSat")
+      assert.property(result[0], "totalSent")
+      assert.property(result[0], "totalSentSat")
+      assert.property(result[0], "unconfirmedBalance")
+      assert.property(result[0], "unconfirmedBalanceSat")
+      assert.property(result[0], "unconfirmedTxApperances")
+      assert.property(result[0], "txApperances")
+      assert.property(result[0], "transactions")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[1], "cashAddress")
+      assert.property(result[1], "slpAddress")
+      assert.property(result[1], "currentPage")
+      assert.property(result[1], "pagesTotal")
+
+      /*
+      If in any way possible, I would like to refactor this test
+      according to the DRY principle to share it with the integration tests too
+      Would that make sense or does that implicate anything unwanted?
+
+      assertDetails(result[0])
+
+      assertDetails(data) {
+            assert.property(data, "satoshis")
+            assert.property(data, "height")
+            assert.property(data, "confirmations")
+            assert.property(data, "timestamp")
+            assert.property(data, "fees")
+            assert.property(data, "outputIndexes")
+            assert.property(data, "inputIndexes")
+            assert.property(data, "tx")
+      }
+      */
     })
   })
 })
