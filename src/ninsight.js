@@ -68,34 +68,10 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      // Handle single address.
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/utxo`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-        return response.data
-
-        // Handle array of addresses.
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/utxo`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'utxo')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
@@ -137,32 +113,10 @@ class Ninsight {
    */
   async unconfirmed(address) {
     try {
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/unconfirmed`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/unconfirmed`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'unconfirmed')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
@@ -213,32 +167,10 @@ class Ninsight {
    */
   async transactions(address) {
     try {
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/transactions`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${_this.ninsightURL}/address/transactions`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'transactions')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
