@@ -285,38 +285,38 @@ describe(`#Ninsight`, () => {
       }
     })
 
-    it(`should GET details for a single address`, async () => {
+    it(`should POST address details for a single address`, async () => {
       // Stub the network call.
       sandbox.stub(axios, "post").resolves({
-        data: mockData.addrDetail
+        data: mockData.addrDetailArray
       })
 
       const result = await bchjs.Ninsight.details("addr")
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.property(result, "balance")
-      assert.property(result, "balanceSat")
-      assert.property(result, "totalReceived")
-      assert.property(result, "totalReceivedSat")
-      assert.property(result, "totalSent")
-      assert.property(result, "totalSentSat")
-      assert.property(result, "unconfirmedBalance")
-      assert.property(result, "unconfirmedBalanceSat")
-      assert.property(result, "unconfirmedTxApperances")
-      assert.property(result, "txApperances")
-      assert.property(result, "transactions")
-      assert.property(result, "legacyAddress")
-      assert.property(result, "cashAddress")
-      assert.property(result, "slpAddress")
-      assert.property(result, "currentPage")
-      assert.property(result, "pagesTotal")
+      assert.property(result[0], "balance")
+      assert.property(result[0], "balanceSat")
+      assert.property(result[0], "totalReceived")
+      assert.property(result[0], "totalReceivedSat")
+      assert.property(result[0], "totalSent")
+      assert.property(result[0], "totalSentSat")
+      assert.property(result[0], "unconfirmedBalance")
+      assert.property(result[0], "unconfirmedBalanceSat")
+      assert.property(result[0], "unconfirmedTxApperances")
+      assert.property(result[0], "txApperances")
+      assert.property(result[0], "transactions")
+      assert.property(result[0], "legacyAddress")
+      assert.property(result[0], "cashAddress")
+      assert.property(result[0], "slpAddress")
+      assert.property(result[0], "currentPage")
+      assert.property(result[0], "pagesTotal")
     })
 
     it(`should call constructor with null args`, async () => {
       new bchjs.Ninsight.constructor({})
     })
 
-    it(`should GET details for an array of addresses`, async () => {
+    it(`should POST address details for an array of addresses`, async () => {
       // Mock the network call.
       sandbox.stub(axios, "post").resolves({
         data: mockData.addrDetailArray
