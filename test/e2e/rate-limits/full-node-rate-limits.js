@@ -1,4 +1,8 @@
 /*
+  CT 11/11/2020:
+  There is no longer a free tier. These tests have been deprecated.
+
+  ----
   Mocha test that verifies that the bch-api server is enforcing its
   full-node access rules
 
