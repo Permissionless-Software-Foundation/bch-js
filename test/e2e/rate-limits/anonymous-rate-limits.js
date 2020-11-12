@@ -5,12 +5,17 @@
   To Run Test:
   - Update the RESTURL for bch-api you want to test against.
   - Ensure the BCHJSTOKEN environment variable is set to an empty string.
+  - If working with bch-api locally, eliminate the local IP address from the
+    whitelist in bch-api/src/middleware/route-ratelimit.js
+
+  Run this test with this command:
+  mocha --timeout=30000 anonymous-rate-limits.js
 */
 
 const assert = require("chai").assert
 
-const RESTURL = `https://api.fullstack.cash/v3/`
-// const RESTURL = `http://localhost:3000/v3/`
+// const RESTURL = `https://abc.fullstack.cash/v3/`
+const RESTURL = `http://localhost:3000/v3/`
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({ restURL: RESTURL })
@@ -32,7 +37,7 @@ describe("#anonymous rate limits", () => {
 
   it("should throw error when rate limit exceeded", async () => {
     try {
-      for (let i = 0; i < 22; i++) await bchjs.Control.getNetworkInfo()
+      for (let i = 0; i < 35; i++) await bchjs.Control.getNetworkInfo()
 
       assert.fail("Unexpected result")
     } catch (err) {

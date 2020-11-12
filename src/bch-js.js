@@ -55,9 +55,27 @@ class BCHJS {
     else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== "")
       this.apiToken = process.env.BCHJSTOKEN
 
+    // Retrieve the Basic Authentication password.
+    this.authPass = "" // default value.
+    if (config && config.authPass && config.authPass !== "")
+      this.authPass = config.authPass
+    else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== "")
+      this.authPass = process.env.BCHJSAUTHPASS
+
+    // Generate a Basic Authentication token from an auth password
+    this.authToken = ""
+    if (this.authPass) {
+      console.log(`bch-js initialized with authPass: ${this.authPass}`)
+      // Generate the header for Basic Authentication.
+      const combined = `fullstackcash:${this.authPass}`
+      var base64Credential = Buffer.from(combined).toString("base64")
+      this.authToken = `Basic ${base64Credential}`
+    }
+
     const libConfig = {
       restURL: this.restURL,
-      apiToken: this.apiToken
+      apiToken: this.apiToken,
+      authToken: this.authToken
     }
 
     // console.log(`apiToken: ${this.apiToken}`)
