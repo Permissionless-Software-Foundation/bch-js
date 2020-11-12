@@ -312,6 +312,10 @@ describe(`#Ninsight`, () => {
       assert.property(result, "pagesTotal")
     })
 
+    it(`should call constructor with null args`, async () => {
+      new bchjs.Ninsight.constructor({})
+    })
+
     it(`should GET details for an array of addresses`, async () => {
       // Mock the network call.
       sandbox.stub(axios, "post").resolves({

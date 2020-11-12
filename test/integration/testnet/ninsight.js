@@ -158,11 +158,12 @@ describe(`#Ninsight`, () => {
       }
     })
 
-    it(`should GET details for a single address`, async () => {
+    it(`should POST address details for a single address`, async () => {
       const addr = "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr"
 
       const result = await bchjs.Ninsight.details(addr)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      assert.isArray(result)
       assert.property(result[0], "balance")
       assert.property(result[0], "balanceSat")
       assert.property(result[0], "totalReceived")
@@ -181,7 +182,7 @@ describe(`#Ninsight`, () => {
       assert.property(result[0], "pagesTotal")
     })
 
-    it(`should GET details for an array of addresses`, async () => {
+    it(`should POST address details for an array of addresses`, async () => {
       const addr = [
         "bchtest:qzjtnzcvzxx7s0na88yrg3zl28wwvfp97538sgrrmr",
         "bchtest:qp6hgvevf4gzz6l7pgcte3gaaud9km0l459fa23dul"
