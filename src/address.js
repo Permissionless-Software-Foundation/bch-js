@@ -11,6 +11,23 @@ class Address {
 
     this.restURL = tmp.restURL
     this.apiToken = tmp.apiToken
+    this.authToken = config.authToken
+
+    if (this.authToken) {
+      // Add Basic Authentication token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: this.authToken
+        }
+      }
+    } else {
+      // Add JWT token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: `Token ${this.apiToken}`
+        }
+      }
+    }
   }
 
   /**

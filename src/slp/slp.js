@@ -18,22 +18,31 @@ const Utils = require("./utils")
 // SLP is a superset of BITBOX
 class SLP {
   constructor(config) {
-    const tmp = {}
-    if (!config || !config.restURL) {
-      tmp.restURL = `https://api.fullstack.cash/v3/`
+    this.restURL = config.restURL
+    this.apiToken = config.apiToken
+    this.authToken = config.authToken
+
+    if (this.authToken) {
+      // Add Basic Authentication token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: this.authToken
+        }
+      }
     } else {
-      tmp.restURL = config.restURL
-      tmp.apiToken = config.apiToken
+      // Add JWT token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: `Token ${this.apiToken}`
+        }
+      }
     }
 
-    this.restURL = tmp.restURL
-    this.apiToken = tmp.apiToken
-
-    this.Address = new Address(tmp)
+    this.Address = new Address(config)
     this.ECPair = ECPair
-    this.TokenType1 = new TokenType1(tmp)
+    this.TokenType1 = new TokenType1(config)
     this.NFT1 = new NFT1(this.restURL)
-    this.Utils = new Utils(tmp)
+    this.Utils = new Utils(config)
   }
 }
 
