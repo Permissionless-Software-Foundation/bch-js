@@ -14,12 +14,13 @@ const JWT_TOKEN =
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
-  restURL: `https://api.fullstack.cash/v3/`,
+  // restURL: `https://bchn.fullstack.cash/v3/`,
+  restURL: `https://abc.fullstack.cash/v3/`,
   // restURL: `http://localhost:3000/v3/`,
   apiToken: JWT_TOKEN
 })
 
-describe("#full node rate limits", () => {
+describe("#Indexer rate limits", () => {
   it("should allow more than 20 RPM to full node", async () => {
     for (let i = 0; i < 22; i++) {
       const result = await bchjs.Control.getNetworkInfo()
@@ -40,7 +41,7 @@ describe("#full node rate limits", () => {
     const addr = "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf"
 
     for (let i = 0; i < 22; i++) {
-      const result = await bchjs.Blockbook.balance(addr)
+      const result = await bchjs.Electrumx.balance(addr)
 
       if (i === 5) {
         // console.log(`validating 5th call: ${i}`)

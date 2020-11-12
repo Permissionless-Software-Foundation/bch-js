@@ -65,7 +65,7 @@ class BCHJS {
     // Generate a Basic Authentication token from an auth password
     this.authToken = ""
     if (this.authPass) {
-      console.log(`bch-js initialized with authPass: ${this.authPass}`)
+      // console.log(`bch-js initialized with authPass: ${this.authPass}`)
       // Generate the header for Basic Authentication.
       const combined = `fullstackcash:${this.authPass}`
       var base64Credential = Buffer.from(combined).toString("base64")

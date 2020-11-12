@@ -13,12 +13,13 @@ const PRO_PASS = "testpassword"
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
-  // restURL: `https://api.fullstack.cash/v3/`,
-  restURL: `http://localhost:3000/v3/`,
+  // restURL: `https://bchn.fullstack.cash/v3/`,
+  restURL: `https://abc.fullstack.cash/v3/`,
+  // restURL: `http://localhost:3000/v3/`,
   authPass: PRO_PASS
 })
 
-describe("#full node rate limits", () => {
+describe("#Basic Authentication rate limits", () => {
   it("should allow more than 20 RPM to full node", async () => {
     for (let i = 0; i < 22; i++) {
       const result = await bchjs.Control.getNetworkInfo()
