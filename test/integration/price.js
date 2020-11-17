@@ -25,6 +25,15 @@ describe("#price", () => {
     })
   })
 
+  describe("#getBchaUsd", () => {
+    it("should get the USD price of BCHA", async () => {
+      const result = await bchjs.Price.getBchaUsd()
+      console.log(result)
+
+      assert.isNumber(result)
+    })
+  })
+
   describe("#rates", () => {
     it("should get the price of BCH in several currencies", async () => {
       const result = await bchjs.Price.rates()
