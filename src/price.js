@@ -29,26 +29,7 @@ class Price {
     this.axios = axios
   }
 
-  /**
-   * @api price.current() current()
-   * @apiName Price.
-   * @apiGroup Price
-   * @apiDescription Return current price of BCH in multiple currencies.
-   * This endpoint will be deprecated in favor of getUSD. It uses the Bitcoin.com
-   * price feed.
-   *
-   * @apiExample Example usage:
-   *(async () => {
-   *  try {
-   *    let current = await bchjs.Price.current('usd');
-   *    console.log(current);
-   *  } catch(err) {
-   *   console.err(err)
-   *  }
-   *})()
-   *
-   * // 26681
-   */
+  // This endpoint is deprecated. Documentation removed.
   async current(currency = "usd") {
     try {
       const response = await this.axios.get(
