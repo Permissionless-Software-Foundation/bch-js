@@ -14,7 +14,7 @@
     "test:integration:abc": "RESTURL=https://abc.fullstack.cash/v3/ IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/",
     "test:integration:testnet": "IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/testnet/",
     "test:integration:local": "RESTURL=http://localhost:3000/v3/ mocha --timeout 30000 test/integration",
-    "test:integration:local:bchn": "RESTURL=http://localhost:3000/v3/ bash test/integration/test-free-tier-bchn.sh",
+    "test:integration:local:bchn": "RESTURL=http://localhost:3000/v3/ bash test/integration/test-bchn-integration.sh",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v3/ mocha --timeout 30000 test/integration/testnet",
     "test:temp": "RESTURL=http://localhost:3000/v3/ mocha --timeout 30000 -g '#price' test/integration/",
     "test:integration:api": "RESTURL=https://api.fullstack.cash/v3/ mocha --timeout 30000 test/integration",
