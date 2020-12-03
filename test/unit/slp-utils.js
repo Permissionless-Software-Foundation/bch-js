@@ -880,6 +880,76 @@ describe("#SLP Utils", () => {
       assert.equal(data[0].isValid, true)
     })
 
+    it("should return details for a simple SEND SLP token utxo with correct decimal resolution", async () => {
+      // Mock the call to REST API
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(slp.Utils, "decodeOpReturn")
+        .onCall(0)
+        .resolves({
+          tokenType: 1,
+          txType: "SEND",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          amounts: ["200000000", "99887500000000"]
+        })
+        .onCall(1)
+        .resolves({
+          tokenType: 1,
+          txType: "GENESIS",
+          ticker: "TOK-CH",
+          name: "TokyoCash",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          documentUri: "",
+          documentHash: "",
+          decimals: 8,
+          mintBatonVout: 0,
+          qty: "2100000000000000"
+        })
+
+      // Stub the call to validateTxid
+      sandbox.stub(slp.Utils, "validateTxid").resolves([
+        {
+          txid:
+            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+          valid: true
+        }
+      ])
+
+      const utxos = [
+        {
+          txid:
+            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+          vout: 1,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 596089,
+          confirmations: 748
+        }
+      ]
+
+      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert2.property(data[0], "txid")
+      assert2.property(data[0], "vout")
+      assert2.property(data[0], "amount")
+      assert2.property(data[0], "satoshis")
+      assert2.property(data[0], "height")
+      assert2.property(data[0], "confirmations")
+      assert2.property(data[0], "utxoType")
+      assert2.property(data[0], "tokenId")
+      assert2.property(data[0], "tokenTicker")
+      assert2.property(data[0], "tokenName")
+      assert2.property(data[0], "tokenDocumentUrl")
+      assert2.property(data[0], "tokenDocumentHash")
+      assert2.property(data[0], "decimals")
+      assert2.property(data[0], "tokenQty")
+      assert2.property(data[0], "isValid")
+      assert.equal(data[0].isValid, true)
+    })
+
     it("should handle BCH and SLP utxos in the same TX", async () => {
       // Mock external dependencies.
       sandbox
