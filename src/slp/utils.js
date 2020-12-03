@@ -1021,7 +1021,9 @@ class Utils {
             // Tokens
             else {
               utxo.utxoType = "token"
-              utxo.tokenQty = slpData.qty / Math.pow(10, slpData.decimals)
+              utxo.tokenQty = new BigNumber(slpData.qty)
+                .div(Math.pow(10, slpData.decimals))
+                .toString()
             }
 
             utxo.tokenId = utxo.txid
@@ -1064,7 +1066,9 @@ class Utils {
             // Tokens
             else {
               utxo.utxoType = "token"
-              utxo.tokenQty = slpData.qty / Math.pow(10, genesisData.decimals)
+              utxo.tokenQty = new BigNumber(slpData.qty)
+                .div(Math.pow(10, genesisData.decimals))
+                .toString()
             }
 
             // Hydrate the UTXO object with information about the SLP token.
