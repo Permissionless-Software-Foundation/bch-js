@@ -7,7 +7,7 @@ const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
-  : `https://tapi.fullstack.cash/v3/`
+  : `https://testnet3.fullstack.cash/v3/`
 // if (process.env.RESTURL) RESTURL = process.env.RESTURL
 
 const BCHJS = require("../../../src/bch-js")
@@ -25,7 +25,7 @@ util.inspect.defaultOptions = {
 describe(`#SLP`, () => {
   beforeEach(async () => {
     // Introduce a delay so that the BVT doesn't trip the rate limits.
-    await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
   })
 
   describe("#util", () => {
@@ -73,22 +73,6 @@ describe(`#SLP`, () => {
   })
 
   describe("#balancesForAddress", () => {
-    it(`should throw an error if input is not a string or array of strings`, async () => {
-      try {
-        const address = 1234
-
-        await bchjs.SLP.Utils.balancesForAddress(address)
-
-        assert.equal(true, false, "Uh oh. Code path should not end here.")
-      } catch (err) {
-        //console.log(`Error: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
-    })
-
     it(`should fetch all balances for address: slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9`, async () => {
       // Mock the call to rest.bitcoin.com
       if (process.env.TEST === "unit") {

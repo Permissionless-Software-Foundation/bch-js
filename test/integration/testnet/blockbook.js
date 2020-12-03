@@ -8,7 +8,7 @@ const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
-  : `https://tapi.fullstack.cash/v3/`
+  : `https://testnet3.fullstack.cash/v3/`
 // if (process.env.RESTURL) RESTURL = process.env.RESTURL
 
 const BCHJS = require("../../../src/bch-js")
@@ -26,6 +26,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#Blockbook`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#Balance`, () => {
     it(`should GET balance for a single address`, async () => {
       const addr = "bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2"
@@ -165,7 +169,7 @@ describe(`#Blockbook`, () => {
         for (let i = 0; i < 25; i++)
           addr.push("bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2")
 
-        const result = await bchjs.Blockbook.utxo(addr)
+        await bchjs.Blockbook.utxo(addr)
         //console.log(`result: ${util.inspect(result)}`)
 
         assert.equal(true, false, "Unexpected result!")
@@ -176,3 +180,7 @@ describe(`#Blockbook`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}

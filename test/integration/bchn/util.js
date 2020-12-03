@@ -5,15 +5,8 @@
 
 const chai = require("chai")
 const assert = chai.assert
-
-const RESTURL = process.env.RESTURL
-  ? process.env.RESTURL
-  : `https://testnet3.fullstack.cash/v3/`
-// if (process.env.RESTURL) RESTURL = process.env.RESTURL
-
 const BCHJS = require("../../../src/bch-js")
-// const bchjs = new BCHJS({ restURL: `https://testnet.bchjs.cash/v3/` })
-const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
+const bchjs = new BCHJS()
 
 // Inspect utility used for debugging.
 const util = require("util")
@@ -24,13 +17,9 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#util`, () => {
-  beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
-  })
-
   describe(`#validateAddress`, () => {
     it(`should return false for testnet addr on mainnet`, async () => {
-      const address = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peu`
+      const address = `bchtest:qqqk4y6lsl5da64sg5qc3xezmplyu5kmpyz2ysaa5y`
 
       const result = await bchjs.Util.validateAddress(address)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -40,7 +29,7 @@ describe(`#util`, () => {
     })
 
     it(`should return false for bad address`, async () => {
-      const address = `bchtest:qqqk4y6lsl5da64sg53xezmplyu5kmpyz2ysaa5y`
+      const address = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peu`
 
       const result = await bchjs.Util.validateAddress(address)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -50,7 +39,7 @@ describe(`#util`, () => {
     })
 
     it(`should validate valid address`, async () => {
-      const address = `bchtest:qqqk4y6lsl5da64sg5qc3xezmplyu5kmpyz2ysaa5y`
+      const address = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z`
 
       const result = await bchjs.Util.validateAddress(address)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -68,8 +57,8 @@ describe(`#util`, () => {
 
     it(`should validate an array of addresses`, async () => {
       const address = [
-        `bchtest:qqqk4y6lsl5da64sg5qc3xezmplyu5kmpyz2ysaa5y`,
-        `bchtest:pq6k9969f6v6sg7a75jkru4n7wn9sknv5cztcp0dnh`
+        `bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z`,
+        `bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z`
       ]
 
       const result = await bchjs.Util.validateAddress(address)
@@ -86,9 +75,24 @@ describe(`#util`, () => {
       ])
     })
 
+    it(`should throw an error for improper single input`, async () => {
+      try {
+        const address = 15432
+
+        await bchjs.Util.validateAddress(address)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input must be a string or array of strings.`
+        )
+      }
+    })
+
     it(`should throw error on array size rate limit`, async () => {
       try {
-        const dataMock = `bchtest:pq6k9969f6v6sg7a75jkru4n7wn9sknv5cztcp0dnh`
+        const dataMock = `bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z`
         const data = []
         for (let i = 0; i < 25; i++) data.push(dataMock)
 
@@ -103,7 +107,3 @@ describe(`#util`, () => {
     })
   })
 })
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}

@@ -6,41 +6,30 @@ class Price {
   constructor(config) {
     _this = this
 
-    if (config) {
-      this.restURL = config.restURL
-      this.apiToken = config.apiToken
-    }
+    this.restURL = config.restURL
+    this.apiToken = config.apiToken
+    this.authToken = config.authToken
 
-    // Add JWT token to the authorization header.
-    this.axiosOptions = {
-      headers: {
-        authorization: `Token ${this.apiToken}`
+    if (this.authToken) {
+      // Add Basic Authentication token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: this.authToken
+        }
+      }
+    } else {
+      // Add JWT token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: `Token ${this.apiToken}`
+        }
       }
     }
 
     this.axios = axios
   }
 
-  /**
-   * @api price.current() current()
-   * @apiName Price.
-   * @apiGroup Price
-   * @apiDescription Return current price of BCH in multiple currencies.
-   * This endpoint will be deprecated in favor of getUSD. It uses the Bitcoin.com
-   * price feed.
-   *
-   * @apiExample Example usage:
-   *(async () => {
-   *  try {
-   *    let current = await bchjs.Price.current('usd');
-   *    console.log(current);
-   *  } catch(err) {
-   *   console.err(err)
-   *  }
-   *})()
-   *
-   * // 26681
-   */
+  // This endpoint is deprecated. Documentation removed.
   async current(currency = "usd") {
     try {
       const response = await this.axios.get(
@@ -127,6 +116,41 @@ class Price {
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
       return response.data
+    } catch (err) {
+      if (err.response && err.response.data) throw err.response.data
+      else throw err
+    }
+  }
+
+  /**
+   * @api price.getBchaUsd() getBchaUsd()
+   * @apiName Price getBchaUsd()
+   * @apiGroup Price
+   * @apiDescription Return current price of BCHA in USD.
+   * This endpoint gets the USD price of BCHA from the Coinex API. The price
+   * comes from bch-api, so it has a better chance of working in Tor.
+   *
+   * @apiExample Example usage:
+   *(async () => {
+   *  try {
+   *    let current = await bchjs.Price.getBchaUsd();
+   *    console.log(current);
+   *  } catch(err) {
+   *   console.err(err)
+   *  }
+   *})()
+   *
+   * // 18.81
+   */
+  async getBchaUsd() {
+    try {
+      const response = await this.axios.get(
+        `${this.restURL}price/bchausd`,
+        _this.axiosOptions
+      )
+      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+
+      return response.data.usd
     } catch (err) {
       if (err.response && err.response.data) throw err.response.data
       else throw err

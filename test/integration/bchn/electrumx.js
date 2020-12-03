@@ -2,18 +2,12 @@ const chai = require("chai")
 const assert = chai.assert
 const sinon = require("sinon")
 
-const BCHJS = require("../../src/bch-js")
+const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS()
 
 describe(`#ElectrumX`, () => {
   let sandbox
-
-  beforeEach(async () => {
-    sandbox = sinon.createSandbox()
-
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
-  })
-
+  beforeEach(() => (sandbox = sinon.createSandbox()))
   afterEach(() => sandbox.restore())
 
   describe(`#utxo`, () => {
@@ -360,7 +354,3 @@ describe(`#ElectrumX`, () => {
     })
   })
 })
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}

@@ -6,11 +6,21 @@ class RawTransactions {
   constructor(config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
+    this.authToken = config.authToken
 
-    // Add JWT token to the authorization header.
-    this.axiosOptions = {
-      headers: {
-        authorization: `Token ${this.apiToken}`
+    if (this.authToken) {
+      // Add Basic Authentication token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: this.authToken
+        }
+      }
+    } else {
+      // Add JWT token to the authorization header.
+      this.axiosOptions = {
+        headers: {
+          authorization: `Token ${this.apiToken}`
+        }
       }
     }
 
@@ -262,9 +272,7 @@ class RawTransactions {
             txids: txid,
             verbose: verbose
           },
-          headers: {
-            authorization: `Token ${this.apiToken}`
-          }
+          headers: _this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -337,9 +345,7 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: {
-            authorization: `Token ${this.apiToken}`
-          }
+          headers: _this.axiosOptions.headers
         }
         const response = await axios(options)
 

@@ -7,7 +7,7 @@
 
 const chai = require("chai")
 const assert = chai.assert
-const BCHJS = require("../../src/bch-js")
+const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS()
 
 // Inspect utility used for debugging.
@@ -19,10 +19,6 @@ util.inspect.defaultOptions = {
 }
 
 describe("#rawtransaction", () => {
-  beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
-  })
-
   describe("#decodeRawTransaction", () => {
     it("should decode tx for a single hex", async () => {
       const hex =
@@ -65,6 +61,21 @@ describe("#rawtransaction", () => {
       ])
       assert.isArray(result[0].vin)
       assert.isArray(result[0].vout)
+    })
+
+    it(`should throw an error for improper single input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.RawTransactions.decodeRawTransaction(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input must be a string or array of strings.`
+        )
+      }
     })
 
     it(`should throw error on array size rate limit`, async () => {
@@ -222,6 +233,22 @@ describe("#rawtransaction", () => {
       console.log(`result ${JSON.stringify(result, null, 2)}`)
     })
 */
+    /*
+    it(`should throw an error for improper single input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.RawTransactions.decodeRawTransaction(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input must be a string or array of strings.`
+        )
+      }
+    })
+*/
   })
 
   /*
@@ -239,12 +266,12 @@ describe("#rawtransaction", () => {
         await bchjs.RawTransactions.sendRawTransaction(hex)
         //console.log(`result ${JSON.stringify(result, null, 2)}`)
 
-        assert.equal(true, false, "Unexpected result!")
+        assert.fail("Unexpected result!")
       } catch (err) {
         //console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ["error"])
-        assert.include(err.error, "bad-txns-inputs-missingorspent (code 16)")
+        assert.include(err.error, "Missing inputs")
       }
     })
 
@@ -257,11 +284,28 @@ describe("#rawtransaction", () => {
 
         const result = await bchjs.RawTransactions.sendRawTransaction(hexes)
         console.log(`result ${JSON.stringify(result, null, 2)}`)
+
+        assert.fail("Unexpected result!")
       } catch (err) {
         // console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ["error"])
-        assert.include(err.error, "bad-txns-inputs-missingorspent (code 16)")
+        assert.include(err.error, "Missing inputs")
+      }
+    })
+
+    it(`should throw an error for improper single input`, async () => {
+      try {
+        const addr = 12345
+
+        await bchjs.RawTransactions.sendRawTransaction(addr)
+        assert.equal(true, false, "Unexpected result!")
+      } catch (err) {
+        //console.log(`err: `, err)
+        assert.include(
+          err.message,
+          `Input hex must be a string or array of strings`
+        )
       }
     })
 
@@ -283,7 +327,3 @@ describe("#rawtransaction", () => {
     })
   })
 })
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}

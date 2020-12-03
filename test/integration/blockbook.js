@@ -18,6 +18,10 @@ util.inspect.defaultOptions = {
 }
 
 describe(`#Blockbook`, () => {
+  beforeEach(async () => {
+    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+  })
+
   describe(`#Balance`, () => {
     it(`should GET balance for a single address`, async () => {
       const addr = "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf"
@@ -65,21 +69,6 @@ describe(`#Blockbook`, () => {
         "txids"
       ])
       assert.isArray(result[0].txids)
-    })
-
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Blockbook.balance(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
     })
 
     it(`should throw error on array size rate limit`, async () => {
@@ -136,21 +125,6 @@ describe(`#Blockbook`, () => {
       ])
     })
 
-    it(`should throw an error for improper input`, async () => {
-      try {
-        const addr = 12345
-
-        await bchjs.Blockbook.utxo(addr)
-        assert.equal(true, false, "Unexpected result!")
-      } catch (err) {
-        //console.log(`err: `, err)
-        assert.include(
-          err.message,
-          `Input address must be a string or array of strings`
-        )
-      }
-    })
-
     it(`should throw error on array size rate limit`, async () => {
       try {
         const addr = []
@@ -168,3 +142,7 @@ describe(`#Blockbook`, () => {
     })
   })
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
