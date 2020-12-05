@@ -634,6 +634,17 @@ describe(`#SLP`, () => {
         assert.equal(result.isValid, true)
       })
     })
+
+    describe("#getWhitelist", () => {
+      it("should get the whitelist", async () => {
+        const result = await bchjs.SLP.Utils.getWhitelist()
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+        assert.property(result[0], "name")
+        assert.property(result[1], "tokenId")
+      })
+    })
   })
 
   describe("#tokentype1", () => {

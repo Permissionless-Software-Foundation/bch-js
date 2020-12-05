@@ -1944,4 +1944,32 @@ describe("#SLP Utils", () => {
       }
     })
   })
+
+  describe("#getWhitelist", () => {
+    it("should return the list", async () => {
+      sandbox.stub(axios, "get").resolves({ data: mockData.mockWhitelist })
+
+      const result = await slp.Utils.getWhitelist()
+
+      assert2.isArray(result)
+      assert2.property(result[0], "name")
+      assert2.property(result[1], "tokenId")
+    })
+
+    it("catches and throws an error", async () => {
+      try {
+        sandbox.stub(axios, "get").rejects({
+          error:
+            "Network error: Could not communicate with full node or other external service."
+        })
+
+        await slp.Utils.getWhitelist()
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.error, "Network error")
+      }
+    })
+  })
 })

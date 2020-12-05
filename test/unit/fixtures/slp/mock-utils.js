@@ -1107,6 +1107,29 @@ const txDetailsSLPNftGenesis = {
   blocktime: 1591329189
 }
 
+const mockWhitelist = [
+  {
+    name: "USDH",
+    tokenId: "c4b0d62156b3fa5c8f3436079b5394f7edc1bef5dc1cd2f9d0c4d46f82cca479"
+  },
+  {
+    name: "SPICE",
+    tokenId: "4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf"
+  },
+  {
+    name: "PSF",
+    tokenId: "38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0"
+  },
+  {
+    name: "TROUT",
+    tokenId: "a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2"
+  },
+  {
+    name: "PSFTEST",
+    tokenId: "d0ef4de95b78222bfee2326ab11382f4439aa0855936e2fe6ac129a8d778baa0"
+  }
+]
+
 module.exports = {
   mockList,
   mockToken,
@@ -1131,5 +1154,6 @@ module.exports = {
   mockTxDetails,
   mockDualValidation,
   mockDualOpData,
-  mockInvalidSlpSend
+  mockInvalidSlpSend,
+  mockWhitelist
 }
