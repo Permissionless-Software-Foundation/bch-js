@@ -1966,7 +1966,7 @@ describe("#SLP Utils", () => {
       assert2.property(result[0], "valid")
       assert2.equal(result[0].valid, null)
     })
-
+    /*
     it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
       const txids = [
         // Malformed SLP tx
@@ -1982,6 +1982,7 @@ describe("#SLP Utils", () => {
       const result = await slp.Utils.validateTxid(txids)
       console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
+*/
   })
 
   describe("#getWhitelist", () => {
