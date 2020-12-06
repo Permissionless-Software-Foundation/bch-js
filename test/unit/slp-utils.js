@@ -2,10 +2,10 @@ const assert = require("assert")
 const assert2 = require("chai").assert
 
 const SLP = require("../../src/slp/slp")
-//const slp = new SLP("http://decatur.hopto.org:12400/v3/")
+//const slp = new SLP("http://decatur.hopto.org:12400/v4/")
 //const slp = new SLP("https://rest.bitcoin.com/v2/")
 const slp = new SLP({
-  restURL: "https://api.fullstack.cash/v3/",
+  restURL: "https://api.fullstack.cash/v4/",
   apiToken: process.env.BCHJSTOKEN
 })
 
@@ -1979,7 +1979,7 @@ describe("#SLP Utils", () => {
         "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
       ]
 
-      const result = await bchjs.SLP.Utils.validateTxid(txids)
+      const result = await slp.Utils.validateTxid(txids)
       console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
   })

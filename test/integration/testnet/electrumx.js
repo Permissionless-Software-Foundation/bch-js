@@ -4,7 +4,7 @@ const sinon = require("sinon")
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
-  : `https://testnet3.fullstack.cash/v3/`
+  : `https://testnet3.fullstack.cash/v4/`
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })

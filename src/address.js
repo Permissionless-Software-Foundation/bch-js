@@ -6,7 +6,7 @@ const coininfo = require("coininfo")
 class Address {
   constructor(config) {
     const tmp = {}
-    if (!config || !config.restURL) tmp.restURL = `https://api.bchjs.cash/v3/`
+    if (!config || !config.restURL) tmp.restURL = `https://api.bchjs.cash/v4/`
     else tmp.restURL = config.restURL
 
     this.restURL = tmp.restURL

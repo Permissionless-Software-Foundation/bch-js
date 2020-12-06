@@ -14,9 +14,9 @@
 
 const assert = require("chai").assert
 
-// const RESTURL = `https://abc.fullstack.cash/v3/`
-const RESTURL = `https://bchn.fullstack.cash/v3/`
-// const RESTURL = `http://localhost:3000/v3/`
+// const RESTURL = `https://abc.fullstack.cash/v4/`
+const RESTURL = `https://bchn.fullstack.cash/v4/`
+// const RESTURL = `http://localhost:3000/v4/`
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({ restURL: RESTURL })
