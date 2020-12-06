@@ -652,7 +652,7 @@ describe(`#SLP`, () => {
           "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
 
         const result = await bchjs.SLP.Utils.validateTxid3(txid)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
         assert.isArray(result)
 
@@ -660,7 +660,7 @@ describe(`#SLP`, () => {
         assert.equal(result[0].txid, txid)
 
         assert.property(result[0], "valid")
-        assert.equal(result[0].valid, false)
+        assert.equal(result[0].valid, null)
       })
 
       it("should validate a known valid TXID", async () => {

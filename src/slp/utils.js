@@ -444,27 +444,9 @@ class Utils {
         },
         _this.axiosOptions
       )
-      console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
       const validatedTxids = response.data
-
-      // CT 12/5/2020: Leaving this here for future reference. 'null' is a special
-      // value returned by SLPDB. It indicates that SLPDB is not aware of the TXID.
-      // It might mean that SLPDB has fallen behind.
-      // 'null' is distict from 'false'. 'false' firmly indicates that the TXID is
-      // not valid. 'null' indicates a lack of knowledge.
-      // Handle any null values
-      for (let i = 0; i < validatedTxids.length; i++) {
-        if (validatedTxids[i] === null) {
-          console.log(`i: ${i}`)
-          console.log(`validatedTxids: ${validatedTxids}`)
-          console.log(`txids: ${txids}`)
-          validatedTxids[i] = {
-            txid: txids[i],
-            valid: null
-          }
-        }
-      }
 
       return validatedTxids
     } catch (error) {
@@ -668,21 +650,6 @@ class Utils {
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
       const validatedTxids = response.data
-
-      // CT 12/5/2020: Leaving this here for future reference. 'null' is a special
-      // value returned by SLPDB. It indicates that SLPDB is not aware of the TXID.
-      // It might mean that SLPDB has fallen behind.
-      // 'null' is distict from 'false'. 'false' firmly indicates that the TXID is
-      // not valid. 'null' indicates a lack of knowledge.
-      // Handle any null values
-      for (let i = 0; i < validatedTxids.length; i++) {
-        if (validatedTxids[i] === null) {
-          validatedTxids[i] = {
-            txid: txids[i],
-            valid: null
-          }
-        }
-      }
 
       return validatedTxids
     } catch (error) {

@@ -1964,7 +1964,7 @@ describe("#SLP Utils", () => {
       assert2.equal(result[0].txid, txid)
 
       assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, false)
+      assert2.equal(result[0].valid, null)
     })
 
     it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
@@ -2031,7 +2031,7 @@ describe("#SLP Utils", () => {
       assert2.equal(result[0].txid, txid)
 
       assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, false)
+      assert2.equal(result[0].valid, null)
     })
 
     it("should handle an array with a single element", async () => {

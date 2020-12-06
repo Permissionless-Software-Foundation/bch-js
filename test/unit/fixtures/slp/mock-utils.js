@@ -1140,7 +1140,7 @@ const mockValidateTxid3Valid = [
 const mockValidateTxid3Invalid = [
   {
     txid: "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
-    valid: false
+    valid: null
   }
 ]
 
