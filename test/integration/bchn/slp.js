@@ -35,7 +35,7 @@ describe(`#SLP`, () => {
         const tokenId = `4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf`
 
         const result = await bchjs.SLP.Utils.list(tokenId)
-        //console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
         assert.hasAnyKeys(result, [
           "decimals",
@@ -59,6 +59,34 @@ describe(`#SLP`, () => {
           "circulatingSupply",
           "mintingBatonStatus"
         ])
+      })
+
+      it("should NOT get a list of all tokens in existence", async () => {
+        try {
+          await bchjs.SLP.Utils.list()
+          // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+          assert.fail("Unexpected result!")
+        } catch (err) {
+          // console.log(err)
+          assert.include(err.message, "Not Found")
+        }
+      })
+
+      it("should get information on multiple tokens", async () => {
+        const tokenIds = [
+          // Spice
+          `4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf`,
+          // PSF
+          "38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0"
+        ]
+
+        const result = await bchjs.SLP.Utils.list(tokenIds)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+        assert.equal(result[0].symbol, "SPICE")
+        assert.equal(result[1].symbol, "PSF")
       })
     })
 

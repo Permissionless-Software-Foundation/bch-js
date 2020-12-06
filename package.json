@@ -20,7 +20,7 @@
     "test:temp": "RESTURL=https://bchn.fullstack.cash/v4/ mocha --timeout 30000 -g '#validateTxid' test/integration/bchn/",
     "test:temp2": "RESTURL=https://abc.fullstack.cash/v4/ mocha --timeout 30000 -g '#validateTxid' test/integration/",
     "test:temp3": "ISBCHN=true RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 -g '#validateTxid' test/integration/bchn/",
-    "test:temp4": "mocha -g '#SLP Utils' test/unit/",
+    "test:temp4": "mocha --trace-warnings --unhandled-rejections=strict -g '#SLP Utils' test/unit/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"

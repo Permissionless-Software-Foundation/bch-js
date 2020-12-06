@@ -579,7 +579,7 @@ class Utils {
       // Retrieve the whitelist from the REST API if we haven't gotten it yet.
       if (this.whitelist.length === 0) {
         const response = await _this.axios.get(path, _this.axiosOptions)
-        console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+        // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
         this.whitelist = response.data
       }
