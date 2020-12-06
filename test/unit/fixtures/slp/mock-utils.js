@@ -1107,6 +1107,62 @@ const txDetailsSLPNftGenesis = {
   blocktime: 1591329189
 }
 
+const mockWhitelist = [
+  {
+    name: "USDH",
+    tokenId: "c4b0d62156b3fa5c8f3436079b5394f7edc1bef5dc1cd2f9d0c4d46f82cca479"
+  },
+  {
+    name: "SPICE",
+    tokenId: "4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf"
+  },
+  {
+    name: "PSF",
+    tokenId: "38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0"
+  },
+  {
+    name: "TROUT",
+    tokenId: "a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2"
+  },
+  {
+    name: "PSFTEST",
+    tokenId: "d0ef4de95b78222bfee2326ab11382f4439aa0855936e2fe6ac129a8d778baa0"
+  }
+]
+
+const mockValidateTxid3Valid = [
+  {
+    txid: "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+    valid: true
+  }
+]
+
+const mockValidateTxid3Invalid = [
+  {
+    txid: "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+    valid: null
+  }
+]
+
+const mockValidateTxidArray = [
+  {
+    txid: "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+    valid: true
+  },
+  {
+    txid: "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
+    valid: true
+  },
+  {
+    txid: "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+    valid: false
+  },
+  {
+    txid: "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
+    valid: false
+  }
+]
+
 module.exports = {
   mockList,
   mockToken,
@@ -1131,5 +1187,8 @@ module.exports = {
   mockTxDetails,
   mockDualValidation,
   mockDualOpData,
-  mockInvalidSlpSend
+  mockInvalidSlpSend,
+  mockWhitelist,
+  mockValidateTxid3Valid,
+  mockValidateTxid3Invalid
 }

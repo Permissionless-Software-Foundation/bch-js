@@ -2,10 +2,10 @@ const assert = require("assert")
 const assert2 = require("chai").assert
 
 const SLP = require("../../src/slp/slp")
-//const slp = new SLP("http://decatur.hopto.org:12400/v3/")
+//const slp = new SLP("http://decatur.hopto.org:12400/v4/")
 //const slp = new SLP("https://rest.bitcoin.com/v2/")
 const slp = new SLP({
-  restURL: "https://api.fullstack.cash/v3/",
+  restURL: "https://api.fullstack.cash/v4/",
   apiToken: process.env.BCHJSTOKEN
 })
 
@@ -1941,6 +1941,152 @@ describe("#SLP Utils", () => {
       } catch (err) {
         // console.log("err: ", err)
         assert2.include(err.message, "slp-validate timed out")
+      }
+    })
+  })
+
+  describe("#validateTxid", () => {
+    it("should invalidate a known invalid TXID", async () => {
+      const txid =
+        "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
+
+      // Mock live network calls.
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.mockValidateTxid3Invalid
+      })
+
+      const result = await slp.Utils.validateTxid(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.isArray(result)
+
+      assert2.property(result[0], "txid")
+      assert2.equal(result[0].txid, txid)
+
+      assert2.property(result[0], "valid")
+      assert2.equal(result[0].valid, null)
+    })
+    /*
+    it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
+      const txids = [
+        // Malformed SLP tx
+        "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+        // Normal TX (non-SLP)
+        "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
+        // Valid PSF SLP tx
+        "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+        // Valid SLP token not in whitelist
+        "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
+      ]
+
+      const result = await slp.Utils.validateTxid(txids)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+    })
+*/
+  })
+
+  describe("#getWhitelist", () => {
+    it("should return the list", async () => {
+      sandbox.stub(axios, "get").resolves({ data: mockData.mockWhitelist })
+
+      const result = await slp.Utils.getWhitelist()
+
+      assert2.isArray(result)
+      assert2.property(result[0], "name")
+      assert2.property(result[1], "tokenId")
+    })
+
+    it("catches and throws an error", async () => {
+      try {
+        sandbox.stub(axios, "get").rejects({
+          error:
+            "Network error: Could not communicate with full node or other external service."
+        })
+
+        await slp.Utils.getWhitelist()
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.error, "Network error")
+      }
+    })
+  })
+
+  describe("#validateTxid3", () => {
+    it("should invalidate a known invalid TXID", async () => {
+      const txid =
+        "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
+
+      // Mock live network calls.
+      sandbox.stub(axios, "post").resolves({
+        data: mockData.mockValidateTxid3Invalid
+      })
+
+      const result = await slp.Utils.validateTxid3(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.isArray(result)
+
+      assert2.property(result[0], "txid")
+      assert2.equal(result[0].txid, txid)
+
+      assert2.property(result[0], "valid")
+      assert2.equal(result[0].valid, null)
+    })
+
+    it("should handle an array with a single element", async () => {
+      sandbox
+        .stub(axios, "post")
+        .resolves({ data: mockData.mockValidateTxid3Valid })
+
+      const txid = [
+        "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd"
+      ]
+
+      const result = await slp.Utils.validateTxid3(txid)
+
+      assert2.isArray(result)
+
+      assert2.property(result[0], "txid")
+      assert2.equal(result[0].txid, txid)
+
+      assert2.property(result[0], "valid")
+      assert2.equal(result[0].valid, true)
+    })
+
+    it("should handle an single string input", async () => {
+      sandbox
+        .stub(axios, "post")
+        .resolves({ data: mockData.mockValidateTxid3Valid })
+
+      const txid =
+        "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd"
+
+      const result = await slp.Utils.validateTxid3(txid)
+
+      assert2.isArray(result)
+
+      assert2.property(result[0], "txid")
+      assert2.equal(result[0].txid, txid)
+
+      assert2.property(result[0], "valid")
+      assert2.equal(result[0].valid, true)
+    })
+
+    it("catches and throws an error", async () => {
+      try {
+        sandbox.stub(axios, "post").rejects({
+          error:
+            "Network error: Could not communicate with full node or other external service."
+        })
+
+        await slp.Utils.validateTxid3()
+
+        assert2.equal(true, false, "Unexpected result")
+      } catch (err) {
+        // console.log("err: ", err)
+        assert2.include(err.error, "Network error")
       }
     })
   })

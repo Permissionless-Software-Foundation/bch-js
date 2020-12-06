@@ -18,8 +18,8 @@ const JWT_TOKEN =
 
 const BCHJS = require("../../../src/bch-js")
 const bchjs = new BCHJS({
-  restURL: `https://api.fullstack.cash/v3/`,
-  // restURL: `http://localhost:3000/v3/`,
+  restURL: `https://api.fullstack.cash/v4/`,
+  // restURL: `http://localhost:3000/v4/`,
   apiToken: JWT_TOKEN
 })
 

@@ -244,7 +244,7 @@ describe("#rawtransaction", () => {
         //console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ["error"])
-        assert.include(err.error, "bad-txns-inputs-missingorspent (code 16)")
+        assert.include(err.error, "bad-txns-inputs-missingorspent")
       }
     })
 
@@ -261,7 +261,7 @@ describe("#rawtransaction", () => {
         // console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ["error"])
-        assert.include(err.error, "bad-txns-inputs-missingorspent (code 16)")
+        assert.include(err.error, "bad-txns-inputs-missingorspent")
       }
     })
 
