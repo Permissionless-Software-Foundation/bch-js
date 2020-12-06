@@ -338,7 +338,7 @@ describe("#address.js", () => {
       })
     })
   })
-  /*
+
   describe("address format detection", () => {
     describe("#isLegacyAddress", () => {
       describe("is legacy", () => {
@@ -932,5 +932,4 @@ describe("#address.js", () => {
       })
     })
   })
-  */
 })

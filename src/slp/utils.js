@@ -196,6 +196,7 @@ class Utils {
   async list(id) {
     let path
     let method
+
     if (!id) {
       method = "get"
       path = `${this.restURL}slp/list`
