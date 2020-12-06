@@ -1130,6 +1130,39 @@ const mockWhitelist = [
   }
 ]
 
+const mockValidateTxid3Valid = [
+  {
+    txid: "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+    valid: true
+  }
+]
+
+const mockValidateTxid3Invalid = [
+  {
+    txid: "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+    valid: false
+  }
+]
+
+const mockValidateTxidArray = [
+  {
+    txid: "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+    valid: true
+  },
+  {
+    txid: "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
+    valid: true
+  },
+  {
+    txid: "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+    valid: false
+  },
+  {
+    txid: "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
+    valid: false
+  }
+]
+
 module.exports = {
   mockList,
   mockToken,
@@ -1155,5 +1188,7 @@ module.exports = {
   mockDualValidation,
   mockDualOpData,
   mockInvalidSlpSend,
-  mockWhitelist
+  mockWhitelist,
+  mockValidateTxid3Valid,
+  mockValidateTxid3Invalid
 }

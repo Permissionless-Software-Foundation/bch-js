@@ -444,16 +444,24 @@ class Utils {
         },
         _this.axiosOptions
       )
-      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
       const validatedTxids = response.data
 
+      // CT 12/5/2020: Leaving this here for future reference. 'null' is a special
+      // value returned by SLPDB. It indicates that SLPDB is not aware of the TXID.
+      // It might mean that SLPDB has fallen behind.
+      // 'null' is distict from 'false'. 'false' firmly indicates that the TXID is
+      // not valid. 'null' indicates a lack of knowledge.
       // Handle any null values
       for (let i = 0; i < validatedTxids.length; i++) {
         if (validatedTxids[i] === null) {
+          console.log(`i: ${i}`)
+          console.log(`validatedTxids: ${validatedTxids}`)
+          console.log(`txids: ${txids}`)
           validatedTxids[i] = {
             txid: txids[i],
-            valid: false
+            valid: null
           }
         }
       }
@@ -583,6 +591,100 @@ class Utils {
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
       return response.data
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  /**
+   * @api SLP.Utils.validateTxid3() validateTxid3()
+   * @apiName validateTxid3
+   * @apiGroup SLP Utils
+   * @apiDescription Validate that txid is an SLP transaction using the SLPDB whitelist server.
+   * Same exact functionality as the validateTxid() function, but this function
+   * calls the whitelist SLPDB. It will only validate SLP tokens that are in the
+   * whitelist. You can retrieve the whitelist with the SLP.Utils.whitelist()
+   * function.
+   *
+   * @apiExample Example usage:
+   *
+   * // validate single SLP txid
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.validateTxid3(
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+   *    );
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * [ { txid:
+   * 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+   * valid: true } ]
+   *
+   * // validate multiple SLP txids
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.validateTxid3([
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb",
+   *      "00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476"
+   *    ]);
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * [ { txid:
+   *     'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+   *    valid: true },
+   *  { txid:
+   *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
+   *    valid: true } ]
+   */
+  async validateTxid3(txid) {
+    const path = `${this.restURL}slp/validateTxid3`
+
+    // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
+
+    // Handle a single TXID or an array of TXIDs.
+    let txids
+    if (typeof txid === "string") txids = [txid]
+    else txids = txid
+
+    try {
+      const response = await axios.post(
+        path,
+        {
+          txids: txids
+        },
+        _this.axiosOptions
+      )
+      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+
+      const validatedTxids = response.data
+
+      // CT 12/5/2020: Leaving this here for future reference. 'null' is a special
+      // value returned by SLPDB. It indicates that SLPDB is not aware of the TXID.
+      // It might mean that SLPDB has fallen behind.
+      // 'null' is distict from 'false'. 'false' firmly indicates that the TXID is
+      // not valid. 'null' indicates a lack of knowledge.
+      // Handle any null values
+      for (let i = 0; i < validatedTxids.length; i++) {
+        if (validatedTxids[i] === null) {
+          validatedTxids[i] = {
+            txid: txids[i],
+            valid: null
+          }
+        }
+      }
+
+      return validatedTxids
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
