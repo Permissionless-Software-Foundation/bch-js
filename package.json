@@ -8,7 +8,7 @@
   ],
   "main": "src/bch-js",
   "scripts": {
-    "test": "nyc mocha --timeout 30000 test/unit/",
+    "test": "nyc mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
     "test:integration": "bash test/integration/test-bchn-integration.sh",
     "test:integration:bchn": "bash test/integration/test-bchn-integration.sh",
     "test:integration:abc": "RESTURL=https://abc.fullstack.cash/v4/ IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/",
