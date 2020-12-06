@@ -1,28 +1,24 @@
+// Public npm libraries
 const assert = require("assert")
 const assert2 = require("chai").assert
-
-const SLP = require("../../src/slp/slp")
-//const slp = new SLP("http://decatur.hopto.org:12400/v4/")
-//const slp = new SLP("https://rest.bitcoin.com/v2/")
-const slp = new SLP({
-  restURL: "https://api.fullstack.cash/v4/",
-  apiToken: process.env.BCHJSTOKEN
-})
-
 const nock = require("nock") // http call mocking
 const sinon = require("sinon")
-const axios = require("axios")
+// const axios = require("axios")
+
+// Unit under test
+const SLP = require("../../src/slp/slp")
+let uut
+let SERVER
+
+const REST_URL = process.env.RESTURL
+  ? process.env.RESTURL
+  : "https://api.fullstack.cash/v4/"
 
 // Mock data used for unit tests
 const mockData = require("./fixtures/slp/mock-utils")
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = "unit"
-const SERVER = slp.restURL
-
-// Used for debugging and iterrogating JS objects.
-const util = require("util")
-util.inspect.defaultOptions = { depth: 1 }
 
 describe("#SLP Utils", () => {
   let sandbox
@@ -32,6 +28,12 @@ describe("#SLP Utils", () => {
     if (!nock.isActive()) nock.activate()
 
     sandbox = sinon.createSandbox()
+
+    uut = new SLP({
+      restURL: REST_URL,
+      apiToken: process.env.BCHJSTOKEN
+    })
+    SERVER = uut.restURL
   })
 
   afterEach(() => {
@@ -51,7 +53,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockList)
       }
 
-      const list = await slp.Utils.list()
+      const list = await uut.Utils.list()
       //console.log(`list: ${JSON.stringify(list, null, 2)}`)
 
       assert2.isArray(list)
@@ -90,7 +92,7 @@ describe("#SLP Utils", () => {
       const tokenId =
         "4276533bb702e7f8c9afd8aa61ebf016e95011dc3d54e55faa847ac1dd461e84"
 
-      const list = await slp.Utils.list(tokenId)
+      const list = await uut.Utils.list(tokenId)
       //console.log(`list: ${JSON.stringify(list, null, 2)}`)
 
       assert2.hasAllKeys(list, [
@@ -131,7 +133,7 @@ describe("#SLP Utils", () => {
         "b3f4f132dc3b9c8c96316346993a8d54d729715147b7b11aa6c8cd909e955313"
       ]
 
-      const list = await slp.Utils.list(tokenIds)
+      const list = await uut.Utils.list(tokenIds)
       // console.log(`list: ${JSON.stringify(list, null, 2)}`)
 
       assert2.hasAllKeys(list[0], [
@@ -165,7 +167,7 @@ describe("#SLP Utils", () => {
       try {
         const address = 1234
 
-        await slp.Utils.balancesForAddress(address)
+        await uut.Utils.balancesForAddress(address)
 
         assert2.equal(true, false, "Uh oh. Code path should not end here.")
       } catch (err) {
@@ -181,14 +183,14 @@ describe("#SLP Utils", () => {
       // Mock the call to the REST API
       if (process.env.TEST === "unit") {
         sandbox
-          .stub(axios, "get")
+          .stub(uut.Utils.axios, "get")
           .resolves({ data: mockData.balancesForAddress })
       }
       //sandbox
-      //  .stub(slp.Utils, "balancesForAddress")
+      //  .stub(uut.Utils, "balancesForAddress")
       //  .resolves(mockData.balancesForAddress)
 
-      const balances = await slp.Utils.balancesForAddress(
+      const balances = await uut.Utils.balancesForAddress(
         "simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9"
       )
       // console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
@@ -212,11 +214,11 @@ describe("#SLP Utils", () => {
       // Mock the call to the REST API
       if (process.env.TEST === "unit") {
         sandbox
-          .stub(axios, "post")
+          .stub(uut.Utils.axios, "post")
           .resolves({ data: mockData.balancesForAddresses })
       }
 
-      const balances = await slp.Utils.balancesForAddress(addresses)
+      const balances = await uut.Utils.balancesForAddress(addresses)
       //console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
 
       assert2.isArray(balances)
@@ -240,7 +242,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockIsValidTxid)
       }
 
-      const isValid = await slp.Utils.validateTxid(
+      const isValid = await uut.Utils.validateTxid(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
       )
       assert.deepEqual(isValid, [
@@ -262,7 +264,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockBalancesForToken)
       }
 
-      const balances = await slp.Utils.balancesForToken(
+      const balances = await uut.Utils.balancesForToken(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
       )
       assert2.hasAnyKeys(balances[0], ["tokenBalance", "slpAddress"])
@@ -278,7 +280,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockTokenStats)
       }
 
-      const tokenStats = await slp.Utils.tokenStats(
+      const tokenStats = await uut.Utils.tokenStats(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
       )
       assert2.hasAnyKeys(tokenStats, [
@@ -307,7 +309,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockTransactions)
       }
 
-      const transactions = await slp.Utils.transactions(
+      const transactions = await uut.Utils.transactions(
         "495322b37d6b2eae81f045eda612b95870a0c2b6069c58f70cf8ef4e6a9fd43a",
         "simpleledger:qrhvcy5xlegs858fjqf8ssl6a4f7wpstaqnt0wauwu"
       )
@@ -324,7 +326,7 @@ describe("#SLP Utils", () => {
           .reply(200, mockData.mockBurnTotal)
       }
 
-      const burnTotal = await slp.Utils.burnTotal(
+      const burnTotal = await uut.Utils.burnTotal(
         "c7078a6c7400518a513a0bde1f4158cf740d08d3b5bfb19aa7b6657e2f4160de"
       )
       //console.log(`burnTotal: ${JSON.stringify(burnTotal, null, 2)}`)
@@ -343,7 +345,7 @@ describe("#SLP Utils", () => {
       try {
         const txid = 53423 // Not a string.
 
-        await slp.Utils.decodeOpReturn(txid)
+        await uut.Utils.decodeOpReturn(txid)
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -357,14 +359,14 @@ describe("#SLP Utils", () => {
         // Mock the call to the REST API
         if (process.env.TEST === "unit") {
           sandbox
-            .stub(axios, "get")
+            .stub(uut.Utils.axios, "get")
             .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
         }
 
         const txid =
           "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
 
-        await slp.Utils.decodeOpReturn(txid)
+        await uut.Utils.decodeOpReturn(txid)
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -378,14 +380,14 @@ describe("#SLP Utils", () => {
         // Mock the call to the REST API
         if (process.env.TEST === "unit") {
           sandbox
-            .stub(axios, "get")
+            .stub(uut.Utils.axios, "get")
             .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
         }
 
         const txid =
           "2ff74c48a5d657cf45f699601990bffbbe7a2a516d5480674cbf6c6a4497908f"
 
-        await slp.Utils.decodeOpReturn(txid)
+        await uut.Utils.decodeOpReturn(txid)
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -398,14 +400,14 @@ describe("#SLP Utils", () => {
       // Mock the call to the REST API
       if (process.env.TEST === "unit") {
         sandbox
-          .stub(axios, "get")
+          .stub(uut.Utils.axios, "get")
           .resolves({ data: mockData.txDetailsSLPGenesis })
       }
 
       const txid =
         "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
 
-      const result = await slp.Utils.decodeOpReturn(txid)
+      const result = await uut.Utils.decodeOpReturn(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.hasAllKeys(result, [
@@ -424,13 +426,16 @@ describe("#SLP Utils", () => {
 
     it("should decode a mint transaction", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit")
-        sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPMint })
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.txDetailsSLPMint })
+      }
 
       const txid =
         "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
 
-      const result = await slp.Utils.decodeOpReturn(txid)
+      const result = await uut.Utils.decodeOpReturn(txid)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.hasAllKeys(result, [
@@ -444,13 +449,16 @@ describe("#SLP Utils", () => {
 
     it("should decode a send transaction", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit")
-        sandbox.stub(axios, "get").resolves({ data: mockData.txDetailsSLPSend })
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.txDetailsSLPSend })
+      }
 
       const txid =
         "4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa"
 
-      const result = await slp.Utils.decodeOpReturn(txid)
+      const result = await uut.Utils.decodeOpReturn(txid)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.hasAllKeys(result, ["tokenType", "txType", "tokenId", "amounts"])
@@ -460,14 +468,14 @@ describe("#SLP Utils", () => {
       // Mock the call to the REST API.
       if (process.env.TEST === "unit") {
         sandbox
-          .stub(axios, "get")
+          .stub(uut.Utils.axios, "get")
           .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
       }
 
       const txid =
         "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
 
-      const data = await slp.Utils.decodeOpReturn(txid)
+      const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.equal(data.mintBatonVout, 0)
@@ -477,14 +485,14 @@ describe("#SLP Utils", () => {
       // Mock the call to rest.bitcoin.com
       if (process.env.TEST === "unit") {
         sandbox
-          .stub(axios, "get")
+          .stub(uut.Utils.axios, "get")
           .resolves({ data: mockData.txDetailsSLPSendAlt })
       }
 
       const txid =
         "d94357179775425ebc59c93173bd6dc9854095f090a2eb9dcfe9797398bc8eae"
 
-      const data = await slp.Utils.decodeOpReturn(txid)
+      const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.hasAnyKeys(data, [
@@ -503,14 +511,14 @@ describe("#SLP Utils", () => {
         // Mock the call to rest.bitcoin.com
         if (process.env.TEST === "unit") {
           sandbox
-            .stub(axios, "get")
+            .stub(uut.Utils.axios, "get")
             .resolves({ data: mockData.mockInvalidSlpSend })
         }
 
         const txid =
           "a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415"
 
-        await slp.Utils.decodeOpReturn(txid)
+        await uut.Utils.decodeOpReturn(txid)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       } catch (err) {
         // console.log(`err: `, err)
@@ -521,13 +529,13 @@ describe("#SLP Utils", () => {
     it("should decode a NFT Parent transaction", async () => {
       // Mock the call to the REST API.
       sandbox
-        .stub(axios, "get")
+        .stub(uut.Utils.axios, "get")
         .resolves({ data: mockData.txDetailsSLPNftGenesis })
 
       const txid =
         "4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4"
 
-      const data = await slp.Utils.decodeOpReturn(txid)
+      const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.property(data, "tokenType")
@@ -549,13 +557,13 @@ describe("#SLP Utils", () => {
     // it("should decode a NFT Child transaction", async () => {
     //   // Mock the call to the REST API.
     //   // sandbox
-    //   //   .stub(axios, "get")
+    //   //   .stub(uut.Utils.axios, "get")
     //   //   .resolves({ data: mockData.txDetailsSLPNftGenesis })
     //
     //   const txid =
     //     "3de3766b10506c9156533f1639979e49d1884521543c13e4af73647df1ed3f76"
     //
-    //   const data = await slp.Utils.decodeOpReturn(txid)
+    //   const data = await uut.Utils.decodeOpReturn(txid)
     //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
     //
     //   // assert2.property(data, "tokenType")
@@ -578,7 +586,7 @@ describe("#SLP Utils", () => {
   describe("#tokenUtxoDetails", () => {
     it("should throw error if input is not an array.", async () => {
       try {
-        await slp.Utils.tokenUtxoDetails("test")
+        await uut.Utils.tokenUtxoDetails("test")
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -612,7 +620,7 @@ describe("#SLP Utils", () => {
           }
         ]
 
-        await slp.Utils.tokenUtxoDetails(utxos)
+        await uut.Utils.tokenUtxoDetails(utxos)
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -645,7 +653,7 @@ describe("#SLP Utils", () => {
           }
         ]
 
-        await slp.Utils.tokenUtxoDetails(utxos)
+        await uut.Utils.tokenUtxoDetails(utxos)
 
         assert2.equal(true, false, "Unexpected result.")
       } catch (err) {
@@ -662,7 +670,7 @@ describe("#SLP Utils", () => {
     it("should return details on minting baton from genesis transaction", async () => {
       // Mock the call to REST API
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
         {
           txid:
             "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90",
@@ -671,7 +679,7 @@ describe("#SLP Utils", () => {
       ])
 
       // Stub the calls to decodeOpReturn.
-      sandbox.stub(slp.Utils, "decodeOpReturn").resolves({
+      sandbox.stub(uut.Utils, "decodeOpReturn").resolves({
         tokenType: 1,
         txType: "GENESIS",
         ticker: "SLPSDK",
@@ -706,7 +714,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       // assert2.equal(data[0], false, "Change UTXO marked as false.")
@@ -741,7 +749,7 @@ describe("#SLP Utils", () => {
 
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .onCall(0)
         .resolves({
           tokenType: 1,
@@ -767,7 +775,7 @@ describe("#SLP Utils", () => {
         })
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
         {
           txid:
             "cf4b922d1e1aa56b52d752d4206e1448ea76c3ebe69b3b97d8f8f65413bd5c76",
@@ -787,7 +795,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.property(data[0], "txid")
@@ -814,7 +822,7 @@ describe("#SLP Utils", () => {
       // Mock the call to REST API
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .onCall(0)
         .resolves({
           tokenType: 1,
@@ -839,7 +847,7 @@ describe("#SLP Utils", () => {
         })
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
         {
           txid:
             "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
@@ -859,7 +867,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.property(data[0], "txid")
@@ -883,11 +891,11 @@ describe("#SLP Utils", () => {
     it("should handle BCH and SLP utxos in the same TX", async () => {
       // Mock external dependencies.
       sandbox
-        .stub(slp.Utils, "validateTxid")
+        .stub(uut.Utils, "validateTxid")
         .resolves(mockData.mockDualValidation)
 
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .onCall(0)
         .resolves({
           tokenType: 1,
@@ -940,7 +948,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const result = await slp.Utils.tokenUtxoDetails(utxos)
+      const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -964,7 +972,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .onCall(0)
         .throws({ message: "scriptpubkey not op_return" })
         .onCall(1)
@@ -991,7 +999,7 @@ describe("#SLP Utils", () => {
         })
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
         {
           txid:
             "67fd3c7c3a6eb0fea9ab311b91039545086220f7eeeefa367fa28e6e43009f19",
@@ -1020,7 +1028,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const result = await slp.Utils.tokenUtxoDetails(utxos)
+      const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -1044,7 +1052,7 @@ describe("#SLP Utils", () => {
       // Mock live network calls
 
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .throws(new Error("scriptpubkey not op_return"))
 
       const utxos = [
@@ -1068,7 +1076,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const result = await slp.Utils.tokenUtxoDetails(utxos)
+      const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -1107,10 +1115,10 @@ describe("#SLP Utils", () => {
 
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
-      sandbox.stub(slp.Utils, "decodeOpReturn").resolves(slpData)
+      sandbox.stub(uut.Utils, "decodeOpReturn").resolves(slpData)
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves([
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
         {
           txid:
             "d2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954",
@@ -1145,7 +1153,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1198,7 +1206,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(genesisData)
@@ -1211,7 +1219,7 @@ describe("#SLP Utils", () => {
 
       // Stub the call to validateTxid
       sandbox
-        .stub(slp.Utils, "validateTxid")
+        .stub(uut.Utils, "validateTxid")
         .resolves(stubValid)
         .onCall(1)
         .resolves(stubValid)
@@ -1243,7 +1251,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1287,7 +1295,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(slpData)
@@ -1300,7 +1308,7 @@ describe("#SLP Utils", () => {
 
       // Stub the call to validateTxid
       sandbox
-        .stub(slp.Utils, "validateTxid")
+        .stub(uut.Utils, "validateTxid")
         .resolves(stubValid)
         .onCall(1)
         .resolves(stubValid)
@@ -1337,7 +1345,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1389,7 +1397,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(slpData)
@@ -1402,7 +1410,7 @@ describe("#SLP Utils", () => {
 
       // Stub the call to validateTxid
       sandbox
-        .stub(slp.Utils, "validateTxid")
+        .stub(uut.Utils, "validateTxid")
         .resolves(stubValid)
         .onCall(1)
         .resolves(stubValid)
@@ -1439,7 +1447,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1482,13 +1490,13 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(slpData)
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves(stubValid)
+      sandbox.stub(uut.Utils, "validateTxid").resolves(stubValid)
 
       const utxos = [
         {
@@ -1509,7 +1517,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1556,7 +1564,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(genesisData)
@@ -1564,7 +1572,7 @@ describe("#SLP Utils", () => {
         .resolves(slpData)
 
       // Stub the call to validateTxid
-      sandbox.stub(slp.Utils, "validateTxid").resolves(stubValid)
+      sandbox.stub(uut.Utils, "validateTxid").resolves(stubValid)
 
       const utxos = [
         {
@@ -1585,7 +1593,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1633,7 +1641,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .resolves(slpData)
         .onCall(1)
         .resolves(genesisData)
@@ -1646,7 +1654,7 @@ describe("#SLP Utils", () => {
 
       // Stub the call to validateTxid
       sandbox
-        .stub(slp.Utils, "validateTxid")
+        .stub(uut.Utils, "validateTxid")
         .resolves(stubValid)
         .onCall(1)
         .resolves(stubValid)
@@ -1678,7 +1686,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert2.isArray(data)
@@ -1722,12 +1730,12 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      sandbox.stub(slp.Utils, "decodeOpReturn").rejects({
+      sandbox.stub(uut.Utils, "decodeOpReturn").rejects({
         error:
           "Too many requests. Your limits are currently 3 requests per minute. Increase rate limits at https://fullstack.cash"
       })
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       // Values should be 'null' to signal that a determination could not be made
@@ -1741,7 +1749,7 @@ describe("#SLP Utils", () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
-        .stub(slp.Utils, "decodeOpReturn")
+        .stub(uut.Utils, "decodeOpReturn")
         .rejects(new Error("lokad id wrong size"))
 
       const utxos = [
@@ -1760,7 +1768,7 @@ describe("#SLP Utils", () => {
         }
       ]
 
-      const data = await slp.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert.equal(data[0].isValid, false)
@@ -1772,7 +1780,7 @@ describe("#SLP Utils", () => {
   describe("#txDetails", () => {
     it("should throw an error if txid is not included", async () => {
       try {
-        await slp.Utils.txDetails()
+        await uut.Utils.txDetails()
       } catch (err) {
         assert2.include(
           err.message,
@@ -1787,14 +1795,14 @@ describe("#SLP Utils", () => {
         // Mock the call to the REST API
         if (process.env.TEST === "unit") {
           sandbox
-            .stub(axios, "get")
+            .stub(uut.Utils.axios, "get")
             //.resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
             .throws({ error: `TXID not found` })
         }
 
         const txid = `d284e71227ec89f714b964d8eda595be6392bebd2fac46082bc5a9ce6fb7b33e`
 
-        const result = await slp.Utils.txDetails(txid)
+        const result = await uut.Utils.txDetails(txid)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       } catch (err) {
         // console.log(`err: `, err)
@@ -1804,12 +1812,15 @@ describe("#SLP Utils", () => {
 
     it("should return details for an SLP txid", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit")
-        sandbox.stub(axios, "get").resolves({ data: mockData.mockTxDetails })
+      if (process.env.TEST === "unit") {
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.mockTxDetails })
+      }
 
       const txid = `9dbaaafc48c49a21beabada8de632009288a2cd52eecefd0c00edcffca9955d0`
 
-      const result = await slp.Utils.txDetails(txid)
+      const result = await uut.Utils.txDetails(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.hasAnyKeys(result, [
@@ -1838,7 +1849,7 @@ describe("#SLP Utils", () => {
       try {
         const utxos = 1234
 
-        await slp.Utils.hydrateUtxos(utxos)
+        await uut.Utils.hydrateUtxos(utxos)
 
         assert2.equal(true, false, "Uh oh. Code path should not end here.")
       } catch (err) {
@@ -1855,7 +1866,7 @@ describe("#SLP Utils", () => {
           "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
         ]
 
-        await slp.Utils.validateTxid2(txid)
+        await uut.Utils.validateTxid2(txid)
 
         assert2.equal(true, false, "Unexpected result")
       } catch (err) {
@@ -1869,7 +1880,7 @@ describe("#SLP Utils", () => {
         const txid =
           "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783"
 
-        await slp.Utils.validateTxid2(txid)
+        await uut.Utils.validateTxid2(txid)
 
         assert2.equal(true, false, "Unexpected result")
       } catch (err) {
@@ -1883,7 +1894,7 @@ describe("#SLP Utils", () => {
         "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
 
       // Mock live network calls.
-      sandbox.stub(axios, "get").resolves({
+      sandbox.stub(uut.Utils.axios, "get").resolves({
         data: {
           txid: txid,
           isValid: false,
@@ -1891,7 +1902,7 @@ describe("#SLP Utils", () => {
         }
       })
 
-      const result = await slp.Utils.validateTxid2(txid)
+      const result = await uut.Utils.validateTxid2(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.property(result, "txid")
@@ -1906,7 +1917,7 @@ describe("#SLP Utils", () => {
         "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
 
       // Mock live network calls.
-      sandbox.stub(axios, "get").resolves({
+      sandbox.stub(uut.Utils.axios, "get").resolves({
         data: {
           txid: txid,
           isValid: true,
@@ -1914,7 +1925,7 @@ describe("#SLP Utils", () => {
         }
       })
 
-      const result = await slp.Utils.validateTxid2(txid)
+      const result = await uut.Utils.validateTxid2(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.property(result, "txid")
@@ -1932,12 +1943,12 @@ describe("#SLP Utils", () => {
           "eacb1085dfa296fef6d4ae2c0f4529a1bef096dd2325bdcc6dcb5241b3bdb579"
 
         // Mock live network calls.
-        sandbox.stub(axios, "get").rejects({
+        sandbox.stub(uut.Utils.axios, "get").rejects({
           error:
             "Network error: Could not communicate with full node or other external service."
         })
 
-        await slp.Utils.validateTxid2(txid)
+        await uut.Utils.validateTxid2(txid)
 
         assert2.equal(true, false, "Unexpected result")
       } catch (err) {
@@ -1953,11 +1964,11 @@ describe("#SLP Utils", () => {
         "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
 
       // Mock live network calls.
-      sandbox.stub(axios, "post").resolves({
+      sandbox.stub(uut.Utils.axios, "post").resolves({
         data: mockData.mockValidateTxid3Invalid
       })
 
-      const result = await slp.Utils.validateTxid(txid)
+      const result = await uut.Utils.validateTxid(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -1981,7 +1992,7 @@ describe("#SLP Utils", () => {
         "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
       ]
 
-      const result = await slp.Utils.validateTxid(txids)
+      const result = await uut.Utils.validateTxid(txids)
       console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
 */
@@ -1989,9 +2000,11 @@ describe("#SLP Utils", () => {
 
   describe("#getWhitelist", () => {
     it("should return the list", async () => {
-      sandbox.stub(axios, "get").resolves({ data: mockData.mockWhitelist })
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.mockWhitelist })
 
-      const result = await slp.Utils.getWhitelist()
+      const result = await uut.Utils.getWhitelist()
 
       assert2.isArray(result)
       assert2.property(result[0], "name")
@@ -2000,12 +2013,12 @@ describe("#SLP Utils", () => {
 
     it("catches and throws an error", async () => {
       try {
-        sandbox.stub(axios, "get").rejects({
+        sandbox.stub(uut.Utils.axios, "get").rejects({
           error:
             "Network error: Could not communicate with full node or other external service."
         })
 
-        await slp.Utils.getWhitelist()
+        await uut.Utils.getWhitelist()
 
         assert2.fail("Unexpected result")
       } catch (err) {
@@ -2021,11 +2034,11 @@ describe("#SLP Utils", () => {
         "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
 
       // Mock live network calls.
-      sandbox.stub(axios, "post").resolves({
+      sandbox.stub(uut.Utils.axios, "post").resolves({
         data: mockData.mockValidateTxid3Invalid
       })
 
-      const result = await slp.Utils.validateTxid3(txid)
+      const result = await uut.Utils.validateTxid3(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -2039,14 +2052,14 @@ describe("#SLP Utils", () => {
 
     it("should handle an array with a single element", async () => {
       sandbox
-        .stub(axios, "post")
+        .stub(uut.Utils.axios, "post")
         .resolves({ data: mockData.mockValidateTxid3Valid })
 
       const txid = [
         "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd"
       ]
 
-      const result = await slp.Utils.validateTxid3(txid)
+      const result = await uut.Utils.validateTxid3(txid)
 
       assert2.isArray(result)
 
@@ -2059,13 +2072,13 @@ describe("#SLP Utils", () => {
 
     it("should handle an single string input", async () => {
       sandbox
-        .stub(axios, "post")
+        .stub(uut.Utils.axios, "post")
         .resolves({ data: mockData.mockValidateTxid3Valid })
 
       const txid =
         "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd"
 
-      const result = await slp.Utils.validateTxid3(txid)
+      const result = await uut.Utils.validateTxid3(txid)
 
       assert2.isArray(result)
 
@@ -2078,12 +2091,12 @@ describe("#SLP Utils", () => {
 
     it("catches and throws an error", async () => {
       try {
-        sandbox.stub(axios, "post").rejects({
+        sandbox.stub(uut.Utils.axios, "post").rejects({
           error:
             "Network error: Could not communicate with full node or other external service."
         })
 
-        await slp.Utils.validateTxid3()
+        await uut.Utils.validateTxid3()
 
         assert2.equal(true, false, "Unexpected result")
       } catch (err) {

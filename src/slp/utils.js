@@ -216,9 +216,9 @@ class Utils {
     try {
       let response
       if (method === "get") {
-        response = await axios.get(path, _this.axiosOptions)
+        response = await _this.axios.get(path, _this.axiosOptions)
       } else {
-        response = await axios.post(
+        response = await _this.axios.post(
           path,
           {
             tokenIds: id
@@ -314,7 +314,7 @@ class Utils {
       if (typeof address === "string") {
         const path = `${this.restURL}slp/balancesForAddress/${address}`
 
-        const response = await axios.get(path, _this.axiosOptions)
+        const response = await _this.axios.get(path, _this.axiosOptions)
         return response.data
 
         // Array of addresses.
@@ -322,7 +322,7 @@ class Utils {
         const path = `${this.restURL}slp/balancesForAddress`
 
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
+        const response = await _this.axios.post(
           path,
           {
             addresses: address
@@ -379,7 +379,7 @@ class Utils {
     const path = `${this.restURL}slp/balancesForToken/${tokenId}`
 
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -444,7 +444,7 @@ class Utils {
     else txids = txid
 
     try {
-      const response = await axios.post(
+      const response = await _this.axios.post(
         path,
         {
           txids: txids
@@ -510,7 +510,7 @@ class Utils {
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -578,7 +578,7 @@ class Utils {
 
       // Retrieve the whitelist from the REST API if we haven't gotten it yet.
       if (this.whitelist.length === 0) {
-        const response = await axios.get(path, _this.axiosOptions)
+        const response = await _this.axios.get(path, _this.axiosOptions)
         console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
         this.whitelist = response.data
@@ -652,7 +652,7 @@ class Utils {
     else txids = txid
 
     try {
-      const response = await axios.post(
+      const response = await _this.axios.post(
         path,
         {
           txids: txids
@@ -709,7 +709,7 @@ class Utils {
     const path = `${this.restURL}slp/tokenStats/${tokenId}`
 
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -779,7 +779,7 @@ class Utils {
     const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
 
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -818,7 +818,7 @@ class Utils {
     const path = `${this.restURL}slp/burnTotal/${transactionId}`
 
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -860,7 +860,7 @@ class Utils {
       // console.log(`this.restURL: ${this.restURL}`)
       const path = `${this.restURL}slp/txDetails/${txid}`
 
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -935,7 +935,7 @@ class Utils {
 
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       const txDetails = response.data
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
@@ -1513,7 +1513,7 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
-      const response = await axios.post(
+      const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
         {
           utxos: utxos
