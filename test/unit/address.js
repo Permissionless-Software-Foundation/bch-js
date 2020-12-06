@@ -9,8 +9,6 @@ const fixtures = require("./fixtures/address.json")
 const BCHJS = require("../../src/bch-js")
 let bchjs
 
-console.log("ping01")
-
 function flatten(arrays) {
   return [].concat.apply([], arrays)
 }
@@ -80,8 +78,6 @@ const P2SH_ADDRESSES = flatten([
   fixtures.legacyMainnetP2SH,
   fixtures.cashaddrMainnetP2SH
 ])
-
-console.log("ping02")
 
 describe("#address.js", () => {
   beforeEach(() => {
@@ -342,7 +338,7 @@ describe("#address.js", () => {
       })
     })
   })
-
+  /*
   describe("address format detection", () => {
     describe("#isLegacyAddress", () => {
       describe("is legacy", () => {
@@ -936,4 +932,5 @@ describe("#address.js", () => {
       })
     })
   })
+  */
 })

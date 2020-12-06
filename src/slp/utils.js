@@ -35,10 +35,6 @@ class Utils {
     _this = this
 
     this.whitelist = []
-    if (process.env.TEST !== "unit") {
-      // Get the whitelist.
-      this.getWhitelist()
-    }
   }
 
   /**
