@@ -14,6 +14,7 @@ class Utils {
     this.apiToken = config.apiToken
     this.slpParser = slpParser
     this.authToken = config.authToken
+    this.axios = axios
 
     if (this.authToken) {
       // Add Basic Authentication token to the authorization header.
@@ -32,6 +33,12 @@ class Utils {
     }
 
     _this = this
+
+    this.whitelist = []
+    if (process.env.TEST !== "unit") {
+      // Get the whitelist.
+      this.getWhitelist()
+    }
   }
 
   /**
@@ -565,14 +572,19 @@ class Utils {
    *   }
    * ]
    */
-  async getWhitelist(txid) {
+  async getWhitelist() {
     try {
       const path = `${this.restURL}slp/whitelist`
 
-      const response = await axios.get(path, _this.axiosOptions)
-      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      // Retrieve the whitelist from the REST API if we haven't gotten it yet.
+      if (this.whitelist.length === 0) {
+        const response = await axios.get(path, _this.axiosOptions)
+        console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
-      return response.data
+        this.whitelist = response.data
+      }
+
+      return this.whitelist
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
@@ -1074,6 +1086,7 @@ class Utils {
           }
         }
 
+        // Ensure the UTXO has a vout or tx_pos property.
         if (!Number.isInteger(utxo.vout)) {
           if (Number.isInteger(utxo.tx_pos)) {
             utxo.vout = utxo.tx_pos
@@ -1262,16 +1275,64 @@ class Utils {
           }
         }
 
-        // Finally, validate the SLP txid with SLPDB.
+        // *After* the UTXO has been hydrated with SLP data,
+        // validate the TXID with SLPDB.
         if (outAry[i].tokenType) {
-          var isValid = cachedTxValidation[utxo.txid]
+          // Only execute this block if the current UTXO has a 'tokenType'
+          // property. i.e. it has been hydrated with SLP information.
+
+          // If the value has been cached, use the cached version first.
+          let isValid = cachedTxValidation[utxo.txid]
+
+          // If not in the cache, try the general SLPDB.
           if (isValid == null) {
             isValid = await this.validateTxid(utxo.txid)
+            isValid = isValid[0].valid
+
+            // Save the result to the local cache.
             cachedTxValidation[utxo.txid] = isValid
           }
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
-          outAry[i].isValid = isValid[0].valid
+          // If still null, check the whitelist SLPDB
+          if (isValid === null) {
+            console.log(`outAry[${i}]: ${JSON.stringify(outAry[i], null, 2)}`)
+
+            // Figure out if the token UTXO is in the whitelist.
+            let utxoInWhitelist = false
+            for (let j = 0; j < this.whitelist.length; j++) {
+              if (outAry[i].tokenId === this.whitelist[j].tokenId) {
+                utxoInWhitelist = true
+                break
+              }
+            }
+
+            // If the utxo.tokenId is in the whitelist, check the validity with
+            // the whitelist SLPDB. This should still be functioning properly
+            // if the general SLPDB is not.
+            if (utxoInWhitelist) {
+              isValid = await this.validateTxid3(utxo.txid)
+              isValid = isValid[0].valid
+
+              // Save the result to the local cache.
+              cachedTxValidation[utxo.txid] = isValid
+            }
+          }
+
+          // If still null, as a last resort, check it against slp-validate
+          if (isValid === null) {
+            isValid = await this.validateTxid2(utxo.txid)
+            console.log(
+              `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
+            )
+            isValid = isValid.valid
+
+            // Save the result to the local cache.
+            cachedTxValidation[utxo.txid] = isValid
+          }
+
+          console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+          outAry[i].isValid = isValid
         }
       }
 

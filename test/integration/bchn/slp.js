@@ -463,6 +463,98 @@ describe(`#SLP`, () => {
 
         assert.equal(data[0].isValid, false)
       })
+
+      it("should handle a range of UTXO types", async () => {
+        const utxos = [
+          // Malformed SLP tx
+          {
+            note: "Malformed SLP tx",
+            tx_hash:
+              "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+            tx_pos: 1,
+            value: 546
+          },
+          // Normal TX (non-SLP)
+          {
+            note: "Normal TX (non-SLP)",
+            tx_hash:
+              "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
+            tx_pos: 0,
+            value: 400000
+          },
+          // Valid PSF SLP tx
+          {
+            note: "Valid PSF SLP tx",
+            tx_hash:
+              "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
+            tx_pos: 1,
+            value: 546
+          },
+          // Valid SLP token not in whitelist
+          {
+            note: "Valid SLP token not in whitelist",
+            tx_hash:
+              "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
+            tx_pos: 1,
+            value: 546
+          },
+          // Token send on BCHN network.
+          {
+            note: "Token send on BCHN network",
+            tx_hash:
+              "402c663379d9699b6e2dd38737061e5888c5a49fca77c97ab98e79e08959e019",
+            tx_pos: 1,
+            value: 546
+          },
+          // Token send on ABC network.
+          {
+            note: "Token send on ABC network",
+            tx_hash:
+              "336bfe2168aac4c3303508a9e8548a0d33797a83b85b76a12d845c8d6674f79d",
+            tx_pos: 1,
+            value: 546
+          },
+          // Known invalid SLP token send of PSF tokens.
+          {
+            note: "Known invalid SLP token send of PSF tokens",
+            tx_hash:
+              "2bf691ad3679d928fef880b8a45b93b233f8fa0d0a92cf792313dbe77b1deb74",
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        // Malformed SLP tx
+        assert.equal(data[0].tx_hash, utxos[0].tx_hash)
+        assert.equal(data[0].isValid, null)
+
+        // Normal TX (non-SLP)
+        assert.equal(data[1].tx_hash, utxos[1].tx_hash)
+        assert.equal(data[1].isValid, false)
+
+        // Valid PSF SLP tx
+        assert.equal(data[2].tx_hash, utxos[2].tx_hash)
+        assert.equal(data[2].isValid, true)
+
+        // Valid SLP token not in whitelist
+        assert.equal(data[3].tx_hash, utxos[3].tx_hash)
+        assert.equal(data[3].isValid, true)
+
+        // Token send on BCHN network
+        assert.equal(data[4].tx_hash, utxos[4].tx_hash)
+        assert.equal(data[4].isValid, true)
+
+        // Token send on ABC network
+        assert.equal(data[5].tx_hash, utxos[5].tx_hash)
+        assert.equal(data[5].isValid, null)
+
+        // Known invalid SLP token send of PSF tokens
+        assert.equal(data[6].tx_hash, utxos[6].tx_hash)
+        assert.equal(data[6].isValid, false)
+      })
     })
 
     describe("#balancesForAddress", () => {

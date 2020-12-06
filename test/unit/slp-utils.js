@@ -1737,7 +1737,7 @@ describe("#SLP Utils", () => {
     })
 
     // it("should handle a dust attack", async () => {
-    it("#dustattack", async () => {
+    it("should handle dust attack UTXOs", async () => {
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1765,6 +1765,8 @@ describe("#SLP Utils", () => {
 
       assert.equal(data[0].isValid, false)
     })
+
+    //
   })
 
   describe("#txDetails", () => {
@@ -2005,9 +2007,9 @@ describe("#SLP Utils", () => {
 
         await slp.Utils.getWhitelist()
 
-        assert2.equal(true, false, "Unexpected result")
+        assert2.fail("Unexpected result")
       } catch (err) {
-        // console.log("err: ", err)
+        console.log("err: ", err)
         assert2.include(err.error, "Network error")
       }
     })
