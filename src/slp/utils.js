@@ -1,3 +1,4 @@
+// Public npm libraries
 const axios = require("axios")
 const slpParser = require("slp-parser")
 
@@ -1111,9 +1112,9 @@ class Utils {
         let slpData = false
         try {
           slpData = await this.decodeOpReturn(utxo.txid, decodeOpReturnCache)
-          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+          // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
 
           // An error will be thrown if the txid is not SLP.
           // If error is for some other reason, like a 429 error, mark utxo as 'null'
@@ -1124,10 +1125,10 @@ class Utils {
               err.message.indexOf("lokad id") === -1 &&
               err.message.indexOf("trailing data") === -1)
           ) {
-            console.log(
-              `unknown error from decodeOpReturn(). Marking as 'null'`,
-              err
-            )
+            // console.log(
+            //   `unknown error from decodeOpReturn(). Marking as 'null'`,
+            //   err
+            // )
 
             utxo.isValid = null
             outAry.push(utxo)
@@ -1136,10 +1137,9 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
-            console.log("marking as invalid")
+            // console.log("marking as invalid")
             utxo.isValid = false
             outAry.push(utxo)
-            console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
           }
 
           // Halt the execution of the loop and increase to the next index.
@@ -1285,7 +1285,8 @@ class Utils {
         // validate the TXID with SLPDB.
         if (outAry[i].tokenType) {
           // Only execute this block if the current UTXO has a 'tokenType'
-          // property. i.e. it has been hydrated with SLP information.
+          // property. i.e. it has been successfully hydrated with SLP
+          // information.
 
           // If the value has been cached, use the cached version first.
           let isValid = cachedTxValidation[utxo.txid]
@@ -1302,7 +1303,13 @@ class Utils {
 
           // If still null, check the whitelist SLPDB
           if (isValid === null) {
-            console.log(`outAry[${i}]: ${JSON.stringify(outAry[i], null, 2)}`)
+            // console.log(
+            //   `checking against whitelist SLPDB. outAry[${i}]: ${JSON.stringify(
+            //     outAry[i],
+            //     null,
+            //     2
+            //   )}`
+            // )
 
             // Figure out if the token UTXO is in the whitelist.
             let utxoInWhitelist = false
@@ -1318,6 +1325,15 @@ class Utils {
             // if the general SLPDB is not.
             if (utxoInWhitelist) {
               isValid = await this.validateTxid3(utxo.txid)
+
+              // console.log(
+              //   `whitelist-SLPDB for ${utxo.txid}: ${JSON.stringify(
+              //     isValid,
+              //     null,
+              //     2
+              //   )}`
+              // )
+
               isValid = isValid[0].valid
 
               // Save the result to the local cache.
@@ -1328,21 +1344,20 @@ class Utils {
           // If still null, as a last resort, check it against slp-validate
           if (isValid === null) {
             isValid = await this.validateTxid2(utxo.txid)
-            console.log(
-              `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
-            )
-            isValid = isValid.valid
+            // console.log(
+            //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
+            // )
+
+            isValid = isValid.isValid
 
             // Save the result to the local cache.
             cachedTxValidation[utxo.txid] = isValid
           }
 
-          console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
           outAry[i].isValid = isValid
         }
       }
-
-      console.log(`pt2 outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       return outAry
     } catch (error) {

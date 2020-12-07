@@ -1695,21 +1695,82 @@ describe("#SLP Utils", () => {
       assert.equal(data[0].isValid, false)
     })
 
-    // it("should validate against the whitelist SLPDB when regular SLPDB returns null", async () => {
-    //   const utxos = [
-    //     // Malformed SLP tx
-    //     {
-    //       note: "Malformed SLP tx",
-    //       tx_hash:
-    //         "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
-    //       tx_pos: 1,
-    //       value: 546
-    //     }
-    //   ]
-    //
-    //   const data = await uut.Utils.tokenUtxoDetails(utxos)
-    //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
-    // })
+    it("should use backup validators when regular SLPDB returns null", async () => {
+      // Mock the call to REST API
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(uut.Utils, "decodeOpReturn")
+        .onCall(0)
+        .resolves({
+          tokenType: 1,
+          txType: "SEND",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          amounts: ["200000000", "99887500000000"]
+        })
+        .onCall(1)
+        .resolves({
+          tokenType: 1,
+          txType: "GENESIS",
+          ticker: "TOK-CH",
+          name: "TokyoCash",
+          tokenId:
+            "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7",
+          documentUri: "",
+          documentHash: "",
+          decimals: 8,
+          mintBatonVout: 0,
+          qty: "2100000000000000"
+        })
+
+      // Force default SLPDB to return 'null', which should trigger usage of the
+      // backup whitelist-SLPDB.
+      sandbox.stub(uut.Utils, "validateTxid").resolves([
+        {
+          txid:
+            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+          valid: null
+        }
+      ])
+
+      // Force the token UTXO to be in the whitelist.
+      uut.Utils.whitelist = mockData.whitelist
+
+      // Mock the response from the whitelist-SLPDB.
+      sandbox.stub(uut.Utils, "validateTxid3").resolves([
+        {
+          txid:
+            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+          valid: null
+        }
+      ])
+
+      // Mock the response from slp-api
+      sandbox.stub(uut.Utils, "validateTxid2").resolves({
+        txid:
+          "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+        isValid: true,
+        msg: ""
+      })
+
+      const utxos = [
+        {
+          txid:
+            "fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb",
+          vout: 1,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 596089,
+          confirmations: 748
+        }
+      ]
+
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      // The UTXO should have been validated by the third validation source.
+      assert.equal(data[0].isValid, true)
+    })
   })
 
   describe("#txDetails", () => {
