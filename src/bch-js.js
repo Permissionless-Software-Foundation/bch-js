@@ -8,6 +8,7 @@
 
 // bch-api mainnet.
 const DEFAULT_REST_API = "https://api.fullstack.cash/v4/"
+// const DEFAULT_REST_API = "http://localhost:3000/v4/"
 
 // local deps
 const BitcoinCash = require("./bitcoincash")

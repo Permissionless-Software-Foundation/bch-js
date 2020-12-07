@@ -1,3 +1,4 @@
+// Public npm libraries
 const axios = require("axios")
 const slpParser = require("slp-parser")
 
@@ -14,6 +15,7 @@ class Utils {
     this.apiToken = config.apiToken
     this.slpParser = slpParser
     this.authToken = config.authToken
+    this.axios = axios
 
     if (this.authToken) {
       // Add Basic Authentication token to the authorization header.
@@ -32,6 +34,8 @@ class Utils {
     }
 
     _this = this
+
+    this.whitelist = []
   }
 
   /**
@@ -193,6 +197,7 @@ class Utils {
   async list(id) {
     let path
     let method
+
     if (!id) {
       method = "get"
       path = `${this.restURL}slp/list`
@@ -209,9 +214,9 @@ class Utils {
     try {
       let response
       if (method === "get") {
-        response = await axios.get(path, _this.axiosOptions)
+        response = await _this.axios.get(path, _this.axiosOptions)
       } else {
-        response = await axios.post(
+        response = await _this.axios.post(
           path,
           {
             tokenIds: id
@@ -307,7 +312,7 @@ class Utils {
       if (typeof address === "string") {
         const path = `${this.restURL}slp/balancesForAddress/${address}`
 
-        const response = await axios.get(path, _this.axiosOptions)
+        const response = await _this.axios.get(path, _this.axiosOptions)
         return response.data
 
         // Array of addresses.
@@ -315,7 +320,7 @@ class Utils {
         const path = `${this.restURL}slp/balancesForAddress`
 
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
+        const response = await _this.axios.post(
           path,
           {
             addresses: address
@@ -369,10 +374,10 @@ class Utils {
    */
   // Retrieve token balances for a given tokenId.
   async balancesForToken(tokenId) {
-    const path = `${this.restURL}slp/balancesForToken/${tokenId}`
-
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const path = `${this.restURL}slp/balancesForToken/${tokenId}`
+
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -437,7 +442,7 @@ class Utils {
     else txids = txid
 
     try {
-      const response = await axios.post(
+      const response = await _this.axios.post(
         path,
         {
           txids: txids
@@ -503,7 +508,7 @@ class Utils {
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -565,14 +570,19 @@ class Utils {
    *   }
    * ]
    */
-  async getWhitelist(txid) {
+  async getWhitelist() {
     try {
       const path = `${this.restURL}slp/whitelist`
 
-      const response = await axios.get(path, _this.axiosOptions)
-      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      // Retrieve the whitelist from the REST API if we haven't gotten it yet.
+      if (this.whitelist.length === 0) {
+        const response = await _this.axios.get(path, _this.axiosOptions)
+        // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
-      return response.data
+        this.whitelist = response.data
+      }
+
+      return this.whitelist
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
@@ -640,7 +650,7 @@ class Utils {
     else txids = txid
 
     try {
-      const response = await axios.post(
+      const response = await _this.axios.post(
         path,
         {
           txids: txids
@@ -694,10 +704,11 @@ class Utils {
    * }
    */
   async tokenStats(tokenId) {
-    const path = `${this.restURL}slp/tokenStats/${tokenId}`
-
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const path = `${this.restURL}slp/tokenStats/${tokenId}`
+
+      const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -764,10 +775,11 @@ class Utils {
    */
   // Retrieve token transactions for a given tokenId and address.
   async transactions(tokenId, address) {
-    const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
-
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
+
+      const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -803,10 +815,11 @@ class Utils {
    * }
    */
   async burnTotal(transactionId) {
-    const path = `${this.restURL}slp/burnTotal/${transactionId}`
-
     try {
-      const response = await axios.get(path, _this.axiosOptions)
+      const path = `${this.restURL}slp/burnTotal/${transactionId}`
+
+      const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -848,7 +861,7 @@ class Utils {
       // console.log(`this.restURL: ${this.restURL}`)
       const path = `${this.restURL}slp/txDetails/${txid}`
 
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -923,7 +936,7 @@ class Utils {
 
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
-      const response = await axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, _this.axiosOptions)
       const txDetails = response.data
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
@@ -1074,6 +1087,7 @@ class Utils {
           }
         }
 
+        // Ensure the UTXO has a vout or tx_pos property.
         if (!Number.isInteger(utxo.vout)) {
           if (Number.isInteger(utxo.tx_pos)) {
             utxo.vout = utxo.tx_pos
@@ -1108,9 +1122,13 @@ class Utils {
           if (
             !err.message ||
             (err.message.indexOf("scriptpubkey not op_return") === -1 &&
-              err.message.indexOf("lokad id") === -1)
+              err.message.indexOf("lokad id") === -1 &&
+              err.message.indexOf("trailing data") === -1)
           ) {
-            // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+            // console.log(
+            //   `unknown error from decodeOpReturn(). Marking as 'null'`,
+            //   err
+            // )
 
             utxo.isValid = null
             outAry.push(utxo)
@@ -1119,6 +1137,7 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
+            // console.log("marking as invalid")
             utxo.isValid = false
             outAry.push(utxo)
           }
@@ -1262,16 +1281,81 @@ class Utils {
           }
         }
 
-        // Finally, validate the SLP txid with SLPDB.
+        // *After* the UTXO has been hydrated with SLP data,
+        // validate the TXID with SLPDB.
         if (outAry[i].tokenType) {
-          var isValid = cachedTxValidation[utxo.txid]
+          // Only execute this block if the current UTXO has a 'tokenType'
+          // property. i.e. it has been successfully hydrated with SLP
+          // information.
+
+          // If the value has been cached, use the cached version first.
+          let isValid = cachedTxValidation[utxo.txid]
+
+          // If not in the cache, try the general SLPDB.
           if (isValid == null) {
             isValid = await this.validateTxid(utxo.txid)
+            isValid = isValid[0].valid
+
+            // Save the result to the local cache.
             cachedTxValidation[utxo.txid] = isValid
           }
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
-          outAry[i].isValid = isValid[0].valid
+          // If still null, check the whitelist SLPDB
+          if (isValid === null) {
+            // console.log(
+            //   `checking against whitelist SLPDB. outAry[${i}]: ${JSON.stringify(
+            //     outAry[i],
+            //     null,
+            //     2
+            //   )}`
+            // )
+
+            // Figure out if the token UTXO is in the whitelist.
+            let utxoInWhitelist = false
+            for (let j = 0; j < this.whitelist.length; j++) {
+              if (outAry[i].tokenId === this.whitelist[j].tokenId) {
+                utxoInWhitelist = true
+                break
+              }
+            }
+
+            // If the utxo.tokenId is in the whitelist, check the validity with
+            // the whitelist SLPDB. This should still be functioning properly
+            // if the general SLPDB is not.
+            if (utxoInWhitelist) {
+              isValid = await this.validateTxid3(utxo.txid)
+
+              // console.log(
+              //   `whitelist-SLPDB for ${utxo.txid}: ${JSON.stringify(
+              //     isValid,
+              //     null,
+              //     2
+              //   )}`
+              // )
+
+              isValid = isValid[0].valid
+
+              // Save the result to the local cache.
+              cachedTxValidation[utxo.txid] = isValid
+            }
+          }
+
+          // If still null, as a last resort, check it against slp-validate
+          if (isValid === null) {
+            isValid = await this.validateTxid2(utxo.txid)
+            // console.log(
+            //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
+            // )
+
+            isValid = isValid.isValid
+
+            // Save the result to the local cache.
+            cachedTxValidation[utxo.txid] = isValid
+          }
+
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+          outAry[i].isValid = isValid
         }
       }
 
@@ -1452,7 +1536,7 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
-      const response = await axios.post(
+      const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
         {
           utxos: utxos

@@ -1,10 +1,19 @@
-const fixtures = require("./fixtures/script.json")
+// Public npm libraries
 const assert = require("assert")
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
 const Buffer = require("safe-buffer").Buffer
 
+// Mocks
+const fixtures = require("./fixtures/script.json")
+
+// Unit under test (uut)
+const BCHJS = require("../../src/bch-js")
+let bchjs
+
 describe("#Script", () => {
+  beforeEach(() => {
+    bchjs = new BCHJS()
+  })
+
   describe("#decode", () => {
     describe("P2PKH scriptSig", () => {
       fixtures.decodeScriptSig.forEach(fixture => {
@@ -321,25 +330,27 @@ describe("#Script", () => {
     })
 
     describe("#pubKeyHashOutputTemplate", () => {
-      fixtures.pubKeyHashOutputTemplate.forEach(fixture => {
-        const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-        const identifier = bchjs.HDNode.toIdentifier(node)
-        it(`should encode pubKeyHash output`, () => {
-          const buf = bchjs.Script.pubKeyHash.output.encode(identifier)
-          assert.equal(buf.toString("hex"), fixture.hex)
-        })
+      it("should exercise pubKeyHashOutputTemplate", () => {
+        fixtures.pubKeyHashOutputTemplate.forEach(fixture => {
+          const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
+          const identifier = bchjs.HDNode.toIdentifier(node)
+          it(`should encode pubKeyHash output`, () => {
+            const buf = bchjs.Script.pubKeyHash.output.encode(identifier)
+            assert.equal(buf.toString("hex"), fixture.hex)
+          })
 
-        it(`should decode pubKeyHash output`, () => {
-          const buf = bchjs.Script.pubKeyHash.output.decode(
-            Buffer.from(`${fixture.hex}`, "hex")
-          )
-          assert.equal(buf.toString("hex"), identifier.toString("hex"))
-        })
+          it(`should decode pubKeyHash output`, () => {
+            const buf = bchjs.Script.pubKeyHash.output.decode(
+              Buffer.from(`${fixture.hex}`, "hex")
+            )
+            assert.equal(buf.toString("hex"), identifier.toString("hex"))
+          })
 
-        it(`should confirm correctly formatted pubKeyHash output`, () => {
-          const buf = bchjs.Script.pubKeyHash.output.encode(identifier)
-          const valid = bchjs.Script.pubKeyHash.output.check(buf)
-          assert.equal(valid, true)
+          it(`should confirm correctly formatted pubKeyHash output`, () => {
+            const buf = bchjs.Script.pubKeyHash.output.encode(identifier)
+            const valid = bchjs.Script.pubKeyHash.output.check(buf)
+            assert.equal(valid, true)
+          })
         })
       })
     })

@@ -1,10 +1,18 @@
+// Public npm libraries
 const assert = require("assert")
 const axios = require("axios")
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
 const sinon = require("sinon")
 
+// Unit under test (uut)
+const BCHJS = require("../../src/bch-js")
+// const bchjs = new BCHJS()
+let bchjs
+
 describe("#Generating", () => {
+  beforeEach(() => {
+    bchjs = new BCHJS()
+  })
+
   describe("#generateToAddress", () => {
     let sandbox
     beforeEach(() => (sandbox = sinon.createSandbox()))

@@ -1,13 +1,20 @@
+// Public npm libraries.
 const assert = require("assert")
-
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
-
 const Buffer = require("safe-buffer").Buffer
 
+// Mocks
 const fixtures = require("./fixtures/ecpair.json")
 
+// Unit under test (uut)
+const BCHJS = require("../../src/bch-js")
+// const bchjs = new BCHJS()
+let bchjs
+
 describe("#ECPair", () => {
+  beforeEach(() => {
+    bchjs = new BCHJS()
+  })
+
   describe("#fromWIF", () => {
     fixtures.fromWIF.forEach(fixture => {
       it(`should create ECPair from WIF ${fixture.privateKeyWIF}`, () => {

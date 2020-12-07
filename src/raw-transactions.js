@@ -24,6 +24,9 @@ class RawTransactions {
       }
     }
 
+    // Encapsulate dependencies
+    this.axios = axios
+
     _this = this
   }
 
@@ -322,7 +325,7 @@ class RawTransactions {
     try {
       // Single tx hex.
       if (typeof hex === "string") {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
           _this.axiosOptions
         )
@@ -347,7 +350,7 @@ class RawTransactions {
           },
           headers: _this.axiosOptions.headers
         }
-        const response = await axios(options)
+        const response = await _this.axios(options)
 
         return response.data
       }

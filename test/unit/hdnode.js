@@ -1,11 +1,20 @@
-const fixtures = require("./fixtures/hdnode.json")
-const slpFixtures = require("./fixtures/slp/address.json")
+// Public npm libraries
 const assert = require("assert")
-const BCHJS = require("../../src/bch-js")
-const bchjs = new BCHJS()
 const Buffer = require("safe-buffer").Buffer
 
+// Mocks
+const fixtures = require("./fixtures/hdnode.json")
+const slpFixtures = require("./fixtures/slp/address.json")
+
+// Unit under test (uut)
+const BCHJS = require("../../src/bch-js")
+let bchjs
+
 describe("#HDNode", () => {
+  beforeEach(() => {
+    bchjs = new BCHJS()
+  })
+
   describe("#fromSeed", () => {
     fixtures.fromSeed.forEach(mnemonic => {
       it(`should create an HDNode from root seed buffer`, async () => {
@@ -178,71 +187,75 @@ describe("#HDNode", () => {
   })
 
   describe("#fromXPriv", () => {
-    fixtures.fromXPriv.forEach(fixture => {
-      const hdNode = bchjs.HDNode.fromXPriv(fixture.xpriv)
-      it(`should create HDNode from xpriv ${fixture.xpriv}`, () => {
-        assert.notEqual(hdNode, null)
-      })
+    it("should exercise fromXPriv", () => {
+      fixtures.fromXPriv.forEach(fixture => {
+        const hdNode = bchjs.HDNode.fromXPriv(fixture.xpriv)
+        it(`should create HDNode from xpriv ${fixture.xpriv}`, () => {
+          assert.notEqual(hdNode, null)
+        })
 
-      it(`should export xpriv ${fixture.xpriv}`, () => {
-        assert.equal(bchjs.HDNode.toXPriv(hdNode), fixture.xpriv)
-      })
+        it(`should export xpriv ${fixture.xpriv}`, () => {
+          assert.equal(bchjs.HDNode.toXPriv(hdNode), fixture.xpriv)
+        })
 
-      it(`should export xpub ${fixture.xpub}`, () => {
-        assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
-      })
+        it(`should export xpub ${fixture.xpub}`, () => {
+          assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
+        })
 
-      it(`should export legacy address ${fixture.legacy}`, () => {
-        assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
-      })
+        it(`should export legacy address ${fixture.legacy}`, () => {
+          assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
+        })
 
-      it(`should export cashaddress ${fixture.cashaddress}`, () => {
-        assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
-      })
+        it(`should export cashaddress ${fixture.cashaddress}`, () => {
+          assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
+        })
 
-      it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
-        assert.equal(
-          bchjs.HDNode.toCashAddress(hdNode, true),
-          fixture.regtestaddress
-        )
-      })
+        it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
+          assert.equal(
+            bchjs.HDNode.toCashAddress(hdNode, true),
+            fixture.regtestaddress
+          )
+        })
 
-      it(`should export privateKeyWIF ${fixture.privateKeyWIF}`, () => {
-        assert.equal(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
+        it(`should export privateKeyWIF ${fixture.privateKeyWIF}`, () => {
+          assert.equal(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
+        })
       })
     })
   })
 
   describe("#fromXPub", () => {
-    fixtures.fromXPub.forEach(fixture => {
-      const hdNode = bchjs.HDNode.fromXPub(fixture.xpub)
-      it(`should create HDNode from xpub ${fixture.xpub}`, () => {
-        assert.notEqual(hdNode, null)
-      })
+    it("should exercise fromXPub", () => {
+      fixtures.fromXPub.forEach(fixture => {
+        const hdNode = bchjs.HDNode.fromXPub(fixture.xpub)
+        it(`should create HDNode from xpub ${fixture.xpub}`, () => {
+          assert.notEqual(hdNode, null)
+        })
 
-      it(`should export xpub ${fixture.xpub}`, () => {
-        assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
-      })
+        it(`should export xpub ${fixture.xpub}`, () => {
+          assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
+        })
 
-      it(`should export legacy address ${fixture.legacy}`, () => {
-        assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
-      })
+        it(`should export legacy address ${fixture.legacy}`, () => {
+          assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
+        })
 
-      it(`should export cashaddress ${fixture.cashaddress}`, () => {
-        assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
-      })
+        it(`should export cashaddress ${fixture.cashaddress}`, () => {
+          assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
+        })
 
-      it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
-        assert.equal(
-          bchjs.HDNode.toCashAddress(hdNode, true),
-          fixture.regtestaddress
-        )
+        it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
+          assert.equal(
+            bchjs.HDNode.toCashAddress(hdNode, true),
+            fixture.regtestaddress
+          )
+        })
       })
     })
   })
 
   describe("#bip32", () => {
-    describe("create accounts and addresses", () => {
+    it("should create accounts and addresses", () => {
       fixtures.accounts.forEach(async fixture => {
         const seedBuffer = await bchjs.Mnemonic.toSeed(fixture.mnemonic)
         console.log(`seedBuffer: ${seedBuffer.toString()}`)
