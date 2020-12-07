@@ -83,7 +83,7 @@ describe("#SLP Utils", () => {
       assert.property(list[1], "symbol")
     })
   })
-  /*
+
   describe("#balancesForAddress", () => {
     it(`should throw an error if input is not a string or array of strings`, async () => {
       try {
@@ -91,10 +91,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.balancesForAddress(address)
 
-        assert2.equal(true, false, "Uh oh. Code path should not end here.")
+        assert.equal(true, false, "Uh oh. Code path should not end here.")
       } catch (err) {
         //console.log(`Error: `, err)
-        assert2.include(
+        assert.include(
           err.message,
           `Input address must be a string or array of strings`
         )
@@ -117,8 +117,8 @@ describe("#SLP Utils", () => {
       )
       // console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
 
-      assert2.isArray(balances)
-      assert2.hasAllKeys(balances[0], [
+      assert.isArray(balances)
+      assert.hasAllKeys(balances[0], [
         "tokenId",
         "balanceString",
         "balance",
@@ -143,9 +143,9 @@ describe("#SLP Utils", () => {
       const balances = await uut.Utils.balancesForAddress(addresses)
       //console.log(`balances: ${JSON.stringify(balances, null, 2)}`)
 
-      assert2.isArray(balances)
-      assert2.isArray(balances[0])
-      assert2.hasAllKeys(balances[0][0], [
+      assert.isArray(balances)
+      assert.isArray(balances[0])
+      assert.hasAllKeys(balances[0][0], [
         "tokenId",
         "balanceString",
         "balance",
@@ -158,11 +158,9 @@ describe("#SLP Utils", () => {
   describe("#validateTxid", () => {
     it(`should validate slp txid`, async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        nock(SERVER)
-          .post(uri => uri.includes("/"))
-          .reply(200, mockData.mockIsValidTxid)
-      }
+      sandbox
+        .stub(uut.Utils.axios, "post")
+        .resolves({ data: mockData.mockIsValidTxid })
 
       const isValid = await uut.Utils.validateTxid(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
@@ -180,32 +178,30 @@ describe("#SLP Utils", () => {
   describe("#balancesForToken", () => {
     it(`should retrieve token balances for a given tokenId`, async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        nock(SERVER)
-          .get(uri => uri.includes("/"))
-          .reply(200, mockData.mockBalancesForToken)
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.mockBalancesForToken })
 
       const balances = await uut.Utils.balancesForToken(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
       )
-      assert2.hasAnyKeys(balances[0], ["tokenBalance", "slpAddress"])
+
+      assert.hasAnyKeys(balances[0], ["tokenBalance", "slpAddress"])
     })
   })
 
   describe("#tokenStats", () => {
     it(`should retrieve stats for a given tokenId`, async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        nock(SERVER)
-          .get(uri => uri.includes("/"))
-          .reply(200, mockData.mockTokenStats)
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.mockTokenStats })
 
       const tokenStats = await uut.Utils.tokenStats(
         "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
       )
-      assert2.hasAnyKeys(tokenStats, [
+
+      assert.hasAnyKeys(tokenStats, [
         "circulatingSupply",
         "decimals",
         "documentUri",
@@ -225,35 +221,32 @@ describe("#SLP Utils", () => {
   describe("#transactions", () => {
     it(`should retrieve transactions for a given tokenId and address`, async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        nock(SERVER)
-          .get(uri => uri.includes("/"))
-          .reply(200, mockData.mockTransactions)
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.mockTransactions })
 
       const transactions = await uut.Utils.transactions(
         "495322b37d6b2eae81f045eda612b95870a0c2b6069c58f70cf8ef4e6a9fd43a",
         "simpleledger:qrhvcy5xlegs858fjqf8ssl6a4f7wpstaqnt0wauwu"
       )
-      assert2.hasAnyKeys(transactions[0], ["txid", "tokenDetails"])
+
+      assert.hasAnyKeys(transactions[0], ["txid", "tokenDetails"])
     })
   })
 
   describe("#burnTotal", () => {
     it(`should retrieve input, output and burn totals`, async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        nock(SERVER)
-          .get(uri => uri.includes("/"))
-          .reply(200, mockData.mockBurnTotal)
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.mockBurnTotal })
 
       const burnTotal = await uut.Utils.burnTotal(
         "c7078a6c7400518a513a0bde1f4158cf740d08d3b5bfb19aa7b6657e2f4160de"
       )
       //console.log(`burnTotal: ${JSON.stringify(burnTotal, null, 2)}`)
 
-      assert2.hasAnyKeys(burnTotal, [
+      assert.hasAnyKeys(burnTotal, [
         "transactionId",
         "inputTotal",
         "outputTotal",
@@ -269,62 +262,56 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.decodeOpReturn(txid)
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
         //console.log(`err: ${util.inspect(err)}`)
-        assert2.include(err.message, `txid string must be included`)
+        assert.include(err.message, `txid string must be included`)
       }
     })
 
     it("should throw an error for non-SLP transaction", async () => {
       try {
         // Mock the call to the REST API
-        if (process.env.TEST === "unit") {
-          sandbox
-            .stub(uut.Utils.axios, "get")
-            .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
-        }
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
 
         const txid =
           "3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec"
 
         await uut.Utils.decodeOpReturn(txid)
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
         // console.log(`err: ${util.inspect(err)}`)
-        assert2.include(err.message, `scriptpubkey not op_return`)
+        assert.include(err.message, `scriptpubkey not op_return`)
       }
     })
 
     it("should throw an error for non-SLP transaction with OP_RETURN", async () => {
       try {
         // Mock the call to the REST API
-        if (process.env.TEST === "unit") {
-          sandbox
-            .stub(uut.Utils.axios, "get")
-            .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
-        }
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
 
         const txid =
           "2ff74c48a5d657cf45f699601990bffbbe7a2a516d5480674cbf6c6a4497908f"
 
         await uut.Utils.decodeOpReturn(txid)
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
         // console.log(`err: ${util.inspect(err)}`)
-        assert2.include(err.message, `SLP not in first chunk`)
+        assert.include(err.message, `SLP not in first chunk`)
       }
     })
 
     it("should decode a genesis transaction", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(uut.Utils.axios, "get")
-          .resolves({ data: mockData.txDetailsSLPGenesis })
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.txDetailsSLPGenesis })
 
       const txid =
         "bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90"
@@ -332,7 +319,7 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.decodeOpReturn(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.hasAllKeys(result, [
+      assert.hasAllKeys(result, [
         "tokenType",
         "txType",
         "tokenId",
@@ -348,11 +335,9 @@ describe("#SLP Utils", () => {
 
     it("should decode a mint transaction", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(uut.Utils.axios, "get")
-          .resolves({ data: mockData.txDetailsSLPMint })
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.txDetailsSLPMint })
 
       const txid =
         "65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4"
@@ -360,7 +345,7 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.decodeOpReturn(txid)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.hasAllKeys(result, [
+      assert.hasAllKeys(result, [
         "tokenType",
         "txType",
         "tokenId",
@@ -371,11 +356,9 @@ describe("#SLP Utils", () => {
 
     it("should decode a send transaction", async () => {
       // Mock the call to the REST API
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(uut.Utils.axios, "get")
-          .resolves({ data: mockData.txDetailsSLPSend })
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.txDetailsSLPSend })
 
       const txid =
         "4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa"
@@ -383,16 +366,14 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.decodeOpReturn(txid)
       //console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.hasAllKeys(result, ["tokenType", "txType", "tokenId", "amounts"])
+      assert.hasAllKeys(result, ["tokenType", "txType", "tokenId", "amounts"])
     })
 
     it("should properly decode a Genesis transaction with no minting baton", async () => {
       // Mock the call to the REST API.
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(uut.Utils.axios, "get")
-          .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
-      }
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
 
       const txid =
         "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7"
@@ -400,16 +381,14 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.equal(data.mintBatonVout, 0)
+      assert.equal(data.mintBatonVout, 0)
     })
 
     it("should decode a send transaction with alternate encoding", async () => {
-      // Mock the call to rest.bitcoin.com
-      if (process.env.TEST === "unit") {
-        sandbox
-          .stub(uut.Utils.axios, "get")
-          .resolves({ data: mockData.txDetailsSLPSendAlt })
-      }
+      // Mock the call to the REST API
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.txDetailsSLPSendAlt })
 
       const txid =
         "d94357179775425ebc59c93173bd6dc9854095f090a2eb9dcfe9797398bc8eae"
@@ -417,7 +396,7 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.hasAnyKeys(data, [
+      assert.hasAnyKeys(data, [
         "transactionType",
         "txType",
         "tokenId",
@@ -430,12 +409,10 @@ describe("#SLP Utils", () => {
     // decodeOpReturn2() method using the slp-parser library.
     it("should throw error for invalid SLP transaction", async () => {
       try {
-        // Mock the call to rest.bitcoin.com
-        if (process.env.TEST === "unit") {
-          sandbox
-            .stub(uut.Utils.axios, "get")
-            .resolves({ data: mockData.mockInvalidSlpSend })
-        }
+        // Mock the call to the REST API
+        sandbox
+          .stub(uut.Utils.axios, "get")
+          .resolves({ data: mockData.mockInvalidSlpSend })
 
         const txid =
           "a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415"
@@ -444,7 +421,7 @@ describe("#SLP Utils", () => {
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       } catch (err) {
         // console.log(`err: `, err)
-        assert2.include(err.message, "amount string size not 8 bytes")
+        assert.include(err.message, "amount string size not 8 bytes")
       }
     })
 
@@ -460,20 +437,20 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.decodeOpReturn(txid)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.property(data, "tokenType")
-      assert2.property(data, "txType")
-      assert2.property(data, "ticker")
-      assert2.property(data, "name")
-      assert2.property(data, "tokenId")
-      assert2.property(data, "documentUri")
-      assert2.property(data, "documentHash")
-      assert2.property(data, "decimals")
-      assert2.property(data, "mintBatonVout")
-      assert2.property(data, "qty")
+      assert.property(data, "tokenType")
+      assert.property(data, "txType")
+      assert.property(data, "ticker")
+      assert.property(data, "name")
+      assert.property(data, "tokenId")
+      assert.property(data, "documentUri")
+      assert.property(data, "documentHash")
+      assert.property(data, "decimals")
+      assert.property(data, "mintBatonVout")
+      assert.property(data, "qty")
 
-      assert2.equal(data.tokenType, 129)
-      assert2.equal(data.mintBatonVout, 2)
-      assert2.equal(data.qty, 1)
+      assert.equal(data.tokenType, 129)
+      assert.equal(data.mintBatonVout, 2)
+      assert.equal(data.qty, 1)
     })
 
     // it("should decode a NFT Child transaction", async () => {
@@ -488,20 +465,20 @@ describe("#SLP Utils", () => {
     //   const data = await uut.Utils.decodeOpReturn(txid)
     //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
     //
-    //   // assert2.property(data, "tokenType")
-    //   // assert2.property(data, "txType")
-    //   // assert2.property(data, "ticker")
-    //   // assert2.property(data, "name")
-    //   // assert2.property(data, "tokenId")
-    //   // assert2.property(data, "documentUri")
-    //   // assert2.property(data, "documentHash")
-    //   // assert2.property(data, "decimals")
-    //   // assert2.property(data, "mintBatonVout")
-    //   // assert2.property(data, "qty")
+    //   // assert.property(data, "tokenType")
+    //   // assert.property(data, "txType")
+    //   // assert.property(data, "ticker")
+    //   // assert.property(data, "name")
+    //   // assert.property(data, "tokenId")
+    //   // assert.property(data, "documentUri")
+    //   // assert.property(data, "documentHash")
+    //   // assert.property(data, "decimals")
+    //   // assert.property(data, "mintBatonVout")
+    //   // assert.property(data, "qty")
     //   //
-    //   // assert2.equal(data.tokenType, 129)
-    //   // assert2.equal(data.mintBatonVout, 2)
-    //   // assert2.equal(data.qty, 1)
+    //   // assert.equal(data.tokenType, 129)
+    //   // assert.equal(data.mintBatonVout, 2)
+    //   // assert.equal(data.qty, 1)
     // })
   })
 
@@ -510,9 +487,9 @@ describe("#SLP Utils", () => {
       try {
         await uut.Utils.tokenUtxoDetails("test")
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
-        assert2.include(
+        assert.include(
           err.message,
           `Input must be an array`,
           "Expected error message."
@@ -544,9 +521,9 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.tokenUtxoDetails(utxos)
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
-        assert2.include(
+        assert.include(
           err.message,
           `utxo 1 does not have a satoshis or value property`,
           "Expected error message."
@@ -577,9 +554,9 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.tokenUtxoDetails(utxos)
 
-        assert2.equal(true, false, "Unexpected result.")
+        assert.equal(true, false, "Unexpected result.")
       } catch (err) {
-        assert2.include(
+        assert.include(
           err.message,
           `utxo 1 does not have a txid or tx_hash property`,
           "Expected error message."
@@ -639,31 +616,31 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      // assert2.equal(data[0], false, "Change UTXO marked as false.")
-      assert2.property(data[0], "txid")
-      assert2.property(data[0], "vout")
-      assert2.property(data[0], "amount")
-      assert2.property(data[0], "satoshis")
-      assert2.property(data[0], "height")
-      assert2.property(data[0], "confirmations")
-      assert2.property(data[0], "isValid")
-      assert2.equal(data[0].isValid, false)
+      // assert.equal(data[0], false, "Change UTXO marked as false.")
+      assert.property(data[0], "txid")
+      assert.property(data[0], "vout")
+      assert.property(data[0], "amount")
+      assert.property(data[0], "satoshis")
+      assert.property(data[0], "height")
+      assert.property(data[0], "confirmations")
+      assert.property(data[0], "isValid")
+      assert.equal(data[0].isValid, false)
 
-      assert2.property(data[1], "txid")
-      assert2.property(data[1], "vout")
-      assert2.property(data[1], "amount")
-      assert2.property(data[1], "satoshis")
-      assert2.property(data[1], "height")
-      assert2.property(data[1], "confirmations")
-      assert2.property(data[1], "utxoType")
-      assert2.property(data[1], "tokenId")
-      assert2.property(data[1], "tokenTicker")
-      assert2.property(data[1], "tokenName")
-      assert2.property(data[1], "tokenDocumentUrl")
-      assert2.property(data[1], "tokenDocumentHash")
-      assert2.property(data[1], "decimals")
-      assert2.property(data[1], "isValid")
-      assert2.equal(data[1].isValid, true)
+      assert.property(data[1], "txid")
+      assert.property(data[1], "vout")
+      assert.property(data[1], "amount")
+      assert.property(data[1], "satoshis")
+      assert.property(data[1], "height")
+      assert.property(data[1], "confirmations")
+      assert.property(data[1], "utxoType")
+      assert.property(data[1], "tokenId")
+      assert.property(data[1], "tokenTicker")
+      assert.property(data[1], "tokenName")
+      assert.property(data[1], "tokenDocumentUrl")
+      assert.property(data[1], "tokenDocumentHash")
+      assert.property(data[1], "decimals")
+      assert.property(data[1], "isValid")
+      assert.equal(data[1].isValid, true)
     })
 
     it("should return details for a MINT token utxo", async () => {
@@ -720,23 +697,23 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.property(data[0], "txid")
-      assert2.property(data[0], "vout")
-      assert2.property(data[0], "amount")
-      assert2.property(data[0], "satoshis")
-      assert2.property(data[0], "height")
-      assert2.property(data[0], "confirmations")
-      assert2.property(data[0], "utxoType")
-      assert2.property(data[0], "transactionType")
-      assert2.property(data[0], "tokenId")
-      assert2.property(data[0], "tokenTicker")
-      assert2.property(data[0], "tokenName")
-      assert2.property(data[0], "tokenDocumentUrl")
-      assert2.property(data[0], "tokenDocumentHash")
-      assert2.property(data[0], "decimals")
-      assert2.property(data[0], "mintBatonVout")
-      assert2.property(data[0], "tokenQty")
-      assert2.property(data[0], "isValid")
+      assert.property(data[0], "txid")
+      assert.property(data[0], "vout")
+      assert.property(data[0], "amount")
+      assert.property(data[0], "satoshis")
+      assert.property(data[0], "height")
+      assert.property(data[0], "confirmations")
+      assert.property(data[0], "utxoType")
+      assert.property(data[0], "transactionType")
+      assert.property(data[0], "tokenId")
+      assert.property(data[0], "tokenTicker")
+      assert.property(data[0], "tokenName")
+      assert.property(data[0], "tokenDocumentUrl")
+      assert.property(data[0], "tokenDocumentHash")
+      assert.property(data[0], "decimals")
+      assert.property(data[0], "mintBatonVout")
+      assert.property(data[0], "tokenQty")
+      assert.property(data[0], "isValid")
       assert.equal(data[0].isValid, true)
     })
 
@@ -792,21 +769,21 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.property(data[0], "txid")
-      assert2.property(data[0], "vout")
-      assert2.property(data[0], "amount")
-      assert2.property(data[0], "satoshis")
-      assert2.property(data[0], "height")
-      assert2.property(data[0], "confirmations")
-      assert2.property(data[0], "utxoType")
-      assert2.property(data[0], "tokenId")
-      assert2.property(data[0], "tokenTicker")
-      assert2.property(data[0], "tokenName")
-      assert2.property(data[0], "tokenDocumentUrl")
-      assert2.property(data[0], "tokenDocumentHash")
-      assert2.property(data[0], "decimals")
-      assert2.property(data[0], "tokenQty")
-      assert2.property(data[0], "isValid")
+      assert.property(data[0], "txid")
+      assert.property(data[0], "vout")
+      assert.property(data[0], "amount")
+      assert.property(data[0], "satoshis")
+      assert.property(data[0], "height")
+      assert.property(data[0], "confirmations")
+      assert.property(data[0], "utxoType")
+      assert.property(data[0], "tokenId")
+      assert.property(data[0], "tokenTicker")
+      assert.property(data[0], "tokenName")
+      assert.property(data[0], "tokenDocumentUrl")
+      assert.property(data[0], "tokenDocumentHash")
+      assert.property(data[0], "decimals")
+      assert.property(data[0], "tokenQty")
+      assert.property(data[0], "isValid")
       assert.equal(data[0].isValid, true)
     })
 
@@ -873,17 +850,17 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(result)
-      assert2.equal(result.length, 2)
+      assert.isArray(result)
+      assert.equal(result.length, 2)
 
-      assert2.property(result[0], "txid")
-      assert2.property(result[0], "vout")
-      assert2.property(result[0], "value")
-      assert2.property(result[0], "satoshis")
-      assert2.property(result[0], "height")
-      assert2.property(result[0], "confirmations")
-      assert2.property(result[0], "isValid")
-      assert2.equal(result[0].isValid, false)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "vout")
+      assert.property(result[0], "value")
+      assert.property(result[0], "satoshis")
+      assert.property(result[0], "height")
+      assert.property(result[0], "confirmations")
+      assert.property(result[0], "isValid")
+      assert.equal(result[0].isValid, false)
 
       assert.equal(result[1].isValid, true)
       assert.equal(result[1].utxoType, "token")
@@ -953,19 +930,19 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(result)
-      assert2.equal(result.length, 2)
+      assert.isArray(result)
+      assert.equal(result.length, 2)
 
-      assert2.property(result[0], "txid")
-      assert2.property(result[0], "vout")
-      assert2.property(result[0], "amount")
-      assert2.property(result[0], "satoshis")
-      assert2.property(result[0], "height")
-      assert2.property(result[0], "confirmations")
-      assert2.property(result[0], "isValid")
-      assert2.equal(result[0].isValid, false)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "vout")
+      assert.property(result[0], "amount")
+      assert.property(result[0], "satoshis")
+      assert.property(result[0], "height")
+      assert.property(result[0], "confirmations")
+      assert.property(result[0], "isValid")
+      assert.equal(result[0].isValid, false)
 
-      assert2.equal(result[1].isValid, true)
+      assert.equal(result[1].isValid, true)
       assert.equal(result[1].utxoType, "token")
       assert.equal(result[1].transactionType, "send")
     })
@@ -1001,23 +978,23 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(result)
+      assert.isArray(result)
 
-      assert2.property(result[0], "txid")
-      assert2.property(result[0], "vout")
-      assert2.property(result[0], "amount")
-      assert2.property(result[0], "satoshis")
-      assert2.property(result[0], "confirmations")
-      assert2.property(result[0], "isValid")
-      assert2.equal(result[0].isValid, false)
+      assert.property(result[0], "txid")
+      assert.property(result[0], "vout")
+      assert.property(result[0], "amount")
+      assert.property(result[0], "satoshis")
+      assert.property(result[0], "confirmations")
+      assert.property(result[0], "isValid")
+      assert.equal(result[0].isValid, false)
 
-      assert2.property(result[1], "txid")
-      assert2.property(result[1], "vout")
-      assert2.property(result[1], "amount")
-      assert2.property(result[1], "satoshis")
-      assert2.property(result[1], "confirmations")
-      assert2.property(result[1], "isValid")
-      assert2.equal(result[1].isValid, false)
+      assert.property(result[1], "txid")
+      assert.property(result[1], "vout")
+      assert.property(result[1], "amount")
+      assert.property(result[1], "satoshis")
+      assert.property(result[1], "confirmations")
+      assert.property(result[1], "isValid")
+      assert.equal(result[1].isValid, false)
     })
 
     it("should decode a Genesis transaction", async () => {
@@ -1078,18 +1055,18 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].utxoType, "token")
-      assert2.equal(data[0].tokenQty, 100)
-      assert2.equal(data[0].isValid, true)
-      assert2.equal(data[0].tokenType, 1)
+      assert.equal(data[0].utxoType, "token")
+      assert.equal(data[0].tokenQty, 100)
+      assert.equal(data[0].isValid, true)
+      assert.equal(data[0].tokenType, 1)
 
-      assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(data[1].isValid, true)
-      assert2.equal(data[1].tokenType, 1)
+      assert.equal(data[1].utxoType, "minting-baton")
+      assert.equal(data[1].isValid, true)
+      assert.equal(data[1].tokenType, 1)
 
-      assert2.equal(data[2].isValid, false)
+      assert.equal(data[2].isValid, false)
     })
 
     it("should decode a Mint transaction", async () => {
@@ -1176,18 +1153,18 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].utxoType, "token")
-      assert2.equal(data[0].tokenQty, 100)
-      assert2.equal(data[0].isValid, true)
-      assert2.equal(data[0].tokenType, 1)
+      assert.equal(data[0].utxoType, "token")
+      assert.equal(data[0].tokenQty, 100)
+      assert.equal(data[0].isValid, true)
+      assert.equal(data[0].tokenType, 1)
 
-      assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(data[1].isValid, true)
-      assert2.equal(data[1].tokenType, 1)
+      assert.equal(data[1].utxoType, "minting-baton")
+      assert.equal(data[1].isValid, true)
+      assert.equal(data[1].tokenType, 1)
 
-      assert2.equal(data[2].isValid, false)
+      assert.equal(data[2].isValid, false)
     })
 
     it("should decode a NFT Group Genesis transaction", async () => {
@@ -1270,17 +1247,17 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].isValid, false)
+      assert.equal(data[0].isValid, false)
 
-      assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(data[1].isValid, true)
-      assert2.equal(data[1].tokenType, 129)
+      assert.equal(data[1].utxoType, "minting-baton")
+      assert.equal(data[1].isValid, true)
+      assert.equal(data[1].tokenType, 129)
 
-      assert2.equal(data[2].utxoType, "token")
-      assert2.equal(data[2].tokenType, 129)
-      assert2.equal(data[1].isValid, true)
+      assert.equal(data[2].utxoType, "token")
+      assert.equal(data[2].tokenType, 129)
+      assert.equal(data[1].isValid, true)
     })
 
     it("should decode a NFT Group Mint transaction", async () => {
@@ -1372,17 +1349,17 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].isValid, false)
+      assert.equal(data[0].isValid, false)
 
-      assert2.equal(data[1].utxoType, "minting-baton")
-      assert2.equal(data[1].tokenType, 129)
-      assert2.equal(data[1].isValid, true)
+      assert.equal(data[1].utxoType, "minting-baton")
+      assert.equal(data[1].tokenType, 129)
+      assert.equal(data[1].isValid, true)
 
-      assert2.equal(data[2].utxoType, "token")
-      assert2.equal(data[2].tokenType, 129)
-      assert2.equal(data[2].isValid, true)
+      assert.equal(data[2].utxoType, "token")
+      assert.equal(data[2].tokenType, 129)
+      assert.equal(data[2].isValid, true)
     })
 
     it("should decode a NFT Child Genesis transaction", async () => {
@@ -1442,13 +1419,13 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].utxoType, "token")
-      assert2.equal(data[0].tokenType, 65)
-      assert2.equal(data[0].isValid, true)
+      assert.equal(data[0].utxoType, "token")
+      assert.equal(data[0].tokenType, 65)
+      assert.equal(data[0].isValid, true)
 
-      assert2.equal(data[1].isValid, false)
+      assert.equal(data[1].isValid, false)
     })
 
     it("should decode an NFT Child Send transaction", async () => {
@@ -1518,14 +1495,14 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].utxoType, "token")
-      assert2.equal(data[0].transactionType, "send")
-      assert2.equal(data[0].tokenType, 65)
-      assert2.equal(data[0].isValid, true)
+      assert.equal(data[0].utxoType, "token")
+      assert.equal(data[0].transactionType, "send")
+      assert.equal(data[0].tokenType, 65)
+      assert.equal(data[0].isValid, true)
 
-      assert2.equal(data[1].isValid, false)
+      assert.equal(data[1].isValid, false)
     })
 
     it("should decode an NFT Group Send transaction", async () => {
@@ -1611,19 +1588,19 @@ describe("#SLP Utils", () => {
       const data = await uut.Utils.tokenUtxoDetails(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      assert2.isArray(data)
+      assert.isArray(data)
 
-      assert2.equal(data[0].utxoType, "token")
-      assert2.equal(data[0].transactionType, "send")
-      assert2.equal(data[0].tokenType, 129)
-      assert2.equal(data[0].isValid, true)
+      assert.equal(data[0].utxoType, "token")
+      assert.equal(data[0].transactionType, "send")
+      assert.equal(data[0].tokenType, 129)
+      assert.equal(data[0].isValid, true)
 
-      assert2.equal(data[1].utxoType, "token")
-      assert2.equal(data[1].transactionType, "send")
-      assert2.equal(data[1].tokenType, 129)
-      assert2.equal(data[1].isValid, true)
+      assert.equal(data[1].utxoType, "token")
+      assert.equal(data[1].transactionType, "send")
+      assert.equal(data[1].tokenType, 129)
+      assert.equal(data[1].isValid, true)
 
-      assert2.equal(data[2].isValid, false)
+      assert.equal(data[2].isValid, false)
     })
 
     it("should return null value when 429 recieved", async () => {
@@ -1704,7 +1681,7 @@ describe("#SLP Utils", () => {
       try {
         await uut.Utils.txDetails()
       } catch (err) {
-        assert2.include(
+        assert.include(
           err.message,
           `txid string must be included`,
           "Expected error message."
@@ -1730,7 +1707,7 @@ describe("#SLP Utils", () => {
         assert.fail("Unexpected result")
       } catch (err) {
         // console.log(`err: `, err)
-        assert2.include(err.error, `TXID not found`, "Expected error message.")
+        assert.include(err.error, `TXID not found`, "Expected error message.")
       }
     })
 
@@ -1747,7 +1724,7 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.txDetails(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.hasAnyKeys(result, [
+      assert.hasAnyKeys(result, [
         "txid",
         "version",
         "locktime",
@@ -1775,10 +1752,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.hydrateUtxos(utxos)
 
-        assert2.equal(true, false, "Uh oh. Code path should not end here.")
+        assert.equal(true, false, "Uh oh. Code path should not end here.")
       } catch (err) {
         // console.log(`Error: `, err)
-        assert2.include(err.message, `Input must be an array.`)
+        assert.include(err.message, `Input must be an array.`)
       }
     })
   })
@@ -1792,10 +1769,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.validateTxid2(txid)
 
-        assert2.equal(true, false, "Unexpected result")
+        assert.equal(true, false, "Unexpected result")
       } catch (err) {
         // console.log("err: ", err)
-        assert2.include(err.message, "txid must be 64 character string")
+        assert.include(err.message, "txid must be 64 character string")
       }
     })
 
@@ -1806,10 +1783,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.validateTxid2(txid)
 
-        assert2.equal(true, false, "Unexpected result")
+        assert.equal(true, false, "Unexpected result")
       } catch (err) {
         // console.log("err: ", err)
-        assert2.include(err.message, "txid must be 64 character string")
+        assert.include(err.message, "txid must be 64 character string")
       }
     })
 
@@ -1829,11 +1806,11 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.validateTxid2(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.property(result, "txid")
-      assert2.equal(result.txid, txid)
+      assert.property(result, "txid")
+      assert.equal(result.txid, txid)
 
-      assert2.property(result, "isValid")
-      assert2.equal(result.isValid, false)
+      assert.property(result, "isValid")
+      assert.equal(result.isValid, false)
     })
 
     it("should validate a known valid TXID", async () => {
@@ -1852,11 +1829,11 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.validateTxid2(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.property(result, "txid")
-      assert2.equal(result.txid, txid)
+      assert.property(result, "txid")
+      assert.equal(result.txid, txid)
 
-      assert2.property(result, "isValid")
-      assert2.equal(result.isValid, true)
+      assert.property(result, "isValid")
+      assert.equal(result.isValid, true)
     })
 
     // slp-validate can take a long time. bch-api cuts it off if it fails to
@@ -1874,10 +1851,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.validateTxid2(txid)
 
-        assert2.equal(true, false, "Unexpected result")
+        assert.equal(true, false, "Unexpected result")
       } catch (err) {
         // console.log("err: ", err)
-        assert2.include(err.message, "slp-validate timed out")
+        assert.include(err.message, "slp-validate timed out")
       }
     })
   })
@@ -1895,13 +1872,13 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.validateTxid(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(result)
+      assert.isArray(result)
 
-      assert2.property(result[0], "txid")
-      assert2.equal(result[0].txid, txid)
+      assert.property(result[0], "txid")
+      assert.equal(result[0].txid, txid)
 
-      assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, null)
+      assert.property(result[0], "valid")
+      assert.equal(result[0].valid, null)
     })
     /*
     it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
@@ -1920,7 +1897,6 @@ describe("#SLP Utils", () => {
       console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
 */
-  /*
   })
 
   describe("#getWhitelist", () => {
@@ -1931,9 +1907,9 @@ describe("#SLP Utils", () => {
 
       const result = await uut.Utils.getWhitelist()
 
-      assert2.isArray(result)
-      assert2.property(result[0], "name")
-      assert2.property(result[1], "tokenId")
+      assert.isArray(result)
+      assert.property(result[0], "name")
+      assert.property(result[1], "tokenId")
     })
 
     it("catches and throws an error", async () => {
@@ -1945,10 +1921,10 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.getWhitelist()
 
-        assert2.fail("Unexpected result")
+        assert.fail("Unexpected result")
       } catch (err) {
         console.log("err: ", err)
-        assert2.include(err.error, "Network error")
+        assert.include(err.error, "Network error")
       }
     })
   })
@@ -1966,13 +1942,13 @@ describe("#SLP Utils", () => {
       const result = await uut.Utils.validateTxid3(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert2.isArray(result)
+      assert.isArray(result)
 
-      assert2.property(result[0], "txid")
-      assert2.equal(result[0].txid, txid)
+      assert.property(result[0], "txid")
+      assert.equal(result[0].txid, txid)
 
-      assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, null)
+      assert.property(result[0], "valid")
+      assert.equal(result[0].valid, null)
     })
 
     it("should handle an array with a single element", async () => {
@@ -1986,13 +1962,13 @@ describe("#SLP Utils", () => {
 
       const result = await uut.Utils.validateTxid3(txid)
 
-      assert2.isArray(result)
+      assert.isArray(result)
 
-      assert2.property(result[0], "txid")
-      assert2.equal(result[0].txid, txid)
+      assert.property(result[0], "txid")
+      assert.equal(result[0].txid, txid)
 
-      assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, true)
+      assert.property(result[0], "valid")
+      assert.equal(result[0].valid, true)
     })
 
     it("should handle an single string input", async () => {
@@ -2005,13 +1981,13 @@ describe("#SLP Utils", () => {
 
       const result = await uut.Utils.validateTxid3(txid)
 
-      assert2.isArray(result)
+      assert.isArray(result)
 
-      assert2.property(result[0], "txid")
-      assert2.equal(result[0].txid, txid)
+      assert.property(result[0], "txid")
+      assert.equal(result[0].txid, txid)
 
-      assert2.property(result[0], "valid")
-      assert2.equal(result[0].valid, true)
+      assert.property(result[0], "valid")
+      assert.equal(result[0].valid, true)
     })
 
     it("catches and throws an error", async () => {
@@ -2023,12 +1999,11 @@ describe("#SLP Utils", () => {
 
         await uut.Utils.validateTxid3()
 
-        assert2.equal(true, false, "Unexpected result")
+        assert.equal(true, false, "Unexpected result")
       } catch (err) {
         // console.log("err: ", err)
-        assert2.include(err.error, "Network error")
+        assert.include(err.error, "Network error")
       }
     })
   })
-  */
 })

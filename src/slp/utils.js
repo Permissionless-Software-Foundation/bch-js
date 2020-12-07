@@ -373,9 +373,9 @@ class Utils {
    */
   // Retrieve token balances for a given tokenId.
   async balancesForToken(tokenId) {
-    const path = `${this.restURL}slp/balancesForToken/${tokenId}`
-
     try {
+      const path = `${this.restURL}slp/balancesForToken/${tokenId}`
+
       const response = await _this.axios.get(path, _this.axiosOptions)
       return response.data
     } catch (error) {
@@ -703,10 +703,11 @@ class Utils {
    * }
    */
   async tokenStats(tokenId) {
-    const path = `${this.restURL}slp/tokenStats/${tokenId}`
-
     try {
+      const path = `${this.restURL}slp/tokenStats/${tokenId}`
+
       const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -773,10 +774,11 @@ class Utils {
    */
   // Retrieve token transactions for a given tokenId and address.
   async transactions(tokenId, address) {
-    const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
-
     try {
+      const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
+
       const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -812,10 +814,11 @@ class Utils {
    * }
    */
   async burnTotal(transactionId) {
-    const path = `${this.restURL}slp/burnTotal/${transactionId}`
-
     try {
+      const path = `${this.restURL}slp/burnTotal/${transactionId}`
+
       const response = await _this.axios.get(path, _this.axiosOptions)
+
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
