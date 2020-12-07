@@ -1673,7 +1673,43 @@ describe("#SLP Utils", () => {
       assert.equal(data[0].isValid, false)
     })
 
+    it("should invalidate a malformed SLP OP_RETURN", async () => {
+      sandbox
+        .stub(uut.Utils, "decodeOpReturn")
+        .rejects(new Error("trailing data"))
+
+      const utxos = [
+        // Malformed SLP tx
+        {
+          note: "Malformed SLP tx",
+          tx_hash:
+            "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+          tx_pos: 1,
+          value: 546
+        }
+      ]
+
+      const data = await uut.Utils.tokenUtxoDetails(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert.equal(data[0].isValid, false)
+    })
+
+    // it("should validate against the whitelist SLPDB when regular SLPDB returns null", async () => {
+    //   const utxos = [
+    //     // Malformed SLP tx
+    //     {
+    //       note: "Malformed SLP tx",
+    //       tx_hash:
+    //         "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+    //       tx_pos: 1,
+    //       value: 546
+    //     }
+    //   ]
     //
+    //   const data = await uut.Utils.tokenUtxoDetails(utxos)
+    //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
+    // })
   })
 
   describe("#txDetails", () => {

@@ -1111,9 +1111,9 @@ class Utils {
         let slpData = false
         try {
           slpData = await this.decodeOpReturn(utxo.txid, decodeOpReturnCache)
-          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+          console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
 
           // An error will be thrown if the txid is not SLP.
           // If error is for some other reason, like a 429 error, mark utxo as 'null'
@@ -1121,9 +1121,13 @@ class Utils {
           if (
             !err.message ||
             (err.message.indexOf("scriptpubkey not op_return") === -1 &&
-              err.message.indexOf("lokad id") === -1)
+              err.message.indexOf("lokad id") === -1 &&
+              err.message.indexOf("trailing data") === -1)
           ) {
-            // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+            console.log(
+              `unknown error from decodeOpReturn(). Marking as 'null'`,
+              err
+            )
 
             utxo.isValid = null
             outAry.push(utxo)
@@ -1132,8 +1136,10 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
+            console.log("marking as invalid")
             utxo.isValid = false
             outAry.push(utxo)
+            console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
           }
 
           // Halt the execution of the loop and increase to the next index.
@@ -1335,6 +1341,8 @@ class Utils {
           outAry[i].isValid = isValid
         }
       }
+
+      console.log(`pt2 outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       return outAry
     } catch (error) {
