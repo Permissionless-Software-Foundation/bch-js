@@ -553,11 +553,11 @@ describe(`#SLP`, () => {
         ]
 
         const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
-        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
         // Malformed SLP tx
         assert.equal(data[0].tx_hash, utxos[0].tx_hash)
-        assert.equal(data[0].isValid, null)
+        assert.equal(data[0].isValid, false)
 
         // Normal TX (non-SLP)
         assert.equal(data[1].tx_hash, utxos[1].tx_hash)
