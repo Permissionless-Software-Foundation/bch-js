@@ -158,6 +158,30 @@ const details = {
 
 const detailsPost = [details, details]
 
+const addrDetail = 
+  {
+    "balance": 0.00001,
+    "balanceSat": 1000,
+    "totalReceived": 0.00001,
+    "totalReceivedSat": 1000,
+    "totalSent": 0,
+    "totalSentSat": 0,
+    "unconfirmedBalance": 0,
+    "unconfirmedBalanceSat": 0,
+    "unconfirmedTxApperances": 0,
+    "txApperances": 1,
+    "transactions": [
+      "5f09d317e24c5d376f737a2711f3bd1d381abdb41743fff3819b4f76382e1eac"
+    ],
+    "legacyAddress": "1FZrK8HohEKyKCTM24NkAzPnX9WD9Ujhw7",
+    "cashAddress": "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr",
+    "slpAddress": "simpleledger:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ylynt40sa",
+    "currentPage": 0,
+    "pagesTotal": 1
+  }
+
+const addrDetailArray = [addrDetail, addrDetail]
+
 module.exports = {
   utxo,
   utxoPost,
@@ -166,5 +190,7 @@ module.exports = {
   transactions,
   transactionsPost,
   details,
-  detailsPost
+  detailsPost,
+  addrDetail,
+  addrDetailArray
 }

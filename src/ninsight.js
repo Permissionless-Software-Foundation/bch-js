@@ -68,34 +68,10 @@ class Ninsight {
    */
   async utxo(address) {
     try {
-      // Handle single address.
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-        return response.data
-
-        // Handle array of addresses.
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/utxo`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'utxo')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
@@ -137,32 +113,10 @@ class Ninsight {
    */
   async unconfirmed(address) {
     try {
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/unconfirmed`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/unconfirmed`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'unconfirmed')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
@@ -213,32 +167,10 @@ class Ninsight {
    */
   async transactions(address) {
     try {
-      if (typeof address === "string") {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/transactions`,
-          {
-            addresses: [address]
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      } else if (Array.isArray(address)) {
-        const response = await axios.post(
-          `${this.ninsightURL}/address/transactions`,
-          {
-            addresses: address
-          },
-          _this.axiosOptions
-        )
-
-        return response.data
-      }
-
-      throw new Error(`Input address must be a string or array of strings.`)
-    } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      _this._validateParam(address)
+      return _this._callAxios(address, 'transactions')
+    } catch (e) {
+      _this._handleError(e)
     }
   }
 
@@ -288,7 +220,7 @@ class Ninsight {
     try {
       if (typeof txid === "string") {
         const response = await axios.post(
-          `${this.ninsightURL}/transaction/details`,
+          `${_this.ninsightURL}/transaction/details`,
           {
             txids: [txid]
           },
@@ -298,7 +230,7 @@ class Ninsight {
         return response.data
       } else if (Array.isArray(txid)) {
         const response = await axios.post(
-          `${this.ninsightURL}/transaction/details`,
+          `${_this.ninsightURL}/transaction/details`,
           {
             txids: txid
           },
@@ -313,6 +245,76 @@ class Ninsight {
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
+  }
+  /**
+   * @api Ninsight.details()  details()
+   * @apiName Ninsight Details
+   * @apiGroup Ninsight
+   * @apiDescription Return details of address.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let details = await bchjs.Ninsight.details('bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c');
+   *     let details = await bchjs.Ninsight.details(['bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c','bitcoincash:qzs02v05l7qs5s24srqju498qu55dwuj0cx5ehjm2c']);
+   *     console.log(details);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   *  // [
+   *  //   {
+    *  //"balance": 0.00001,
+    *  //"balanceSat": 1000,
+    *  //"totalReceived": 0.00001,
+    *  //"totalReceivedSat": 1000,
+    *  //"totalSent": 0,
+    *  //"totalSentSat": 0,
+    *  //"unconfirmedBalance": 0,
+    *  //"unconfirmedBalanceSat": 0,
+    *  //"unconfirmedTxApperances": 0,
+    *  //"txApperances": 1,
+    *  //"transactions": [
+    *  //"5f09d317e24c5d376f737a2711f3bd1d381abdb41743fff3819b4f76382e1eac"         ],
+    *  //"legacyAddress": "1FZrK8HohEKyKCTM24NkAzPnX9WD9Ujhw7",
+    *  //"cashAddress": "bitcoincash:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ynlcsq0wr",
+    *  //"slpAddress": "simpleledger:qz0us0z6ucpqt07jgpad0shgh7xmwxyr3ylynt40sa",
+    *  //"currentPage": 0,
+    *  //"pagesTotal": 1
+   *  //   }
+   *  // ]
+   *
+   */
+  async details(address) {
+    try {
+      _this._validateParam(address)
+      return _this._callAxios(address, 'details')
+    } catch (e) {
+      _this._handleError(e)
+    }
+  }
+
+  _validateParam(address) {
+    if (typeof address !== "string" && !Array.isArray(address))
+      throw new Error(`Input address must be a string or array of strings.`)
+  }
+
+  _handleError(error) {
+    if (error.response && error.response.data) throw error.response.data
+      else throw error
+  }
+
+  async _callAxios(address, type) {
+    const response = await axios.post(
+    `${_this.ninsightURL}/address/${type}`,
+    {
+      addresses: Array.isArray(address) ? address : [address]
+    },
+     _this.axiosOptions
+    )
+    //console.log(`SAMPLE: ${response.data}`);
+    return response.data
   }
 }
 
