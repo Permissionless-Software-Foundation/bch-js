@@ -2,7 +2,7 @@ const chai = require("chai")
 const assert = chai.assert
 const sinon = require("sinon")
 
-const BCHJS = require("../../../src/bch-js")
+const BCHJS = require("../../../../src/bch-js")
 const bchjs = new BCHJS({ ninsightURL: "https://trest.bitcoin.com/v2" })
 
 describe(`#Ninsight`, () => {
@@ -105,7 +105,8 @@ describe(`#Ninsight`, () => {
   })
   describe(`#txDetails`, () => {
     it(`should POST transactions details for a single address`, async () => {
-      const txid = "76856d82e00b2696acd8d989e1fa6c46b431005046a285ce905814cac0ff8fea"
+      const txid =
+        "76856d82e00b2696acd8d989e1fa6c46b431005046a285ce905814cac0ff8fea"
 
       const result = await bchjs.Ninsight.txDetails(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
