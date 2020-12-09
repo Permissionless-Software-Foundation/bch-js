@@ -12,7 +12,7 @@
     "test:integration": "npm run test:integration:bchn",
     "test:integration:abc": "export RESTURL=https://abc.fullstack.cash/v4/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/abc/",
     "test:integration:bchn": "export RESTURL=https://bchn.fullstack.cash/v4/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
-    "test:integration:testnet": "IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/testnet/",
+    "test:integration:testnet": "IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/chains/testnet/",
     "test:integration:local": "RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 test/integration",
     "test:integration:local:bchn": "RESTURL=http://localhost:3000/v4/ bash test/integration/test-bchn-integration.sh",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v4/ mocha --timeout 30000 test/integration/testnet",
