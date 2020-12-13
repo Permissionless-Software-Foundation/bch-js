@@ -1293,7 +1293,9 @@ class Utils {
 
           // If not in the cache, try the general SLPDB.
           if (isValid == null) {
+            console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
             isValid = await this.validateTxid(utxo.txid)
+            console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
             if (isValid !== null) {
               isValid = isValid[0].valid
