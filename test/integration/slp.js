@@ -464,20 +464,20 @@ describe(`#SLP`, () => {
         assert.equal(data[0].isValid, false)
       })
 
-      // it("should handle null SLPDB validations", async () => {
-      //   const utxos = [
-      //     {
-      //       height: 665577,
-      //       tx_hash:
-      //         "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
-      //       tx_pos: 1,
-      //       value: 546
-      //     }
-      //   ]
-      //
-      //   const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
-      //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
-      // })
+      it("should handle null SLPDB validations", async () => {
+        const utxos = [
+          {
+            height: 665577,
+            tx_hash:
+              "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      })
     })
 
     describe("#balancesForAddress", () => {
@@ -619,19 +619,62 @@ describe(`#SLP`, () => {
         }
       })
 
-      // it("should handle null SLPDB validations", async () => {
-      //   const utxos = [
-      //     {
-      //       height: 665577,
-      //       tx_hash:
-      //         "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
-      //       tx_pos: 1,
-      //       value: 546
-      //     }
-      //   ]
+      it("should handle null SLPDB validations", async () => {
+        const utxos = [
+          {
+            height: 665577,
+            tx_hash:
+              "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.hydrateUtxos([{ utxos: utxos }])
+        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      })
+    })
+
+    describe("#validateTxid", () => {
+      it("should return null on a known invalid TXID", async () => {
+        const txid =
+          "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
+
+        const result = await bchjs.SLP.Utils.validateTxid(txid)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+
+        assert.property(result[0], "txid")
+        assert.equal(result[0].txid, txid)
+
+        assert.property(result[0], "valid")
+        assert.equal(result[0].valid, null)
+      })
+
+      it("should return true a known valid TXID", async () => {
+        const txid =
+          "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
+
+        const result = await bchjs.SLP.Utils.validateTxid(txid)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+
+        assert.property(result[0], "txid")
+        assert.equal(result[0].txid, txid)
+
+        assert.property(result[0], "valid")
+        assert.equal(result[0].valid, true)
+      })
+
+      // This test is not necessary.
+      // it("should handle a null response from SLPDB", async () => {
+      //   const txid =
+      //     "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419"
       //
-      //   const data = await bchjs.SLP.Utils.hydrateUtxos([{ utxos: utxos }])
-      //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      //   const result = await bchjs.SLP.Utils.validateTxid(txid)
+      //   console.log(`result: ${JSON.stringify(result, null, 2)}`)
       // })
     })
 
