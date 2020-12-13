@@ -434,7 +434,7 @@ class Utils {
   async validateTxid(txid) {
     const path = `${this.restURL}slp/validateTxid`
 
-    // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
+    console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -449,7 +449,9 @@ class Utils {
         },
         _this.axiosOptions
       )
-      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      console.log(
+        `validateTxid response.data: ${JSON.stringify(response.data, null, 2)}`
+      )
 
       const validatedTxids = response.data
 
@@ -1290,6 +1292,9 @@ class Utils {
 
           // If the value has been cached, use the cached version first.
           let isValid = cachedTxValidation[utxo.txid]
+
+          // There are two possible responses from SLPDB. If SLPDB is functioning
+          // correctly...
 
           // If not in the cache, try the general SLPDB.
           if (isValid == null) {
