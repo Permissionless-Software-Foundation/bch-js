@@ -431,6 +431,10 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
+  // This function has two responses. If SLPDB is working correctly, the output
+  // will be like the examples above. If SLPDB has fallen behind real-time
+  // processing, it will return this output:
+  // [ null ]
   async validateTxid(txid) {
     const path = `${this.restURL}slp/validateTxid`
 
@@ -1054,7 +1058,7 @@ class Utils {
       // utxo list may have duplicate tx_hash, varying tx_pos
       // only need to call decodeOpReturn once for those
       const decodeOpReturnCache = {}
-      const cachedTxValidation = {}
+      // const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
@@ -1290,26 +1294,51 @@ class Utils {
           // property. i.e. it has been successfully hydrated with SLP
           // information.
 
+          // CT 12/13/2020: Disabling the cache until I get processing of tokens
+          // to be more stable.
           // If the value has been cached, use the cached version first.
-          let isValid = cachedTxValidation[utxo.txid]
+          // let isValid = cachedTxValidation[utxo.txid]
+          let isValid = null
 
           // There are two possible responses from SLPDB. If SLPDB is functioning
-          // correctly...
+          // correctly, then validateTxid() will return this:
+          // isValid: [
+          //   {
+          // 	"txid": "ff0c0354f8d3ddb34fa36f73494eb58ea24f8b8da6904aa8ed43b7a74886c583",
+          // 	"valid": true
+          //   }
+          // ]
+          //
+          // If SLPDB has fallen behind real-time processing, it will return this:
+          // isValid: [
+          //   null
+          // ]
+          //
+          // Note: validateTxid3() has the same output as validateTxid().
+          // validateTxid2() uses slp-validate, which has a different output format.
 
           // If not in the cache, try the general SLPDB.
-          if (isValid == null) {
-            console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
+          if (isValid === null) {
+            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
             isValid = await this.validateTxid(utxo.txid)
-            console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+            // console.log(
+            //   `validateTxid() isValid: ${JSON.stringify(isValid, null, 2)}`
+            // )
 
-            if (isValid !== null) {
-              isValid = isValid[0].valid
+            // Handle corner case where SLPDB returns an array with a null element.
+            if (isValid[0] === null)
+              isValid = [{ txid: utxo.txid, valid: null }]
 
-              // Save the result to the local cache.
-              cachedTxValidation[utxo.txid] = isValid
-            }
+            isValid = isValid[0].valid
+
+            // Save the result to the local cache.
+            // cachedTxValidation[utxo.txid] = isValid
           }
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+
+          // console.log(
+          //   `pre-validateTxid3() isValid: ${JSON.stringify(isValid, null, 2)}`
+          // )
 
           // If still null, check the whitelist SLPDB
           if (isValid === null) {
@@ -1344,28 +1373,33 @@ class Utils {
               //   )}`
               // )
 
-              if (isValid !== null) {
-                isValid = isValid[0].valid
+              if (isValid[0] !== null) isValid = isValid[0].valid
 
-                // Save the result to the local cache.
-                cachedTxValidation[utxo.txid] = isValid
-              }
+              // Save the result to the local cache.
+              // cachedTxValidation[utxo.txid] = isValid
             }
           }
 
+          // console.log(
+          //   `pre-validateTxid2() isValid: ${JSON.stringify(isValid, null, 2)}`
+          // )
+
           // If still null, as a last resort, check it against slp-validate
           if (isValid === null) {
-            isValid = await this.validateTxid2(utxo.txid)
+            try {
+              isValid = await this.validateTxid2(utxo.txid)
+            } catch (err) {
+              // Mark as invalid if validateTxid2() throws an error.
+              isValid = null
+            }
             // console.log(
             //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
             // )
 
-            if (isValid !== null) {
-              isValid = isValid.isValid
+            if (isValid !== null) isValid = isValid.isValid
 
-              // Save the result to the local cache.
-              cachedTxValidation[utxo.txid] = isValid
-            }
+            // Save the result to the local cache.
+            // cachedTxValidation[utxo.txid] = isValid
           }
 
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
