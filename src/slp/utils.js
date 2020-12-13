@@ -453,9 +453,9 @@ class Utils {
         },
         _this.axiosOptions
       )
-      console.log(
-        `validateTxid response.data: ${JSON.stringify(response.data, null, 2)}`
-      )
+      // console.log(
+      //   `validateTxid response.data: ${JSON.stringify(response.data, null, 2)}`
+      // )
 
       const validatedTxids = response.data
 
@@ -1058,7 +1058,7 @@ class Utils {
       // utxo list may have duplicate tx_hash, varying tx_pos
       // only need to call decodeOpReturn once for those
       const decodeOpReturnCache = {}
-      // const cachedTxValidation = {}
+      const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
 
@@ -1297,8 +1297,9 @@ class Utils {
           // CT 12/13/2020: Disabling the cache until I get processing of tokens
           // to be more stable.
           // If the value has been cached, use the cached version first.
-          // let isValid = cachedTxValidation[utxo.txid]
-          let isValid = null
+          let isValid = cachedTxValidation[utxo.txid]
+          if (!isValid) isValid = null
+          // let isValid = null
 
           // There are two possible responses from SLPDB. If SLPDB is functioning
           // correctly, then validateTxid() will return this:
@@ -1404,6 +1405,9 @@ class Utils {
 
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
           outAry[i].isValid = isValid
+
+          // Save the txid to the local cache to reduce API calls.
+          cachedTxValidation[utxo.txid] = isValid
         }
       }
 
