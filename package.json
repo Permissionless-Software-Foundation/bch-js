@@ -16,7 +16,8 @@
     "test:integration:local": "RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 test/integration",
     "test:integration:local:bchn": "RESTURL=http://localhost:3000/v4/ bash test/integration/test-bchn-integration.sh",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v4/ mocha --timeout 30000 test/integration/testnet",
-    "test:temp": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 -g '#hydrateUtxos' test/integration/",
+    "test:temp": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 -g '#validateTxid2' test/integration/",
+    "test:temp2": "mocha --timeout 30000 -g 'tokenUtxoDetails' test/unit/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs"

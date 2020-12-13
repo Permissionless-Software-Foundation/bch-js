@@ -472,6 +472,13 @@ describe(`#SLP`, () => {
               "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
             tx_pos: 1,
             value: 546
+          },
+          {
+            height: 665577,
+            tx_hash:
+              "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
+            tx_pos: 1,
+            value: 546
           }
         ]
 
@@ -627,6 +634,13 @@ describe(`#SLP`, () => {
               "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
             tx_pos: 1,
             value: 546
+          },
+          {
+            height: 665577,
+            tx_hash:
+              "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
+            tx_pos: 1,
+            value: 546
           }
         ]
 
@@ -636,6 +650,7 @@ describe(`#SLP`, () => {
     })
 
     describe("#validateTxid", () => {
+      /*
       it("should return null on a known invalid TXID", async () => {
         const txid =
           "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
@@ -667,15 +682,25 @@ describe(`#SLP`, () => {
         assert.property(result[0], "valid")
         assert.equal(result[0].valid, true)
       })
-
+*/
       // This test is not necessary.
-      // it("should handle a null response from SLPDB", async () => {
-      //   const txid =
-      //     "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419"
-      //
-      //   const result = await bchjs.SLP.Utils.validateTxid(txid)
-      //   console.log(`result: ${JSON.stringify(result, null, 2)}`)
-      // })
+      it("should handle a null response from SLPDB", async () => {
+        const txid =
+          "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419"
+
+        const result = await bchjs.SLP.Utils.validateTxid(txid)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      })
+
+      it("should handle a null response from SLPDB", async () => {
+        const txid = [
+          "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419",
+          "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
+        ]
+
+        const result = await bchjs.SLP.Utils.validateTxid(txid)
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      })
     })
 
     describe("#validateTxid2", () => {
