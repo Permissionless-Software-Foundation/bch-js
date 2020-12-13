@@ -1294,10 +1294,13 @@ class Utils {
           // If not in the cache, try the general SLPDB.
           if (isValid == null) {
             isValid = await this.validateTxid(utxo.txid)
-            isValid = isValid[0].valid
 
-            // Save the result to the local cache.
-            cachedTxValidation[utxo.txid] = isValid
+            if (isValid !== null) {
+              isValid = isValid[0].valid
+
+              // Save the result to the local cache.
+              cachedTxValidation[utxo.txid] = isValid
+            }
           }
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
 
@@ -1334,10 +1337,12 @@ class Utils {
               //   )}`
               // )
 
-              isValid = isValid[0].valid
+              if (isValid !== null) {
+                isValid = isValid[0].valid
 
-              // Save the result to the local cache.
-              cachedTxValidation[utxo.txid] = isValid
+                // Save the result to the local cache.
+                cachedTxValidation[utxo.txid] = isValid
+              }
             }
           }
 
@@ -1348,10 +1353,12 @@ class Utils {
             //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
             // )
 
-            isValid = isValid.isValid
+            if (isValid !== null) {
+              isValid = isValid.isValid
 
-            // Save the result to the local cache.
-            cachedTxValidation[utxo.txid] = isValid
+              // Save the result to the local cache.
+              cachedTxValidation[utxo.txid] = isValid
+            }
           }
 
           // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
