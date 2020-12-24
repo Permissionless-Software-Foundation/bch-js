@@ -438,7 +438,7 @@ class Utils {
   async validateTxid(txid) {
     const path = `${this.restURL}slp/validateTxid`
 
-    console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
+    // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
