@@ -34,7 +34,6 @@ const IPFS = require("./ipfs")
 const Encryption = require("./encryption")
 
 // Indexers
-const Blockbook = require("./blockbook")
 const OpenBazaar = require("./openbazaar")
 const Ninsight = require("./ninsight")
 const Electrumx = require("./electrumx")
@@ -79,9 +78,6 @@ class BCHJS {
     }
 
     // console.log(`apiToken: ${this.apiToken}`)
-
-    // Populate Blockbook endpoints.
-    this.Blockbook = new Blockbook(libConfig)
 
     // Populate OpenBazaar endpoints
     this.OpenBazaar = new OpenBazaar(libConfig)
@@ -193,9 +189,6 @@ class BitboxShim {
     this.Control = new Control(libConfig)
     this.Mining = new Mining(libConfig)
     this.RawTransactions = new RawTransactions(libConfig)
-
-    // Populate Blockbook endpoints.
-    this.Blockbook = new Blockbook(libConfig)
 
     // Populate OpenBazaar endpoints
     this.OpenBazaar = new OpenBazaar(libConfig)

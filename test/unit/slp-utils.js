@@ -2161,4 +2161,19 @@ describe("#SLP Utils", () => {
       }
     })
   })
+
+  describe("#getStatus", () => {
+    it("should return the current block height of the SLPDB indexer", async () => {
+      sandbox
+        .stub(uut.Utils.axios, "get")
+        .resolves({ data: mockData.slpdbStatus })
+
+      const result = await uut.Utils.getStatus()
+
+      // console.log(`result: `, result)
+
+      assert.property(result, "bchBlockHeight")
+      assert.property(result, "slpProcessedBlockHeight")
+    })
+  })
 })

@@ -483,7 +483,10 @@ describe(`#SLP`, () => {
         ]
 
         const data = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
-        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.isArray(data)
+        // assert.equal(data[0].isValid, null)
       })
     })
 
@@ -645,51 +648,25 @@ describe(`#SLP`, () => {
         ]
 
         const data = await bchjs.SLP.Utils.hydrateUtxos([{ utxos: utxos }])
-        console.log(`data: ${JSON.stringify(data, null, 2)}`)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.isArray(data.slpUtxos)
+        assert.equal(data.slpUtxos[0].isValid, null)
       })
     })
 
     describe("#validateTxid", () => {
-      /*
-      it("should return null on a known invalid TXID", async () => {
-        const txid =
-          "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
-
-        const result = await bchjs.SLP.Utils.validateTxid(txid)
-        console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-        assert.isArray(result)
-
-        assert.property(result[0], "txid")
-        assert.equal(result[0].txid, txid)
-
-        assert.property(result[0], "valid")
-        assert.equal(result[0].valid, null)
-      })
-
-      it("should return true a known valid TXID", async () => {
-        const txid =
-          "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488"
-
-        const result = await bchjs.SLP.Utils.validateTxid(txid)
-        console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-        assert.isArray(result)
-
-        assert.property(result[0], "txid")
-        assert.equal(result[0].txid, txid)
-
-        assert.property(result[0], "valid")
-        assert.equal(result[0].valid, true)
-      })
-*/
       // This test is not necessary.
       it("should handle a null response from SLPDB", async () => {
         const txid =
           "4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419"
 
         const result = await bchjs.SLP.Utils.validateTxid(txid)
-        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+        assert.equal(result[0].txid, txid)
+        // assert.equal(result[0].valid, null)
       })
 
       it("should handle a null response from SLPDB", async () => {
@@ -699,7 +676,11 @@ describe(`#SLP`, () => {
         ]
 
         const result = await bchjs.SLP.Utils.validateTxid(txid)
-        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.isArray(result)
+        assert.equal(result[0].txid, txid[0])
+        // assert.equal(result[0].valid, null)
       })
     })
 
@@ -744,82 +725,16 @@ describe(`#SLP`, () => {
       })
     })
 
-    // describe("#validateTxid3", () => {
-    //   it("should invalidate a known invalid TXID", async () => {
-    //     const txid =
-    //       "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a"
-    //
-    //     const result = await bchjs.SLP.Utils.validateTxid3(txid)
-    //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //
-    //     assert.isArray(result)
-    //
-    //     assert.property(result[0], "txid")
-    //     assert.equal(result[0].txid, txid)
-    //
-    //     assert.property(result[0], "valid")
-    //     assert.equal(result[0].valid, null)
-    //   })
-    //
-    //   it("should validate a known valid TXID", async () => {
-    //     const txid =
-    //       "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd"
-    //
-    //     const result = await bchjs.SLP.Utils.validateTxid3(txid)
-    //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //
-    //     assert.isArray(result)
-    //
-    //     assert.property(result[0], "txid")
-    //     assert.equal(result[0].txid, txid)
-    //
-    //     assert.property(result[0], "valid")
-    //     assert.equal(result[0].valid, true)
-    //   })
-    //
-    //   it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
-    //     const txids = [
-    //       // Malformed SLP tx
-    //       "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
-    //       // Normal TX (non-SLP)
-    //       "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
-    //       // Valid PSF SLP tx
-    //       "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
-    //       // Valid SLP token not in whitelist
-    //       "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
-    //       // Unprocessed SLP TX
-    //       // "a0d6406eecfd8634158efa9314ff15b4cbf451938e9dc7b5678c46b41eabc6ed" // Mint baton
-    //       "402c663379d9699b6e2dd38737061e5888c5a49fca77c97ab98e79e08959e019"
-    //     ]
-    //
-    //     const result = await bchjs.SLP.Utils.validateTxid3(txids)
-    //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //   })
-    // })
+    describe("#getStatus", () => {
+      it("should return the current block height of the SLPDB indexer", async () => {
+        const result = await bchjs.SLP.Utils.getStatus()
 
-    // describe("#validateTxid", () => {
-    //   it("should handle a mix of valid, invalid, and non-SLP txs", async () => {
-    //     const txids = [
-    //       // Malformed SLP tx
-    //       "f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a",
-    //       // Normal TX (non-SLP)
-    //       "01cdaec2f8b311fc2d6ecc930247bd45fa696dc204ab684596e281fe1b06c1f0",
-    //       // Valid PSF SLP tx
-    //       "daf4d8b8045e7a90b7af81bfe2370178f687da0e545511bce1c9ae539eba5ffd",
-    //       // Valid SLP token not in whitelist
-    //       "3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488",
-    //       // Unprocessed SLP TX
-    //       // "a0d6406eecfd8634158efa9314ff15b4cbf451938e9dc7b5678c46b41eabc6ed"
-    //       // Token send on BCHN network.
-    //       "402c663379d9699b6e2dd38737061e5888c5a49fca77c97ab98e79e08959e019",
-    //       // Token send on ABC network.
-    //       "336bfe2168aac4c3303508a9e8548a0d33797a83b85b76a12d845c8d6674f79d"
-    //     ]
-    //
-    //     const result = await bchjs.SLP.Utils.validateTxid(txids)
-    //     console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //   })
-    // })
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.property(result, "bchBlockHeight")
+        assert.property(result, "slpProcessedBlockHeight")
+      })
+    })
   })
 
   describe("#tokentype1", () => {
