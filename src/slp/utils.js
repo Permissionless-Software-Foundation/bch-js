@@ -1602,6 +1602,48 @@ class Utils {
       else throw error
     }
   }
+
+  /**
+   * @api SLP.Utils.getStatus() getStatus()
+   * @apiName getStatus
+   * @apiGroup SLP Utils
+   * @apiDescription Get the status and health of the SLPDB connected to bch-api.
+   *
+   * @apiExample Example usage:
+   *
+   * // Get the current blockheight of the SLPDB indexer.
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.validateTxid(
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+   *    );
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * [ { txid:
+   * 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+   * valid: true } ]
+   *
+   */
+  async getStatus(txid) {
+    const path = `${this.restURL}slp/status`
+
+    try {
+      const response = await _this.axios.get(path, _this.axiosOptions)
+      // console.log(
+      //   `getStatus response.data: ${JSON.stringify(response.data, null, 2)}`
+      // )
+
+      return response.data
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
 }
 
 module.exports = Utils

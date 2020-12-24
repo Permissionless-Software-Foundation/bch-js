@@ -1190,6 +1190,106 @@ const whitelist = [
   }
 ]
 
+const slpdbStatus = {
+  _id: "5fe4cd90cd2bd2000f7fe46c",
+  version: "1.0.0-beta-rc13",
+  versionHash: "bb4a805610b9e4d67c1595b716df36190c75e8b1",
+  deplVersionHash: null,
+  startCmd: "node index run",
+  context: "SLPDB",
+  lastStatusUpdate: {
+    utc: "Thu, 24 Dec 2020 17:19:12 GMT",
+    unix: 1608830352
+  },
+  lastIncomingTxnZmq: {
+    utc: "Thu, 24 Dec 2020 17:19:12 GMT",
+    unix: 1608830352
+  },
+  lastIncomingBlockZmq: {
+    utc: "Thu, 24 Dec 2020 16:43:38 GMT",
+    unix: 1608828218
+  },
+  lastOutgoingTxnZmq: null,
+  lastOutgoingBlockZmq: null,
+  state: "RUNNING",
+  stateHistory: [
+    {
+      utc: "Mon, 07 Dec 2020 15:26:23 GMT",
+      state: "STARTUP_BLOCK_SYNC"
+    },
+    {
+      utc: "Tue, 08 Dec 2020 19:53:04 GMT",
+      state: "RUNNING"
+    }
+  ],
+  network: "mainnet",
+  bchBlockHeight: 667270,
+  bchBlockHash:
+    "000000000000000003d57b35b1b6b8073c8311974e2b9a473e1bd6daa98fde53",
+  slpProcessedBlockHeight: 667270,
+  mempoolInfoBch: {
+    loaded: true,
+    size: 534,
+    bytes: 320552,
+    usage: 956384,
+    maxmempool: 300000000,
+    mempoolminfee: 0.00001,
+    minrelaytxfee: 0.00001
+  },
+  mempoolSizeSlp: 78,
+  tokensCount: 77976,
+  pastStackTraces: [
+    "[Tue, 08 Dec 2020 19:35:36 GMT] MongoServerSelectionError: connection <monitor> to 172.17.0.1:12301 timed out\n    at Timeout._onTimeout (/home/safeuser/SLPDB/node_modules/mongodb/lib/core/sdam/topology.js:438:30)\n    at listOnTimeout (internal/timers.js:554:17)\n    at processTimers (internal/timers.js:497:7)",
+    "[Tue, 08 Dec 2020 19:35:36 GMT] MongoServerSelectionError: connection <monitor> to 172.17.0.1:12301 timed out\n    at Timeout._onTimeout (/home/safeuser/SLPDB/node_modules/mongodb/lib/core/sdam/topology.js:438:30)\n    at listOnTimeout (internal/timers.js:554:17)\n    at processTimers (internal/timers.js:497:7)"
+  ],
+  doubleSpends: [
+    {
+      txo:
+        "3e377f67e9d065f02e47633d847cdb04b0679d51baccdc0feea5297529e330b5:820",
+      details: {
+        originalTxid:
+          "dc148149d25a546fffe0b207c62b192811c288481df5f43f1f76f67b6004f98c",
+        current:
+          "de12db60e253c378eeebb1df85153168a998db8267ec54b38589cc31348b2b8d",
+        time: {
+          utc: "Sat, 19 Dec 2020 02:25:37 GMT",
+          unix: 1608344737
+        }
+      }
+    }
+  ],
+  reorgs: [],
+  mongoDbStats: {
+    db: "slpdb",
+    collections: 5,
+    views: 0,
+    objects: 2497140,
+    avgObjSize: 3188.778575890819,
+    dataSize: 7593.943150520325,
+    storageSize: 3357.74609375,
+    indexes: 71,
+    indexSize: 1490.14453125,
+    totalSize: 4847.890625,
+    scaleFactor: 1048576,
+    fsUsedSize: 74424.46484375,
+    fsTotalSize: 153676.98046875,
+    ok: 1
+  },
+  publicUrl: "fullstack--bchn-02",
+  telemetryHash: null,
+  system: {
+    loadAvg1: 0.16,
+    loadAvg5: 0.11,
+    loadAvg15: 0.04,
+    platform: "linux",
+    cpuCount: 8,
+    freeMem: 5780.51953125,
+    totalMem: 31360.8828125,
+    uptime: 1654085,
+    processUptime: 1374204.613560816
+  }
+}
+
 module.exports = {
   mockList,
   mockToken,
@@ -1218,5 +1318,6 @@ module.exports = {
   mockWhitelist,
   mockValidateTxid3Valid,
   mockValidateTxid3Invalid,
-  whitelist
+  whitelist,
+  slpdbStatus
 }

@@ -820,6 +820,17 @@ describe(`#SLP`, () => {
     //     console.log(`result: ${JSON.stringify(result, null, 2)}`)
     //   })
     // })
+
+    describe("#getStatus", () => {
+      it("should return the current block height of the SLPDB indexer", async () => {
+        const result = await bchjs.SLP.Utils.getStatus()
+
+        console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.property(result, "bchBlockHeight")
+        assert.property(result, "slpProcessedBlockHeight")
+      })
+    })
   })
 
   describe("#tokentype1", () => {
