@@ -1,6 +1,7 @@
 // Public npm libraries
 const axios = require("axios")
 const slpParser = require("slp-parser")
+const BigNumber = require("bignumber.js")
 
 // const Script = require("../script")
 // const scriptLib = new Script()
@@ -1178,7 +1179,9 @@ class Utils {
             // Tokens
             else {
               utxo.utxoType = "token"
-              utxo.tokenQty = slpData.qty / Math.pow(10, slpData.decimals)
+              utxo.tokenQty = new BigNumber(slpData.qty)
+                .div(Math.pow(10, slpData.decimals))
+                .toString()
             }
 
             utxo.tokenId = utxo.txid
@@ -1221,7 +1224,9 @@ class Utils {
             // Tokens
             else {
               utxo.utxoType = "token"
-              utxo.tokenQty = slpData.qty / Math.pow(10, genesisData.decimals)
+              utxo.tokenQty = new BigNumber(slpData.qty)
+                .div(Math.pow(10, genesisData.decimals))
+                .toString()
             }
 
             // Hydrate the UTXO object with information about the SLP token.
@@ -1279,7 +1284,12 @@ class Utils {
             utxo.tokenType = slpData.tokenType
 
             // Calculate the real token quantity.
-            utxo.tokenQty = tokenQty / Math.pow(10, genesisData.decimals)
+
+            const tokenQtyBig = new BigNumber(tokenQty).div(
+              Math.pow(10, genesisData.decimals)
+            )
+            //console.log(`tokenQtyBig`, tokenQtyBig.toString())
+            utxo.tokenQty = tokenQtyBig.toString()
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
