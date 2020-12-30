@@ -1,3 +1,7 @@
+/*
+  This library handles the OP_RETURN of SLP TokenType1 transactions.
+*/
+
 //const BCHJS = require("../bch-js")
 //const bchjs = new BCHJS()
 
@@ -93,12 +97,16 @@ class TokenType1 {
       const tokenId = tokenUtxos[0].tokenId
       const decimals = tokenUtxos[0].decimals
 
-      // Calculate the total amount of tokens owned by the wallet.
-      let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
-        totalTokens += tokenUtxos[i].tokenQty
+      const sendQtyBig = new BigNumber(sendQty).times(10 ** decimals)
 
-      const change = totalTokens - sendQty
+      // Calculate the total amount of tokens owned by the wallet.
+      const totalTokens = tokenUtxos.reduce(
+        (tot, txo) =>
+          tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals)),
+        new BigNumber(0)
+      )
+
+      const change = totalTokens.minus(sendQtyBig)
       // console.log(`change: ${change}`)
 
       let script
@@ -109,18 +117,19 @@ class TokenType1 {
         outputs = 2
 
         // Convert the send quantity to the format expected by slp-mdm.
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
+        const baseQty = sendQtyBig.toString()
         // console.log(`baseQty: `, baseQty)
 
         // Convert the change quantity to the format expected by slp-mdm.
-        let baseChange = new BigNumber(change).times(10 ** decimals)
-        baseChange = baseChange.absoluteValue()
-        baseChange = Math.floor(baseChange)
-        baseChange = baseChange.toString()
+        const baseChange = change.toString()
         // console.log(`baseChange: `, baseChange)
+
+        // Check for potential burns
+        const outputQty = new BigNumber(baseChange).plus(new BigNumber(baseQty))
+        const inputQty = new BigNumber(totalTokens)
+        const tokenOutputDelta = outputQty.minus(inputQty).toString() !== "0"
+        if (tokenOutputDelta)
+          throw "Token transaction inputs do not match outputs, cannot send transaction"
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [
@@ -131,13 +140,16 @@ class TokenType1 {
 
         // Corner case, when there is no token change to send back.
       } else {
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
+        const baseQty = sendQtyBig.toString()
         // console.log(`baseQty: `, baseQty)
 
-        // console.log(`baseQty: ${baseQty.toString()}`)
+        // Check for potential burns
+        const noChangeOutputQty = new BigNumber(baseQty)
+        const noChangeInputQty = new BigNumber(totalTokens)
+        const tokenSingleOutputError =
+          noChangeOutputQty.minus(noChangeInputQty).toString() !== "0"
+        if (tokenSingleOutputError)
+          throw "Token transaction inputs do not match outputs, cannot send transaction"
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
