@@ -1,3 +1,7 @@
+/*
+  This library handles the OP_RETURN of SLP TokenType1 transactions.
+*/
+
 //const BCHJS = require("../bch-js")
 //const bchjs = new BCHJS()
 
