@@ -903,6 +903,7 @@ class Utils {
 
   // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails(utxos) {
+    //console.log(`tokenUtxoDetails in bch-js called`)
     try {
       // utxo list may have duplicate tx_hash, varying tx_pos
       // only need to call decodeOpReturn once for those
@@ -966,7 +967,7 @@ class Utils {
         let slpData = false
         try {
           slpData = await this.decodeOpReturn(utxo.txid, decodeOpReturnCache)
-          // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
+          //console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
 
@@ -1130,7 +1131,7 @@ class Utils {
             const tokenQtyBig = new BigNumber(tokenQty).div(
               Math.pow(10, genesisData.decimals)
             )
-            //console.log(`tokenQtyBig`, tokenQtyBig.toString())
+            // console.log(`tokenQtyBig.toString()`, tokenQtyBig.toString())
             utxo.tokenQty = tokenQtyBig.toString()
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
