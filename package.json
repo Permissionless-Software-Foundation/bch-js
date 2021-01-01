@@ -44,7 +44,7 @@
     "bip38": "^2.0.2",
     "bip39": "^3.0.2",
     "bip66": "^1.1.5",
-    "bitcoincash-ops": "christroutner/bitcoincash-ops",
+    "@psf/bitcoincash-ops": "^2.0.0",
     "bitcoincashjs-lib": "christroutner/bitcoincashjs-lib#master",
     "bitcoinjs-message": "^2.0.0",
     "bs58": "^4.0.1",
