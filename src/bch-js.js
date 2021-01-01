@@ -27,7 +27,6 @@ const ECPair = require("./ecpair")
 const Script = require("./script")
 const Price = require("./price")
 const Socket = require("./socket")
-const Wallet = require("./wallet")
 const Schnorr = require("./schnorr")
 const SLP = require("./slp/slp")
 const IPFS = require("./ipfs")
@@ -110,7 +109,6 @@ class BCHJS {
     this.TransactionBuilder.setAddress(this.Address)
     this.Util = new Util(libConfig)
     this.Socket = Socket
-    this.Wallet = Wallet
     this.Schnorr = new Schnorr(libConfig)
 
     this.SLP = new SLP(libConfig)
@@ -163,7 +161,6 @@ class BitboxShim {
     this.TransactionBuilder.setAddress(this.Address)
     this.Util = new Util(libConfig)
     this.Socket = Socket
-    this.Wallet = Wallet
     this.Schnorr = new Schnorr(libConfig)
 
     // Populate the SLP endpoints.
