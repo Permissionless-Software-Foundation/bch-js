@@ -39,7 +39,7 @@
     "bigi": "^1.4.2",
     "bignumber.js": "^9.0.0",
     "bip-schnorr": "^0.3.0",
-    "bip21": "Bitcoin-com/bip21",
+    "@psf/bip21": "^2.0.1",
     "@psf/bip32-utils": "^0.13.1",
     "bip38": "^2.0.2",
     "bip39": "^3.0.2",
