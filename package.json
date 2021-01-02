@@ -20,7 +20,8 @@
     "test:temp2": "mocha --timeout 30000 -g '#getStatus' test/unit/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
-    "docs": "./node_modules/.bin/apidoc -i src/ -o docs"
+    "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
+    "lint": "standard --env mocha --fix"
   },
   "license": "MIT",
   "homepage": "https://github.com/Permissionless-Software-Foundation/bch-js",
@@ -79,8 +80,10 @@
     "coveralls": "^3.0.2",
     "eslint": "5.16.0",
     "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-standard": "^4.0.0",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
@@ -88,7 +91,8 @@
     "nyc": "^14.1.0",
     "prettier": "^1.18.2",
     "semantic-release": "^17.3.1",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "standard": "^16.0.3"
   },
   "apidoc": {
     "title": "bch-js",

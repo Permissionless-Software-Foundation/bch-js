@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class Util {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -72,10 +72,10 @@ class Util {
    * // iscompressed: true,
    * // account: 'Test' }]
    */
-  async validateAddress(address) {
+  async validateAddress (address) {
     try {
       // Single block
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}util/validateAddress/${address}`,
           _this.axiosOptions
@@ -85,7 +85,7 @@ class Util {
         // Array of blocks.
       } else if (Array.isArray(address)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}util/validateAddress`,
           data: {
             addresses: address
@@ -99,7 +99,7 @@ class Util {
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error

@@ -1,11 +1,11 @@
-const BCHJSAddress = require("../address")
+const BCHJSAddress = require('../address')
 // const bchAddress = new BCHJSAddress()
 let bchAddress
 
-const bchaddrjs = require("bchaddrjs-slp")
+const bchaddrjs = require('bchaddrjs-slp')
 
 class Address extends BCHJSAddress {
-  constructor(config) {
+  constructor (config) {
     super(config)
 
     this.restURL = config.restURL
@@ -52,11 +52,11 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.toSLPAddress('msDbtTj7kWXPpYaR7PQmMK84i66fJqQMLx', false)
    *  // qzq9je6pntpva3wf6scr7mlnycr54sjgeqauyclpwv
    */
-  toSLPAddress(address, prefix = true, regtest = false) {
+  toSLPAddress (address, prefix = true, regtest = false) {
     this._ensureValidAddress(address)
     const slpAddress = bchaddrjs.toSlpAddress(address)
     if (prefix) return slpAddress
-    return slpAddress.split(":")[1]
+    return slpAddress.split(':')[1]
   }
 
   /**
@@ -98,11 +98,11 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.toCashAddress('msDbtTj7kWXPpYaR7PQmMK84i66fJqQMLx', false)
    *  // qzq9je6pntpva3wf6scr7mlnycr54sjgeqxgrr9ku3
    */
-  toCashAddress(address, prefix = true, regtest = false) {
+  toCashAddress (address, prefix = true, regtest = false) {
     this._ensureValidAddress(address)
     const cashAddress = bchaddrjs.toCashAddress(address)
     if (prefix) return cashAddress
-    return cashAddress.split(":")[1]
+    return cashAddress.split(':')[1]
   }
 
   /**
@@ -145,18 +145,18 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.toLegacyAddress('qph2v4mkxjgdqgmlyjx6njmey0ftrxlnggs3v58dse')
    *  // mqc1tmwY2368LLGktnePzEyPAsgADxbksi
    */
-  toLegacyAddress(address) {
+  toLegacyAddress (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.toLegacyAddress(cashAddr)
   }
 
-  isLegacyAddress(address) {
+  isLegacyAddress (address) {
     this._ensureValidAddress(address)
     return bchAddress.isLegacyAddress(address)
   }
 
-  isCashAddress(address) {
+  isCashAddress (address) {
     this._ensureValidAddress(address)
     if (bchaddrjs.isSlpAddress(address)) return false
 
@@ -195,7 +195,7 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.isSLPAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // false
    */
-  isSLPAddress(address) {
+  isSLPAddress (address) {
     this._ensureValidAddress(address)
     return bchaddrjs.isSlpAddress(address)
   }
@@ -248,7 +248,7 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.isMainnetAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // false
    */
-  isMainnetAddress(address) {
+  isMainnetAddress (address) {
     this._ensureValidAddress(address)
     const cashaddr = bchaddrjs.toCashAddress(address)
     return bchAddress.isMainnetAddress(cashaddr)
@@ -301,11 +301,12 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.isTestnetAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // true
    */
-  isTestnetAddress(address) {
+  isTestnetAddress (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.isTestnetAddress(cashAddr)
   }
+
   /**
    * @api SLP.Address.isP2PKHAddress() isP2PKHAddress()
    * @apiName isP2PKHAddress
@@ -353,11 +354,12 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.isP2PKHAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // true
    */
-  isP2PKHAddress(address) {
+  isP2PKHAddress (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.isP2PKHAddress(cashAddr)
   }
+
   /**
    * @api SLP.Address.isP2SHAddress() isP2SHAddress()
    * @apiName isP2SHAddress
@@ -405,11 +407,12 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.isP2SHAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // false
    */
-  isP2SHAddress(address) {
+  isP2SHAddress (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.isP2SHAddress(cashAddr)
   }
+
   /**
    * @api SLP.Address.detectAddressFormat() detectAddressFormat()
    * @apiName detectAddressFormat
@@ -457,12 +460,13 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.detectAddressFormat('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // legacy
    */
-  detectAddressFormat(address) {
+  detectAddressFormat (address) {
     this._ensureValidAddress(address)
-    if (bchaddrjs.isSlpAddress(address)) return "slpaddr"
+    if (bchaddrjs.isSlpAddress(address)) return 'slpaddr'
 
     return bchAddress.detectAddressFormat(address)
   }
+
   /**
    * @api SLP.Address.detectAddressNetwork() detectAddressNetwork()
    * @apiName detectAddressNetwork
@@ -510,11 +514,12 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.detectAddressNetwork('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    *  // testnet
    */
-  detectAddressNetwork(address) {
+  detectAddressNetwork (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.detectAddressNetwork(cashAddr)
   }
+
   /**
    * @api SLP.Address.detectAddressType() detectAddressType()
    * @apiName detectAddressType
@@ -562,11 +567,12 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.detectAddressType('mqc1tmwY2368LLGktnePzEyPAsgADxbksi');
    *  // p2pkh
    */
-  detectAddressType(address) {
+  detectAddressType (address) {
     this._ensureValidAddress(address)
     const cashAddr = bchaddrjs.toCashAddress(address)
     return bchAddress.detectAddressType(cashAddr)
   }
+
   /*
   async details(address) {
     let tmpBITBOX
@@ -644,7 +650,7 @@ class Address extends BCHJSAddress {
     return tmpBITBOX.Address.transactions(address)
   }
 */
-  _ensureValidAddress(address) {
+  _ensureValidAddress (address) {
     try {
       bchaddrjs.toCashAddress(address)
     } catch (err) {

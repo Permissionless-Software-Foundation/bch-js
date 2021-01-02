@@ -1,9 +1,9 @@
-//const BCHJS = require("../bch-js")
-//const bchjs = new BCHJS()
+// const BCHJS = require("../bch-js")
+// const bchjs = new BCHJS()
 
-const BCHJSECPair = require("../ecpair")
+const BCHJSECPair = require('../ecpair')
 
-const bchaddrjs = require("bchaddrjs-slp")
+const bchaddrjs = require('bchaddrjs-slp')
 
 class ECPair extends BCHJSECPair {
   /*
@@ -25,7 +25,7 @@ class ECPair extends BCHJSECPair {
    *  bchjs.SLP.ECPair.toSLPAddress(ecpair);
    *  // slptest:qq835u5srlcqwrtwt6xm4efwan30fxg9hcqag6fk03
    */
-  static toSLPAddress(ecpair) {
+  static toSLPAddress (ecpair) {
     const slpAddress = bchaddrjs.toSlpAddress(this.toCashAddress(ecpair))
     return slpAddress
   }

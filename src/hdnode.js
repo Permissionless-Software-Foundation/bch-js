@@ -1,10 +1,10 @@
-const Bitcoin = require("@psf/bitcoincashjs-lib")
-const coininfo = require("@psf/coininfo")
-const bip32utils = require("@psf/bip32-utils")
-const bchaddrjs = require("bchaddrjs-slp")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const coininfo = require('@psf/coininfo')
+const bip32utils = require('@psf/bip32-utils')
+const bchaddrjs = require('bchaddrjs-slp')
 
 class HDNode {
-  constructor(address) {
+  constructor (address) {
     this._address = address
   }
 
@@ -32,11 +32,9 @@ class HDNode {
    *   // create HDNode from seed buffer
    *   bchjs.HDNode.fromSeed(seedBuffer);
    */
-  fromSeed(rootSeedBuffer, network = "mainnet") {
+  fromSeed (rootSeedBuffer, network = 'mainnet') {
     let bitcoincash
-    if (network === "bitcoincash" || network === "mainnet")
-      bitcoincash = coininfo.bitcoincash.main
-    else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'bitcoincash' || network === 'mainnet') { bitcoincash = coininfo.bitcoincash.main } else bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromSeedBuffer(
@@ -75,7 +73,7 @@ class HDNode {
    *   bchjs.HDNode.toLegacyAddress(hdNode);
    *   // 14mVsq3H5Ep2Jb6AqoKsmY1BFHKCBGPDLi
    */
-  toLegacyAddress(hdNode) {
+  toLegacyAddress (hdNode) {
     return hdNode.getAddress()
   }
 
@@ -109,7 +107,7 @@ class HDNode {
    *   bchjs.HDNode.toCashAddress(hdNode);
    *   // bitcoincash:qq549jxsjv66kw0smdju4es2axnk7hhe9cquhjg4gt
    */
-  toCashAddress(hdNode, regtest = false) {
+  toCashAddress (hdNode, regtest = false) {
     return this._address.toCashAddress(hdNode.getAddress(), true, regtest)
   }
 
@@ -142,7 +140,7 @@ class HDNode {
    * bchjs.SLP.HDNode.toSLPAddress(hdNode);
    * // simpleledger:qqxh2z2z397m4c6u9s5x6wjtku742q8rpvm6al2nrf
    */
-  toSLPAddress(hdNode) {
+  toSLPAddress (hdNode) {
     const cashAddr = this.toCashAddress(hdNode)
     return bchaddrjs.toSlpAddress(cashAddr)
   }
@@ -177,7 +175,7 @@ class HDNode {
    *   bchjs.HDNode.toWIF(hdNode);
    *   // KwobPFhv3AuXc3ps6YtWfMVRpLBDBA7jnJddurfELTyTNcFhZYpJ
    */
-  toWIF(hdNode) {
+  toWIF (hdNode) {
     return hdNode.keyPair.toWIF()
   }
 
@@ -211,7 +209,7 @@ class HDNode {
    *   bchjs.HDNode.toXPub(hdNode);
    *   // xpub661MyMwAqRbcFuMLeHkSbTNwNHG9MQyrAZqV1Q4MEAsmj9MYa5sxg8WC2LKqW6EHviHVucBjWi1n38juZpDDeX3U6YrsMeACdcNSTHkM8BQ
    */
-  toXPub(hdNode) {
+  toXPub (hdNode) {
     return hdNode.neutered().toBase58()
   }
 
@@ -245,7 +243,7 @@ class HDNode {
    *   bchjs.HDNode.toXPriv(hdNode);
    *   // xprv9s21ZrQH143K2b5GPP6zHz22E6LeCgQXJtwNbC3MA3Kz7Se7tveKo96EhqwFtSkYWkyenVcMqM7uq35PcUNG8cUdpsJEgwKG3dvfP7TmL3v
    */
-  toXPriv(hdNode) {
+  toXPriv (hdNode) {
     return hdNode.toBase58()
   }
 
@@ -277,7 +275,7 @@ class HDNode {
    *   // create public key buffer from HDNode
    *   bchjs.HDNode.toKeyPair(hdNode);
    */
-  toKeyPair(hdNode) {
+  toKeyPair (hdNode) {
     return hdNode.keyPair
   }
 
@@ -311,7 +309,7 @@ class HDNode {
    *   bchjs.HDNode.toPublicKey(hdNode);
    *   // <Buffer 02 d2 26 74 6e 78 03 ac 11 e0 96 c6 24 de e8 dd 62 52 e7 8e 51 56 8a c1 18 62 aa 2a 72 50 1d ea 7d>
    */
-  toPublicKey(hdNode) {
+  toPublicKey (hdNode) {
     return hdNode.getPublicKeyBuffer()
   }
 
@@ -329,10 +327,10 @@ class HDNode {
    *   // testnet xpriv
    *   bchjs.HDNode.fromXPriv('tprv8gQ3zr1F5pRHMebqqhorrorYNvUG3XkcZjSWVs2cEtRwwJy1TRhgRx4XcF8dYHM2eyTbTCcdKYNhqgyBQphxwRoVyVKr9zuyoA8WxNDRvom');
    */
-  fromXPriv(xpriv) {
+  fromXPriv (xpriv) {
     let bitcoincash
-    if (xpriv[0] === "x") bitcoincash = coininfo.bitcoincash.main
-    else if (xpriv[0] === "t") bitcoincash = coininfo.bitcoincash.test
+    if (xpriv[0] === 'x') bitcoincash = coininfo.bitcoincash.main
+    else if (xpriv[0] === 't') bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromBase58(xpriv, bitcoincashBitcoinJSLib)
@@ -352,10 +350,10 @@ class HDNode {
    *   // testnet xpub
    *   bchjs.HDNode.fromXPub('tpubDD669G3VEC6xF7ddjMUTGDWewwzCCrwX933HnP4ufAELmoDn5pXGcSgPnLodjFvWQwRXkG94f77BatEDA8dfQ99yy97kRYynUpNLENEqTBo');
    */
-  fromXPub(xpub) {
+  fromXPub (xpub) {
     let bitcoincash
-    if (xpub[0] === "x") bitcoincash = coininfo.bitcoincash.main
-    else if (xpub[0] === "t") bitcoincash = coininfo.bitcoincash.test
+    if (xpub[0] === 'x') bitcoincash = coininfo.bitcoincash.main
+    else if (xpub[0] === 't') bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromBase58(xpub, bitcoincashBitcoinJSLib)
@@ -378,7 +376,7 @@ class HDNode {
    *   // derive hardened child HDNode
    *   bchjs.HDNode.derivePath(hdNode, "m/44'/145'/0'");
    */
-  derivePath(hdnode, path) {
+  derivePath (hdnode, path) {
     return hdnode.derivePath(path)
   }
 
@@ -399,7 +397,7 @@ class HDNode {
    *   // derive unhardened child HDNode
    *   bchjs.HDNode.derive(hdNode, 0);
    */
-  derive(hdnode, path) {
+  derive (hdnode, path) {
     return hdnode.derive(path)
   }
 
@@ -420,7 +418,7 @@ class HDNode {
    *   // derive hardened child HDNode
    *   bchjs.HDNode.deriveHardened(hdNode, 0);
    */
-  deriveHardened(hdnode, path) {
+  deriveHardened (hdnode, path) {
     return hdnode.deriveHardened(path)
   }
 
@@ -450,7 +448,7 @@ class HDNode {
    *   // sign
    *   bchjs.HDNode.sign(hdnode, buf);
    */
-  sign(hdnode, buffer) {
+  sign (hdnode, buffer) {
     return hdnode.sign(buffer)
   }
 
@@ -494,7 +492,7 @@ class HDNode {
    *   bchjs.HDNode.verify(hdnode2, buf, signature);
    *   // false
    */
-  verify(hdnode, buffer, signature) {
+  verify (hdnode, buffer, signature) {
     return hdnode.verify(buffer, signature)
   }
 
@@ -530,7 +528,7 @@ class HDNode {
    *   bchjs.HDNode.isPublic(node);
    *   // false
    */
-  isPublic(hdnode) {
+  isPublic (hdnode) {
     return hdnode.isNeutered()
   }
 
@@ -566,7 +564,7 @@ class HDNode {
    *   bchjs.HDNode.isPrivate(node);
    *   // true
    */
-  isPrivate(hdnode) {
+  isPrivate (hdnode) {
     return !hdnode.isNeutered()
   }
 
@@ -598,11 +596,11 @@ class HDNode {
    *   bchjs.Crypto.hash160(publicKeyBuffer);
    *   // <Buffer e1 8e 20 e3 f8 f1 c0 53 e6 1f 9e 3a 58 8e 71 f5 0b 8d 2d c4>
    */
-  toIdentifier(hdnode) {
+  toIdentifier (hdnode) {
     return hdnode.getIdentifier()
   }
 
-  fromBase58(base58, network) {
+  fromBase58 (base58, network) {
     return Bitcoin.HDNode.fromBase58(base58, network)
   }
 
@@ -625,14 +623,14 @@ class HDNode {
    *   // create account
    *   let account = bchjs.HDNode.createAccount([childNode]);
    */
-  createAccount(hdNodes) {
+  createAccount (hdNodes) {
     const arr = hdNodes.map(
       (item, index) => new bip32utils.Chain(item.neutered())
     )
     return new bip32utils.Account(arr)
   }
 
-  createChain(hdNode) {
+  createChain (hdNode) {
     return new bip32utils.Chain(hdNode)
   }
 }

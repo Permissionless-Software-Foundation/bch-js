@@ -1,14 +1,14 @@
-const fixtures = require("./fixtures/transaction-builder.json")
-const assert = require("assert")
-const BCHJS = require("../../src/bch-js")
+const fixtures = require('./fixtures/transaction-builder.json')
+const assert = require('assert')
+const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
-const Buffer = require("safe-buffer").Buffer
+const Buffer = require('safe-buffer').Buffer
 
-describe("#TransactionBuilder", () => {
-  describe("#hashTypes", () => {
-    const transactionBuilder = new bchjs.TransactionBuilder("mainnet")
+describe('#TransactionBuilder', () => {
+  describe('#hashTypes', () => {
+    const transactionBuilder = new bchjs.TransactionBuilder('mainnet')
     fixtures.hashTypes.forEach(fixture => {
-      it(`should match hash type`, () => {
+      it('should match hash type', () => {
         assert.equal(
           fixture[Object.keys(fixture)[0]],
           transactionBuilder.hashTypes[Object.keys(fixture)[0]]
@@ -17,11 +17,11 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#P2PK", () => {
-    describe("#toOne", () => {
-      describe("#Mainnet", () => {
+  describe('#P2PK', () => {
+    describe('#toOne', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pk.toOne.mainnet.forEach(fixture => {
-          it(`should create 1-to-1 P2PK transaction on mainnet`, () => {
+          it('should create 1-to-1 P2PK transaction on mainnet', () => {
             const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
             const transactionBuilder = new bchjs.TransactionBuilder()
             const originalAmount = fixture.amount
@@ -56,11 +56,11 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pk.toOne.testnet.forEach(fixture => {
-          it(`should create 1-to-1 P2PK transaction on testnet`, () => {
+          it('should create 1-to-1 P2PK transaction on testnet', () => {
             const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const originalAmount = fixture.amount
             const txid = fixture.txHash
             const pubKey = bchjs.HDNode.toPublicKey(node)
@@ -94,10 +94,10 @@ describe("#TransactionBuilder", () => {
       })
     })
 
-    describe("#toMany", () => {
-      describe("#Mainnet", () => {
+    describe('#toMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pk.toMany.mainnet.forEach(fixture => {
-          it(`should create 1-to-many P2PK transaction on mainnet`, () => {
+          it('should create 1-to-many P2PK transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -139,13 +139,13 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pk.toMany.testnet.forEach(fixture => {
-          it(`should create 1-to-many P2PK transaction on testnet`, () => {
+          it('should create 1-to-many P2PK transaction on testnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const originalAmount = fixture.amount
             const txid = fixture.txHash
             const pubKey1 = bchjs.HDNode.toPublicKey(node1)
@@ -184,10 +184,10 @@ describe("#TransactionBuilder", () => {
       })
     })
 
-    describe("#manyToMany", () => {
-      describe("#Mainnet", () => {
+    describe('#manyToMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pk.manyToMany.mainnet.forEach(fixture => {
-          it(`should create many-to-many P2PK transaction on mainnet`, () => {
+          it('should create many-to-many P2PK transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -246,14 +246,14 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pk.manyToMany.testnet.forEach(fixture => {
-          it(`should create many-to-many P2PK transaction on testnet`, () => {
+          it('should create many-to-many P2PK transaction on testnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
             const node4 = bchjs.HDNode.fromXPriv(fixture.xprivs[3])
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const originalAmount = fixture.amount
             const txid = fixture.txHash
             const pubKey1 = bchjs.HDNode.toPublicKey(node1)
@@ -308,10 +308,10 @@ describe("#TransactionBuilder", () => {
       })
     })
 
-    describe("#fromMany", () => {
-      describe("#Mainnet", () => {
+    describe('#fromMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pk.fromMany.mainnet.forEach(fixture => {
-          it(`should create many-to-1 P2PK transaction on mainnet`, () => {
+          it('should create many-to-1 P2PK transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -366,13 +366,13 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pk.fromMany.testnet.forEach(fixture => {
-          it(`should create many-to-1 P2PK transaction on testnet`, () => {
+          it('should create many-to-1 P2PK transaction on testnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const originalAmount = fixture.amount
             const txid = fixture.txHash
             const pubKey1 = bchjs.HDNode.toPublicKey(node1)
@@ -425,11 +425,11 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#P2PKH", () => {
-    describe("#toOne", () => {
-      describe("#Mainnet", () => {
+  describe('#P2PKH', () => {
+    describe('#toOne', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pkh.toOne.mainnet.forEach(fixture => {
-          it(`should create 1-to-1 P2PKH transaction on mainnet`, () => {
+          it('should create 1-to-1 P2PKH transaction on mainnet', () => {
             const hdnode = bchjs.HDNode.fromXPriv(fixture.xpriv)
             const transactionBuilder = new bchjs.TransactionBuilder()
             const keyPair = bchjs.HDNode.toKeyPair(hdnode)
@@ -464,11 +464,11 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pkh.toOne.testnet.forEach(fixture => {
-          it(`should create 1-to-1 P2PKH transaction on testnet`, () => {
-            const hdnode = bchjs.HDNode.fromXPriv(fixture.xpriv, "testnet")
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+          it('should create 1-to-1 P2PKH transaction on testnet', () => {
+            const hdnode = bchjs.HDNode.fromXPriv(fixture.xpriv, 'testnet')
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const keyPair = bchjs.HDNode.toKeyPair(hdnode)
             const txHash = fixture.txHash
             // original amount of satoshis in vin
@@ -540,10 +540,10 @@ describe("#TransactionBuilder", () => {
       */
     })
 
-    describe("#toMany", () => {
-      describe("#Mainnet", () => {
+    describe('#toMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pkh.toMany.mainnet.forEach(fixture => {
-          it(`should create 1-to-2 P2PKH transaction on mainnet`, () => {
+          it('should create 1-to-2 P2PKH transaction on mainnet', () => {
             const hdnode = bchjs.HDNode.fromXPriv(fixture.xpriv)
             const transactionBuilder = new bchjs.TransactionBuilder()
             const keyPair = bchjs.HDNode.toKeyPair(hdnode)
@@ -584,12 +584,12 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pkh.toMany.testnet.forEach(fixture => {
           // TODO pass in tesnet network config
-          it(`should create 1-to-2 P2PKH transaction on testnet`, () => {
+          it('should create 1-to-2 P2PKH transaction on testnet', () => {
             const hdnode = bchjs.HDNode.fromXPriv(fixture.xpriv)
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const keyPair = bchjs.HDNode.toKeyPair(hdnode)
             const txHash = fixture.txHash
             // original amount of satoshis in vin
@@ -670,13 +670,13 @@ describe("#TransactionBuilder", () => {
             assert.equal(hex, fixture.hex)
           })
         })
-      })*/
+      }) */
     })
 
-    describe("#manyToMany", () => {
-      describe("#Mainnet", () => {
+    describe('#manyToMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pkh.manyToMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-2 P2PKH transaction on mainnet`, () => {
+          it('should create 2-to-2 P2PKH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const transactionBuilder = new bchjs.TransactionBuilder()
@@ -721,12 +721,12 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pkh.manyToMany.testnet.forEach(fixture => {
-          it(`should create 2-to-2 P2PKH transaction on testnet`, () => {
+          it('should create 2-to-2 P2PKH transaction on testnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const txHash = fixture.txHash
             const originalAmount = fixture.amounts[0] + fixture.amounts[1]
             transactionBuilder.addInput(txHash, 0)
@@ -817,10 +817,10 @@ describe("#TransactionBuilder", () => {
       */
     })
 
-    describe("#fromMany", () => {
-      describe("#Mainnet", () => {
+    describe('#fromMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2pkh.fromMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-1 P2PKH transaction on mainnet`, () => {
+          it('should create 2-to-1 P2PKH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const transactionBuilder = new bchjs.TransactionBuilder()
@@ -858,12 +858,12 @@ describe("#TransactionBuilder", () => {
         })
       })
 
-      describe("#Testnet", () => {
+      describe('#Testnet', () => {
         fixtures.scripts.p2pkh.fromMany.testnet.forEach(fixture => {
-          it(`should create 2-to-1 P2PKH transaction on testnet`, () => {
+          it('should create 2-to-1 P2PKH transaction on testnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
-            const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+            const transactionBuilder = new bchjs.TransactionBuilder('testnet')
             const txHash = fixture.txHash
             const originalAmount = fixture.amounts[0] + fixture.amounts[1]
             transactionBuilder.addInput(txHash, 0)
@@ -941,10 +941,10 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#op_return", () => {
-    describe("#Mainnet", () => {
+  describe('#op_return', () => {
+    describe('#Mainnet', () => {
       fixtures.nulldata.mainnet.forEach(fixture => {
-        it(`should create transaction w/ OP_RETURN output on mainnet`, () => {
+        it('should create transaction w/ OP_RETURN output on mainnet', () => {
           const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
           const transactionBuilder = new bchjs.TransactionBuilder()
           const txHash = fixture.txHash
@@ -958,7 +958,7 @@ describe("#TransactionBuilder", () => {
           transactionBuilder.addOutput(fixture.output, sendAmount)
           const data = fixture.data
           const buf = bchjs.Script.nullData.output.encode(
-            Buffer.from(data, "ascii")
+            Buffer.from(data, 'ascii')
           )
           transactionBuilder.addOutput(buf, 0)
           const keyPair = bchjs.HDNode.toKeyPair(node)
@@ -977,11 +977,11 @@ describe("#TransactionBuilder", () => {
       })
     })
 
-    describe("#Testnet", () => {
+    describe('#Testnet', () => {
       fixtures.nulldata.testnet.forEach(fixture => {
-        it(`should create transaction w/ OP_RETURN output on testnet`, () => {
+        it('should create transaction w/ OP_RETURN output on testnet', () => {
           const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-          const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+          const transactionBuilder = new bchjs.TransactionBuilder('testnet')
           const txHash = fixture.txHash
           const originalAmount = fixture.amount
           transactionBuilder.addInput(txHash, 0)
@@ -993,7 +993,7 @@ describe("#TransactionBuilder", () => {
           transactionBuilder.addOutput(fixture.output, sendAmount)
           const data = fixture.data
           const buf = bchjs.Script.nullData.output.encode(
-            Buffer.from(data, "ascii")
+            Buffer.from(data, 'ascii')
           )
           transactionBuilder.addOutput(buf, 0)
           const keyPair = bchjs.HDNode.toKeyPair(node)
@@ -1049,11 +1049,11 @@ describe("#TransactionBuilder", () => {
     */
   })
 
-  describe("#P2MS", () => {
-    describe("#toOne", () => {
-      describe("#Mainnet", () => {
+  describe('#P2MS', () => {
+    describe('#toOne', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2ms.toOne.mainnet.forEach(fixture => {
-          it(`should create 1-to-1 1-of-2 P2MS transaction on mainnet`, () => {
+          it('should create 1-to-1 1-of-2 P2MS transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1130,10 +1130,10 @@ describe("#TransactionBuilder", () => {
       // });
     })
 
-    describe("#toMany", () => {
-      describe("#Mainnet", () => {
+    describe('#toMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2ms.toMany.mainnet.forEach(fixture => {
-          it(`should create 1-to-2 P2MS transaction on mainnet`, () => {
+          it('should create 1-to-2 P2MS transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1220,10 +1220,10 @@ describe("#TransactionBuilder", () => {
       //   });
     })
 
-    describe("#manyToMany", () => {
-      describe("#Mainnet", () => {
+    describe('#manyToMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2ms.manyToMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-2 P2MS transaction on mainnet`, () => {
+          it('should create 2-to-2 P2MS transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1329,10 +1329,10 @@ describe("#TransactionBuilder", () => {
       //   });
     })
 
-    describe("#fromMany", () => {
-      describe("#Mainnet", () => {
+    describe('#fromMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2ms.fromMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-1 P2MS transaction on mainnet`, () => {
+          it('should create 2-to-1 P2MS transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1429,11 +1429,11 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#P2SH", () => {
-    describe("#toOne", () => {
-      describe("#Mainnet", () => {
+  describe('#P2SH', () => {
+    describe('#toOne', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2sh.toOne.mainnet.forEach(fixture => {
-          it(`should create 1-to-1 P2SH transaction on mainnet`, () => {
+          it('should create 1-to-1 P2SH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const transactionBuilder = new bchjs.TransactionBuilder()
@@ -1516,10 +1516,10 @@ describe("#TransactionBuilder", () => {
       // });
     })
 
-    describe("#toMany", () => {
-      describe("#Mainnet", () => {
+    describe('#toMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2sh.toMany.mainnet.forEach(fixture => {
-          it(`should create 1-to-2 P2SH transaction on mainnet`, () => {
+          it('should create 1-to-2 P2SH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1614,10 +1614,10 @@ describe("#TransactionBuilder", () => {
       //   });
     })
 
-    describe("#manyToMany", () => {
-      describe("#Mainnet", () => {
+    describe('#manyToMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2sh.manyToMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-2 P2SH transaction on mainnet`, () => {
+          it('should create 2-to-2 P2SH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1734,10 +1734,10 @@ describe("#TransactionBuilder", () => {
       //   });
     })
 
-    describe("#fromMany", () => {
-      describe("#Mainnet", () => {
+    describe('#fromMany', () => {
+      describe('#Mainnet', () => {
         fixtures.scripts.p2sh.fromMany.mainnet.forEach(fixture => {
-          it(`should create 2-to-1 P2SH transaction on mainnet`, () => {
+          it('should create 2-to-1 P2SH transaction on mainnet', () => {
             const node1 = bchjs.HDNode.fromXPriv(fixture.xprivs[0])
             const node2 = bchjs.HDNode.fromXPriv(fixture.xprivs[1])
             const node3 = bchjs.HDNode.fromXPriv(fixture.xprivs[2])
@@ -1842,10 +1842,10 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#op_return", () => {
-    describe("#Mainnet", () => {
+  describe('#op_return', () => {
+    describe('#Mainnet', () => {
       fixtures.nulldata.mainnet.forEach(fixture => {
-        it(`should create transaction w/ OP_RETURN output on mainnet`, () => {
+        it('should create transaction w/ OP_RETURN output on mainnet', () => {
           const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
           const transactionBuilder = new bchjs.TransactionBuilder()
           const txHash = fixture.txHash
@@ -1859,7 +1859,7 @@ describe("#TransactionBuilder", () => {
           transactionBuilder.addOutput(fixture.output, sendAmount)
           const data = fixture.data
           const buf = bchjs.Script.nullData.output.encode(
-            Buffer.from(data, "ascii")
+            Buffer.from(data, 'ascii')
           )
           transactionBuilder.addOutput(buf, 0)
           const keyPair = bchjs.HDNode.toKeyPair(node)
@@ -1878,11 +1878,11 @@ describe("#TransactionBuilder", () => {
       })
     })
 
-    describe("#Testnet", () => {
+    describe('#Testnet', () => {
       fixtures.nulldata.testnet.forEach(fixture => {
-        it(`should create transaction w/ OP_RETURN output on testnet`, () => {
+        it('should create transaction w/ OP_RETURN output on testnet', () => {
           const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-          const transactionBuilder = new bchjs.TransactionBuilder("testnet")
+          const transactionBuilder = new bchjs.TransactionBuilder('testnet')
           const txHash = fixture.txHash
           const originalAmount = fixture.amount
           transactionBuilder.addInput(txHash, 0)
@@ -1894,7 +1894,7 @@ describe("#TransactionBuilder", () => {
           transactionBuilder.addOutput(fixture.output, sendAmount)
           const data = fixture.data
           const buf = bchjs.Script.nullData.output.encode(
-            Buffer.from(data, "ascii")
+            Buffer.from(data, 'ascii')
           )
           transactionBuilder.addOutput(buf, 0)
           const keyPair = bchjs.HDNode.toKeyPair(node)
@@ -1950,37 +1950,37 @@ describe("#TransactionBuilder", () => {
 */
   })
 
-  describe("#bip66", () => {
+  describe('#bip66', () => {
     fixtures.bip66.forEach(fixture => {
       it(`should bip66 encode as ${fixture.DER}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
-        const r = Buffer.from(fixture.r, "hex")
-        const s = Buffer.from(fixture.s, "hex")
+        const r = Buffer.from(fixture.r, 'hex')
+        const s = Buffer.from(fixture.s, 'hex')
         const DER = transactionBuilder.bip66.encode(r, s)
-        assert.equal(DER.toString("hex"), fixture.DER)
+        assert.equal(DER.toString('hex'), fixture.DER)
       })
     })
 
     fixtures.bip66.forEach(fixture => {
       it(`should bip66 decode ${fixture.DER}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
-        const buffer = Buffer.from(fixture.DER, "hex")
+        const buffer = Buffer.from(fixture.DER, 'hex')
         const signature = transactionBuilder.bip66.decode(buffer)
-        assert.equal(signature.r.toString("hex"), fixture.r)
-        assert.equal(signature.s.toString("hex"), fixture.s)
+        assert.equal(signature.r.toString('hex'), fixture.r)
+        assert.equal(signature.s.toString('hex'), fixture.s)
       })
     })
 
     fixtures.bip66.forEach(fixture => {
       it(`should bip66 check ${fixture.DER}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
-        const buffer = Buffer.from(fixture.DER, "hex")
+        const buffer = Buffer.from(fixture.DER, 'hex')
         assert.equal(transactionBuilder.bip66.check(buffer), true)
       })
     })
   })
 
-  describe("#bip68", () => {
+  describe('#bip68', () => {
     fixtures.bip68.encode.forEach(fixture => {
       it(`should bip68 encode as ${fixture.result}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
@@ -2002,10 +2002,10 @@ describe("#TransactionBuilder", () => {
     })
   })
 
-  describe("#LockTime", () => {
-    describe("#Mainnet", () => {
+  describe('#LockTime', () => {
+    describe('#Mainnet', () => {
       fixtures.locktime.mainnet.forEach(fixture => {
-        it(`should create transaction with nLockTime on mainnet`, () => {
+        it('should create transaction with nLockTime on mainnet', () => {
           const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
           const transactionBuilder = new bchjs.TransactionBuilder()
 

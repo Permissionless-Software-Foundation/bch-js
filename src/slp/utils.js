@@ -1,7 +1,7 @@
 // Public npm libraries
-const axios = require("axios")
-const slpParser = require("slp-parser")
-const BigNumber = require("bignumber.js")
+const axios = require('axios')
+const slpParser = require('slp-parser')
+const BigNumber = require('bignumber.js')
 
 // const Script = require("../script")
 // const scriptLib = new Script()
@@ -11,7 +11,7 @@ const BigNumber = require("bignumber.js")
 let _this
 
 class Utils {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.slpParser = slpParser
@@ -195,18 +195,18 @@ class Utils {
    * circulatingSupply: 19882.03820723,
    * mintingBatonStatus: 'ALIVE' } ]
    */
-  async list(id) {
+  async list (id) {
     let path
     let method
 
     if (!id) {
-      method = "get"
+      method = 'get'
       path = `${this.restURL}slp/list`
-    } else if (typeof id === "string") {
-      method = "get"
+    } else if (typeof id === 'string') {
+      method = 'get'
       path = `${this.restURL}slp/list/${id}`
-    } else if (typeof id === "object") {
-      method = "post"
+    } else if (typeof id === 'object') {
+      method = 'post'
       path = `${this.restURL}slp/list`
     }
 
@@ -214,7 +214,7 @@ class Utils {
 
     try {
       let response
-      if (method === "get") {
+      if (method === 'get') {
         response = await _this.axios.get(path, _this.axiosOptions)
       } else {
         response = await _this.axios.post(
@@ -307,10 +307,10 @@ class Utils {
    * array of addresses.
    */
   // Retrieve token balances for a given address.
-  async balancesForAddress(address) {
+  async balancesForAddress (address) {
     try {
       // Single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const path = `${this.restURL}slp/balancesForAddress/${address}`
 
         const response = await _this.axios.get(path, _this.axiosOptions)
@@ -332,7 +332,7 @@ class Utils {
         return response.data
       }
 
-      throw new Error("Input address must be a string or array of strings.")
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       throw error
@@ -374,7 +374,7 @@ class Utils {
    *
    */
   // Retrieve token balances for a given tokenId.
-  async balancesForToken(tokenId) {
+  async balancesForToken (tokenId) {
     try {
       const path = `${this.restURL}slp/balancesForToken/${tokenId}`
 
@@ -436,14 +436,14 @@ class Utils {
   // will be like the examples above. If SLPDB has fallen behind real-time
   // processing, it will return this output:
   // [ null ]
-  async validateTxid(txid) {
+  async validateTxid (txid) {
     const path = `${this.restURL}slp/validateTxid`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
-    if (typeof txid === "string") txids = [txid]
+    if (typeof txid === 'string') txids = [txid]
     else txids = txid
 
     try {
@@ -501,17 +501,18 @@ class Utils {
    * 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
    * valid: true } ]
    */
-  async validateTxid2(txid) {
+  async validateTxid2 (txid) {
     try {
       // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
       if (
         !txid ||
-        txid === "" ||
-        typeof txid !== "string" ||
+        txid === '' ||
+        typeof txid !== 'string' ||
         txid.length !== 64
-      )
-        throw new Error("txid must be 64 character string.")
+      ) {
+        throw new Error('txid must be 64 character string.')
+      }
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
@@ -520,8 +521,9 @@ class Utils {
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
 
-      if (error.error && error.error.indexOf("Network error") > -1)
-        throw new Error("slp-validate timed out")
+      if (error.error && error.error.indexOf('Network error') > -1) {
+        throw new Error('slp-validate timed out')
+      }
 
       throw error
     }
@@ -577,7 +579,7 @@ class Utils {
    *   }
    * ]
    */
-  async getWhitelist() {
+  async getWhitelist () {
     try {
       const path = `${this.restURL}slp/whitelist`
 
@@ -646,14 +648,14 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
-  async validateTxid3(txid) {
+  async validateTxid3 (txid) {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
-    if (typeof txid === "string") txids = [txid]
+    if (typeof txid === 'string') txids = [txid]
     else txids = txid
 
     try {
@@ -710,7 +712,7 @@ class Utils {
    *  satoshisLockedUp: 135408
    * }
    */
-  async tokenStats(tokenId) {
+  async tokenStats (tokenId) {
     try {
       const path = `${this.restURL}slp/tokenStats/${tokenId}`
 
@@ -781,7 +783,7 @@ class Utils {
    * ]
    */
   // Retrieve token transactions for a given tokenId and address.
-  async transactions(tokenId, address) {
+  async transactions (tokenId, address) {
     try {
       const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
 
@@ -821,7 +823,7 @@ class Utils {
    *  burnTotal: 100
    * }
    */
-  async burnTotal(transactionId) {
+  async burnTotal (transactionId) {
     try {
       const path = `${this.restURL}slp/burnTotal/${transactionId}`
 
@@ -855,15 +857,16 @@ class Utils {
    * })()
    *
    */
-  async txDetails(txid) {
+  async txDetails (txid) {
     try {
       if (
         !txid ||
-        txid === "" ||
-        typeof txid !== "string" ||
+        txid === '' ||
+        typeof txid !== 'string' ||
         txid.length !== 64
-      )
-        throw new Error("txid string must be included.")
+      ) {
+        throw new Error('txid string must be included.')
+      }
 
       // console.log(`this.restURL: ${this.restURL}`)
       const path = `${this.restURL}slp/txDetails/${txid}`
@@ -920,7 +923,7 @@ class Utils {
    * }
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn(txid, cache = null) {
+  async decodeOpReturn (txid, cache = null) {
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -929,8 +932,9 @@ class Utils {
     // cache[txid] = returnValue
     // Then pass that cache object back into this function every time its called.
     if (cache) {
-      if (!(cache instanceof Object))
-        throw new Error("decodeOpReturn cache parameter must be Object")
+      if (!(cache instanceof Object)) {
+        throw new Error('decodeOpReturn cache parameter must be Object')
+      }
 
       const cachedVal = cache[txid]
       if (cachedVal) return cachedVal
@@ -938,8 +942,9 @@ class Utils {
 
     try {
       // Validate the txid input.
-      if (!txid || txid === "" || typeof txid !== "string")
-        throw new Error("txid string must be included.")
+      if (!txid || txid === '' || typeof txid !== 'string') {
+        throw new Error('txid string must be included.')
+      }
 
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
@@ -951,19 +956,19 @@ class Utils {
       const opReturn = txDetails.vout[0].scriptPubKey.hex
       // console.log(`opReturn hex: ${opReturn}`)
 
-      const parsedData = _this.slpParser.parseSLP(Buffer.from(opReturn, "hex"))
+      const parsedData = _this.slpParser.parseSLP(Buffer.from(opReturn, 'hex'))
       // console.log(`parsedData: ${JSON.stringify(parsedData, null, 2)}`)
 
       // Convert Buffer data to hex strings or utf8 strings.
       let tokenData = {}
-      if (parsedData.transactionType === "SEND") {
+      if (parsedData.transactionType === 'SEND') {
         tokenData = {
           tokenType: parsedData.tokenType,
           txType: parsedData.transactionType,
-          tokenId: parsedData.data.tokenId.toString("hex"),
+          tokenId: parsedData.data.tokenId.toString('hex'),
           amounts: parsedData.data.amounts
         }
-      } else if (parsedData.transactionType === "GENESIS") {
+      } else if (parsedData.transactionType === 'GENESIS') {
         tokenData = {
           tokenType: parsedData.tokenType,
           txType: parsedData.transactionType,
@@ -976,11 +981,11 @@ class Utils {
           mintBatonVout: parsedData.data.mintBatonVout,
           qty: parsedData.data.qty
         }
-      } else if (parsedData.transactionType === "MINT") {
+      } else if (parsedData.transactionType === 'MINT') {
         tokenData = {
           tokenType: parsedData.tokenType,
           txType: parsedData.transactionType,
-          tokenId: parsedData.data.tokenId.toString("hex"),
+          tokenId: parsedData.data.tokenId.toString('hex'),
           mintBatonVout: parsedData.data.mintBatonVout,
           qty: parsedData.data.qty
         }
@@ -1054,14 +1059,14 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
 
   // CT 5/31/20: Refactored to use slp-parse library.
-  async tokenUtxoDetails(utxos) {
+  async tokenUtxoDetails (utxos) {
     try {
       // utxo list may have duplicate tx_hash, varying tx_pos
       // only need to call decodeOpReturn once for those
       const decodeOpReturnCache = {}
       const cachedTxValidation = {}
       // Throw error if input is not an array.
-      if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
+      if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
       // Loop through each element in the array and validate the input before
       // further processing.
@@ -1072,9 +1077,8 @@ class Utils {
           // If Electrumx, convert the value to satoshis.
           if (utxo.value) {
             utxo.satoshis = utxo.value
-          }
-          // If there is neither a satoshis or value property, throw an error.
-          else {
+          } else {
+            // If there is neither a satoshis or value property, throw an error.
             throw new Error(
               `utxo ${i} does not have a satoshis or value property.`
             )
@@ -1085,9 +1089,8 @@ class Utils {
           // If Electrumx, convert the tx_hash property to txid.
           if (utxo.tx_hash) {
             utxo.txid = utxo.tx_hash
-          }
-          // If there is neither a txid or tx_hash property, throw an error.
-          else {
+          } else {
+            // If there is neither a txid or tx_hash property, throw an error.
             throw new Error(
               `utxo ${i} does not have a txid or tx_hash property.`
             )
@@ -1128,9 +1131,9 @@ class Utils {
           // to display the unknown state.
           if (
             !err.message ||
-            (err.message.indexOf("scriptpubkey not op_return") === -1 &&
-              err.message.indexOf("lokad id") === -1 &&
-              err.message.indexOf("trailing data") === -1)
+            (err.message.indexOf('scriptpubkey not op_return') === -1 &&
+              err.message.indexOf('lokad id') === -1 &&
+              err.message.indexOf('trailing data') === -1)
           ) {
             // console.log(
             //   `unknown error from decodeOpReturn(). Marking as 'null'`,
@@ -1159,7 +1162,7 @@ class Utils {
 
         // If there is an OP_RETURN, attempt to decode it.
         // Handle Genesis SLP transactions.
-        if (txType === "genesis") {
+        if (txType === 'genesis') {
           if (
             utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
@@ -1168,17 +1171,15 @@ class Utils {
             // outAry[i] = false
             utxo.isValid = false
             outAry[i] = utxo
-          }
-
-          // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
-          else {
+          } else {
+            // If this is a valid SLP UTXO, then return the decoded OP_RETURN data.
             // Minting Baton
             if (utxo.vout === slpData.mintBatonVout) {
-              utxo.utxoType = "minting-baton"
-            }
-            // Tokens
-            else {
-              utxo.utxoType = "token"
+              utxo.utxoType = 'minting-baton'
+            } else {
+              // Tokens
+
+              utxo.utxoType = 'token'
               utxo.tokenQty = new BigNumber(slpData.qty)
                 .div(Math.pow(10, slpData.decimals))
                 .toString()
@@ -1198,7 +1199,7 @@ class Utils {
         }
 
         // Handle Mint SLP transactions.
-        if (txType === "mint") {
+        if (txType === 'mint') {
           if (
             utxo.vout !== slpData.mintBatonVout && // UTXO is not a mint baton output.
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
@@ -1207,10 +1208,9 @@ class Utils {
             // outAry[i] = false
             utxo.isValid = false
             outAry[i] = utxo
-          }
+          } else {
+            // If UTXO passes validation, then return formatted token data.
 
-          // If UTXO passes validation, then return formatted token data.
-          else {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache
@@ -1219,18 +1219,18 @@ class Utils {
 
             // Minting Baton
             if (utxo.vout === slpData.mintBatonVout) {
-              utxo.utxoType = "minting-baton"
-            }
-            // Tokens
-            else {
-              utxo.utxoType = "token"
+              utxo.utxoType = 'minting-baton'
+            } else {
+              // Tokens
+
+              utxo.utxoType = 'token'
               utxo.tokenQty = new BigNumber(slpData.qty)
                 .div(Math.pow(10, genesisData.decimals))
                 .toString()
             }
 
             // Hydrate the UTXO object with information about the SLP token.
-            utxo.transactionType = "mint"
+            utxo.transactionType = 'mint'
             utxo.tokenId = slpData.tokenId
             utxo.tokenType = slpData.tokenType
 
@@ -1247,7 +1247,7 @@ class Utils {
         }
 
         // Handle Send SLP transactions.
-        if (txType === "send") {
+        if (txType === 'send') {
           // Filter out any vouts that match.
           // const voutMatch = slpData.spendData.filter(x => utxo.vout === x.vout)
           // console.log(`voutMatch: ${JSON.stringify(voutMatch, null, 2)}`)
@@ -1260,10 +1260,9 @@ class Utils {
             // outAry[i] = false
             utxo.isValid = false
             outAry[i] = utxo
-          }
+          } else {
+            // If UTXO passes validation, then return formatted token data.
 
-          // If UTXO passes validation, then return formatted token data.
-          else {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache
@@ -1273,8 +1272,8 @@ class Utils {
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
             // Hydrate the UTXO object with information about the SLP token.
-            utxo.utxoType = "token"
-            utxo.transactionType = "send"
+            utxo.utxoType = 'token'
+            utxo.transactionType = 'send'
             utxo.tokenId = slpData.tokenId
             utxo.tokenTicker = genesisData.ticker
             utxo.tokenName = genesisData.name
@@ -1288,7 +1287,7 @@ class Utils {
             const tokenQtyBig = new BigNumber(tokenQty).div(
               Math.pow(10, genesisData.decimals)
             )
-            //console.log(`tokenQtyBig`, tokenQtyBig.toString())
+            // console.log(`tokenQtyBig`, tokenQtyBig.toString())
             utxo.tokenQty = tokenQtyBig.toString()
 
             // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
@@ -1315,8 +1314,8 @@ class Utils {
           // correctly, then validateTxid() will return this:
           // isValid: [
           //   {
-          // 	"txid": "ff0c0354f8d3ddb34fa36f73494eb58ea24f8b8da6904aa8ed43b7a74886c583",
-          // 	"valid": true
+          //  "txid": "ff0c0354f8d3ddb34fa36f73494eb58ea24f8b8da6904aa8ed43b7a74886c583",
+          //  "valid": true
           //   }
           // ]
           //
@@ -1337,8 +1336,9 @@ class Utils {
             // )
 
             // Handle corner case where SLPDB returns an array with a null element.
-            if (isValid[0] === null)
+            if (isValid[0] === null) {
               isValid = [{ txid: utxo.txid, valid: null }]
+            }
 
             isValid = isValid[0].valid
 
@@ -1593,10 +1593,10 @@ class Utils {
    */
   // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
   // do the heavy lifting.
-  async hydrateUtxos(utxos) {
+  async hydrateUtxos (utxos) {
     try {
       // Throw error if input is not an array.
-      if (!Array.isArray(utxos)) throw new Error("Input must be an array.")
+      if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
@@ -1639,7 +1639,7 @@ class Utils {
    * valid: true } ]
    *
    */
-  async getStatus(txid) {
+  async getStatus (txid) {
     const path = `${this.restURL}slp/status`
 
     try {

@@ -1,10 +1,11 @@
-const Bitcoin = require("@psf/bitcoincashjs-lib")
-const coininfo = require("@psf/coininfo")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const coininfo = require('@psf/coininfo')
 
 class ECPair {
-  static setAddress(address) {
+  static setAddress (address) {
     ECPair._address = address
   }
+
   /**
    * @api Ecpair.fromWIF() fromWIF()
    * @apiName fromWIF
@@ -20,20 +21,19 @@ class ECPair {
    *  let wif = 'cSNLj6xeg3Yg2rfcgKoWNx4MiAgn9ugCUUro37UDEhn6CzeYqjWW'
    *  bchjs.ECPair.fromWIF(wif)
    * */
-  static fromWIF(privateKeyWIF) {
+  static fromWIF (privateKeyWIF) {
     let network
-    if (privateKeyWIF[0] === "L" || privateKeyWIF[0] === "K")
-      network = "mainnet"
-    else if (privateKeyWIF[0] === "c") network = "testnet"
+    if (privateKeyWIF[0] === 'L' || privateKeyWIF[0] === 'K') { network = 'mainnet' } else if (privateKeyWIF[0] === 'c') network = 'testnet'
 
     let bitcoincash
-    if (network === "mainnet") bitcoincash = coininfo.bitcoincash.main
+    if (network === 'mainnet') bitcoincash = coininfo.bitcoincash.main
     else bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
 
     return Bitcoin.ECPair.fromWIF(privateKeyWIF, bitcoincashBitcoinJSLib)
   }
+
   /**
    * @api Ecpair.toWIF() toWIF()
    * @apiName toWIF
@@ -57,17 +57,18 @@ class ECPair {
    *  bchjs.ECPair.toWIF(ecpair);
    *  // cT3tJP7BnjFJSAHbooMXrY8E9t2AFj37amSBAYFMeHfqPqPgD4ZA
    * */
-  static toWIF(ecpair) {
+  static toWIF (ecpair) {
     return ecpair.toWIF()
   }
 
-  static sign(ecpair, buffer) {
+  static sign (ecpair, buffer) {
     return ecpair.sign(buffer)
   }
 
-  static verify(ecpair, buffer, signature) {
+  static verify (ecpair, buffer, signature) {
     return ecpair.verify(buffer, signature)
   }
+
   /**
    * @api Ecpair.fromPublicKey() fromPublicKey()
    * @apiName fromPublicKey
@@ -83,9 +84,10 @@ class ECPair {
    *  let pubkeyBuffer = Buffer.from("024a6d0737a23c472d078d78c1cbc3c2bbf8767b48e72684ff03a911b463da7fa6", 'hex');
    *  bchjs.ECPair.fromPublicKey(pubkeyBuffer);
    * */
-  static fromPublicKey(pubkeyBuffer) {
+  static fromPublicKey (pubkeyBuffer) {
     return Bitcoin.ECPair.fromPublicKeyBuffer(pubkeyBuffer)
   }
+
   /**
    * @api Ecpair.toPublicKey() toPublicKey()
    * @apiName toPublicKey
@@ -105,9 +107,10 @@ class ECPair {
    *  bchjs.ECPair.toPublicKey(ecpair);
    *  //
    * */
-  static toPublicKey(ecpair) {
+  static toPublicKey (ecpair) {
     return ecpair.getPublicKeyBuffer()
   }
+
   /**
    * @api Ecpair.toLegacyAddress() toLegacyAddress()
    * @apiName toLegacyAddress
@@ -131,9 +134,10 @@ class ECPair {
    *  bchjs.ECPair.toLegacyAddress(ecpair);
    *  // mg4PygFcXoyNJGJkM2Dcpe25av9wXzz1My
    * */
-  static toLegacyAddress(ecpair) {
+  static toLegacyAddress (ecpair) {
     return ecpair.getAddress()
   }
+
   /**
    * @api Ecpair.toCashAddress() toCashAddress()
    * @apiName toCashAddress
@@ -157,7 +161,7 @@ class ECPair {
    *  bchjs.ECPair.toCashAddress(ecpair);
    *  // bchtest:qqzly4vrcxcjw62u4yq4nv86ltk2mc9v0yvq8mvj6m
    * */
-  static toCashAddress(ecpair, regtest = false) {
+  static toCashAddress (ecpair, regtest = false) {
     return ECPair._address.toCashAddress(ecpair.getAddress(), true, regtest)
   }
 }
