@@ -1,5 +1,5 @@
-const Bitcoin = require("bitcoincashjs-lib")
-const opcodes = require("bitcoincash-ops")
+const Bitcoin = require("@psf/bitcoincashjs-lib")
+const opcodes = require("@psf/bitcoincash-ops")
 
 class Script {
   constructor() {

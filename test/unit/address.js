@@ -1,6 +1,6 @@
 // Public npm libraries.
 const assert = require("assert")
-const Bitcoin = require("bitcoincashjs-lib")
+const Bitcoin = require("@psf/bitcoincashjs-lib")
 
 // Mocks
 const fixtures = require("./fixtures/address.json")
