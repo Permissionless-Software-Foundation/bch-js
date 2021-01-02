@@ -52,7 +52,7 @@
     "cashaddrjs": "^0.3.3",
     "chalk": "^2.3.0",
     "clear": "0.1.0",
-    "coininfo": "Bitcoin-com/coininfo",
+    "@psf/coininfo": "^4.0.0",
     "commander": "^3.0.0",
     "cp-file": "^7.0.0",
     "ecurve": "^1.0.6",

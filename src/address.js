@@ -1,7 +1,7 @@
 //const axios = require("axios")
-const Bitcoin = require("bitcoincashjs-lib")
+const Bitcoin = require("@psf/bitcoincashjs-lib")
 const cashaddr = require("cashaddrjs")
-const coininfo = require("coininfo")
+const coininfo = require("@psf/coininfo")
 
 class Address {
   constructor(config) {

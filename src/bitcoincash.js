@@ -1,9 +1,9 @@
-const Bitcoin = require("bitcoincashjs-lib")
+const Bitcoin = require("@psf/bitcoincashjs-lib")
 const sb = require("satoshi-bitcoin")
 const bitcoinMessage = require("bitcoinjs-message")
 const bs58 = require("bs58")
 const bip21 = require("@psf/bip21")
-const coininfo = require("coininfo")
+const coininfo = require("@psf/coininfo")
 const bip38 = require("bip38")
 const wif = require("wif")
 
