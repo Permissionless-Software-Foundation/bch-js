@@ -3,12 +3,12 @@
   provides for their application.
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class OpenBazaar {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
 
@@ -55,12 +55,12 @@ class OpenBazaar {
    * }
    *
    */
-  async balance(address) {
+  async balance (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         let response
-        if (process.env.NETWORK === "testnet") {
+        if (process.env.NETWORK === 'testnet') {
           response = await axios.get(
             `https://tbch.blockbook.api.openbazaar.org/api/address/${address}`,
             _this.axiosOptions
@@ -75,7 +75,7 @@ class OpenBazaar {
         return response.data
       }
 
-      throw new Error(`Input address must be a string.`)
+      throw new Error('Input address must be a string.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -109,12 +109,12 @@ class OpenBazaar {
    *   }
    * ]
    */
-  async utxo(address) {
+  async utxo (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         let response
-        if (process.env.NETWORK === "testnet") {
+        if (process.env.NETWORK === 'testnet') {
           response = await axios.get(
             `https://tbch.blockbook.api.openbazaar.org/api/utxo/${address}`,
             _this.axiosOptions
@@ -127,7 +127,7 @@ class OpenBazaar {
         }
         return response.data
       }
-      throw new Error(`Input address must be a string.`)
+      throw new Error('Input address must be a string.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -199,12 +199,12 @@ class OpenBazaar {
    * }
    *
    */
-  async tx(txid) {
+  async tx (txid) {
     try {
       // Handle single txid.
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         let response
-        if (process.env.NETWORK === "testnet") {
+        if (process.env.NETWORK === 'testnet') {
           response = await axios.get(
             `https://tbch.blockbook.api.openbazaar.org/api/tx/${txid}`,
             _this.axiosOptions
@@ -218,7 +218,7 @@ class OpenBazaar {
         return response.data
       }
 
-      throw new Error(`Input txid must be a string.`)
+      throw new Error('Input txid must be a string.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error

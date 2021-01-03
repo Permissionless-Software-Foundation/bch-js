@@ -1,7 +1,7 @@
-const schnorr = require("bip-schnorr")
+const schnorr = require('bip-schnorr')
 
 class Schnorr {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -46,7 +46,7 @@ class Schnorr {
    * console.log("The signature is: " + createdSignature.toString("hex"))
    * // The signature is: 2a298dacae57395a15d0795ddbfd1dcb564da82b0f269bc70a74f8220429ba1d1e51a22ccec35599b8f266912281f8365ffc2d035a230434a1a64dc59f7013fd
    */
-  sign(privateKey, message) {
+  sign (privateKey, message) {
     return schnorr.sign(privateKey, message)
   }
 
@@ -78,7 +78,7 @@ class Schnorr {
    * console.error("The signature verification failed: " + e)
    * }
    */
-  verify(publicKey, message, signatureToVerify) {
+  verify (publicKey, message, signatureToVerify) {
     return schnorr.verify(publicKey, message, signatureToVerify)
   }
 
@@ -140,7 +140,7 @@ class Schnorr {
    * console.error("The signature verification failed: " + e)
    * }
    */
-  batchVerify(publicKeys, messages, signaturesToVerify) {
+  batchVerify (publicKeys, messages, signaturesToVerify) {
     return schnorr.batchVerify(publicKeys, messages, signaturesToVerify)
   }
 
@@ -189,7 +189,7 @@ class Schnorr {
    * console.error("The signature verification failed: " + e)
    * }
    */
-  nonInteractive(privateKeys, message) {
+  nonInteractive (privateKeys, message) {
     return schnorr.muSig.nonInteractive(privateKeys, message)
   }
 
@@ -263,7 +263,7 @@ class Schnorr {
    * // -----------------------------------------------------------------------
    * publicData.pubKeyHash = bchjs.Schnorr.computeEll(publicData.pubKeys)
    */
-  computeEll(publicKeys) {
+  computeEll (publicKeys) {
     return schnorr.muSig.computeEll(publicKeys)
   }
 
@@ -281,7 +281,7 @@ class Schnorr {
    * publicData.pubKeyHash
    * )
    */
-  publicKeyCombine(publicKeys, publicKeyHash) {
+  publicKeyCombine (publicKeys, publicKeyHash) {
     return schnorr.muSig.pubKeyCombine(publicKeys, publicKeyHash)
   }
 
@@ -313,7 +313,7 @@ class Schnorr {
    * })
    * const signerSession = signerPrivateData[0].session
    */
-  sessionInitialize(sessionId, privateKey, message, pubKeyCombined, ell, idx) {
+  sessionInitialize (sessionId, privateKey, message, pubKeyCombined, ell, idx) {
     return schnorr.muSig.sessionInitialize(
       sessionId,
       privateKey,
@@ -365,7 +365,7 @@ class Schnorr {
    * data => (data.session.nonceIsNegated = signerSession.nonceIsNegated)
    * )
    */
-  sessionNonceCombine(session, nonces) {
+  sessionNonceCombine (session, nonces) {
     return schnorr.muSig.sessionNonceCombine(session, nonces)
   }
 
@@ -392,7 +392,7 @@ class Schnorr {
    * )
    * })
    */
-  partialSign(session, message, nonceCombined, pubKeyCombined) {
+  partialSign (session, message, nonceCombined, pubKeyCombined) {
     return schnorr.muSig.partialSign(
       session,
       message,
@@ -436,7 +436,7 @@ class Schnorr {
    * )
    * }
    */
-  partialSignatureVerify(
+  partialSignatureVerify (
     session,
     partialSignature,
     nonceCombined,
@@ -484,27 +484,27 @@ class Schnorr {
    * publicData.signature
    * )
    */
-  partialSignaturesCombine(nonceCombined, partialSignatures) {
+  partialSignaturesCombine (nonceCombined, partialSignatures) {
     return schnorr.muSig.partialSigCombine(nonceCombined, partialSignatures)
   }
 
-  bufferToInt(buffer) {
+  bufferToInt (buffer) {
     return schnorr.convert.bufferToInt(buffer)
   }
 
-  intToBuffer(bigInteger) {
+  intToBuffer (bigInteger) {
     return schnorr.convert.intToBuffer(bigInteger)
   }
 
-  hash(buffer) {
+  hash (buffer) {
     return schnorr.convert.hash(buffer)
   }
 
-  pointToBuffer(point) {
+  pointToBuffer (point) {
     return schnorr.convert.pointToBuffer(point)
   }
 
-  pubKeyToPoint(publicKey) {
+  pubKeyToPoint (publicKey) {
     return schnorr.convert.pubKeyToPoint(publicKey)
   }
 }

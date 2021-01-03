@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class Price {
-  constructor(config) {
+  constructor (config) {
     _this = this
 
     this.restURL = config.restURL
@@ -30,7 +30,7 @@ class Price {
   }
 
   // This endpoint is deprecated. Documentation removed.
-  async current(currency = "usd") {
+  async current (currency = 'usd') {
     try {
       const response = await this.axios.get(
         `https://index-api.bitcoin.com/api/v0/cash/price/${currency.toLowerCase()}`
@@ -64,7 +64,7 @@ class Price {
    *
    * // 266.81
    */
-  async getUsd() {
+  async getUsd () {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/usd`,
@@ -107,7 +107,7 @@ class Price {
    *   ZWL: "80215.03"
    * }
    */
-  async rates() {
+  async rates () {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/rates`,
@@ -142,7 +142,7 @@ class Price {
    *
    * // 18.81
    */
-  async getBchaUsd() {
+  async getBchaUsd () {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/bchausd`,

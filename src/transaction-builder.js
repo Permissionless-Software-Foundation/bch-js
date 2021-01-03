@@ -1,18 +1,16 @@
-const Bitcoin = require("@psf/bitcoincashjs-lib")
-const coininfo = require("@psf/coininfo")
-const bip66 = require("bip66")
-const bip68 = require("bc-bip68")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const coininfo = require('@psf/coininfo')
+const bip66 = require('bip66')
+const bip68 = require('bc-bip68')
 
 class TransactionBuilder {
-  static setAddress(address) {
+  static setAddress (address) {
     TransactionBuilder._address = address
   }
 
-  constructor(network = "mainnet") {
+  constructor (network = 'mainnet') {
     let bitcoincash
-    if (network === "bitcoincash" || network === "mainnet")
-      bitcoincash = coininfo.bitcoincash.main
-    else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'bitcoincash' || network === 'mainnet') { bitcoincash = coininfo.bitcoincash.main } else bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     this.transaction = new Bitcoin.TransactionBuilder(bitcoincashBitcoinJSLib)
@@ -33,7 +31,7 @@ class TransactionBuilder {
     this.bip66 = bip66
     this.bip68 = bip68
     this.p2shInput = false
-    this.tx
+    // this.tx
   }
 
   /**
@@ -48,23 +46,24 @@ class TransactionBuilder {
    * // add input with txid and index of vout
    * transactionBuilder.addInput(txid, 0);
    */
-  addInput(txHash, vout, sequence = this.DEFAULT_SEQUENCE, prevOutScript) {
+  addInput (txHash, vout, sequence = this.DEFAULT_SEQUENCE, prevOutScript) {
     this.transaction.addInput(txHash, vout, sequence, prevOutScript)
   }
 
-  addInputScript(vout, script) {
+  addInputScript (vout, script) {
     this.tx = this.transaction.buildIncomplete()
     this.tx.setInputScript(vout, script)
     this.p2shInput = true
   }
 
-  addInputScripts(scripts) {
+  addInputScripts (scripts) {
     this.tx = this.transaction.buildIncomplete()
     scripts.forEach(script => {
       this.tx.setInputScript(script.vout, script.script)
     })
     this.p2shInput = true
   }
+
   /**
    * @api Transaction-Builder.addOutput() addOutput()
    * @apiName AddOutput
@@ -79,7 +78,7 @@ class TransactionBuilder {
    *  // add output w/ address and amount to send
    *  transactionBuilder.addOutput('bitcoincash:qpuax2tarq33f86wccwlx8ge7tad2wgvqgjqlwshpw', sendAmount);
    */
-  addOutput(scriptPubKey, amount) {
+  addOutput (scriptPubKey, amount) {
     try {
       this.transaction.addOutput(
         TransactionBuilder._address.toLegacyAddress(scriptPubKey),
@@ -89,6 +88,7 @@ class TransactionBuilder {
       this.transaction.addOutput(scriptPubKey, amount)
     }
   }
+
   /**
    * @api Transaction-Builder.setLockTime() setLockTime()
    * @apiName SetLockTime
@@ -104,9 +104,10 @@ class TransactionBuilder {
    *  transactionBuilder.addOutput('bitcoincash:qpuax2tarq33f86wccwlx8ge7tad2wgvqgjqlwshpw', sendAmount);
    *  transactionBuilder.setLockTime(50000)
    */
-  setLockTime(locktime) {
+  setLockTime (locktime) {
     this.transaction.setLockTime(locktime)
   }
+
   /**
    * @api Transaction-Builder.sign() sign()
    * @apiName Sign.
@@ -124,7 +125,7 @@ class TransactionBuilder {
    *  // sign w/ keyPair
    *  transactionBuilder.sign(0, keyPair, redeemScript, transactionBuilder.hashTypes.SIGHASH_ALL, originalAmount, transactionBuilder.signatureAlgorithms.SCHNORR);
    */
-  sign(
+  sign (
     vin,
     keyPair,
     redeemScript,
@@ -144,6 +145,7 @@ class TransactionBuilder {
       signatureAlgorithm
     )
   }
+
   /**
    * @api Transaction-Builder.build() build()
    * @apiName Build.
@@ -154,7 +156,7 @@ class TransactionBuilder {
    * // build tx
    * let tx = bchjs.transactionBuilder.build();
    */
-  build() {
+  build () {
     if (this.p2shInput === true) return this.tx
 
     return this.transaction.build()

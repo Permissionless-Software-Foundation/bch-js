@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class Mining {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -27,10 +27,10 @@ class Mining {
     _this = this
   }
 
-  async getBlockTemplate(template_request) {
+  async getBlockTemplate (templateRequest) {
     try {
       const response = await axios.get(
-        `${this.restURL}mining/getBlockTemplate/${template_request}`,
+        `${this.restURL}mining/getBlockTemplate/${templateRequest}`,
         _this.axiosOptions
       )
       return response.data
@@ -40,7 +40,7 @@ class Mining {
     }
   }
 
-  async getMiningInfo() {
+  async getMiningInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getMiningInfo`,
@@ -53,7 +53,7 @@ class Mining {
     }
   }
 
-  async getNetworkHashps(nblocks = 120, height = 1) {
+  async getNetworkHashps (nblocks = 120, height = 1) {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getNetworkHashps?nblocks=${nblocks}&height=${height}`,
@@ -66,7 +66,7 @@ class Mining {
     }
   }
 
-  async submitBlock(hex, parameters) {
+  async submitBlock (hex, parameters) {
     let path = `${this.restURL}mining/submitBlock/${hex}`
     if (parameters) path = `${path}?parameters=${parameters}`
 

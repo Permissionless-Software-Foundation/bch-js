@@ -7,66 +7,56 @@
 */
 
 // bch-api mainnet.
-const DEFAULT_REST_API = "https://api.fullstack.cash/v4/"
+const DEFAULT_REST_API = 'https://api.fullstack.cash/v4/'
 // const DEFAULT_REST_API = "http://localhost:3000/v4/"
 
 // local deps
-const BitcoinCash = require("./bitcoincash")
-const Crypto = require("./crypto")
-const Util = require("./util")
-const Blockchain = require("./blockchain")
-const Control = require("./control")
-const Generating = require("./generating")
-const Mining = require("./mining")
-const RawTransactions = require("./raw-transactions")
-const Mnemonic = require("./mnemonic")
-const Address = require("./address")
-const HDNode = require("./hdnode")
-const TransactionBuilder = require("./transaction-builder")
-const ECPair = require("./ecpair")
-const Script = require("./script")
-const Price = require("./price")
-const Socket = require("./socket")
-const Schnorr = require("./schnorr")
-const SLP = require("./slp/slp")
-const IPFS = require("./ipfs")
-const Encryption = require("./encryption")
+const BitcoinCash = require('./bitcoincash')
+const Crypto = require('./crypto')
+const Util = require('./util')
+const Blockchain = require('./blockchain')
+const Control = require('./control')
+const Generating = require('./generating')
+const Mining = require('./mining')
+const RawTransactions = require('./raw-transactions')
+const Mnemonic = require('./mnemonic')
+const Address = require('./address')
+const HDNode = require('./hdnode')
+const TransactionBuilder = require('./transaction-builder')
+const ECPair = require('./ecpair')
+const Script = require('./script')
+const Price = require('./price')
+const Socket = require('./socket')
+const Schnorr = require('./schnorr')
+const SLP = require('./slp/slp')
+const IPFS = require('./ipfs')
+const Encryption = require('./encryption')
 
 // Indexers
-const OpenBazaar = require("./openbazaar")
-const Ninsight = require("./ninsight")
-const Electrumx = require("./electrumx")
+const OpenBazaar = require('./openbazaar')
+const Ninsight = require('./ninsight')
+const Electrumx = require('./electrumx')
 
 class BCHJS {
-  constructor(config) {
+  constructor (config) {
     // Try to retrieve the REST API URL from different sources.
-    if (config && config.restURL && config.restURL !== "")
-      this.restURL = config.restURL
-    else if (process.env.RESTURL && process.env.RESTURL !== "")
-      this.restURL = process.env.RESTURL
-    else this.restURL = DEFAULT_REST_API
+    if (config && config.restURL && config.restURL !== '') { this.restURL = config.restURL } else if (process.env.RESTURL && process.env.RESTURL !== '') { this.restURL = process.env.RESTURL } else this.restURL = DEFAULT_REST_API
 
     // Retrieve the apiToken
-    this.apiToken = "" // default value.
-    if (config && config.apiToken && config.apiToken !== "")
-      this.apiToken = config.apiToken
-    else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== "")
-      this.apiToken = process.env.BCHJSTOKEN
+    this.apiToken = '' // default value.
+    if (config && config.apiToken && config.apiToken !== '') { this.apiToken = config.apiToken } else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== '') { this.apiToken = process.env.BCHJSTOKEN }
 
     // Retrieve the Basic Authentication password.
-    this.authPass = "" // default value.
-    if (config && config.authPass && config.authPass !== "")
-      this.authPass = config.authPass
-    else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== "")
-      this.authPass = process.env.BCHJSAUTHPASS
+    this.authPass = '' // default value.
+    if (config && config.authPass && config.authPass !== '') { this.authPass = config.authPass } else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== '') { this.authPass = process.env.BCHJSAUTHPASS }
 
     // Generate a Basic Authentication token from an auth password
-    this.authToken = ""
+    this.authToken = ''
     if (this.authPass) {
       // console.log(`bch-js initialized with authPass: ${this.authPass}`)
       // Generate the header for Basic Authentication.
       const combined = `fullstackcash:${this.authPass}`
-      var base64Credential = Buffer.from(combined).toString("base64")
+      const base64Credential = Buffer.from(combined).toString('base64')
       this.authToken = `Basic ${base64Credential}`
     }
 

@@ -13,23 +13,24 @@
 */
 
 // Replace the address below with the address you want to send the BCH to.
-const RECV_ADDR1 = `bchtest:qzfn2mly05t6fjsh5kjj0dqq0jjtct27ng089dgg05`
+const RECV_ADDR1 = 'bchtest:qzfn2mly05t6fjsh5kjj0dqq0jjtct27ng089dgg05'
 const SATOSHIS_TO_SEND = 1000
 
 // Instantiate BITBOX.
-const bitboxLib = "../../../lib/BITBOX"
+const bitboxLib = '../../../lib/BITBOX'
 const BITBOXSDK = require(bitboxLib)
-const BITBOX = new BITBOXSDK({ restURL: "https://trest.bitcoin.com/v2/" })
-//const BITBOX = new BITBOXSDK({ restURL: "http://localhost:3000/v2/" })
+const BITBOX = new BITBOXSDK({ restURL: 'https://trest.bitcoin.com/v2/' })
+// const BITBOX = new BITBOXSDK({ restURL: "http://localhost:3000/v2/" })
 
-const util = require("util")
+// const util = require('util')
 
 // Open the wallet generated with create-wallet.
+let walletInfo = {}
 try {
-  var walletInfo = require(`./wallet.json`)
+  walletInfo = require('./wallet.json')
 } catch (err) {
   console.log(
-    `Could not open wallet.json. Generate a wallet with create-wallet first.`
+    'Could not open wallet.json. Generate a wallet with create-wallet first.'
   )
   process.exit(0)
 }
@@ -37,26 +38,26 @@ try {
 const SEND_ADDR = walletInfo.cashAddress
 const SEND_MNEMONIC = walletInfo.mnemonic
 
-async function testSend() {
+async function testSend () {
   try {
     const hex1 = await buildTx1(RECV_ADDR1)
-    //const hex2 = await buildTx2(RECV_ADDR2)
+    // const hex2 = await buildTx2(RECV_ADDR2)
 
     console.log(`hex1: ${hex1}\n\n`)
-    //console.log(`hex2: ${hex2}\n\n`)
+    // console.log(`hex2: ${hex2}\n\n`)
 
     const broadcast = await BITBOX.RawTransactions.sendRawTransaction(hex1)
 
     console.log(`Transaction IDs: ${JSON.stringify(broadcast, null, 2)}`)
-    console.log(`Should return a TXID string.`)
+    console.log('Should return a TXID string.')
   } catch (err) {
-    console.log(`Error in testSend: `, err)
+    console.log('Error in testSend: ', err)
   }
 }
 testSend()
 
 // Build a TX hex with the largest UTXO.
-async function buildTx1(recAddr) {
+async function buildTx1 (recAddr) {
   try {
     // Get the balance of the sending address.
     const balance = await getBCHBalance(SEND_ADDR, false)
@@ -65,7 +66,7 @@ async function buildTx1(recAddr) {
 
     // Exit if the balance is zero.
     if (balance <= 0.0) {
-      console.log(`Balance of sending address is zero. Exiting.`)
+      console.log('Balance of sending address is zero. Exiting.')
       process.exit(0)
     }
 
@@ -74,16 +75,17 @@ async function buildTx1(recAddr) {
     console.log(`Sender Legacy Address: ${SEND_ADDR_LEGACY}`)
     console.log(`Receiver Legacy Address: ${RECV_ADDR_LEGACY}`)
 
-    const balance2 = await getBCHBalance(recAddr, false)
-    //console.log(`Balance of recieving address ${recAddr} is ${balance2} BCH.`)
+    // const balance2 = await getBCHBalance(recAddr, false)
+    // console.log(`Balance of recieving address ${recAddr} is ${balance2} BCH.`)
+    await getBCHBalance(recAddr, false)
 
     const u = await BITBOX.Address.utxo(SEND_ADDR)
-    //console.log(`u: ${JSON.stringify(u, null, 2)}`)
+    // console.log(`u: ${JSON.stringify(u, null, 2)}`)
     const utxo = findBiggestUtxo(u.utxos)
     console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
     // instance of transaction builder
-    const transactionBuilder = new BITBOX.TransactionBuilder("testnet")
+    const transactionBuilder = new BITBOX.TransactionBuilder('testnet')
 
     const satoshisToSend = SATOSHIS_TO_SEND
     const originalAmount = utxo.satoshis
@@ -134,30 +136,30 @@ async function buildTx1(recAddr) {
 
     return hex
   } catch (err) {
-    console.log(`Error in buildTx().`)
+    console.log('Error in buildTx().')
     throw err
   }
 }
 
 // Generate a change address from a Mnemonic of a private key.
-function changeAddrFromMnemonic(mnemonic) {
+function changeAddrFromMnemonic (mnemonic) {
   // root seed buffer
   const rootSeed = BITBOX.Mnemonic.toSeed(mnemonic)
 
   // master HDNode
-  const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, "testnet")
+  const masterHDNode = BITBOX.HDNode.fromSeed(rootSeed, 'testnet')
 
   // HDNode of BIP44 account
   const account = BITBOX.HDNode.derivePath(masterHDNode, "m/44'/145'/0'")
 
   // derive the first external change address HDNode which is going to spend utxo
-  const change = BITBOX.HDNode.derivePath(account, "0/0")
+  const change = BITBOX.HDNode.derivePath(account, '0/0')
 
   return change
 }
 
 // Get the balance in BCH of a BCH address.
-async function getBCHBalance(addr, verbose) {
+async function getBCHBalance (addr, verbose) {
   try {
     const result = await BITBOX.Address.details(addr)
 
@@ -167,16 +169,16 @@ async function getBCHBalance(addr, verbose) {
 
     return bchBalance.balance
   } catch (err) {
-    console.error(`Error in getBCHBalance: `, err)
+    console.error('Error in getBCHBalance: ', err)
     console.log(`addr: ${addr}`)
     throw err
   }
 }
 
 // Returns the utxo with the biggest balance from an array of utxos.
-function findBiggestUtxo(utxos) {
+function findBiggestUtxo (utxos) {
   // Sort the utxos by the amount of satoshis, largest first.
-  utxos.sort(function(a, b) {
+  utxos.sort(function (a, b) {
     return b.satoshis - a.satoshis
   })
 

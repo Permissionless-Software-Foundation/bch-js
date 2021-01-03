@@ -2,12 +2,12 @@
   API endpoints for basic control and information of the full node.
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
 let _this // Global reference to the instance of this class.
 
 class Control {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -77,7 +77,7 @@ class Control {
    *   warnings:
    *   'Warning: Unknown block versions being mined! It\'s possible unknown rules are in effect' }}
    */
-  async getNetworkInfo() {
+  async getNetworkInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}control/getNetworkInfo`,
@@ -90,7 +90,7 @@ class Control {
     }
   }
 
-  async getMemoryInfo() {
+  async getMemoryInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}control/getMemoryInfo`,

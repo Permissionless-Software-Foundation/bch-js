@@ -3,12 +3,12 @@
   by FullStack.cash
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class ElectrumX {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -97,10 +97,10 @@ class ElectrumX {
    *   }
    *
    */
-  async utxo(address) {
+  async utxo (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/utxos/${address}`,
           _this.axiosOptions
@@ -120,7 +120,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -181,10 +181,10 @@ class ElectrumX {
    *   }
    *
    */
-  async balance(address) {
+  async balance (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/balance/${address}`,
           _this.axiosOptions
@@ -204,7 +204,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -279,10 +279,10 @@ class ElectrumX {
    *   }
    *
    */
-  async transactions(address) {
+  async transactions (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/transactions/${address}`,
           _this.axiosOptions
@@ -302,7 +302,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -371,10 +371,10 @@ class ElectrumX {
    *   }
    *
    */
-  async unconfirmed(address) {
+  async unconfirmed (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/unconfirmed/${address}`,
           _this.axiosOptions
@@ -394,7 +394,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -442,7 +442,7 @@ class ElectrumX {
    * }
    *
    */
-  async blockHeader(height, count = 1) {
+  async blockHeader (height, count = 1) {
     try {
       const response = await axios.get(
         `${this.restURL}electrumx/block/headers/${height}?count=${count}`,
@@ -452,9 +452,7 @@ class ElectrumX {
     } catch (error) {
       // console.log("error: ", error)
       if (error.response && error.response.data) {
-        if (error.response && error.response.data)
-          throw new Error(error.response.data.error)
-        else throw error.response.data
+        if (error.response && error.response.data) { throw new Error(error.response.data.error) } else throw error.response.data
       } else {
         throw error
       }
@@ -531,10 +529,10 @@ class ElectrumX {
    *   ]
    * }
    */
-  async txData(txid) {
+  async txData (txid) {
     try {
       // Handle single transaction.
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/tx/data/${txid}`,
           _this.axiosOptions
@@ -552,7 +550,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input txId must be a string or array of strings.`)
+      throw new Error('Input txId must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -580,9 +578,9 @@ class ElectrumX {
    *  "txid": "..."
    * }
    */
-  async broadcast(txHex) {
+  async broadcast (txHex) {
     try {
-      if (typeof txHex === "string") {
+      if (typeof txHex === 'string') {
         const response = await axios.post(
           `${this.restURL}electrumx/tx/broadcast`,
           { txHex },
@@ -592,7 +590,7 @@ class ElectrumX {
         return response.data
       }
 
-      throw new Error(`Input txHex must be a string.`)
+      throw new Error('Input txHex must be a string.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error

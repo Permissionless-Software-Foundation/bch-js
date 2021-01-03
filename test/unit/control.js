@@ -1,46 +1,46 @@
-const assert = require("assert")
-const axios = require("axios")
-const BCHJS = require("../../src/bch-js")
+const assert = require('assert')
+const axios = require('axios')
+const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
-const sinon = require("sinon")
+const sinon = require('sinon')
 
-describe("#Control", () => {
-  describe("#getNetworkInfo", () => {
+describe('#Control', () => {
+  describe('#getNetworkInfo', () => {
     let sandbox
     beforeEach(() => (sandbox = sinon.createSandbox()))
     afterEach(() => sandbox.restore())
 
-    it("should get info", done => {
+    it('should get info', done => {
       const data = {
         version: 170000,
         protocolversion: 70015,
         blocks: 527813,
         timeoffset: 0,
         connections: 21,
-        proxy: "",
+        proxy: '',
         difficulty: 581086703759.5878,
         testnet: false,
         paytxfee: 0,
         relayfee: 0.00001,
-        errors: ""
+        errors: ''
       }
-      const resolved = new Promise(r => r({ data: data }))
-      sandbox.stub(axios, "get").returns(resolved)
+      const resolved = new Promise(resolve => resolve({ data: data }))
+      sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getNetworkInfo()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })
   })
 
-  describe("#getMemoryInfo", () => {
+  describe('#getMemoryInfo', () => {
     let sandbox
     beforeEach(() => (sandbox = sinon.createSandbox()))
     afterEach(() => sandbox.restore())
 
-    it("should get memory info", done => {
+    it('should get memory info', done => {
       const data = {
         locked: {
           used: 0,
@@ -51,12 +51,12 @@ describe("#Control", () => {
           chunks_free: 1
         }
       }
-      const resolved = new Promise(r => r({ data: data }))
-      sandbox.stub(axios, "get").returns(resolved)
+      const resolved = new Promise(resolve => resolve({ data: data }))
+      sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getMemoryInfo()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })

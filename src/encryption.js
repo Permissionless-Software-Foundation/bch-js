@@ -2,12 +2,12 @@
   This library contains useful functions that deal with encryption.
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class Encryption {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.axios = axios
@@ -33,10 +33,9 @@ class Encryption {
   }
 
   // Search the blockchain for a public key associated with a BCH address.
-  async getPubKey(addr) {
+  async getPubKey (addr) {
     try {
-      if (!addr || typeof addr !== "string")
-        throw new Error(`Input must be a valid Bitcoin Cash address.`)
+      if (!addr || typeof addr !== 'string') { throw new Error('Input must be a valid Bitcoin Cash address.') }
 
       const response = await _this.axios.get(
         `${this.restURL}encryption/publickey/${addr}`,

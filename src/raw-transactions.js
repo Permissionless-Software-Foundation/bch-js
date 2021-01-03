@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
 let _this
 
 class RawTransactions {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -92,10 +92,10 @@ class RawTransactions {
    * //   vin: [ [Object] ],
    * //   vout: [ [Object] ] } ]
    */
-  async decodeRawTransaction(hex) {
+  async decodeRawTransaction (hex) {
     try {
       // Single hex
-      if (typeof hex === "string") {
+      if (typeof hex === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeRawTransaction/${hex}`,
           _this.axiosOptions
@@ -106,7 +106,7 @@ class RawTransactions {
         // Array of hexes
       } else if (Array.isArray(hex)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/decodeRawTransaction`,
           data: {
             hexes: hex
@@ -120,7 +120,7 @@ class RawTransactions {
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -160,11 +160,11 @@ class RawTransactions {
    * // type: 'nonstandard',
    * // p2sh: 'bitcoincash:pqwndulzwft8dlmqrteqyc9hf823xr3lcc7ypt74ts' }]
    */
-  async decodeScript(script) {
-    //if (typeof script !== "string") script = JSON.stringify(script)
+  async decodeScript (script) {
+    // if (typeof script !== "string") script = JSON.stringify(script)
 
     try {
-      if (typeof script === "string") {
+      if (typeof script === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeScript/${script}`,
           _this.axiosOptions
@@ -173,7 +173,7 @@ class RawTransactions {
         return response.data
       } else if (Array.isArray(script)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/decodeScript`,
           data: {
             hexes: script
@@ -187,7 +187,7 @@ class RawTransactions {
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -258,9 +258,9 @@ class RawTransactions {
    * //   time: 1547752564,
    * //   blocktime: 1547752564 } ]
    */
-  async getRawTransaction(txid, verbose = false) {
+  async getRawTransaction (txid, verbose = false) {
     try {
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
           _this.axiosOptions
@@ -269,7 +269,7 @@ class RawTransactions {
         return response.data
       } else if (Array.isArray(txid)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/getRawTransaction`,
           data: {
             txids: txid,
@@ -282,7 +282,7 @@ class RawTransactions {
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -321,16 +321,16 @@ class RawTransactions {
    * })()
    * // ['0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098']
    */
-  async sendRawTransaction(hex, allowhighfees = false) {
+  async sendRawTransaction (hex, allowhighfees = false) {
     try {
       // Single tx hex.
-      if (typeof hex === "string") {
+      if (typeof hex === 'string') {
         const response = await this.axios.get(
           `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
           _this.axiosOptions
         )
 
-        if (response.data === "66: insufficient priority") {
+        if (response.data === '66: insufficient priority') {
           console.warn(
             `WARN: Insufficient Priority! This is likely due to a fee that is too low, or insufficient funds.
             Please ensure that there is BCH in the given wallet. If you are running on the testnet, get some
@@ -343,7 +343,7 @@ class RawTransactions {
         // Array input
       } else if (Array.isArray(hex)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/sendRawTransaction`,
           data: {
             hexes: hex
@@ -355,7 +355,7 @@ class RawTransactions {
         return response.data
       }
 
-      throw new Error(`Input hex must be a string or array of strings.`)
+      throw new Error('Input hex must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
