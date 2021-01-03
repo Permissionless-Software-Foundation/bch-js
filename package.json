@@ -84,6 +84,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-standard": "^4.0.0",
+    "husky": "^4.3.6",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^6.1.4",
     "nock": "^10.0.6",
@@ -97,5 +98,10 @@
   "apidoc": {
     "title": "bch-js",
     "url": "bchjs."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
