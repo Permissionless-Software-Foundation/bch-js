@@ -6,7 +6,7 @@ const cloneDeep = require('lodash.clonedeep')
 // Unit under test
 const SLP = require('../../src/slp/slp')
 let uut
-let SERVER
+// let SERVER
 
 const REST_URL = process.env.RESTURL
   ? process.env.RESTURL
@@ -34,7 +34,7 @@ describe('#SLP Utils', () => {
       restURL: REST_URL,
       apiToken: process.env.BCHJSTOKEN
     })
-    SERVER = uut.restURL
+    // SERVER = uut.restURL
   })
 
   afterEach(() => {

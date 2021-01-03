@@ -1,5 +1,6 @@
 const fixtures = require('./fixtures/transaction-builder.json')
 const assert = require('assert')
+const assert2 = require('chai').assert
 const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
 const Buffer = require('safe-buffer').Buffer
@@ -9,7 +10,7 @@ describe('#TransactionBuilder', () => {
     const transactionBuilder = new bchjs.TransactionBuilder('mainnet')
     fixtures.hashTypes.forEach(fixture => {
       it('should match hash type', () => {
-        assert.equal(
+        assert2.equal(
           fixture[Object.keys(fixture)[0]],
           transactionBuilder.hashTypes[Object.keys(fixture)[0]]
         )
@@ -51,7 +52,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -88,7 +89,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -134,7 +135,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -178,7 +179,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -241,7 +242,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -302,7 +303,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -361,7 +362,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -418,7 +419,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -459,7 +460,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -496,7 +497,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -533,7 +534,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -579,7 +580,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -623,7 +624,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -667,7 +668,7 @@ describe('#TransactionBuilder', () => {
             const tx = transactionBuilder.build()
             // output rawhex
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       }) */
@@ -716,7 +717,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -763,7 +764,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -810,7 +811,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -853,7 +854,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -893,7 +894,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -933,7 +934,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -972,7 +973,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1007,7 +1008,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1042,7 +1043,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1096,7 +1097,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1124,7 +1125,7 @@ describe('#TransactionBuilder', () => {
       //       let tx = transactionBuilder.build();
       //       // output rawhex
       //       let hex = tx.toHex();
-      //       assert.equal(hex, fixture.hex);
+      //       assert.strictEqual(hex, fixture.hex);
       //     });
       //   });
       // });
@@ -1185,7 +1186,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1214,7 +1215,7 @@ describe('#TransactionBuilder', () => {
       //         let tx = transactionBuilder.build();
       //         // output rawhex
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1297,7 +1298,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1323,7 +1324,7 @@ describe('#TransactionBuilder', () => {
       //         transactionBuilder.sign(1, keyPair2, redeemScript, transactionBuilder.hashTypes.SIGHASH_ALL, fixture.amounts[1]);
       //         let tx = transactionBuilder.build();
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1397,7 +1398,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1422,7 +1423,7 @@ describe('#TransactionBuilder', () => {
       //         transactionBuilder.sign(1, keyPair2, redeemScript, transactionBuilder.hashTypes.SIGHASH_ALL, fixture.amounts[1]);
       //         let tx = transactionBuilder.build();
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1482,7 +1483,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1510,7 +1511,7 @@ describe('#TransactionBuilder', () => {
       //       let tx = transactionBuilder.build();
       //       // output rawhex
       //       let hex = tx.toHex();
-      //       assert.equal(hex, fixture.hex);
+      //       assert.strictEqual(hex, fixture.hex);
       //     });
       //   });
       // });
@@ -1579,7 +1580,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1608,7 +1609,7 @@ describe('#TransactionBuilder', () => {
       //         let tx = transactionBuilder.build();
       //         // output rawhex
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1702,7 +1703,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1728,7 +1729,7 @@ describe('#TransactionBuilder', () => {
       //         transactionBuilder.sign(1, keyPair2, redeemScript, transactionBuilder.hashTypes.SIGHASH_ALL, fixture.amounts[1]);
       //         let tx = transactionBuilder.build();
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1810,7 +1811,7 @@ describe('#TransactionBuilder', () => {
             )
             const tx = transactionBuilder.build()
             const hex = tx.toHex()
-            assert.equal(hex, fixture.hex)
+            assert.strictEqual(hex, fixture.hex)
           })
         })
       })
@@ -1835,7 +1836,7 @@ describe('#TransactionBuilder', () => {
       //         transactionBuilder.sign(1, keyPair2, redeemScript, transactionBuilder.hashTypes.SIGHASH_ALL, fixture.amounts[1]);
       //         let tx = transactionBuilder.build();
       //         let hex = tx.toHex();
-      //         assert.equal(hex, fixture.hex);
+      //         assert.strictEqual(hex, fixture.hex);
       //       });
       //     });
       //   });
@@ -1873,7 +1874,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1908,7 +1909,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1943,7 +1944,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })
@@ -1957,7 +1958,7 @@ describe('#TransactionBuilder', () => {
         const r = Buffer.from(fixture.r, 'hex')
         const s = Buffer.from(fixture.s, 'hex')
         const DER = transactionBuilder.bip66.encode(r, s)
-        assert.equal(DER.toString('hex'), fixture.DER)
+        assert.strictEqual(DER.toString('hex'), fixture.DER)
       })
     })
 
@@ -1966,8 +1967,8 @@ describe('#TransactionBuilder', () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
         const buffer = Buffer.from(fixture.DER, 'hex')
         const signature = transactionBuilder.bip66.decode(buffer)
-        assert.equal(signature.r.toString('hex'), fixture.r)
-        assert.equal(signature.s.toString('hex'), fixture.s)
+        assert.strictEqual(signature.r.toString('hex'), fixture.r)
+        assert.strictEqual(signature.s.toString('hex'), fixture.s)
       })
     })
 
@@ -1975,7 +1976,7 @@ describe('#TransactionBuilder', () => {
       it(`should bip66 check ${fixture.DER}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
         const buffer = Buffer.from(fixture.DER, 'hex')
-        assert.equal(transactionBuilder.bip66.check(buffer), true)
+        assert.strictEqual(transactionBuilder.bip66.check(buffer), true)
       })
     })
   })
@@ -1987,17 +1988,17 @@ describe('#TransactionBuilder', () => {
         const obj = {}
         obj[fixture.type] = fixture.value
         const encode = transactionBuilder.bip68.encode(obj)
-        assert.equal(encode, fixture.result)
+        assert2.equal(encode, fixture.result)
       })
     })
 
     fixtures.bip68.decode.forEach(fixture => {
       it(`should bip68 decode ${fixture.result}`, () => {
         const transactionBuilder = new bchjs.TransactionBuilder()
-        const obj = {}
+        // const obj = {}
         const decode = transactionBuilder.bip68.decode(fixture.result)
-        assert.equal(Object.keys(decode)[0], fixture.type)
-        assert.deepEqual(decode[Object.keys(decode)[0]], fixture.value)
+        assert2.equal(Object.keys(decode)[0], fixture.type)
+        assert2.equal(decode[Object.keys(decode)[0]], fixture.value)
       })
     })
   })
@@ -2031,7 +2032,7 @@ describe('#TransactionBuilder', () => {
           )
           const tx = transactionBuilder.build()
           const hex = tx.toHex()
-          assert.equal(hex, fixture.hex)
+          assert.strictEqual(hex, fixture.hex)
         })
       })
     })

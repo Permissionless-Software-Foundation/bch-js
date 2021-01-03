@@ -64,7 +64,7 @@ const paymentInfo = {
   }
 }
 
-mockNewFileModel = {
+const mockNewFileModel = {
   success: true,
   hostingCostBCH: 0.00004197,
   hostingCostUSD: 0.01,

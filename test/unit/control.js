@@ -24,12 +24,12 @@ describe('#Control', () => {
         relayfee: 0.00001,
         errors: ''
       }
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getNetworkInfo()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })
@@ -51,12 +51,12 @@ describe('#Control', () => {
           chunks_free: 1
         }
       }
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getMemoryInfo()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })

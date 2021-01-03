@@ -20,14 +20,14 @@ describe('#Util', () => {
         isscript: false
       }
 
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Util.validateAddress(
         'bitcoincash:qpz7qtkuyhrsz4qmnnrvf8gz9zd0u9v7eqsewyk4w5'
       )
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })

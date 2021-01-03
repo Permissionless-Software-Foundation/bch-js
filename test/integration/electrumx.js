@@ -65,9 +65,10 @@ describe('#ElectrumX', () => {
         const addr = []
         for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf') }
 
-        const result = await bchjs.Electrumx.utxo(addr)
+        // const result = await bchjs.Electrumx.utxo(addr)
+        await bchjs.Electrumx.utxo(addr)
 
-        console.log(`result: ${util.inspect(result)}`)
+        // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         assert.hasAnyKeys(err, ['error'])
@@ -117,9 +118,11 @@ describe('#ElectrumX', () => {
         const addr = []
         for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf') }
 
-        const result = await bchjs.Electrumx.balance(addr)
+        // const result = await bchjs.Electrumx.balance(addr)
+        // console.log(`result: ${util.inspect(result)}`)
 
-        console.log(`result: ${util.inspect(result)}`)
+        await bchjs.Electrumx.balance(addr)
+
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         assert.hasAnyKeys(err, ['error'])
@@ -171,9 +174,11 @@ describe('#ElectrumX', () => {
         const addr = []
         for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrehqueqhw629p6e57994436w730t4rzasnly00ht0') }
 
-        const result = await bchjs.Electrumx.transactions(addr)
+        // const result = await bchjs.Electrumx.transactions(addr)
+        // console.log(`result: ${util.inspect(result)}`)
 
-        console.log(`result: ${util.inspect(result)}`)
+        await bchjs.Electrumx.transactions(addr)
+
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         assert.hasAnyKeys(err, ['error'])
@@ -329,7 +334,7 @@ describe('#ElectrumX', () => {
 
         await bchjs.Electrumx.txData(txids)
 
-        console.log(`result: ${util.inspect(result)}`)
+        // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         assert.hasAnyKeys(err, ['error'])

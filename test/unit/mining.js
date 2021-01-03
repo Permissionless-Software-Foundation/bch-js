@@ -30,12 +30,12 @@ describe('#Mining', () => {
         sigops: 2
       }
 
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getBlockTemplate('')
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })
@@ -59,12 +59,12 @@ describe('#Mining', () => {
         chain: 'main'
       }
 
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getMiningInfo()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })
@@ -78,12 +78,12 @@ describe('#Mining', () => {
     it('should get network hashps', done => {
       const data = 3586365937646890000
 
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getNetworkHashps()
         .then(result => {
-          assert.equal(data, result)
+          assert.strictEqual(data, result)
         })
         .then(done, done)
     })
@@ -98,12 +98,12 @@ describe('#Mining', () => {
     it('should TODO', done => {
       const data = {}
 
-      const resolved = new Promise(r => r({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data: data }))
       sandbox.stub(axios, 'post').returns(resolved)
 
       bchjs.Mining.submitBlock()
         .then(result => {
-          assert.deepEqual(data, result)
+          assert.deepStrictEqual(data, result)
         })
         .then(done, done)
     })

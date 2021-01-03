@@ -41,7 +41,7 @@ describe('#IPFS', () => {
     })
 
     it('should create a new file model', async () => {
-      const path = `${__dirname}/ipfs.js`
+      const path = `${__dirname.toString()}/ipfs.js`
 
       sandbox
         .stub(bchjs.IPFS.axios, 'post')
@@ -87,7 +87,7 @@ describe('#IPFS', () => {
 
     it('should throw an error if modelId is not included', async () => {
       try {
-        const path = `${__dirname}/ipfs.js`
+        const path = `${__dirname.toString()}/ipfs.js`
 
         await bchjs.IPFS.uploadFileServer(path)
 
@@ -110,7 +110,7 @@ describe('#IPFS', () => {
         }
         sandbox.stub(bchjs.IPFS.uppy, 'upload').resolves(mock)
 
-        const path = `${__dirname}/ipfs.js`
+        const path = `${__dirname.toString()}/ipfs.js`
         await bchjs.IPFS.uploadFileServer(path, '5ec562319bfacc745e8d8a52')
 
         assert.equal(true, false, 'Unexpected result')
@@ -124,7 +124,7 @@ describe('#IPFS', () => {
       try {
         sandbox.stub(bchjs.IPFS.uppy, 'upload').resolves(mockData.uploadData)
 
-        const path = `${__dirname}/ipfs.js`
+        const path = `${__dirname.toString()}/ipfs.js`
         const result = await bchjs.IPFS.uploadFileServer(
           path,
           '5ec562319bfacc745e8d8a52'

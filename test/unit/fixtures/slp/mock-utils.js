@@ -399,7 +399,7 @@ const nonSLPTxDetailsWithOpReturn = {
   blocktime: 1565380800
 }
 
-txDetailsSLPGenesis = {
+const txDetailsSLPGenesis = {
   txid: 'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
   hash: 'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
   version: 2,
@@ -1319,5 +1319,6 @@ module.exports = {
   mockValidateTxid3Valid,
   mockValidateTxid3Invalid,
   whitelist,
-  slpdbStatus
+  slpdbStatus,
+  mockValidateTxidArray
 }

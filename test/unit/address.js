@@ -21,23 +21,23 @@ const LEGACY_ADDRESSES = flatten([
   fixtures.legacyTestnetP2PKH
 ])
 
-const mainnet_xpubs = []
+const mainnetXpubs = []
 fixtures.mainnetXPub.forEach((f, i) => {
-  mainnet_xpubs.push(f.xpub)
+  mainnetXpubs.push(f.xpub)
 })
 const MAINNET_ADDRESSES = flatten([
-  mainnet_xpubs,
+  mainnetXpubs,
   fixtures.legacyMainnetP2PKH,
   fixtures.legacyMainnetP2SH,
   fixtures.cashaddrMainnetP2PKH
 ])
 
-const testnet_xpubs = []
+const testnetXpubs = []
 fixtures.testnetXPub.forEach((f, i) => {
-  testnet_xpubs.push(f.xpub)
+  testnetXpubs.push(f.xpub)
 })
 const TESTNET_ADDRESSES = flatten([
-  testnet_xpubs,
+  testnetXpubs,
   fixtures.legacyTestnetP2PKH,
   fixtures.cashaddrTestnetP2PKH
 ])
@@ -87,7 +87,7 @@ describe('#address.js', () => {
   describe('#addressConversion', () => {
     describe('#toLegacyAddress', () => {
       it('should translate legacy address format to itself correctly', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           LEGACY_ADDRESSES.map(address =>
             bchjs.Address.toLegacyAddress(address)
           ),
@@ -96,7 +96,7 @@ describe('#address.js', () => {
       })
 
       it('should convert cashaddr address to legacy base58Check', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           CASHADDR_ADDRESSES.map(address =>
             bchjs.Address.toLegacyAddress(address)
           ),
@@ -105,7 +105,7 @@ describe('#address.js', () => {
       })
 
       it('should convert cashaddr regtest address to legacy base58Check', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           REGTEST_ADDRESSES.map(address =>
             bchjs.Address.toLegacyAddress(address)
           ),
@@ -127,7 +127,7 @@ describe('#address.js', () => {
 
     describe('#toCashAddress', () => {
       it('should convert legacy base58Check address to cashaddr', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           LEGACY_ADDRESSES.map(address =>
             bchjs.Address.toCashAddress(address, true)
           ),
@@ -136,7 +136,7 @@ describe('#address.js', () => {
       })
 
       it('should convert legacy base58Check address to regtest cashaddr', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.legacyTestnetP2PKH.map(address =>
             bchjs.Address.toCashAddress(address, true, true)
           ),
@@ -145,7 +145,7 @@ describe('#address.js', () => {
       })
 
       it('should translate cashaddr address format to itself correctly', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           CASHADDR_ADDRESSES.map(address =>
             bchjs.Address.toCashAddress(address, true)
           ),
@@ -154,7 +154,7 @@ describe('#address.js', () => {
       })
 
       it('should translate regtest cashaddr address format to itself correctly', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           REGTEST_ADDRESSES.map(address =>
             bchjs.Address.toCashAddress(address, true, true)
           ),
@@ -163,7 +163,7 @@ describe('#address.js', () => {
       })
 
       it('should translate no-prefix cashaddr address format to itself correctly', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
             bchjs.Address.toCashAddress(address, true)
           ),
@@ -172,7 +172,7 @@ describe('#address.js', () => {
       })
 
       it('should translate no-prefix regtest cashaddr address format to itself correctly', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           REGTEST_ADDRESSES_NO_PREFIX.map(address =>
             bchjs.Address.toCashAddress(address, true, true)
           ),
@@ -183,14 +183,14 @@ describe('#address.js', () => {
       it('should translate cashaddr address format to itself of no-prefix correctly', () => {
         CASHADDR_ADDRESSES.forEach(address => {
           const noPrefix = bchjs.Address.toCashAddress(address, false)
-          assert.equal(address.split(':')[1], noPrefix)
+          assert.strictEqual(address.split(':')[1], noPrefix)
         })
       })
 
       it('should translate regtest cashaddr address format to itself of no-prefix correctly', () => {
         REGTEST_ADDRESSES.forEach(address => {
           const noPrefix = bchjs.Address.toCashAddress(address, false, true)
-          assert.equal(address.split(':')[1], noPrefix)
+          assert.strictEqual(address.split(':')[1], noPrefix)
         })
       })
 
@@ -208,21 +208,21 @@ describe('#address.js', () => {
 
     describe('#toHash160', () => {
       it('should convert legacy base58check address to hash160', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           LEGACY_ADDRESSES.map(address => bchjs.Address.toHash160(address)),
           HASH160_HASHES
         )
       })
 
       it('should convert cashaddr address to hash160', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           CASHADDR_ADDRESSES.map(address => bchjs.Address.toHash160(address)),
           HASH160_HASHES
         )
       })
 
       it('should convert　regtest cashaddr address to hash160', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           REGTEST_ADDRESSES.map(address => bchjs.Address.toHash160(address)),
           fixtures.hash160TestnetP2PKH
         )
@@ -242,7 +242,7 @@ describe('#address.js', () => {
 
     describe('#fromHash160', () => {
       it('should convert hash160 to mainnet P2PKH legacy base58check address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160MainnetP2PKH.map(hash160 =>
             bchjs.Address.hash160ToLegacy(hash160)
           ),
@@ -251,7 +251,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to mainnet P2SH legacy base58check address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160MainnetP2SH.map(hash160 =>
             bchjs.Address.hash160ToLegacy(
               hash160,
@@ -263,7 +263,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to testnet P2PKH legacy base58check address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160TestnetP2PKH.map(hash160 =>
             bchjs.Address.hash160ToLegacy(
               hash160,
@@ -275,7 +275,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to mainnet P2PKH cash address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160MainnetP2PKH.map(hash160 =>
             bchjs.Address.hash160ToCash(hash160)
           ),
@@ -284,7 +284,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to mainnet P2SH cash address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160MainnetP2SH.map(hash160 =>
             bchjs.Address.hash160ToCash(
               hash160,
@@ -296,7 +296,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to testnet P2PKH cash address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160TestnetP2PKH.map(hash160 =>
             bchjs.Address.hash160ToCash(
               hash160,
@@ -308,7 +308,7 @@ describe('#address.js', () => {
       })
 
       it('should convert hash160 to regtest P2PKH cash address', () => {
-        assert.deepEqual(
+        assert.deepStrictEqual(
           fixtures.hash160TestnetP2PKH.map(hash160 =>
             bchjs.Address.hash160ToCash(
               hash160,
@@ -345,7 +345,7 @@ describe('#address.js', () => {
         LEGACY_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a legacy base58Check address`, () => {
             const isBase58Check = bchjs.Address.isLegacyAddress(address)
-            assert.equal(isBase58Check, true)
+            assert.strictEqual(isBase58Check, true)
           })
         })
       })
@@ -353,14 +353,14 @@ describe('#address.js', () => {
         CASHADDR_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a legacy address`, () => {
             const isBase58Check = bchjs.Address.isLegacyAddress(address)
-            assert.equal(isBase58Check, false)
+            assert.strictEqual(isBase58Check, false)
           })
         })
 
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a legacy address`, () => {
             const isBase58Check = bchjs.Address.isLegacyAddress(address)
-            assert.equal(isBase58Check, false)
+            assert.strictEqual(isBase58Check, false)
           })
         })
       })
@@ -382,14 +382,14 @@ describe('#address.js', () => {
         CASHADDR_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a cashaddr address`, () => {
             const isCashaddr = bchjs.Address.isCashAddress(address)
-            assert.equal(isCashaddr, true)
+            assert.strictEqual(isCashaddr, true)
           })
         })
 
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a cashaddr address`, () => {
             const isCashaddr = bchjs.Address.isCashAddress(address)
-            assert.equal(isCashaddr, true)
+            assert.strictEqual(isCashaddr, true)
           })
         })
       })
@@ -398,7 +398,7 @@ describe('#address.js', () => {
         LEGACY_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a cashaddr address`, () => {
             const isCashaddr = bchjs.Address.isCashAddress(address)
-            assert.equal(isCashaddr, false)
+            assert.strictEqual(isCashaddr, false)
           })
         })
       })
@@ -419,7 +419,7 @@ describe('#address.js', () => {
         HASH160_HASHES.forEach(address => {
           it(`should detect ${address} is a hash160 hash`, () => {
             const isHash160 = bchjs.Address.isHash160(address)
-            assert.equal(isHash160, true)
+            assert.strictEqual(isHash160, true)
           })
         })
       })
@@ -427,21 +427,21 @@ describe('#address.js', () => {
         LEGACY_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a hash160 hash`, () => {
             const isHash160 = bchjs.Address.isHash160(address)
-            assert.equal(isHash160, false)
+            assert.strictEqual(isHash160, false)
           })
         })
 
         CASHADDR_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a hash160 hash`, () => {
             const isHash160 = bchjs.Address.isHash160(address)
-            assert.equal(isHash160, false)
+            assert.strictEqual(isHash160, false)
           })
         })
 
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a legacy address`, () => {
             const isHash160 = bchjs.Address.isHash160(address)
-            assert.equal(isHash160, false)
+            assert.strictEqual(isHash160, false)
           })
         })
       })
@@ -465,7 +465,7 @@ describe('#address.js', () => {
         MAINNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a mainnet address`, () => {
             const isMainnet = bchjs.Address.isMainnetAddress(address)
-            assert.equal(isMainnet, true)
+            assert.strictEqual(isMainnet, true)
           })
         })
       })
@@ -474,14 +474,14 @@ describe('#address.js', () => {
         TESTNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a mainnet address`, () => {
             const isMainnet = bchjs.Address.isMainnetAddress(address)
-            assert.equal(isMainnet, false)
+            assert.strictEqual(isMainnet, false)
           })
         })
 
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a mainnet address`, () => {
             const isMainnet = bchjs.Address.isMainnetAddress(address)
-            assert.equal(isMainnet, false)
+            assert.strictEqual(isMainnet, false)
           })
         })
       })
@@ -503,7 +503,7 @@ describe('#address.js', () => {
         TESTNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a testnet address`, () => {
             const isTestnet = bchjs.Address.isTestnetAddress(address)
-            assert.equal(isTestnet, true)
+            assert.strictEqual(isTestnet, true)
           })
         })
       })
@@ -512,14 +512,14 @@ describe('#address.js', () => {
         MAINNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a testnet address`, () => {
             const isTestnet = bchjs.Address.isTestnetAddress(address)
-            assert.equal(isTestnet, false)
+            assert.strictEqual(isTestnet, false)
           })
         })
 
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a testnet address`, () => {
             const isTestnet = bchjs.Address.isTestnetAddress(address)
-            assert.equal(isTestnet, false)
+            assert.strictEqual(isTestnet, false)
           })
         })
       })
@@ -541,7 +541,7 @@ describe('#address.js', () => {
         REGTEST_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a regtest address`, () => {
             const isRegTest = bchjs.Address.isRegTestAddress(address)
-            assert.equal(isRegTest, true)
+            assert.strictEqual(isRegTest, true)
           })
         })
       })
@@ -550,14 +550,14 @@ describe('#address.js', () => {
         MAINNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a regtest address`, () => {
             const isRegTest = bchjs.Address.isRegTestAddress(address)
-            assert.equal(isRegTest, false)
+            assert.strictEqual(isRegTest, false)
           })
         })
 
         TESTNET_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a regtest address`, () => {
             const isRegTest = bchjs.Address.isRegTestAddress(address)
-            assert.equal(isRegTest, false)
+            assert.strictEqual(isRegTest, false)
           })
         })
       })
@@ -581,7 +581,7 @@ describe('#address.js', () => {
         P2PKH_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a P2PKH address`, () => {
             const isP2PKH = bchjs.Address.isP2PKHAddress(address)
-            assert.equal(isP2PKH, true)
+            assert.strictEqual(isP2PKH, true)
           })
         })
       })
@@ -590,7 +590,7 @@ describe('#address.js', () => {
         P2SH_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a P2PKH address`, () => {
             const isP2PKH = bchjs.Address.isP2PKHAddress(address)
-            assert.equal(isP2PKH, false)
+            assert.strictEqual(isP2PKH, false)
           })
         })
       })
@@ -612,7 +612,7 @@ describe('#address.js', () => {
         P2SH_ADDRESSES.forEach(address => {
           it(`should detect ${address} is a P2SH address`, () => {
             const isP2SH = bchjs.Address.isP2SHAddress(address)
-            assert.equal(isP2SH, true)
+            assert.strictEqual(isP2SH, true)
           })
         })
       })
@@ -621,7 +621,7 @@ describe('#address.js', () => {
         P2PKH_ADDRESSES.forEach(address => {
           it(`should detect ${address} is not a P2SH address`, () => {
             const isP2SH = bchjs.Address.isP2SHAddress(address)
-            assert.equal(isP2SH, false)
+            assert.strictEqual(isP2SH, false)
           })
         })
       })
@@ -641,7 +641,7 @@ describe('#address.js', () => {
 
   describe('cashaddr prefix detection', () => {
     it('should return the same result for detectAddressFormat', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressFormat(address)
         ),
@@ -649,7 +649,7 @@ describe('#address.js', () => {
           bchjs.Address.detectAddressFormat(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressFormat(address)
         ),
@@ -659,7 +659,7 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for detectAddressNetwork', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressNetwork(address)
         ),
@@ -667,7 +667,7 @@ describe('#address.js', () => {
           bchjs.Address.detectAddressNetwork(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressNetwork(address)
         ),
@@ -677,7 +677,7 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for detectAddressType', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressType(address)
         ),
@@ -685,7 +685,7 @@ describe('#address.js', () => {
           bchjs.Address.detectAddressType(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.detectAddressType(address)
         ),
@@ -695,7 +695,7 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for toLegacyAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.toLegacyAddress(address)
         ),
@@ -703,7 +703,7 @@ describe('#address.js', () => {
           bchjs.Address.toLegacyAddress(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.toLegacyAddress(address)
         ),
@@ -711,7 +711,7 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for isLegacyAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isLegacyAddress(address)
         ),
@@ -719,7 +719,7 @@ describe('#address.js', () => {
           bchjs.Address.isLegacyAddress(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isLegacyAddress(address)
         ),
@@ -727,13 +727,13 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for isCashAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isCashAddress(address)
         ),
         CASHADDR_ADDRESSES.map(address => bchjs.Address.isCashAddress(address))
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isCashAddress(address)
         ),
@@ -741,7 +741,7 @@ describe('#address.js', () => {
       )
     })
     it('should return the same result for isMainnetAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isMainnetAddress(address)
         ),
@@ -749,7 +749,7 @@ describe('#address.js', () => {
           bchjs.Address.isMainnetAddress(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isMainnetAddress(address)
         ),
@@ -758,8 +758,9 @@ describe('#address.js', () => {
         )
       )
     })
+
     it('should return the same result for isTestnetAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isTestnetAddress(address)
         ),
@@ -767,7 +768,7 @@ describe('#address.js', () => {
           bchjs.Address.isTestnetAddress(address)
         )
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isTestnetAddress(address)
         ),
@@ -776,28 +777,30 @@ describe('#address.js', () => {
         )
       )
     })
+
     it('should return the same result for isP2PKHAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isP2PKHAddress(address)
         ),
         CASHADDR_ADDRESSES.map(address => bchjs.Address.isP2PKHAddress(address))
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isP2PKHAddress(address)
         ),
         REGTEST_ADDRESSES.map(address => bchjs.Address.isP2PKHAddress(address))
       )
     })
+
     it('should return the same result for isP2SHAddress', () => {
-      assert.deepEqual(
+      assert.deepStrictEqual(
         CASHADDR_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isP2SHAddress(address)
         ),
         CASHADDR_ADDRESSES.map(address => bchjs.Address.isP2SHAddress(address))
       )
-      assert.deepEqual(
+      assert.deepStrictEqual(
         REGTEST_ADDRESSES_NO_PREFIX.map(address =>
           bchjs.Address.isP2SHAddress(address)
         ),
@@ -810,21 +813,21 @@ describe('#address.js', () => {
     LEGACY_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a legacy base58Check address`, () => {
         const isBase58Check = bchjs.Address.detectAddressFormat(address)
-        assert.equal(isBase58Check, 'legacy')
+        assert.strictEqual(isBase58Check, 'legacy')
       })
     })
 
     CASHADDR_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a legacy cashaddr address`, () => {
         const isCashaddr = bchjs.Address.detectAddressFormat(address)
-        assert.equal(isCashaddr, 'cashaddr')
+        assert.strictEqual(isCashaddr, 'cashaddr')
       })
     })
 
     REGTEST_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a legacy cashaddr address`, () => {
         const isCashaddr = bchjs.Address.detectAddressFormat(address)
-        assert.equal(isCashaddr, 'cashaddr')
+        assert.strictEqual(isCashaddr, 'cashaddr')
       })
     })
 
@@ -844,21 +847,21 @@ describe('#address.js', () => {
     MAINNET_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a mainnet address`, () => {
         const isMainnet = bchjs.Address.detectAddressNetwork(address)
-        assert.equal(isMainnet, 'mainnet')
+        assert.strictEqual(isMainnet, 'mainnet')
       })
     })
 
     TESTNET_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a testnet address`, () => {
         const isTestnet = bchjs.Address.detectAddressNetwork(address)
-        assert.equal(isTestnet, 'testnet')
+        assert.strictEqual(isTestnet, 'testnet')
       })
     })
 
     REGTEST_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a testnet address`, () => {
         const isTestnet = bchjs.Address.detectAddressNetwork(address)
-        assert.equal(isTestnet, 'regtest')
+        assert.strictEqual(isTestnet, 'regtest')
       })
     })
 
@@ -878,14 +881,14 @@ describe('#address.js', () => {
     P2PKH_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a P2PKH address`, () => {
         const isP2PKH = bchjs.Address.detectAddressType(address)
-        assert.equal(isP2PKH, 'p2pkh')
+        assert.strictEqual(isP2PKH, 'p2pkh')
       })
     })
 
     P2SH_ADDRESSES.forEach(address => {
       it(`should detect ${address} is a P2SH address`, () => {
         const isP2SH = bchjs.Address.detectAddressType(address)
-        assert.equal(isP2SH, 'p2sh')
+        assert.strictEqual(isP2SH, 'p2sh')
       })
     })
 
@@ -905,7 +908,7 @@ describe('#address.js', () => {
     XPUBS.forEach((xpub, i) => {
       xpub.addresses.forEach((address, j) => {
         it(`generate public external change address ${j} for ${xpub.xpub}`, () => {
-          assert.equal(bchjs.Address.fromXPub(xpub.xpub, `0/${j}`), address)
+          assert.strictEqual(bchjs.Address.fromXPub(xpub.xpub, `0/${j}`), address)
         })
       })
     })
@@ -921,14 +924,14 @@ describe('#address.js', () => {
       ])
 
       // hash160 script buffer
-      const p2sh_hash160 = bchjs.Crypto.hash160(script)
+      const p2shHash160 = bchjs.Crypto.hash160(script)
 
       // encode hash160 as P2SH output
-      const scriptPubKey = bchjs.Script.scriptHash.output.encode(p2sh_hash160)
+      const scriptPubKey = bchjs.Script.scriptHash.output.encode(p2shHash160)
       const p2shAddress = bchjs.Address.fromOutputScript(scriptPubKey)
 
       fixtures.p2shMainnet.forEach((address, i) => {
-        assert.equal(p2shAddress, address)
+        assert.strictEqual(p2shAddress, address)
       })
     })
   })

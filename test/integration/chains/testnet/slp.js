@@ -30,7 +30,8 @@ describe('#SLP', () => {
 
   describe('#util', () => {
     it('should get information on the Oasis token', async () => {
-      const tokenId = 'a371e9934c7695d08a5eb7f31d3bceb4f3644860cc67520cda1e149423b9ec39'
+      const tokenId =
+        'a371e9934c7695d08a5eb7f31d3bceb4f3644860cc67520cda1e149423b9ec39'
 
       const result = await bchjs.SLP.Utils.list(tokenId)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -74,13 +75,6 @@ describe('#SLP', () => {
 
   describe('#balancesForAddress', () => {
     it('should fetch all balances for address: slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9', async () => {
-      // Mock the call to rest.bitcoin.com
-      if (process.env.TEST === 'unit') {
-        sandbox
-          .stub(axios, 'get')
-          .resolves({ data: mockData.balancesForAddress })
-      }
-
       const balances = await bchjs.SLP.Utils.balancesForAddress(
         'slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9'
       )
@@ -101,13 +95,6 @@ describe('#SLP', () => {
         'slptest:qz0kc67pm4emjyr3gaaa2wstdaykg9m4yqwlzpj3w9',
         'slptest:qr5uy4h8ysyhwkp9s245scckdnc7teyjqc5ft2z43h'
       ]
-
-      // Mock the call to rest.bitcoin.com
-      if (process.env.TEST === 'unit') {
-        sandbox
-          .stub(axios, 'post')
-          .resolves({ data: mockData.balancesForAddresses })
-      }
 
       const balances = await bchjs.SLP.Utils.balancesForAddress(addresses)
       // console.log(`balances: ${JSON.stringify(balances, null, 2)}`)

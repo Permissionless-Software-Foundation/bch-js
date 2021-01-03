@@ -4,7 +4,7 @@ const Buffer = require('safe-buffer').Buffer
 
 // Mocks
 const fixtures = require('./fixtures/hdnode.json')
-const slpFixtures = require('./fixtures/slp/address.json')
+// const slpFixtures = require('./fixtures/slp/address.json')
 
 // Unit under test (uut)
 const BCHJS = require('../../src/bch-js')
@@ -20,7 +20,7 @@ describe('#HDNode', () => {
       it('should create an HDNode from root seed buffer', async () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
-        assert.notEqual(hdNode, null)
+        assert.notStrictEqual(hdNode, null)
       })
     })
   })
@@ -31,8 +31,8 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(derive.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const childHDNode = bchjs.HDNode.derive(hdNode, 0)
-        assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-        assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+        assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+        assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
       })
     })
   })
@@ -43,8 +43,8 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(derive.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const childHDNode = bchjs.HDNode.deriveHardened(hdNode, 0)
-        assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-        assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+        assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+        assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
       })
     })
 
@@ -56,8 +56,8 @@ describe('#HDNode', () => {
           const purpose = bchjs.HDNode.deriveHardened(hdNode, 44)
           const coin = bchjs.HDNode.deriveHardened(purpose, 145)
           const childHDNode = bchjs.HDNode.deriveHardened(coin, 0)
-          assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-          assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+          assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
         })
       })
     })
@@ -70,8 +70,8 @@ describe('#HDNode', () => {
           const rootSeedBuffer = await bchjs.Mnemonic.toSeed(derive.mnemonic)
           const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
           const childHDNode = bchjs.HDNode.derivePath(hdNode, '0')
-          assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-          assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+          assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
         })
       })
     })
@@ -82,8 +82,8 @@ describe('#HDNode', () => {
           const rootSeedBuffer = await bchjs.Mnemonic.toSeed(derive.mnemonic)
           const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
           const childHDNode = bchjs.HDNode.derivePath(hdNode, "0'")
-          assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-          assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+          assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
         })
       })
     })
@@ -94,8 +94,8 @@ describe('#HDNode', () => {
           const rootSeedBuffer = await bchjs.Mnemonic.toSeed(derive.mnemonic)
           const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
           const childHDNode = bchjs.HDNode.derivePath(hdNode, "44'/145'/0'")
-          assert.equal(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
-          assert.equal(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
+          assert.strictEqual(bchjs.HDNode.toXPub(childHDNode), derive.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPriv(childHDNode), derive.xpriv)
         })
       })
     })
@@ -108,7 +108,7 @@ describe('#HDNode', () => {
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const childHDNode = bchjs.HDNode.derivePath(hdNode, '0')
         const addy = bchjs.HDNode.toLegacyAddress(childHDNode)
-        assert.equal(addy, fixture.address)
+        assert.strictEqual(addy, fixture.address)
       })
     })
   })
@@ -120,7 +120,7 @@ describe('#HDNode', () => {
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const childHDNode = bchjs.HDNode.derivePath(hdNode, '0')
         const addy = bchjs.HDNode.toCashAddress(childHDNode)
-        assert.equal(addy, fixture.address)
+        assert.strictEqual(addy, fixture.address)
       })
 
       it(`should get address ${fixture.regtestAddress} from HDNode`, async () => {
@@ -128,7 +128,7 @@ describe('#HDNode', () => {
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const childHDNode = bchjs.HDNode.derivePath(hdNode, '0')
         const addr = bchjs.HDNode.toCashAddress(childHDNode, true)
-        assert.equal(addr, fixture.regtestAddress)
+        assert.strictEqual(addr, fixture.regtestAddress)
       })
     })
   })
@@ -137,7 +137,7 @@ describe('#HDNode', () => {
     fixtures.toWIF.forEach(fixture => {
       it(`should get privateKeyWIF ${fixture.privateKeyWIF} from HDNode`, () => {
         const hdNode = bchjs.HDNode.fromXPriv(fixture.xpriv)
-        assert.equal(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
+        assert.strictEqual(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
       })
     })
   })
@@ -148,7 +148,7 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(fixture.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const xpub = bchjs.HDNode.toXPub(hdNode)
-        assert.equal(xpub, fixture.xpub)
+        assert.strictEqual(xpub, fixture.xpub)
       })
     })
   })
@@ -159,7 +159,7 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(fixture.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const xpriv = bchjs.HDNode.toXPriv(hdNode)
-        assert.equal(xpriv, fixture.xpriv)
+        assert.strictEqual(xpriv, fixture.xpriv)
       })
     })
   })
@@ -170,7 +170,7 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(fixture.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const keyPair = bchjs.HDNode.toKeyPair(hdNode)
-        assert.equal(typeof keyPair, 'object')
+        assert.strictEqual(typeof keyPair, 'object')
       })
     })
   })
@@ -181,7 +181,7 @@ describe('#HDNode', () => {
         const rootSeedBuffer = await bchjs.Mnemonic.toSeed(fixture.mnemonic)
         const hdNode = bchjs.HDNode.fromSeed(rootSeedBuffer)
         const publicKeyBuffer = bchjs.HDNode.toPublicKey(hdNode)
-        assert.equal(typeof publicKeyBuffer, 'object')
+        assert.strictEqual(typeof publicKeyBuffer, 'object')
       })
     })
   })
@@ -195,30 +195,30 @@ describe('#HDNode', () => {
         })
 
         it(`should export xpriv ${fixture.xpriv}`, () => {
-          assert.equal(bchjs.HDNode.toXPriv(hdNode), fixture.xpriv)
+          assert.strictEqual(bchjs.HDNode.toXPriv(hdNode), fixture.xpriv)
         })
 
         it(`should export xpub ${fixture.xpub}`, () => {
-          assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
         })
 
         it(`should export legacy address ${fixture.legacy}`, () => {
-          assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
+          assert.strictEqual(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
         })
 
         it(`should export cashaddress ${fixture.cashaddress}`, () => {
-          assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
+          assert.strictEqual(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
         })
 
         it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
-          assert.equal(
+          assert.strictEqual(
             bchjs.HDNode.toCashAddress(hdNode, true),
             fixture.regtestaddress
           )
         })
 
         it(`should export privateKeyWIF ${fixture.privateKeyWIF}`, () => {
-          assert.equal(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
+          assert.strictEqual(bchjs.HDNode.toWIF(hdNode), fixture.privateKeyWIF)
         })
       })
     })
@@ -233,19 +233,19 @@ describe('#HDNode', () => {
         })
 
         it(`should export xpub ${fixture.xpub}`, () => {
-          assert.equal(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
+          assert.strictEqual(bchjs.HDNode.toXPub(hdNode), fixture.xpub)
         })
 
         it(`should export legacy address ${fixture.legacy}`, () => {
-          assert.equal(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
+          assert.strictEqual(bchjs.HDNode.toLegacyAddress(hdNode), fixture.legacy)
         })
 
         it(`should export cashaddress ${fixture.cashaddress}`, () => {
-          assert.equal(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
+          assert.strictEqual(bchjs.HDNode.toCashAddress(hdNode), fixture.cashaddress)
         })
 
         it(`should export regtest cashaddress ${fixture.regtestaddress}`, () => {
-          assert.equal(
+          assert.strictEqual(
             bchjs.HDNode.toCashAddress(hdNode, true),
             fixture.regtestaddress
           )
@@ -273,7 +273,7 @@ describe('#HDNode', () => {
             account.getChainAddress(0)
           )
           it(`should create external change address ${external1}`, () => {
-            assert.equal(external1, fixture.externals[0])
+            assert.strictEqual(external1, fixture.externals[0])
           })
         })
 
@@ -281,7 +281,7 @@ describe('#HDNode', () => {
           for (let i = 0; i < 4; i++) {
             const ex = bchjs.Address.toCashAddress(account.nextChainAddress(0))
             it(`should create external change address ${ex}`, () => {
-              assert.equal(ex, fixture.externals[i + 1])
+              assert.strictEqual(ex, fixture.externals[i + 1])
             })
           }
         })
@@ -295,7 +295,7 @@ describe('#HDNode', () => {
         const hdnode = bchjs.HDNode.fromXPriv(fixture.privateKeyWIF)
         const buf = Buffer.from(bchjs.Crypto.sha256(fixture.data), 'hex')
         const signatureBuf = bchjs.HDNode.sign(hdnode, buf)
-        assert.equal(typeof signatureBuf, 'object')
+        assert.strictEqual(typeof signatureBuf, 'object')
       })
     })
   })
@@ -307,7 +307,7 @@ describe('#HDNode', () => {
         const buf = Buffer.from(bchjs.Crypto.sha256(fixture.data), 'hex')
         const signature = bchjs.HDNode.sign(hdnode1, buf)
         const verify = bchjs.HDNode.verify(hdnode1, buf, signature)
-        assert.equal(verify, true)
+        assert.strictEqual(verify, true)
       })
     })
   })
@@ -316,14 +316,14 @@ describe('#HDNode', () => {
     fixtures.isPublic.forEach(fixture => {
       it('should verify hdnode is public', () => {
         const node = bchjs.HDNode.fromXPub(fixture.xpub)
-        assert.equal(bchjs.HDNode.isPublic(node), true)
+        assert.strictEqual(bchjs.HDNode.isPublic(node), true)
       })
     })
 
     fixtures.isPublic.forEach(fixture => {
       it('should verify hdnode is not public', () => {
         const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-        assert.equal(bchjs.HDNode.isPublic(node), false)
+        assert.strictEqual(bchjs.HDNode.isPublic(node), false)
       })
     })
   })
@@ -332,14 +332,14 @@ describe('#HDNode', () => {
     fixtures.isPrivate.forEach(fixture => {
       it('should verify hdnode is not private', () => {
         const node = bchjs.HDNode.fromXPub(fixture.xpub)
-        assert.equal(bchjs.HDNode.isPrivate(node), false)
+        assert.strictEqual(bchjs.HDNode.isPrivate(node), false)
       })
     })
 
     fixtures.isPrivate.forEach(fixture => {
       it('should verify hdnode is private', () => {
         const node = bchjs.HDNode.fromXPriv(fixture.xpriv)
-        assert.equal(bchjs.HDNode.isPrivate(node), true)
+        assert.strictEqual(bchjs.HDNode.isPrivate(node), true)
       })
     })
   })
@@ -351,7 +351,7 @@ describe('#HDNode', () => {
         const publicKeyBuffer = bchjs.HDNode.toPublicKey(node)
         const hash160 = bchjs.Crypto.hash160(publicKeyBuffer)
         const identifier = bchjs.HDNode.toIdentifier(node)
-        assert.equal(identifier.toString('hex'), hash160.toString('hex'))
+        assert.strictEqual(identifier.toString('hex'), hash160.toString('hex'))
       })
     })
   })
