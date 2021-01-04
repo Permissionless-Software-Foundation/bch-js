@@ -3,7 +3,6 @@
 */
 
 const assert = require('chai').assert
-const nock = require('nock') // http call mocking
 const sinon = require('sinon')
 // const axios = require("axios")
 
@@ -24,17 +23,10 @@ describe('#SLP TokenType1', () => {
   let sandbox
 
   beforeEach(() => {
-    // Activate nock if it's inactive.
-    if (!nock.isActive()) nock.activate()
-
     sandbox = sinon.createSandbox()
   })
 
   afterEach(() => {
-    // Clean up HTTP mocks.
-    nock.cleanAll() // clear interceptor list.
-    nock.restore()
-
     sandbox.restore()
   })
 
