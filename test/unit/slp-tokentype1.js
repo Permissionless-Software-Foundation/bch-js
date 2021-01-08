@@ -1178,6 +1178,25 @@ describe('#SLP TokenType1', () => {
     })
   })
 
+  describe('#generateSendOpReturn07', () => {
+    it('should generate send OP_RETURN code', () => {
+      // Mock UTXO.
+      const tokenUtxos = [
+        {
+          tokenId: '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0',
+          decimals: 8,
+          tokenQty: 2
+        }
+      ]
+
+      const result = bchjs.SLP.TokenType1.generateSendOpReturn(tokenUtxos, 1.5)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.hasAllKeys(result, ['script', 'outputs'])
+      assert.isNumber(result.outputs)
+    })
+  })
+
   describe('#generateBurnOpReturn', () => {
     it('should generate burn OP_RETURN code', () => {
       // Mock UTXO.
