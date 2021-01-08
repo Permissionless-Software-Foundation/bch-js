@@ -1136,7 +1136,7 @@ class Utils {
               err.message.indexOf('trailing data') === -1)
           ) {
             // console.log(
-            //   `unknown error from decodeOpReturn(). Marking as 'null'`,
+            //   'unknown error from decodeOpReturn(). Marking as \'null\'',
             //   err
             // )
 
@@ -1147,7 +1147,7 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
-            // console.log("marking as invalid")
+            // console.log('marking as invalid')
             utxo.isValid = false
             outAry.push(utxo)
           }
@@ -1254,7 +1254,7 @@ class Utils {
 
           // Figure out what token quantity is represented by this utxo.
           const tokenQty = slpData.amounts[utxo.vout - 1]
-          // console.log(`tokenQty: `, tokenQty)
+          // console.log('tokenQty: ', tokenQty)
 
           if (!tokenQty) {
             // outAry[i] = false
