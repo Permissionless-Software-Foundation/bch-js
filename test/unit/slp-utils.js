@@ -497,39 +497,40 @@ describe('#SLP Utils', () => {
       }
     })
 
-    it('should throw error if utxo does not have satoshis or value property.', async () => {
-      try {
-        const utxos = [
-          {
-            txid:
-              'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-            vout: 3,
-            amount: 0.00002015,
-            satoshis: 2015,
-            height: 594892,
-            confirmations: 5
-          },
-          {
-            txid:
-              'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-            vout: 2,
-            amount: 0.00000546,
-            height: 594892,
-            confirmations: 5
-          }
-        ]
-
-        await uut.Utils.tokenUtxoDetails(utxos)
-
-        assert.equal(true, false, 'Unexpected result.')
-      } catch (err) {
-        assert.include(
-          err.message,
-          'utxo 1 does not have a satoshis or value property',
-          'Expected error message.'
-        )
-      }
-    })
+    // CT 1/9/21: This test can be removed after 2/1/21
+    // it('should throw error if utxo does not have satoshis or value property.', async () => {
+    //   try {
+    //     const utxos = [
+    //       {
+    //         txid:
+    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+    //         vout: 3,
+    //         amount: 0.00002015,
+    //         satoshis: 2015,
+    //         height: 594892,
+    //         confirmations: 5
+    //       },
+    //       {
+    //         txid:
+    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+    //         vout: 2,
+    //         amount: 0.00000546,
+    //         height: 594892,
+    //         confirmations: 5
+    //       }
+    //     ]
+    //
+    //     await uut.Utils.tokenUtxoDetails(utxos)
+    //
+    //     assert.equal(true, false, 'Unexpected result.')
+    //   } catch (err) {
+    //     assert.include(
+    //       err.message,
+    //       'utxo 1 does not have a satoshis or value property',
+    //       'Expected error message.'
+    //     )
+    //   }
+    // })
 
     it('should throw error if utxo does not have txid or tx_hash property.', async () => {
       try {
