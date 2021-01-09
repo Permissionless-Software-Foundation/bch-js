@@ -1073,17 +1073,18 @@ class Utils {
       for (let i = 0; i < utxos.length; i++) {
         const utxo = utxos[i]
 
-        if (!utxo.satoshis) {
-          // If Electrumx, convert the value to satoshis.
-          if (utxo.value) {
-            utxo.satoshis = utxo.value
-          } else {
-            // If there is neither a satoshis or value property, throw an error.
-            throw new Error(
-              `utxo ${i} does not have a satoshis or value property.`
-            )
-          }
-        }
+        // CT 1/9/21: This code can be removed after 2/1/21
+        // if (!utxo.satoshis) {
+        //   // If Electrumx, convert the value to satoshis.
+        //   if (utxo.value) {
+        //     utxo.satoshis = utxo.value
+        //   } else {
+        //     // If there is neither a satoshis or value property, throw an error.
+        //     throw new Error(
+        //       `utxo ${i} does not have a satoshis or value property.`
+        //     )
+        //   }
+        // }
 
         if (!utxo.txid) {
           // If Electrumx, convert the tx_hash property to txid.
