@@ -1217,11 +1217,11 @@ describe('#SLP TokenType1', () => {
           tokenDocumentUrl: '',
           tokenDocumentHash: '',
           decimals: 8,
-          tokenQty: 7
+          tokenQty: '7'
         }
       ]
 
-      const result = bchjs.SLP.TokenType1.generateBurnOpReturn(tokenUtxos, 1)
+      const result = bchjs.SLP.TokenType1.generateBurnOpReturn(tokenUtxos, 8)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       // console.log(`result: `, result)
 
