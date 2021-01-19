@@ -33,22 +33,33 @@ const IPFS = require('./ipfs')
 const Encryption = require('./encryption')
 
 // Indexers
-const OpenBazaar = require('./openbazaar')
 const Ninsight = require('./ninsight')
 const Electrumx = require('./electrumx')
 
 class BCHJS {
   constructor (config) {
     // Try to retrieve the REST API URL from different sources.
-    if (config && config.restURL && config.restURL !== '') { this.restURL = config.restURL } else if (process.env.RESTURL && process.env.RESTURL !== '') { this.restURL = process.env.RESTURL } else this.restURL = DEFAULT_REST_API
+    if (config && config.restURL && config.restURL !== '') {
+      this.restURL = config.restURL
+    } else if (process.env.RESTURL && process.env.RESTURL !== '') {
+      this.restURL = process.env.RESTURL
+    } else this.restURL = DEFAULT_REST_API
 
     // Retrieve the apiToken
     this.apiToken = '' // default value.
-    if (config && config.apiToken && config.apiToken !== '') { this.apiToken = config.apiToken } else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== '') { this.apiToken = process.env.BCHJSTOKEN }
+    if (config && config.apiToken && config.apiToken !== '') {
+      this.apiToken = config.apiToken
+    } else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== '') {
+      this.apiToken = process.env.BCHJSTOKEN
+    }
 
     // Retrieve the Basic Authentication password.
     this.authPass = '' // default value.
-    if (config && config.authPass && config.authPass !== '') { this.authPass = config.authPass } else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== '') { this.authPass = process.env.BCHJSAUTHPASS }
+    if (config && config.authPass && config.authPass !== '') {
+      this.authPass = config.authPass
+    } else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== '') {
+      this.authPass = process.env.BCHJSAUTHPASS
+    }
 
     // Generate a Basic Authentication token from an auth password
     this.authToken = ''
@@ -67,9 +78,6 @@ class BCHJS {
     }
 
     // console.log(`apiToken: ${this.apiToken}`)
-
-    // Populate OpenBazaar endpoints
-    this.OpenBazaar = new OpenBazaar(libConfig)
 
     // Bitcoin.com Ninsight indexer
     this.Ninsight = new Ninsight(config)

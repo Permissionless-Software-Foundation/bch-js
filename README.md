@@ -1,9 +1,9 @@
 # bch-js
 
-[![Build Status](https://travis-ci.org/Permissionless-Software-Foundation/bch-js.svg?branch=master)](https://travis-ci.org/Permissionless-Software-Foundation/bch-js)
 [![Version](https://img.shields.io/npm/v/@psf/bch-js)](https://www.npmjs.com/package/@psf/bch-js)
 [![Downloads/week](https://img.shields.io/npm/dw/@psf/bch-js)](https://npmjs.org/package/@psf/bch-js)
 [![License](https://img.shields.io/npm/l/@psf/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
+[![js-standard-style](https://img.shields.io/badge/javascript-standard%20code%20style-green.svg?style=flat-square)](https://github.com/feross/standard)
 
 [bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) blockchains. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Learn more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) about Full Stack Bitcoin Cash development.
 
@@ -117,7 +117,7 @@ Have questions? Need help? Join our community support
 
 Copies of this repository are also published on [IPFS](https://ipfs.io).
 
-- v3.8.10: QmauhggzKDo9A9je5y2K6WRAp32JmGRFCw2ZFTiSnW8yot
+- v4.5.4: QmWv3pxJy3MH8vU5nLUVyzqFxfNKXLQQEnz1rgStNuQijd
 
 ## License
 
