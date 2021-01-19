@@ -220,7 +220,12 @@ class TokenType1 {
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = 0
       for (let i = 0; i < tokenUtxos.length; i++) {
-        totalTokens += tokenUtxos[i].tokenQty
+        totalTokens += parseFloat(tokenUtxos[i].tokenQty)
+      }
+
+      // Make sure burn quantity isn't bigger than the total amount in tokens
+      if (burnQty > totalTokens) {
+        burnQty = totalTokens
       }
 
       const remainder = totalTokens - burnQty
