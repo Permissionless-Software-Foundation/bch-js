@@ -16,8 +16,8 @@
     "test:integration:local": "RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 test/integration",
     "test:integration:local:bchn": "RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v4/ mocha --timeout 30000 test/integration/testnet",
-    "test:temp": "export RESTURL=https://bchn.fullstack.cash/v4/ && mocha --timeout 30000 -g '#tokenUtxoDetails' test/integration/",
-    "test:temp2": "mocha --timeout 30000 -g '#generateSendOpReturn' test/unit/",
+    "test:temp": "export RESTURL=https://bchn.fullstack.cash/v4/ && mocha --timeout 30000 -g '#sort0ConfTxs' test/integration/",
+    "test:temp2": "mocha --timeout=30000 -g '#sortConfTxs' test/unit/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
@@ -32,7 +32,6 @@
   "dependencies": {
     "@uppy/core": "^1.10.4",
     "@uppy/tus": "^1.5.12",
-    "apidoc": "^0.25.0",
     "assert": "^2.0.0",
     "axios": "^0.21.1",
     "bc-bip68": "^1.0.5",
@@ -76,6 +75,7 @@
     "wif": "^2.0.6"
   },
   "devDependencies": {
+    "apidoc": "^0.17.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.2",
     "eslint": "5.16.0",

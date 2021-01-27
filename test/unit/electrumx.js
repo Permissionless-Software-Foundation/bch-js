@@ -390,6 +390,7 @@ describe('#ElectrumX', () => {
       assert.equal(result.transactions.length, 2, '2 outputs for 2 inputs')
     })
   })
+
   describe('#broadcast', () => {
     it('should throw an error for improper input', async () => {
       try {
@@ -402,6 +403,7 @@ describe('#ElectrumX', () => {
         assert.include(err.message, 'Input txHex must be a string.')
       }
     })
+
     it('should broadcast a single transaction', async () => {
       // Stub the network call.
       sandbox.stub(axios, 'post').resolves({ data: mockData.broadcast })
@@ -416,6 +418,77 @@ describe('#ElectrumX', () => {
 
       assert.property(result, 'txid')
       assert.equal(result.txid, txid)
+    })
+  })
+
+  describe('#sortConfTxs', () => {
+    it('should sort in ascending order by default', () => {
+      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isBelow(result[0].height, result[1].height)
+    })
+
+    it('should sort in descending order', () => {
+      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions, 'DESCENDING')
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result[0].height, result[1].height)
+    })
+
+    it('should ignore unconfirmed txs', () => {
+      const result = bchjs.Electrumx.sortConfTxs(mockData.txHistoryWithUnconfirmed.transactions)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result[0].height, 0)
+    })
+
+    it('should handle errors', () => {
+      try {
+        bchjs.Electrumx.sortConfTxs('abc')
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err.message)
+        assert.equal(err.message, 'txs.filter is not a function')
+      }
+    })
+  })
+
+  // These tests use mocked data that contains unconfirmed transactions.
+  describe('#sort0ConfTxs', () => {
+    it('should sort in ascending order by default', async () => {
+      // Stub network calls
+      sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
+
+      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isBelow(result[0].height, result[1].height)
+    })
+
+    it('should sort in descending order', async () => {
+      // Stub network calls
+      sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
+
+      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions, 'DESCENDING')
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result[1].height, result[2].height)
+    })
+
+    it('should handle errors', async () => {
+      try {
+        // Stub network calls
+        sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
+
+        await bchjs.Electrumx.sort0ConfTxs('abc')
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err.message)
+        assert.equal(err.message, 'txs.map is not a function')
+      }
     })
   })
 })
