@@ -369,12 +369,12 @@ describe('#ElectrumX', () => {
     })
   })
 
-  describe('#sort0ConfTxs', () => {
+  describe('#sortAllTxs', () => {
     it('should GET transaction history for a single address', async () => {
       const addr = 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v'
 
       const txs = await bchjs.Electrumx.transactions(addr)
-      const sortedTransactions = await bchjs.Electrumx.sort0ConfTxs(
+      const sortedTransactions = await bchjs.Electrumx.sortAllTxs(
         txs.transactions
       )
       // console.log(

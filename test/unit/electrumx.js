@@ -456,12 +456,12 @@ describe('#ElectrumX', () => {
   })
 
   // These tests use mocked data that contains unconfirmed transactions.
-  describe('#sort0ConfTxs', () => {
+  describe('#sortAllTxs', () => {
     it('should sort in ascending', async () => {
       // Stub network calls
       sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
 
-      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions, 'ASCENDING')
+      const result = await bchjs.Electrumx.sortAllTxs(mockData.txHistoryWithUnconfirmed.transactions, 'ASCENDING')
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isBelow(result[0].height, result[1].height)
@@ -471,7 +471,7 @@ describe('#ElectrumX', () => {
       // Stub network calls
       sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
 
-      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions)
+      const result = await bchjs.Electrumx.sortAllTxs(mockData.txHistoryWithUnconfirmed.transactions)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isAbove(result[1].height, result[2].height)
@@ -482,7 +482,7 @@ describe('#ElectrumX', () => {
         // Stub network calls
         sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
 
-        await bchjs.Electrumx.sort0ConfTxs('abc')
+        await bchjs.Electrumx.sortAllTxs('abc')
 
         assert.fail('Unexpected result')
       } catch (err) {
