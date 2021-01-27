@@ -651,8 +651,8 @@ class ElectrumX {
   }
 
   /**
-   * @api Electrumx.sort0ConfTxs()  sort0ConfTxs()
-   * @apiName ElectrumX sort0ConfTxs
+   * @api Electrumx.sortAllTxs()  sortAllTxs()
+   * @apiName ElectrumX sortAllTxs
    * @apiGroup ElectrumX
    * @apiDescription Sort the output of Electrum.transactions() by block height.
    *
@@ -666,7 +666,7 @@ class ElectrumX {
    * @apiExample Example usage:
    *    (async () => {
    *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
-   *      const sortedTxs = await bchjs.Electrumx.sort0ConfTxs(txs.transactions, 'ASCENDING')
+   *      const sortedTxs = await bchjs.Electrumx.sortAllTxs(txs.transactions, 'ASCENDING')
    *      console.log(sortedTxs)
    *    })()
    *
@@ -682,7 +682,7 @@ class ElectrumX {
    * //   ]
    */
   // Substitute zero-conf txs with the current block-height + 1
-  async sort0ConfTxs (txs, sortingOrder = 'DESCENDING') {
+  async sortAllTxs (txs, sortingOrder = 'DESCENDING') {
     try {
       // Calculate the height of the next block
       const nextBlock = (await this.blockchain.getBlockCount()) + 1
