@@ -2,8 +2,11 @@
   This library interacts with the ElectrumX bch-api REST API endpoints operated
   by FullStack.cash
 */
-
+// Public npm libraries
 const axios = require('axios')
+
+// Local libraries.
+const Blockchain = require('./blockchain')
 
 let _this
 
@@ -28,6 +31,8 @@ class ElectrumX {
         }
       }
     }
+
+    this.blockchain = new Blockchain(config)
 
     _this = this
   }
@@ -452,7 +457,9 @@ class ElectrumX {
     } catch (error) {
       // console.log("error: ", error)
       if (error.response && error.response.data) {
-        if (error.response && error.response.data) { throw new Error(error.response.data.error) } else throw error.response.data
+        if (error.response && error.response.data) {
+          throw new Error(error.response.data.error)
+        } else throw error.response.data
       } else {
         throw error
       }
@@ -594,6 +601,104 @@ class ElectrumX {
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
+    }
+  }
+
+  /**
+   * @api Electrumx.sortConfTxs()  sortConfTxs()
+   * @apiName ElectrumX sortConfTxs
+   * @apiGroup ElectrumX
+   * @apiDescription Sort the output of Electrum.transactions() by block height.
+   *
+   * A simple sort function for the output of Electrum.transactions(). Ignores
+   * unconfirmed transactions.
+   *
+   * Sorts in 'ASCENDING' order by default, or 'DESCENDING' can be specified.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
+   *      const sortedTxs = bchjs.Electrumx.sortConfTxs(txs.transactions, 'DESCENDING')
+   *      console.log(sortedTxs)
+   *    })()
+   *
+   * //   [
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
+   * //     },
+   * //     {
+   * //       "height": 560430,
+   * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     }
+   * //   ]
+   */
+  // Sort confirmed Transactions by the block height
+  sortConfTxs (txs, sortingOrder = 'ASCENDING') {
+    try {
+      // Filter out unconfirmed transactions, with a height of 0 or less.
+      txs = txs.filter(elem => elem.height > 0)
+
+      if (sortingOrder === 'ASCENDING') {
+        return txs.sort((a, b) => a.height - b.height)
+      }
+      return txs.sort((a, b) => b.height - a.height)
+    } catch (err) {
+      console.log('Error in util.js/sortConfTxs()')
+      throw err
+    }
+  }
+
+  /**
+   * @api Electrumx.sort0ConfTxs()  sort0ConfTxs()
+   * @apiName ElectrumX sort0ConfTxs
+   * @apiGroup ElectrumX
+   * @apiDescription Sort the output of Electrum.transactions() by block height.
+   *
+   * A simple sort function for the output of Electrum.transactions().
+   * Assumes that unconfirmed transactions will make it into the next block. Any
+   * unconfirmed transactions have their block height with the height of the next
+   * block. Returns a Promise.
+   *
+   * Sorts in 'ASCENDING' order by default, or 'DESCENDING' can be specified.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
+   *      const sortedTxs = await bchjs.Electrumx.sort0ConfTxs(txs.transactions, 'DESCENDING')
+   *      console.log(sortedTxs)
+   *    })()
+   *
+   * //   [
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
+   * //     },
+   * //     {
+   * //       "height": 560430,
+   * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     }
+   * //   ]
+   */
+  // Substitute zero-conf txs with the current block-height + 1
+  async sort0ConfTxs (txs, sortingOrder = 'ASCENDING') {
+    try {
+      // Calculate the height of the next block
+      const nextBlock = (await this.blockchain.getBlockCount()) + 1
+
+      // Replace the height of any zero-conf transactions with the height of
+      // the next block.
+      const modifiedTxs = txs.map(elem => {
+        if (elem.height <= 0) elem.height = nextBlock
+        return elem
+      })
+      // console.log(`modifiedTxs: ${JSON.stringify(modifiedTxs, null, 2)}`)
+
+      // Sort the modified array of transactions.
+      return this.sortConfTxs(modifiedTxs, sortingOrder)
+    } catch (err) {
+      console.log('Error in util.js/sort0ConfTxs')
+      throw err
     }
   }
 }
