@@ -63,7 +63,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf')
+        }
 
         // const result = await bchjs.Electrumx.utxo(addr)
         await bchjs.Electrumx.utxo(addr)
@@ -116,7 +118,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf')
+        }
 
         // const result = await bchjs.Electrumx.balance(addr)
         // console.log(`result: ${util.inspect(result)}`)
@@ -172,7 +176,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrehqueqhw629p6e57994436w730t4rzasnly00ht0') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bitcoincash:qrehqueqhw629p6e57994436w730t4rzasnly00ht0')
+        }
 
         // const result = await bchjs.Electrumx.transactions(addr)
         // console.log(`result: ${util.inspect(result)}`)
@@ -235,7 +241,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf')
+        }
 
         await bchjs.Electrumx.unconfirmed(addr)
 
@@ -358,6 +366,22 @@ describe('#ElectrumX', () => {
           'the transaction was rejected by network rules'
         )
       }
+    })
+  })
+
+  describe('#sort0ConfTxs', () => {
+    it('should GET transaction history for a single address', async () => {
+      const addr = 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v'
+
+      const txs = await bchjs.Electrumx.transactions(addr)
+      const sortedTransactions = await bchjs.Electrumx.sort0ConfTxs(
+        txs.transactions
+      )
+      // console.log(
+      //   `sortedTransactions: ${JSON.stringify(sortedTransactions, null, 2)}`
+      // )
+
+      assert.isBelow(sortedTransactions[0].height, sortedTransactions[1].height)
     })
   })
 })
