@@ -613,36 +613,37 @@ class ElectrumX {
    * A simple sort function for the output of Electrum.transactions(). Ignores
    * unconfirmed transactions.
    *
-   * Sorts in 'ASCENDING' order by default, or 'DESCENDING' can be specified.
+   * Sorts in 'DESCENDING' order by default, or 'ASCENDING' can be specified.
+   * Descending makes the first element the newest (largest block height).
    *
    * @apiExample Example usage:
    *    (async () => {
    *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
-   *      const sortedTxs = bchjs.Electrumx.sortConfTxs(txs.transactions, 'DESCENDING')
+   *      const sortedTxs = bchjs.Electrumx.sortConfTxs(txs.transactions, 'ASCENDING')
    *      console.log(sortedTxs)
    *    })()
    *
    * //   [
    * //     {
-   * //       "height": 560534,
-   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
-   * //     },
-   * //     {
    * //       "height": 560430,
    * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     },
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
    * //     }
    * //   ]
    */
   // Sort confirmed Transactions by the block height
-  sortConfTxs (txs, sortingOrder = 'ASCENDING') {
+  sortConfTxs (txs, sortingOrder = 'DESCENDING') {
     try {
       // Filter out unconfirmed transactions, with a height of 0 or less.
       txs = txs.filter(elem => elem.height > 0)
 
-      if (sortingOrder === 'ASCENDING') {
-        return txs.sort((a, b) => a.height - b.height)
+      if (sortingOrder === 'DESCENDING') {
+        return txs.sort((a, b) => b.height - a.height)
       }
-      return txs.sort((a, b) => b.height - a.height)
+      return txs.sort((a, b) => a.height - b.height)
     } catch (err) {
       console.log('Error in util.js/sortConfTxs()')
       throw err
@@ -665,23 +666,23 @@ class ElectrumX {
    * @apiExample Example usage:
    *    (async () => {
    *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
-   *      const sortedTxs = await bchjs.Electrumx.sort0ConfTxs(txs.transactions, 'DESCENDING')
+   *      const sortedTxs = await bchjs.Electrumx.sort0ConfTxs(txs.transactions, 'ASCENDING')
    *      console.log(sortedTxs)
    *    })()
    *
    * //   [
    * //     {
-   * //       "height": 560534,
-   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
-   * //     },
-   * //     {
    * //       "height": 560430,
    * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     },
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
    * //     }
    * //   ]
    */
   // Substitute zero-conf txs with the current block-height + 1
-  async sort0ConfTxs (txs, sortingOrder = 'ASCENDING') {
+  async sort0ConfTxs (txs, sortingOrder = 'DESCENDING') {
     try {
       // Calculate the height of the next block
       const nextBlock = (await this.blockchain.getBlockCount()) + 1

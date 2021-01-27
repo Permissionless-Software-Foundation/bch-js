@@ -381,7 +381,7 @@ describe('#ElectrumX', () => {
       //   `sortedTransactions: ${JSON.stringify(sortedTransactions, null, 2)}`
       // )
 
-      assert.isBelow(sortedTransactions[0].height, sortedTransactions[1].height)
+      assert.isAbove(sortedTransactions[0].height, sortedTransactions[1].height)
     })
   })
 })

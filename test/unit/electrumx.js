@@ -422,15 +422,15 @@ describe('#ElectrumX', () => {
   })
 
   describe('#sortConfTxs', () => {
-    it('should sort in ascending order by default', () => {
-      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions)
+    it('should sort in ascending order', () => {
+      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions, 'ASCENDING')
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isBelow(result[0].height, result[1].height)
     })
 
-    it('should sort in descending order', () => {
-      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions, 'DESCENDING')
+    it('should sort in descending order by default', () => {
+      const result = bchjs.Electrumx.sortConfTxs(mockData.transaction.transactions)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isAbove(result[0].height, result[1].height)
@@ -457,21 +457,21 @@ describe('#ElectrumX', () => {
 
   // These tests use mocked data that contains unconfirmed transactions.
   describe('#sort0ConfTxs', () => {
-    it('should sort in ascending order by default', async () => {
+    it('should sort in ascending', async () => {
       // Stub network calls
       sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
 
-      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions)
+      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions, 'ASCENDING')
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isBelow(result[0].height, result[1].height)
     })
 
-    it('should sort in descending order', async () => {
+    it('should sort in descending order by default', async () => {
       // Stub network calls
       sandbox.stub(bchjs.Electrumx.blockchain, 'getBlockCount').resolves(672141)
 
-      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions, 'DESCENDING')
+      const result = await bchjs.Electrumx.sort0ConfTxs(mockData.txHistoryWithUnconfirmed.transactions)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isAbove(result[1].height, result[2].height)
