@@ -141,15 +141,9 @@ describe('#RawTransactions', () => {
     it('should return an array of input addresses', async () => {
       sandbox
         .stub(bchjs.RawTransactions, 'getRawTransaction')
-        .onCall(0)
-        .resolves(mockData.mockTx)
-        .onCall(1)
         .resolves(mockData.mockParentTx1)
 
-      const txid =
-        '32233db13f2ae6d82b6262f335643dccf09fc0bcfcef4bc3fbe023355f02e112'
-
-      const result = await bchjs.RawTransactions._getInputAddrs(txid)
+      const result = await bchjs.RawTransactions._getInputAddrs(mockData.mockTx)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert2.isArray(result)
@@ -164,7 +158,53 @@ describe('#RawTransactions', () => {
           .stub(bchjs.RawTransactions, 'getRawTransaction')
           .rejects(new Error('test error'))
 
-        await bchjs.RawTransactions._getInputAddrs('fake txid')
+        await bchjs.RawTransactions._getInputAddrs(mockData.mockTx)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.equal(err.message, 'test error')
+      }
+    })
+  })
+
+  describe('#getTxData', () => {
+    it('should return tx data with input addresses', async () => {
+      // Mock dependencies
+      sandbox.stub(bchjs.RawTransactions, 'getRawTransaction').resolves(mockData.mockTx)
+      sandbox.stub(bchjs.RawTransactions, '_getInputAddrs').resolves(mockData.mockGetInputAddrsOutput)
+
+      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+
+      const result = await bchjs.RawTransactions.getTxData(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.property(result.vin[0], 'address')
+    })
+
+    it('should throw an error for a non-txid input', async () => {
+      try {
+        await bchjs.RawTransactions.getTxData(1234)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.include(err.message, 'Input must be a string or array of strings')
+      }
+    })
+
+    it('should catch and throw an error', async () => {
+      try {
+        // Force a network error.
+        sandbox
+          .stub(bchjs.RawTransactions, 'getRawTransaction')
+          .rejects(new Error('test error'))
+
+        const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+
+        await bchjs.RawTransactions.getTxData(txid)
 
         assert.fail('Unexpected result')
       } catch (err) {

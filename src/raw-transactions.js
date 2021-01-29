@@ -289,20 +289,19 @@ class RawTransactions {
     }
   }
 
-  // Retrieve the parent TX (pTX) for the given TXID in order to retrieve the BCH
-  // address of the inputs for the given TXID.
-  // Assumes a single TXID. Does not yet work with an array of TXIDs.
+  // Given verbose transaction details, this function retrieves the transaction
+  // data for the inputs (the parent transactions). It returns an array of
+  // objects. Each object corresponds to a transaction input, and contains
+  // the address that generated that input UTXO.
+  //
+  // Assumes a single TX. Does not yet work with an array of TXs.
   // This function returns an array of objects, each object if formated as follows:
   // {
   //   vin: 0, // The position of the input for the given txid
   //   address: bitcoincash:qzhrpmu7nruyfcemeanqh5leuqcnf6zkjq4qm9nqh0
   // }
-  async _getInputAddrs (txid) {
+  async _getInputAddrs (txDetails) {
     try {
-      // Get the TX details for the transaction under consideration.
-      const txDetails = await this.getRawTransaction(txid, true)
-      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
-
       const retArray = [] // Return array
 
       for (let i = 0; i < txDetails.vin.length; i++) {
@@ -314,7 +313,9 @@ class RawTransactions {
         // Get the TX details for the input, in order to retrieve the address of
         // the sender.
         const txDetailsParent = await this.getRawTransaction(inputTxid, true)
-        console.log(`txDetailsParent: ${JSON.stringify(txDetailsParent, null, 2)}`)
+        // console.log(
+        //   `txDetailsParent: ${JSON.stringify(txDetailsParent, null, 2)}`
+        // )
 
         // The vout from the previous tx that represents the sender.
         const voutSender = txDetailsParent.vout[inputVout]
@@ -326,6 +327,58 @@ class RawTransactions {
       }
 
       return retArray
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
+  /**
+   * @api RawTransactions.getTxData() getTxData()
+   * @apiName getTxData
+   * @apiGroup RawTransactions
+   * @apiDescription
+   * Returns an object of transaction data, including addresses for input UTXOs.
+   *
+   * This function is equivalent to running `getRawTransaction (txid, true)`,
+   * execept the `vin` array will be populated with an `address` property that
+   * contains the `bitcoincash:` address of the sender for each input.
+   *
+   * This function will only work with a single txid. It does not yet support an
+   * array of TXIDs.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   * try {
+   *  let txData = await bchjs.RawTransactions.getTxData("0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098");
+   *  console.log(txData);
+   * } catch(error) {
+   * console.error(error)
+   * }
+   * })()
+   */
+  // Equivalent to running: async getRawTransaction (txid, verbose = true)
+  // Only handles a single TXID (not arrays).
+  // Appends the BCH address to the inputs of the transaction.
+  async getTxData (txid) {
+    try {
+      if (typeof txid !== 'string') {
+        throw new Error('Input must be a string or array of strings.')
+      }
+
+      // Get the TX details for the transaction under consideration.
+      const txDetails = await this.getRawTransaction(txid, true)
+      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+      const inAddrs = await this._getInputAddrs(txDetails)
+      // console.log(`inAddrs: ${JSON.stringify(inAddrs, null, 2)}`)
+
+      // Add the input address to the transaction data.
+      for (let i = 0; i < inAddrs.length; i++) {
+        txDetails.vin[i].address = inAddrs[i].address
+      }
+
+      return txDetails
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error

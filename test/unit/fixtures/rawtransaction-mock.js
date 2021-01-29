@@ -48,7 +48,15 @@ const mockParentTx1 = {
   ]
 }
 
+const mockGetInputAddrsOutput = [
+  {
+    vin: 0,
+    address: 'bitcoincash:qr2jtznnkhy0jnynn4l7jmmce6teqcyrhc8herhlgt'
+  }
+]
+
 module.exports = {
   mockTx,
-  mockParentTx1
+  mockParentTx1,
+  mockGetInputAddrsOutput
 }
