@@ -883,18 +883,14 @@ class Utils {
    * @api SLP.Utils.decodeOpReturn() decodeOpReturn()
    * @apiName decodeOpReturn
    * @apiGroup SLP Utils
-   * @apiDescription Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
+   * @apiDescription
+   * Retrieves transactions data from a txid and decodes the SLP OP_RETURN data.
    *
-   * Similar to decodeOpReturn(), except decodeOpReturn2() uses the slp-parser
-   * library maintained by JT Freeman. Outputs have slightly different format.
+   * Throws an error if given a non-SLP txid.
    *
    * If optional associative array parameter cache is used, will cache and
    * reuse responses for the same input.
    *
-   * Throws an error if given a non-SLP txid.
-   *
-   * In a future version of bch-js, this method will replace the origonal
-   * decodeOpReturn() method.
    *
    * @apiExample Example usage:
    *
@@ -921,6 +917,7 @@ class Utils {
    *    "99883300000000"
    *  ]
    * }
+   *
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
   async decodeOpReturn (txid, cache = null) {

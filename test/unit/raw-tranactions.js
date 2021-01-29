@@ -5,6 +5,7 @@
 
 // Public npm libraries
 const assert = require('assert')
+const assert2 = require('chai').assert
 const axios = require('axios')
 const sinon = require('sinon')
 // const nock = require("nock") // HTTP mocking
@@ -18,16 +19,19 @@ let bchjs
 // const util = require("util")
 // util.inspect.defaultOptions = { depth: 1 }
 
+const mockData = require('./fixtures/rawtransaction-mock')
+
 describe('#RawTransactions', () => {
+  let sandbox
   beforeEach(() => {
+    sandbox = sinon.createSandbox()
+
     bchjs = new BCHJS()
   })
 
-  describe('#decodeRawTransaction', () => {
-    let sandbox
-    beforeEach(() => (sandbox = sinon.createSandbox()))
-    afterEach(() => sandbox.restore())
+  afterEach(() => sandbox.restore())
 
+  describe('#decodeRawTransaction', () => {
     it('should decode raw transaction', done => {
       const data = {
         txid:
@@ -131,5 +135,83 @@ describe('#RawTransactions', () => {
     //
     //   assert.strictEqual(data, result.data)
     // })
+  })
+
+  describe('#_getInputAddrs', () => {
+    it('should return an array of input addresses', async () => {
+      sandbox
+        .stub(bchjs.RawTransactions, 'getRawTransaction')
+        .resolves(mockData.mockParentTx1)
+
+      const result = await bchjs.RawTransactions._getInputAddrs(mockData.mockTx)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.isArray(result)
+      assert2.equal(result.length, 1)
+      assert2.property(result[0], 'vin')
+      assert2.property(result[0], 'address')
+    })
+
+    it('should catch and throw and error', async () => {
+      try {
+        sandbox
+          .stub(bchjs.RawTransactions, 'getRawTransaction')
+          .rejects(new Error('test error'))
+
+        await bchjs.RawTransactions._getInputAddrs(mockData.mockTx)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.equal(err.message, 'test error')
+      }
+    })
+  })
+
+  describe('#getTxData', () => {
+    it('should return tx data with input addresses', async () => {
+      // Mock dependencies
+      sandbox.stub(bchjs.RawTransactions, 'getRawTransaction').resolves(mockData.mockTx)
+      sandbox.stub(bchjs.RawTransactions, '_getInputAddrs').resolves(mockData.mockGetInputAddrsOutput)
+
+      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+
+      const result = await bchjs.RawTransactions.getTxData(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.property(result.vin[0], 'address')
+    })
+
+    it('should throw an error for a non-txid input', async () => {
+      try {
+        await bchjs.RawTransactions.getTxData(1234)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.include(err.message, 'Input must be a string or array of strings')
+      }
+    })
+
+    it('should catch and throw an error', async () => {
+      try {
+        // Force a network error.
+        sandbox
+          .stub(bchjs.RawTransactions, 'getRawTransaction')
+          .rejects(new Error('test error'))
+
+        const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+
+        await bchjs.RawTransactions.getTxData(txid)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.equal(err.message, 'test error')
+      }
+    })
   })
 })
