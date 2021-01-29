@@ -19,7 +19,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   bchjs.HDNode.fromSeed(seedBuffer);
    *
@@ -28,7 +28,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   bchjs.HDNode.fromSeed(seedBuffer);
    */
@@ -54,7 +54,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to legacy address
@@ -66,7 +66,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to cash address
@@ -88,7 +88,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to cash address
@@ -100,7 +100,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to cash address
@@ -121,7 +121,7 @@ class HDNode {
    * // create mnemonic
    * let mnemonic = bchjs.Mnemonic.generate(128);
    * // create seed buffer from mnemonic
-   * let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   * let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    * // create HDNode from seed buffer
    * let hdNode = bchjs.SLP.HDNode.fromSeed(seedBuffer);
    * // to cash address
@@ -133,7 +133,7 @@ class HDNode {
    * // create mnemonic from entropy
    * let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    * // create seed buffer from mnemonic
-   * let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   * let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    * // create HDNode from seed buffer
    * let hdNode = bchjs.SLP.HDNode.fromSeed(seedBuffer);
    * // to cash address
@@ -156,7 +156,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to WIF
@@ -168,7 +168,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to WIF
@@ -190,7 +190,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to extended public key
@@ -202,7 +202,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to extended public key
@@ -224,7 +224,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to extended private key
@@ -236,7 +236,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // to extended private key
@@ -258,7 +258,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create root seed buffer from mnemonic
-   *   let rootSeed= bchjs.Mnemonic.toSeed(mnemonic);
+   *   let rootSeed= await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from root seed
    *   let hdNode = bchjs.HDNode.fromSeed(rootSeed);
    *   // create public key buffer from HDNode
@@ -269,7 +269,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // create public key buffer from HDNode
@@ -290,7 +290,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create root seed buffer from mnemonic
-   *   let rootSeed= bchjs.Mnemonic.toSeed(mnemonic);
+   *   let rootSeed= await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from root seed
    *   let hdNode = bchjs.HDNode.fromSeed(rootSeed);
    *   // create public key buffer from HDNode
@@ -302,7 +302,7 @@ class HDNode {
    *   // create mnemonic from entropy
    *   let mnemonic = bchjs.Mnemonic.fromEntropy(entropy);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // create public key buffer from HDNode
@@ -370,7 +370,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // derive hardened child HDNode
@@ -391,7 +391,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // derive unhardened child HDNode
@@ -412,7 +412,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create seed buffer from mnemonic
-   *   let seedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let seedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create HDNode from seed buffer
    *   let hdNode = bchjs.HDNode.fromSeed(seedBuffer);
    *   // derive hardened child HDNode
@@ -615,7 +615,7 @@ class HDNode {
    *   // create mnemonic
    *   let mnemonic = bchjs.Mnemonic.generate(128);
    *   // create root seed buffer
-   *   let rootSeedBuffer = bchjs.Mnemonic.toSeed(mnemonic);
+   *   let rootSeedBuffer = await bchjs.Mnemonic.toSeed(mnemonic);
    *   // create master hd node
    *   let masterHDNode = bchjs.HDNode.fromSeed(rootSeedBuffer);
    *   // derive child node
