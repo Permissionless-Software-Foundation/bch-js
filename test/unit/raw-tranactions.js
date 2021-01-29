@@ -5,6 +5,7 @@
 
 // Public npm libraries
 const assert = require('assert')
+const assert2 = require('chai').assert
 const axios = require('axios')
 const sinon = require('sinon')
 // const nock = require("nock") // HTTP mocking
@@ -18,16 +19,19 @@ let bchjs
 // const util = require("util")
 // util.inspect.defaultOptions = { depth: 1 }
 
+const mockData = require('./fixtures/rawtransaction-mock')
+
 describe('#RawTransactions', () => {
+  let sandbox
   beforeEach(() => {
+    sandbox = sinon.createSandbox()
+
     bchjs = new BCHJS()
   })
 
-  describe('#decodeRawTransaction', () => {
-    let sandbox
-    beforeEach(() => (sandbox = sinon.createSandbox()))
-    afterEach(() => sandbox.restore())
+  afterEach(() => sandbox.restore())
 
+  describe('#decodeRawTransaction', () => {
     it('should decode raw transaction', done => {
       const data = {
         txid:
@@ -131,5 +135,43 @@ describe('#RawTransactions', () => {
     //
     //   assert.strictEqual(data, result.data)
     // })
+  })
+
+  describe('#_getInputAddrs', () => {
+    it('should return an array of input addresses', async () => {
+      sandbox
+        .stub(bchjs.RawTransactions, 'getRawTransaction')
+        .onCall(0)
+        .resolves(mockData.mockTx)
+        .onCall(1)
+        .resolves(mockData.mockParentTx1)
+
+      const txid =
+        '32233db13f2ae6d82b6262f335643dccf09fc0bcfcef4bc3fbe023355f02e112'
+
+      const result = await bchjs.RawTransactions._getInputAddrs(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert2.isArray(result)
+      assert2.equal(result.length, 1)
+      assert2.property(result[0], 'vin')
+      assert2.property(result[0], 'address')
+    })
+
+    it('should catch and throw and error', async () => {
+      try {
+        sandbox
+          .stub(bchjs.RawTransactions, 'getRawTransaction')
+          .rejects(new Error('test error'))
+
+        await bchjs.RawTransactions._getInputAddrs('fake txid')
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(err)
+
+        assert2.equal(err.message, 'test error')
+      }
+    })
   })
 })

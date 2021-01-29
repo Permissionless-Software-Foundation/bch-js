@@ -289,6 +289,49 @@ class RawTransactions {
     }
   }
 
+  // Retrieve the parent TX (pTX) for the given TXID in order to retrieve the BCH
+  // address of the inputs for the given TXID.
+  // Assumes a single TXID. Does not yet work with an array of TXIDs.
+  // This function returns an array of objects, each object if formated as follows:
+  // {
+  //   vin: 0, // The position of the input for the given txid
+  //   address: bitcoincash:qzhrpmu7nruyfcemeanqh5leuqcnf6zkjq4qm9nqh0
+  // }
+  async _getInputAddrs (txid) {
+    try {
+      // Get the TX details for the transaction under consideration.
+      const txDetails = await this.getRawTransaction(txid, true)
+      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+      const retArray = [] // Return array
+
+      for (let i = 0; i < txDetails.vin.length; i++) {
+        // The first input represents the sender of the BCH or tokens.
+        const vin = txDetails.vin[i]
+        const inputTxid = vin.txid
+        const inputVout = vin.vout
+
+        // Get the TX details for the input, in order to retrieve the address of
+        // the sender.
+        const txDetailsParent = await this.getRawTransaction(inputTxid, true)
+        console.log(`txDetailsParent: ${JSON.stringify(txDetailsParent, null, 2)}`)
+
+        // The vout from the previous tx that represents the sender.
+        const voutSender = txDetailsParent.vout[inputVout]
+
+        retArray.push({
+          vin: i,
+          address: voutSender.scriptPubKey.addresses[0]
+        })
+      }
+
+      return retArray
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
   /**
    * @api RawTransactions.sendRawTransaction() sendRawTransaction()
    * @apiName sendRawTransaction
