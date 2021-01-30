@@ -1,5 +1,7 @@
 const axios = require('axios')
 
+const SlpUtils = require('./slp/utils')
+
 let _this
 
 class RawTransactions {
@@ -26,6 +28,9 @@ class RawTransactions {
 
     // Encapsulate dependencies
     this.axios = axios
+
+    // Dependencies
+    this.slpUtils = new SlpUtils(config)
 
     _this = this
   }
@@ -376,6 +381,84 @@ class RawTransactions {
       // Add the input address to the transaction data.
       for (let i = 0; i < inAddrs.length; i++) {
         txDetails.vin[i].address = inAddrs[i].address
+      }
+
+      return txDetails
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
+  // Wraps getTxData(), but also appends SLP token information to each input
+  // and output of the transaction. This is a very API-heavy call.
+  // Returns false if the txid is not an SLP transaction.
+  //
+  // Warning! This is a prototype function and the output can change at any time
+  // without reflecting a change in the semantic version. DO NOT USE IN PRODUCTION.
+  async getTxDataSlp (txid) {
+    try {
+      if (typeof txid !== 'string') {
+        throw new Error('Input must be a string or array of strings.')
+      }
+
+      const txDetails = await this.getTxData(txid)
+
+      // First get the token information for the output. If that fails, then
+      // this is not an SLP transaction, and this method can return false.
+      let outTokenData
+      try {
+        outTokenData = await this.slpUtils.decodeOpReturn(txid)
+        // console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
+
+        // Add token information to the tx details object.
+        txDetails.tokenTxType = outTokenData.txType
+        txDetails.tokenId = outTokenData.tokenId
+
+        // Add the token quantity to each output.
+        for (let i = 0; i < outTokenData.amounts.length; i++) {
+          txDetails.vout[i + 1].tokenQty = outTokenData.amounts[i]
+        }
+
+        // Loop through each input and retrieve the token data.
+        for (let i = 0; i < txDetails.vin.length; i++) {
+          const thisVin = txDetails.vin[i]
+
+          try {
+            // If decodeOpReturn() throws an error, then this input is not
+            // from an SLP transaction and can be ignored.
+            const inTokenData = await this.slpUtils.decodeOpReturn(thisVin.txid)
+            // console.log(
+            //   `vin[${i}] tokenData: ${JSON.stringify(inTokenData, null, 2)}`
+            // )
+
+            // Get the appropriate vout token amount. This may throw an error,
+            // which means this Vin is not actually a token UTXO, it was just
+            // associated with a previous token TX.
+            const tokenQty = inTokenData.amounts[thisVin.vout - 1]
+            // console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
+
+            if (tokenQty) {
+              thisVin.tokenQty = tokenQty
+              // txDetails.vin[i].tokenQty = tokenQty
+            } else {
+              thisVin.tokenQty = null
+            }
+          } catch (err) {
+            // console.log('catch 2: ', err)
+            // If decodeOpReturn() throws an error, then this input is not
+            // from an SLP transaction and can be ignored.
+            // thisVin.tokenQty = null
+            thisVin.tokenQty = null
+            continue
+          }
+          // console.log(
+          //   `2: txDetails.vin[i]: ${JSON.stringify(txDetails.vin[i], null, 2)}`
+          // )
+        }
+      } catch (err) {
+        // console.log('catch 1: ', err)
+        return false
       }
 
       return txDetails
