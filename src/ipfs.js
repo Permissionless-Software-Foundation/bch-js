@@ -14,7 +14,7 @@ class IPFS {
   constructor (config) {
     this.IPFS_API = process.env.IPFS_API
       ? process.env.IPFS_API
-      : 'https://ipfs-file-upload.fullstack.nl'
+      : 'https://ipfs-file-upload.fullstackcash.nl'
     // : `http://localhost:5001`
 
     // Default options when calling axios.
