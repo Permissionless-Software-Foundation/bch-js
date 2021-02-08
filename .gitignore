@@ -3,6 +3,7 @@ node_modules/*
 wallet-info.txt
 wallet.json
 integration-test-sweet.sh
+integration-test-ss.sh
 
 docs/
 coverage/
