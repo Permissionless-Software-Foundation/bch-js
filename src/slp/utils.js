@@ -602,7 +602,8 @@ class Utils {
    * @api SLP.Utils.validateTxid3() validateTxid3()
    * @apiName validateTxid3
    * @apiGroup SLP Utils
-   * @apiDescription Validate that txid is an SLP transaction using the SLPDB whitelist server.
+   * @apiDescription
+   * Validate that txid is an SLP transaction using the SLPDB whitelist server.
    * Same exact functionality as the validateTxid() function, but this function
    * calls the whitelist SLPDB. It will only validate SLP tokens that are in the
    * whitelist. You can retrieve the whitelist with the SLP.Utils.whitelist()
@@ -1715,6 +1716,42 @@ class Utils {
 
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
+        {
+          utxos: utxos
+        },
+        _this.axiosOptions
+      )
+
+      return response.data
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
+  /**
+   * @api SLP.Utils.hydrateUtxosWL() hydrateUtxosWL()
+   * @apiName hydrateUtxosWL
+   * @apiGroup SLP Utils
+   * @apiDescription
+   * This call is exactly the same as `hydrateUtxos()`. This version hydrate a
+   * UTXO with SLP token metadata, but only uses the whitelist SLPDB for
+   * validation.
+   *
+   * Whitelist SLPDBs will return `isValid: null` for any token not in the
+   * 'whitelist' filter. Filtered SLPDBs are much smaller and more reliable
+   * to operate.
+   *
+   */
+  // Same as tokenUtxoDetailsWL(), but reduces API calls by having bch-api server
+  // do the heavy lifting.
+  async hydrateUtxosWL (utxos) {
+    try {
+      // Throw error if input is not an array.
+      if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
+
+      const response = await _this.axios.post(
+        `${this.restURL}slp/hydrateUtxosWL`,
         {
           utxos: utxos
         },
