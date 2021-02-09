@@ -1855,7 +1855,8 @@ describe('#SLP Utils', () => {
             .throws({ error: 'TXID not found' })
         }
 
-        const txid = 'd284e71227ec89f714b964d8eda595be6392bebd2fac46082bc5a9ce6fb7b33e'
+        const txid =
+          'd284e71227ec89f714b964d8eda595be6392bebd2fac46082bc5a9ce6fb7b33e'
 
         await uut.Utils.txDetails(txid)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -1875,7 +1876,8 @@ describe('#SLP Utils', () => {
           .resolves({ data: mockData.mockTxDetails })
       }
 
-      const txid = '9dbaaafc48c49a21beabada8de632009288a2cd52eecefd0c00edcffca9955d0'
+      const txid =
+        '9dbaaafc48c49a21beabada8de632009288a2cd52eecefd0c00edcffca9955d0'
 
       const result = await uut.Utils.txDetails(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -2053,6 +2055,86 @@ describe('#SLP Utils', () => {
       console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
 */
+  })
+
+  describe('#waterfallValidateTxid', () => {
+    // This test ensures that the whitelist SLPDB is called before the
+    // general purpose SLPDB.
+    it('should call validateTxid3() first', async () => {
+      const txid = 'fakeTxid'
+
+      const retVal = [{ txid, valid: true }]
+
+      // Use stubs to force the desired code path.
+      sandbox.stub(uut.Utils, 'validateTxid3').resolves(retVal)
+      sandbox
+        .stub(uut.Utils, 'validateTxid')
+        .rejects(new Error('Unexpected code path'))
+      sandbox
+        .stub(uut.Utils, 'validateTxid2')
+        .rejects(new Error('Unexpected code path'))
+
+      const result = await uut.Utils.waterfallValidateTxid(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result, true)
+    })
+
+    // This test ensures that the general purpose SLPDB is called after the
+    // whitelist SLPDB, but before slp-api.
+    it('should call validateTxid() second', async () => {
+      const txid = 'fakeTxid'
+
+      const retVal1 = [{ txid, valid: null }]
+      const retVal2 = [{ txid, valid: true }]
+
+      // Use stubs to force the desired code path.
+      sandbox.stub(uut.Utils, 'validateTxid3').resolves(retVal1)
+      sandbox.stub(uut.Utils, 'validateTxid').resolves(retVal2)
+      sandbox
+        .stub(uut.Utils, 'validateTxid2')
+        .rejects(new Error('Unexpected code path'))
+
+      const result = await uut.Utils.waterfallValidateTxid(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result, true)
+    })
+
+    // This test ensures that slp-api is called if both SLPDBs return null.
+    it('should call slp-api last', async () => {
+      const txid = 'fakeTxid'
+
+      const retVal1 = [{ txid, valid: null }]
+
+      // Use stubs to force the desired code path.
+      sandbox.stub(uut.Utils, 'validateTxid3').resolves(retVal1)
+      sandbox.stub(uut.Utils, 'validateTxid').resolves(retVal1)
+      sandbox.stub(uut.Utils, 'validateTxid2').resolves({ isValid: true })
+
+      const result = await uut.Utils.waterfallValidateTxid(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result, true)
+    })
+
+    it('catches and throws an error', async () => {
+      try {
+        const txid = 'fakeTxid'
+
+        // Force an error
+        sandbox
+          .stub(uut.Utils, 'validateTxid3')
+          .rejects(new Error('fake error'))
+
+        await await uut.Utils.waterfallValidateTxid(txid)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log(`err.message: ${err.message}`)
+        assert.include(err.message, 'fake error')
+      }
+    })
   })
 
   describe('#getWhitelist', () => {

@@ -1427,6 +1427,140 @@ class Utils {
   }
 
   /**
+   * @api SLP.Utils.waterfallValidateTxid() waterfallValidateTxid()
+   * @apiName waterfallValidateTxid
+   * @apiGroup SLP Utils
+   * @apiDescription Use multiple validators to validate an SLP TXID.
+   *
+   * This function aggregates all the available SLP token validation sources.
+   * It starts with the fastest, most-efficient source first, and continues
+   * to other validation sources until the txid is validated (true or false).
+   * If the txid goes through all sources and can't be validated, it will
+   * return null.
+   *
+   * Validation sources from most efficient to least efficient:
+   * - SLPDB with whitelist filter
+   * - SLPDB general purpose
+   * - slp-api
+   *
+   * Currently only supports a single txid at a time.
+   *
+   * @apiExample Example usage:
+   *
+   * // validate single SLP txid
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.waterfallValidateTxid(
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+   *    );
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * true
+   */
+
+  async waterfallValidateTxid (txid) {
+    try {
+      const cachedTxValidation = {}
+
+      // If the value has been cached, use the cached version first.
+      let isValid = cachedTxValidation[txid]
+      if (!isValid) {
+        isValid = null
+      } else {
+        return isValid
+      }
+
+      // There are two possible responses from SLPDB. If SLPDB is functioning
+      // correctly, then validateTxid() will return this:
+      // isValid: [
+      //   {
+      //  "txid": "ff0c0354f8d3ddb34fa36f73494eb58ea24f8b8da6904aa8ed43b7a74886c583",
+      //  "valid": true
+      //   }
+      // ]
+      //
+      // If SLPDB has fallen behind real-time processing, it will return this:
+      // isValid: [
+      //   null
+      // ]
+      //
+      // Note: validateTxid3() has the same output as validateTxid().
+      // validateTxid2() uses slp-validate, which has a different output format.
+
+      // Validate against the whitelist SLPDB first.
+      const whitelistResult = await this.validateTxid3(txid)
+      // console.log(
+      //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
+      //     whitelistResult,
+      //     null,
+      //     2
+      //   )}`
+      // )
+
+      // Safely retrieve the returned value.
+      if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
+
+      // Exit if isValid is not null.
+      if (isValid !== null) {
+        // Save to the cache.
+        cachedTxValidation[txid] = isValid
+
+        return isValid
+      }
+
+      // Try the general SLPDB, if the whitelist returned null.
+      const generalResult = await this.validateTxid(txid)
+      // console.log(
+      //   `validateTxid() isValid: ${JSON.stringify(generalResult, null, 2)}`
+      // )
+
+      // Safely retrieve the returned value.
+      if (generalResult[0] !== null) isValid = generalResult[0].valid
+
+      // Exit if isValid is not null.
+      if (isValid !== null) {
+        // Save to the cache.
+        cachedTxValidation[txid] = isValid
+
+        return isValid
+      }
+
+      // If still null, as a last resort, check it against slp-validate
+      let slpValidateResult = null
+      try {
+        slpValidateResult = await this.validateTxid2(txid)
+      } catch (err) {
+        /* exit quietly */
+      }
+      // console.log(
+      //   `slpValidateResult: ${JSON.stringify(slpValidateResult, null, 2)}`
+      // )
+
+      // Exit if isValid is not null.
+      if (slpValidateResult !== null) {
+        isValid = slpValidateResult.isValid
+
+        // Save to the cache.
+        cachedTxValidation[txid] = isValid
+
+        return isValid
+      }
+
+      // If isValid is still null, return that value, signaling that the txid
+      // could not be validated.
+      return isValid
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  /**
    * @api SLP.Utils.hydrateUtxos() hydrateUtxos()
    * @apiName hydrateUtxos
    * @apiGroup SLP Utils

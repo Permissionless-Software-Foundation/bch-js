@@ -735,6 +735,27 @@ describe('#SLP', () => {
         assert.property(result, 'slpProcessedBlockHeight')
       })
     })
+
+    describe('#waterfallValidateTxid', () => {
+      it('should validate known good txid not in whitelist', async () => {
+        const txid = '3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488'
+
+        const result = await bchjs.SLP.Utils.waterfallValidateTxid(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.equal(result, true)
+      })
+
+      it('should invalidate a known invalid TXID', async () => {
+        const txid =
+          'f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a'
+
+        const result = await bchjs.SLP.Utils.waterfallValidateTxid(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.equal(result, false)
+      })
+    })
   })
 
   describe('#tokentype1', () => {
