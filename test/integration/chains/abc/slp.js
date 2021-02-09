@@ -27,7 +27,7 @@ describe('#SLP', () => {
     // Introduce a delay so that the BVT doesn't trip the rate limits.
     if (process.env.IS_USING_FREE_TIER) await sleep(1000)
 
-    bchjs = new BCHJS()
+    bchjs = new BCHJS({ restURL: process.env.RESTURL })
   })
 
   describe('#util', () => {
@@ -113,6 +113,7 @@ describe('#SLP', () => {
 
         // Token send on BCHN network
         assert.equal(data[4].tx_hash, utxos[4].tx_hash)
+        // assert.equal(data[4].isValid, true)
         assert.equal(data[4].isValid, null)
 
         // Token send on ABC network
@@ -180,6 +181,7 @@ describe('#SLP', () => {
         assert.equal(result[0].valid, null)
         assert.equal(result[1].valid, null)
         assert.equal(result[2].valid, true)
+        // assert.equal(result[2].valid, null)
         assert.equal(result[3].valid, true)
         assert.equal(result[4].valid, null)
       })
@@ -209,6 +211,7 @@ describe('#SLP', () => {
         assert.equal(result[0].valid, null)
         assert.equal(result[1].valid, null)
         assert.equal(result[2].valid, true)
+        // assert.equal(result[2].valid, null)
         assert.equal(result[3].valid, true)
         assert.equal(result[4].valid, null)
         assert.equal(result[5].valid, true)

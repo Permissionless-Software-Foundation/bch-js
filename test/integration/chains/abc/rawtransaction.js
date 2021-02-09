@@ -8,7 +8,7 @@
 const chai = require('chai')
 const assert = chai.assert
 const BCHJS = require('../../../../src/bch-js')
-const bchjs = new BCHJS()
+const bchjs = new BCHJS({ restURL: process.env.RESTURL })
 
 // Inspect utility used for debugging.
 const util = require('util')
@@ -44,6 +44,7 @@ describe('#rawtransaction', () => {
 
         assert.hasAllKeys(err, ['error'])
         assert.include(err.error, 'bad-txns-inputs-missingorspent')
+        // assert.include(err.error, 'Missing inputs')
       }
     })
 
@@ -61,6 +62,7 @@ describe('#rawtransaction', () => {
 
         assert.hasAllKeys(err, ['error'])
         assert.include(err.error, 'bad-txns-inputs-missingorspent')
+        // assert.include(err.error, 'Missing inputs')
       }
     })
   })

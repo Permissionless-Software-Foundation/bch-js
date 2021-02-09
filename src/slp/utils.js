@@ -653,6 +653,7 @@ class Utils {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
+    // console.log(`path: ${JSON.stringify(path, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -1110,7 +1111,7 @@ class Utils {
 
           // Validate using a 'waterfall' of validators.
           utxo.isValid = await this.waterfallValidateTxid(utxo.txid)
-          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+          // console.log(`isValid: ${JSON.stringify(utxo.isValid, null, 2)}`)
         }
       }
 
@@ -1449,6 +1450,8 @@ class Utils {
 
   async waterfallValidateTxid (txid) {
     try {
+      // console.log('txid: ', txid)
+
       const cachedTxValidation = {}
 
       // If the value has been cached, use the cached version first.
