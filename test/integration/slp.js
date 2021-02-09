@@ -32,7 +32,8 @@ describe('#SLP', () => {
   describe('#util', () => {
     describe('#list', () => {
       it('should get information on the Spice token', async () => {
-        const tokenId = '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf'
+        const tokenId =
+          '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf'
 
         const result = await bchjs.SLP.Utils.list(tokenId)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -490,6 +491,116 @@ describe('#SLP', () => {
       })
     })
 
+    describe('#tokenUtxoDetailsWL', () => {
+      it('should return details for a simple SEND SLP token utxo', async () => {
+        const utxos = [
+          {
+            height: 660554,
+            tx_hash:
+              '89b3f0c84efe8b01b24e2d7ac08636de5781f31dbb84478e3de868ca0a7ed93a',
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetailsWL(utxos)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.property(data[0], 'txid')
+        assert.property(data[0], 'vout')
+        assert.property(data[0], 'height')
+        assert.property(data[0], 'utxoType')
+        assert.property(data[0], 'tokenId')
+        assert.property(data[0], 'tokenTicker')
+        assert.property(data[0], 'tokenName')
+        assert.property(data[0], 'tokenDocumentUrl')
+        assert.property(data[0], 'tokenDocumentHash')
+        assert.property(data[0], 'decimals')
+        assert.property(data[0], 'tokenQty')
+        assert.property(data[0], 'isValid')
+        assert.equal(data[0].isValid, true)
+      })
+
+      it('should return false for BCH-only UTXOs', async () => {
+        const utxos = [
+          {
+            txid:
+              'a937f792c7c9eb23b4f344ce5c233d1ac0909217d0a504d71e6b1e4efb864a3b',
+            vout: 0,
+            amount: 0.00001,
+            satoshis: 1000,
+            confirmations: 0,
+            ts: 1578424704
+          },
+          {
+            txid:
+              '53fd141c2e999e080a5860887441a2c45e9cbe262027e2bd2ac998fc76e43c44',
+            vout: 0,
+            amount: 0.00001,
+            satoshis: 1000,
+            confirmations: 0,
+            ts: 1578424634
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetailsWL(utxos)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.isArray(data)
+        assert.equal(data[0].isValid, false)
+        assert.equal(data[1].isValid, false)
+      })
+
+      it('should handle a dust attack', async () => {
+        // it("#dustattack", async () => {
+        const utxos = [
+          {
+            height: 655965,
+            tx_hash:
+              'a675af87dcd8d39be782737aa52e0076b52eb2f5ce355ffcb5567a64dd96b77e',
+            tx_pos: 151,
+            value: 547,
+            satoshis: 547,
+            txid:
+              'a675af87dcd8d39be782737aa52e0076b52eb2f5ce355ffcb5567a64dd96b77e',
+            vout: 151,
+            address: 'bitcoincash:qq4dw3sm8qvglspy6w2qg0u2ugsy9zcfcqrpeflwww',
+            hdIndex: 11
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetailsWL(utxos)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.equal(data[0].isValid, false)
+      })
+
+      it('should handle null SLPDB validations', async () => {
+        const utxos = [
+          {
+            height: 665577,
+            tx_hash:
+              '4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419',
+            tx_pos: 1,
+            value: 546
+          },
+          {
+            height: 665577,
+            tx_hash:
+              '3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488',
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.tokenUtxoDetailsWL(utxos)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.isArray(data)
+        // assert.equal(data[0].isValid, null)
+      })
+    })
+
     describe('#balancesForAddress', () => {
       it('should fetch all balances for address: simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9', async () => {
         const balances = await bchjs.SLP.Utils.balancesForAddress(
@@ -738,7 +849,8 @@ describe('#SLP', () => {
 
     describe('#waterfallValidateTxid', () => {
       it('should validate known good txid not in whitelist', async () => {
-        const txid = '3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488'
+        const txid =
+          '3a4b628cbcc183ab376d44ce5252325f042268307ffa4a53443e92b6d24fb488'
 
         const result = await bchjs.SLP.Utils.waterfallValidateTxid(txid)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)

@@ -497,41 +497,6 @@ describe('#SLP Utils', () => {
       }
     })
 
-    // CT 1/9/21: This test can be removed after 2/1/21
-    // it('should throw error if utxo does not have satoshis or value property.', async () => {
-    //   try {
-    //     const utxos = [
-    //       {
-    //         txid:
-    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-    //         vout: 3,
-    //         amount: 0.00002015,
-    //         satoshis: 2015,
-    //         height: 594892,
-    //         confirmations: 5
-    //       },
-    //       {
-    //         txid:
-    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-    //         vout: 2,
-    //         amount: 0.00000546,
-    //         height: 594892,
-    //         confirmations: 5
-    //       }
-    //     ]
-    //
-    //     await uut.Utils.tokenUtxoDetails(utxos)
-    //
-    //     assert.equal(true, false, 'Unexpected result.')
-    //   } catch (err) {
-    //     assert.include(
-    //       err.message,
-    //       'utxo 1 does not have a satoshis or value property',
-    //       'Expected error message.'
-    //     )
-    //   }
-    // })
-
     it('should throw error if utxo does not have txid or tx_hash property.', async () => {
       try {
         const utxos = [
@@ -1593,6 +1558,75 @@ describe('#SLP Utils', () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert.equal(data[0].isValid, false)
+    })
+  })
+
+  describe('#tokenUtxoDetailsWL', () => {
+    it('should return details for a simple SEND SLP token utxo', async () => {
+      // Mock the call to REST API
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(uut.Utils, 'decodeOpReturn')
+        .onCall(0)
+        .resolves({
+          tokenType: 1,
+          txType: 'SEND',
+          tokenId:
+            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+          amounts: ['200000000', '99887500000000']
+        })
+        .onCall(1)
+        .resolves({
+          tokenType: 1,
+          txType: 'GENESIS',
+          ticker: 'TOK-CH',
+          name: 'TokyoCash',
+          tokenId:
+            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+          documentUri: '',
+          documentHash: '',
+          decimals: 8,
+          mintBatonVout: 0,
+          qty: '2100000000000000'
+        })
+
+      // Stub the call to validateTxid
+      sandbox.stub(uut.Utils, 'validateTxid3').resolves([
+        {
+          txid:
+            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
+          valid: true
+        }
+      ])
+
+      const utxos = [
+        {
+          txid:
+            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
+          vout: 1,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 596089,
+          confirmations: 748
+        }
+      ]
+
+      const data = await uut.Utils.tokenUtxoDetailsWL(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert.property(data[0], 'txid')
+      assert.property(data[0], 'vout')
+      assert.property(data[0], 'height')
+      assert.property(data[0], 'utxoType')
+      assert.property(data[0], 'tokenId')
+      assert.property(data[0], 'tokenTicker')
+      assert.property(data[0], 'tokenName')
+      assert.property(data[0], 'tokenDocumentUrl')
+      assert.property(data[0], 'tokenDocumentHash')
+      assert.property(data[0], 'decimals')
+      assert.property(data[0], 'tokenQty')
+      assert.property(data[0], 'isValid')
+      assert.equal(data[0].isValid, true)
     })
   })
 
