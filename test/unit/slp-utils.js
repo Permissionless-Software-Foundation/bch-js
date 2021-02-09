@@ -1716,6 +1716,21 @@ describe('#SLP Utils', () => {
     })
   })
 
+  describe('#hydrateUtxosWL', () => {
+    it('should throw an error if input is not an array', async () => {
+      try {
+        const utxos = 1234
+
+        await uut.Utils.hydrateUtxosWL(utxos)
+
+        assert.equal(true, false, 'Uh oh. Code path should not end here.')
+      } catch (err) {
+        // console.log(`Error: `, err)
+        assert.include(err.message, 'Input must be an array.')
+      }
+    })
+  })
+
   describe('#validateTxid2', () => {
     it('should throw an error if the input is an array', async () => {
       try {

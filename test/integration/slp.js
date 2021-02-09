@@ -766,6 +766,99 @@ describe('#SLP', () => {
       })
     })
 
+    describe('#hydrateUtxosWL', () => {
+      it('should hydrate UTXOs', async () => {
+        const utxos = [
+          {
+            utxos: [
+              {
+                txid:
+                  '89b3f0c84efe8b01b24e2d7ac08636de5781f31dbb84478e3de868ca0a7ed93a',
+                vout: 1,
+                value: 546
+              }
+            ]
+          }
+        ]
+
+        const result = await bchjs.SLP.Utils.hydrateUtxosWL(utxos)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        // Test the general structure of the output.
+        assert.isArray(result.slpUtxos)
+        assert.equal(result.slpUtxos.length, 1)
+        assert.equal(result.slpUtxos[0].utxos.length, 1)
+
+        // Test the non-slp UTXO.
+        assert.property(result.slpUtxos[0].utxos[0], 'txid')
+        assert.property(result.slpUtxos[0].utxos[0], 'vout')
+        assert.property(result.slpUtxos[0].utxos[0], 'value')
+        assert.property(result.slpUtxos[0].utxos[0], 'isValid')
+        assert.equal(result.slpUtxos[0].utxos[0].isValid, true)
+      })
+
+      it('should process data directly from Electrumx', async () => {
+        const addrs = [
+          'bitcoincash:qqnt53cfw990u6y38xgezm0lfa8hknw0wueezcpagp',
+          'bitcoincash:qrh3qgtax6adegzc7zxm6m4sgrv9wq28yqnfn33ce5',
+          'bitcoincash:qqcaee5w4ws77n8s2gzy6fwtma6uxd7ctq8553e495'
+        ]
+
+        const utxos = await bchjs.Electrumx.utxo(addrs)
+        // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
+
+        const result = await bchjs.SLP.Utils.hydrateUtxosWL(utxos.utxos)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        // Test the general structure of the output.
+        assert.isArray(result.slpUtxos)
+        assert.equal(result.slpUtxos.length, 3)
+        assert.equal(result.slpUtxos[0].utxos.length, 1)
+        assert.equal(result.slpUtxos[1].utxos.length, 1)
+        assert.equal(result.slpUtxos[2].utxos.length, 2)
+
+        try {
+          // Test the expected values.
+          assert.equal(result.slpUtxos[0].utxos[0].isValid, false)
+          assert.equal(result.slpUtxos[1].utxos[0].isValid, true)
+          assert.equal(result.slpUtxos[1].utxos[0].tokenTicker, 'TROUT')
+          assert.equal(result.slpUtxos[2].utxos[0].isValid, false)
+          assert.equal(result.slpUtxos[2].utxos[1].isValid, null)
+          assert.equal(result.slpUtxos[2].utxos[1].tokenTicker, 'VALENTINE')
+        } catch (err) {
+          console.error(
+            'The hydrateUtxos call may hitting rate limits, or SLPDB may be having issues if "isValid" results are "null"'
+          )
+          console.log('Error: ', err)
+        }
+      })
+
+      it('should handle null SLPDB validations', async () => {
+        const utxos = [
+          {
+            height: 665577,
+            tx_hash:
+              '4b89405c54d1c0bde8aa476a47561a42a6e7a5e927daa2ec69d428810eae3419',
+            tx_pos: 1,
+            value: 546
+          },
+          {
+            height: 665577,
+            tx_hash:
+              'f7e5199ef6669ad4d078093b3ad56e355b6ab84567e59ad0f08a5ad0244f783a',
+            tx_pos: 1,
+            value: 546
+          }
+        ]
+
+        const data = await bchjs.SLP.Utils.hydrateUtxosWL([{ utxos: utxos }])
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.isArray(data.slpUtxos)
+        assert.equal(data.slpUtxos[0].isValid, null)
+      })
+    })
+
     describe('#validateTxid', () => {
       // This test is not necessary.
       it('should handle a null response from SLPDB', async () => {
