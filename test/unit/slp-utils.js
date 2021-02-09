@@ -497,41 +497,6 @@ describe('#SLP Utils', () => {
       }
     })
 
-    // CT 1/9/21: This test can be removed after 2/1/21
-    // it('should throw error if utxo does not have satoshis or value property.', async () => {
-    //   try {
-    //     const utxos = [
-    //       {
-    //         txid:
-    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-    //         vout: 3,
-    //         amount: 0.00002015,
-    //         satoshis: 2015,
-    //         height: 594892,
-    //         confirmations: 5
-    //       },
-    //       {
-    //         txid:
-    //           'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-    //         vout: 2,
-    //         amount: 0.00000546,
-    //         height: 594892,
-    //         confirmations: 5
-    //       }
-    //     ]
-    //
-    //     await uut.Utils.tokenUtxoDetails(utxos)
-    //
-    //     assert.equal(true, false, 'Unexpected result.')
-    //   } catch (err) {
-    //     assert.include(
-    //       err.message,
-    //       'utxo 1 does not have a satoshis or value property',
-    //       'Expected error message.'
-    //     )
-    //   }
-    // })
-
     it('should throw error if utxo does not have txid or tx_hash property.', async () => {
       try {
         const utxos = [
@@ -569,14 +534,7 @@ describe('#SLP Utils', () => {
     // // change UTXO will contain the same SLP txid, but it is not an SLP UTXO.
     it('should return details on minting baton from genesis transaction', async () => {
       // Mock the call to REST API
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
-          valid: true
-        }
-      ])
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       // Stub the calls to decodeOpReturn.
       sandbox.stub(uut.Utils, 'decodeOpReturn').resolves({
@@ -675,13 +633,7 @@ describe('#SLP Utils', () => {
         })
 
       // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            'cf4b922d1e1aa56b52d752d4206e1448ea76c3ebe69b3b97d8f8f65413bd5c76',
-          valid: true
-        }
-      ])
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -746,14 +698,7 @@ describe('#SLP Utils', () => {
           qty: '2100000000000000'
         })
 
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-          valid: true
-        }
-      ])
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -790,9 +735,10 @@ describe('#SLP Utils', () => {
 
     it('should handle BCH and SLP utxos in the same TX', async () => {
       // Mock external dependencies.
-      sandbox
-        .stub(uut.Utils, 'validateTxid')
-        .resolves(mockData.mockDualValidation)
+      // sandbox
+      //   .stub(uut.Utils, 'validateTxid')
+      //   .resolves(mockData.mockDualValidation)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       sandbox
         .stub(uut.Utils, 'decodeOpReturn')
@@ -898,14 +844,7 @@ describe('#SLP Utils', () => {
           qty: '2000000000000000000'
         })
 
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            '67fd3c7c3a6eb0fea9ab311b91039545086220f7eeeefa367fa28e6e43009f19',
-          valid: true
-        }
-      ])
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1017,14 +956,7 @@ describe('#SLP Utils', () => {
       // Stub the calls to decodeOpReturn.
       sandbox.stub(uut.Utils, 'decodeOpReturn').resolves(slpData)
 
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            'd2ec6abff5d1c8ed9ab5db6d140dcaebb813463e42933a4a4db171e7222a0954',
-          valid: true
-        }
-      ])
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1095,14 +1027,6 @@ describe('#SLP Utils', () => {
         qty: '10000000000'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '880587f01e3112e779c0fdf1b9b859c242a28e56ead85483eeedcaa52f051a04',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1118,11 +1042,12 @@ describe('#SLP Utils', () => {
         .resolves(slpData)
 
       // Stub the call to validateTxid
-      sandbox
-        .stub(uut.Utils, 'validateTxid')
-        .resolves(stubValid)
-        .onCall(1)
-        .resolves(stubValid)
+      // sandbox
+      //   .stub(uut.Utils, 'validateTxid')
+      //   .resolves(stubValid)
+      //   .onCall(1)
+      //   .resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1184,14 +1109,6 @@ describe('#SLP Utils', () => {
         qty: '1'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1206,14 +1123,7 @@ describe('#SLP Utils', () => {
         .onCall(4)
         .resolves(slpData)
 
-      // Stub the call to validateTxid
-      sandbox
-        .stub(uut.Utils, 'validateTxid')
-        .resolves(stubValid)
-        .onCall(1)
-        .resolves(stubValid)
-        .onCall(2)
-        .resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1286,14 +1196,6 @@ describe('#SLP Utils', () => {
         qty: '1'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '35846676e7514658bbd2fd60b1f0d4d86195908f6b2de5328d54c8e4a2d05919',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1308,14 +1210,7 @@ describe('#SLP Utils', () => {
         .onCall(4)
         .resolves(genesisData)
 
-      // Stub the call to validateTxid
-      sandbox
-        .stub(uut.Utils, 'validateTxid')
-        .resolves(stubValid)
-        .onCall(1)
-        .resolves(stubValid)
-        .onCall(2)
-        .resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1379,14 +1274,6 @@ describe('#SLP Utils', () => {
         qty: '1'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '9b6db26b64aedcedc0bd9a3037b29b3598573ec5cea99eec03faa838616cd683',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1395,8 +1282,7 @@ describe('#SLP Utils', () => {
         .onCall(1)
         .resolves(slpData)
 
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1453,14 +1339,6 @@ describe('#SLP Utils', () => {
         qty: '1'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '6d68a7ffbb63ef851c43025f801a1d365cddda50b00741bca022c743d74cd61a',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1471,8 +1349,7 @@ describe('#SLP Utils', () => {
         .onCall(2)
         .resolves(slpData)
 
-      // Stub the call to validateTxid
-      sandbox.stub(uut.Utils, 'validateTxid').resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1530,14 +1407,6 @@ describe('#SLP Utils', () => {
         qty: '1'
       }
 
-      const stubValid = [
-        {
-          txid:
-            '57cc47c265ce878679e95e2cec510d8a1a9840f5c62feb4743cc5947d57d9766',
-          valid: true
-        }
-      ]
-
       // Mock external dependencies.
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1552,12 +1421,7 @@ describe('#SLP Utils', () => {
         .onCall(4)
         .resolves(slpData)
 
-      // Stub the call to validateTxid
-      sandbox
-        .stub(uut.Utils, 'validateTxid')
-        .resolves(stubValid)
-        .onCall(1)
-        .resolves(stubValid)
+      sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
 
       const utxos = [
         {
@@ -1695,8 +1559,10 @@ describe('#SLP Utils', () => {
 
       assert.equal(data[0].isValid, false)
     })
+  })
 
-    it('should use backup validators when regular SLPDB returns null', async () => {
+  describe('#tokenUtxoDetailsWL', () => {
+    it('should return details for a simple SEND SLP token utxo', async () => {
       // Mock the call to REST API
       // Stub the calls to decodeOpReturn.
       sandbox
@@ -1724,36 +1590,15 @@ describe('#SLP Utils', () => {
           qty: '2100000000000000'
         })
 
-      // Force default SLPDB to return 'null', which should trigger usage of the
-      // backup whitelist-SLPDB.
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([
-        {
-          txid:
-            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-          valid: null
-        }
-      ])
-
-      // Force the token UTXO to be in the whitelist.
-      uut.Utils.whitelist = mockData.whitelist
-
-      // Mock the response from the whitelist-SLPDB.
+      // Stub the call to validateTxid
       sandbox.stub(uut.Utils, 'validateTxid3').resolves([
         {
           txid:
             'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-          valid: null
+          valid: true
         }
       ])
 
-      // Mock the response from slp-api
-      sandbox.stub(uut.Utils, 'validateTxid2').resolves({
-        txid:
-          'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-        isValid: true,
-        msg: ''
-      })
-
       const utxos = [
         {
           txid:
@@ -1766,68 +1611,21 @@ describe('#SLP Utils', () => {
         }
       ]
 
-      const data = await uut.Utils.tokenUtxoDetails(utxos)
+      const data = await uut.Utils.tokenUtxoDetailsWL(utxos)
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
-      // The UTXO should have been validated by the third validation source.
-      assert.equal(data[0].isValid, true)
-    })
-
-    it('should handle SLPDB returning null corner case', async () => {
-      // Mock the call to REST API
-      // Stub the calls to decodeOpReturn.
-      sandbox
-        .stub(uut.Utils, 'decodeOpReturn')
-        .onCall(0)
-        .resolves({
-          tokenType: 1,
-          txType: 'SEND',
-          tokenId:
-            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
-          amounts: ['200000000', '99887500000000']
-        })
-        .onCall(1)
-        .resolves({
-          tokenType: 1,
-          txType: 'GENESIS',
-          ticker: 'TOK-CH',
-          name: 'TokyoCash',
-          tokenId:
-            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
-          documentUri: '',
-          documentHash: '',
-          decimals: 8,
-          mintBatonVout: 0,
-          qty: '2100000000000000'
-        })
-
-      // Force default SLPDB to return 'null' corner case.
-      sandbox.stub(uut.Utils, 'validateTxid').resolves([null])
-
-      // Mock the response from slp-api
-      sandbox.stub(uut.Utils, 'validateTxid2').resolves({
-        txid:
-          'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-        isValid: true,
-        msg: ''
-      })
-
-      const utxos = [
-        {
-          txid:
-            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
-          vout: 1,
-          amount: 0.00000546,
-          satoshis: 546,
-          height: 596089,
-          confirmations: 748
-        }
-      ]
-
-      const data = await uut.Utils.tokenUtxoDetails(utxos)
-      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
-
-      // The UTXO should have been validated by the third validation source.
+      assert.property(data[0], 'txid')
+      assert.property(data[0], 'vout')
+      assert.property(data[0], 'height')
+      assert.property(data[0], 'utxoType')
+      assert.property(data[0], 'tokenId')
+      assert.property(data[0], 'tokenTicker')
+      assert.property(data[0], 'tokenName')
+      assert.property(data[0], 'tokenDocumentUrl')
+      assert.property(data[0], 'tokenDocumentHash')
+      assert.property(data[0], 'decimals')
+      assert.property(data[0], 'tokenQty')
+      assert.property(data[0], 'isValid')
       assert.equal(data[0].isValid, true)
     })
   })

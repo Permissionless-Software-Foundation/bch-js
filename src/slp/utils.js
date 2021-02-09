@@ -1058,10 +1058,6 @@ class Utils {
   // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails (utxos) {
     try {
-      // utxo list may have duplicate tx_hash, varying tx_pos
-      // only need to call decodeOpReturn once for those
-      const decodeOpReturnCache = {}
-      const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
@@ -1070,19 +1066,7 @@ class Utils {
       for (let i = 0; i < utxos.length; i++) {
         const utxo = utxos[i]
 
-        // CT 1/9/21: This code can be removed after 2/1/21
-        // if (!utxo.satoshis) {
-        //   // If Electrumx, convert the value to satoshis.
-        //   if (utxo.value) {
-        //     utxo.satoshis = utxo.value
-        //   } else {
-        //     // If there is neither a satoshis or value property, throw an error.
-        //     throw new Error(
-        //       `utxo ${i} does not have a satoshis or value property.`
-        //     )
-        //   }
-        // }
-
+        // Ensure the UTXO has a txid or tx_hash property.
         if (!utxo.txid) {
           // If Electrumx, convert the tx_hash property to txid.
           if (utxo.tx_hash) {
@@ -1106,6 +1090,131 @@ class Utils {
           }
         }
       }
+
+      // Hydrate each UTXO with data from SLP OP_REUTRNs.
+      const outAry = await this._hydrateUtxo(utxos)
+      // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
+
+      // *After* each UTXO has been hydrated with SLP data,
+      // validate the TXID with SLPDB.
+      for (let i = 0; i < outAry.length; i++) {
+        const utxo = outAry[i]
+
+        // *After* the UTXO has been hydrated with SLP data,
+        // validate the TXID with SLPDB.
+        if (utxo.tokenType) {
+          // Only execute this block if the current UTXO has a 'tokenType'
+          // property. i.e. it has been successfully hydrated with SLP
+          // information.
+
+          // Validate using a 'waterfall' of validators.
+          utxo.isValid = await this.waterfallValidateTxid(utxo.txid)
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+        }
+      }
+
+      return outAry
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  /**
+   * @api SLP.Utils.tokenUtxoDetailsWL() tokenUtxoDetailsWL()
+   * @apiName tokenUtxoDetailsWL
+   * @apiGroup SLP Utils
+   * @apiDescription
+   *
+   * Same as tokenUtxoDetails(), but it only uses the whitelist SLPDB to
+   * validate UTXOs. This will result in a lot of `isValid: null` values,
+   * but much more performant handling of SLP tokens. Some wallet apps prefer
+   * the scaling performance over the breadth of supported tokens.
+   *
+   */
+  async tokenUtxoDetailsWL (utxos) {
+    try {
+      // Throw error if input is not an array.
+      if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
+
+      // Loop through each element in the array and validate the input before
+      // further processing.
+      for (let i = 0; i < utxos.length; i++) {
+        const utxo = utxos[i]
+
+        // Ensure the UTXO has a txid or tx_hash property.
+        if (!utxo.txid) {
+          // If Electrumx, convert the tx_hash property to txid.
+          if (utxo.tx_hash) {
+            utxo.txid = utxo.tx_hash
+          } else {
+            // If there is neither a txid or tx_hash property, throw an error.
+            throw new Error(
+              `utxo ${i} does not have a txid or tx_hash property.`
+            )
+          }
+        }
+
+        // Ensure the UTXO has a vout or tx_pos property.
+        if (!Number.isInteger(utxo.vout)) {
+          if (Number.isInteger(utxo.tx_pos)) {
+            utxo.vout = utxo.tx_pos
+          } else {
+            throw new Error(
+              `utxo ${i} does not have a vout or tx_pos property.`
+            )
+          }
+        }
+      }
+
+      // Hydrate each UTXO with data from SLP OP_REUTRNs.
+      const outAry = await this._hydrateUtxo(utxos)
+      // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
+
+      // *After* each UTXO has been hydrated with SLP data,
+      // validate the TXID with SLPDB.
+      for (let i = 0; i < outAry.length; i++) {
+        const utxo = outAry[i]
+
+        // *After* the UTXO has been hydrated with SLP data,
+        // validate the TXID with SLPDB.
+        if (utxo.tokenType) {
+          // Only execute this block if the current UTXO has a 'tokenType'
+          // property. i.e. it has been successfully hydrated with SLP
+          // information.
+
+          // Validate against the whitelist SLPDB.
+          const whitelistResult = await this.validateTxid3(utxo.txid)
+          // console.log(
+          //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
+          //     whitelistResult,
+          //     null,
+          //     2
+          //   )}`
+          // )
+
+          let isValid = null
+
+          // Safely retrieve the returned value.
+          if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
+
+          utxo.isValid = isValid
+        }
+      }
+
+      return outAry
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  // This is a private function that is called by tokenUtxoDetails().
+  // It loops through an array of UTXOs and tries to hydrate them with SLP
+  // token information from the OP_RETURN data.
+  async _hydrateUtxo (utxos) {
+    try {
+      const decodeOpReturnCache = {}
 
       // Output Array
       const outAry = []
@@ -1166,7 +1275,6 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            // outAry[i] = false
             utxo.isValid = false
             outAry[i] = utxo
           } else {
@@ -1191,7 +1299,6 @@ class Utils {
             utxo.decimals = slpData.decimals
             utxo.tokenType = slpData.tokenType
 
-            // something
             outAry[i] = utxo
           }
         }
@@ -1203,8 +1310,8 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            // outAry[i] = false
             utxo.isValid = false
+
             outAry[i] = utxo
           } else {
             // If UTXO passes validation, then return formatted token data.
@@ -1255,8 +1362,8 @@ class Utils {
           // console.log('tokenQty: ', tokenQty)
 
           if (!tokenQty) {
-            // outAry[i] = false
             utxo.isValid = false
+
             outAry[i] = utxo
           } else {
             // If UTXO passes validation, then return formatted token data.
@@ -1292,130 +1399,6 @@ class Utils {
 
             outAry[i] = utxo
           }
-        }
-
-        // *After* the UTXO has been hydrated with SLP data,
-        // validate the TXID with SLPDB.
-        if (outAry[i].tokenType) {
-          // Only execute this block if the current UTXO has a 'tokenType'
-          // property. i.e. it has been successfully hydrated with SLP
-          // information.
-
-          // CT 12/13/2020: Disabling the cache until I get processing of tokens
-          // to be more stable.
-          // If the value has been cached, use the cached version first.
-          let isValid = cachedTxValidation[utxo.txid]
-          if (!isValid) isValid = null
-          // let isValid = null
-
-          // There are two possible responses from SLPDB. If SLPDB is functioning
-          // correctly, then validateTxid() will return this:
-          // isValid: [
-          //   {
-          //  "txid": "ff0c0354f8d3ddb34fa36f73494eb58ea24f8b8da6904aa8ed43b7a74886c583",
-          //  "valid": true
-          //   }
-          // ]
-          //
-          // If SLPDB has fallen behind real-time processing, it will return this:
-          // isValid: [
-          //   null
-          // ]
-          //
-          // Note: validateTxid3() has the same output as validateTxid().
-          // validateTxid2() uses slp-validate, which has a different output format.
-
-          // If not in the cache, try the general SLPDB.
-          if (isValid === null) {
-            // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
-            isValid = await this.validateTxid(utxo.txid)
-            // console.log(
-            //   `validateTxid() isValid: ${JSON.stringify(isValid, null, 2)}`
-            // )
-
-            // Handle corner case where SLPDB returns an array with a null element.
-            if (isValid[0] === null) {
-              isValid = [{ txid: utxo.txid, valid: null }]
-            }
-
-            isValid = isValid[0].valid
-
-            // Save the result to the local cache.
-            // cachedTxValidation[utxo.txid] = isValid
-          }
-          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
-
-          // console.log(
-          //   `pre-validateTxid3() isValid: ${JSON.stringify(isValid, null, 2)}`
-          // )
-
-          // If still null, check the whitelist SLPDB
-          if (isValid === null) {
-            // console.log(
-            //   `checking against whitelist SLPDB. outAry[${i}]: ${JSON.stringify(
-            //     outAry[i],
-            //     null,
-            //     2
-            //   )}`
-            // )
-
-            // Figure out if the token UTXO is in the whitelist.
-            let utxoInWhitelist = false
-            for (let j = 0; j < this.whitelist.length; j++) {
-              if (outAry[i].tokenId === this.whitelist[j].tokenId) {
-                utxoInWhitelist = true
-                break
-              }
-            }
-
-            // If the utxo.tokenId is in the whitelist, check the validity with
-            // the whitelist SLPDB. This should still be functioning properly
-            // if the general SLPDB is not.
-            if (utxoInWhitelist) {
-              isValid = await this.validateTxid3(utxo.txid)
-
-              // console.log(
-              //   `whitelist-SLPDB for ${utxo.txid}: ${JSON.stringify(
-              //     isValid,
-              //     null,
-              //     2
-              //   )}`
-              // )
-
-              if (isValid[0] !== null) isValid = isValid[0].valid
-
-              // Save the result to the local cache.
-              // cachedTxValidation[utxo.txid] = isValid
-            }
-          }
-
-          // console.log(
-          //   `pre-validateTxid2() isValid: ${JSON.stringify(isValid, null, 2)}`
-          // )
-
-          // If still null, as a last resort, check it against slp-validate
-          if (isValid === null) {
-            try {
-              isValid = await this.validateTxid2(utxo.txid)
-            } catch (err) {
-              // Mark as invalid if validateTxid2() throws an error.
-              isValid = null
-            }
-            // console.log(
-            //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
-            // )
-
-            if (isValid !== null) isValid = isValid.isValid
-
-            // Save the result to the local cache.
-            // cachedTxValidation[utxo.txid] = isValid
-          }
-
-          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
-          outAry[i].isValid = isValid
-
-          // Save the txid to the local cache to reduce API calls.
-          cachedTxValidation[utxo.txid] = isValid
         }
       }
 
@@ -1469,7 +1452,7 @@ class Utils {
 
       // If the value has been cached, use the cached version first.
       let isValid = cachedTxValidation[txid]
-      if (!isValid) {
+      if (!isValid && isValid !== false) {
         isValid = null
       } else {
         return isValid
