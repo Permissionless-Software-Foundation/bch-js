@@ -1058,10 +1058,6 @@ class Utils {
   // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails (utxos) {
     try {
-      // utxo list may have duplicate tx_hash, varying tx_pos
-      // only need to call decodeOpReturn once for those
-      const decodeOpReturnCache = {}
-      const cachedTxValidation = {}
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
@@ -1070,19 +1066,7 @@ class Utils {
       for (let i = 0; i < utxos.length; i++) {
         const utxo = utxos[i]
 
-        // CT 1/9/21: This code can be removed after 2/1/21
-        // if (!utxo.satoshis) {
-        //   // If Electrumx, convert the value to satoshis.
-        //   if (utxo.value) {
-        //     utxo.satoshis = utxo.value
-        //   } else {
-        //     // If there is neither a satoshis or value property, throw an error.
-        //     throw new Error(
-        //       `utxo ${i} does not have a satoshis or value property.`
-        //     )
-        //   }
-        // }
-
+        // Ensure the UTXO has a txid or tx_hash property.
         if (!utxo.txid) {
           // If Electrumx, convert the tx_hash property to txid.
           if (utxo.tx_hash) {
@@ -1106,6 +1090,42 @@ class Utils {
           }
         }
       }
+
+      // Hydrate each UTXO with data from SLP OP_REUTRNs.
+      const outAry = await this._hydrateUtxo(utxos)
+      // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
+
+      // *After* each UTXO has been hydrated with SLP data,
+      // validate the TXID with SLPDB.
+      for (let i = 0; i < outAry.length; i++) {
+        const utxo = outAry[i]
+
+        // *After* the UTXO has been hydrated with SLP data,
+        // validate the TXID with SLPDB.
+        if (utxo.tokenType) {
+          // Only execute this block if the current UTXO has a 'tokenType'
+          // property. i.e. it has been successfully hydrated with SLP
+          // information.
+
+          // Validate using a 'waterfall' of validators.
+          utxo.isValid = await this.waterfallValidateTxid(utxo.txid)
+          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
+        }
+      }
+
+      return outAry
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      throw error
+    }
+  }
+
+  // This is a private function that is called by tokenUtxoDetails().
+  // It loops through an array of UTXOs and tries to hydrate them with SLP
+  // token information from the OP_RETURN data.
+  async _hydrateUtxo (utxos) {
+    try {
+      const decodeOpReturnCache = {}
 
       // Output Array
       const outAry = []
@@ -1166,7 +1186,6 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            // outAry[i] = false
             utxo.isValid = false
             outAry[i] = utxo
           } else {
@@ -1191,7 +1210,6 @@ class Utils {
             utxo.decimals = slpData.decimals
             utxo.tokenType = slpData.tokenType
 
-            // something
             outAry[i] = utxo
           }
         }
@@ -1203,8 +1221,8 @@ class Utils {
             utxo.vout !== 1 // UTXO is not the reciever of the genesis or mint tokens.
           ) {
             // Can safely be marked as false.
-            // outAry[i] = false
             utxo.isValid = false
+
             outAry[i] = utxo
           } else {
             // If UTXO passes validation, then return formatted token data.
@@ -1255,8 +1273,8 @@ class Utils {
           // console.log('tokenQty: ', tokenQty)
 
           if (!tokenQty) {
-            // outAry[i] = false
             utxo.isValid = false
+
             outAry[i] = utxo
           } else {
             // If UTXO passes validation, then return formatted token data.
@@ -1292,30 +1310,6 @@ class Utils {
 
             outAry[i] = utxo
           }
-        }
-
-        // *After* the UTXO has been hydrated with SLP data,
-        // validate the TXID with SLPDB.
-        if (outAry[i].tokenType) {
-          // Only execute this block if the current UTXO has a 'tokenType'
-          // property. i.e. it has been successfully hydrated with SLP
-          // information.
-
-          // CT 12/13/2020: Disabling the cache until I get processing of tokens
-          // to be more stable.
-          // If the value has been cached, use the cached version first.
-          let isValid = cachedTxValidation[utxo.txid]
-          if (!isValid) isValid = null
-          // let isValid = null
-
-          // Validate using a 'waterfall' of validators.
-          isValid = await this.waterfallValidateTxid(utxo.txid)
-
-          // console.log(`isValid: ${JSON.stringify(isValid, null, 2)}`)
-          outAry[i].isValid = isValid
-
-          // Save the txid to the local cache to reduce API calls.
-          cachedTxValidation[utxo.txid] = isValid
         }
       }
 
@@ -1369,7 +1363,7 @@ class Utils {
 
       // If the value has been cached, use the cached version first.
       let isValid = cachedTxValidation[txid]
-      if (!isValid) {
+      if (!isValid && isValid !== false) {
         isValid = null
       } else {
         return isValid
