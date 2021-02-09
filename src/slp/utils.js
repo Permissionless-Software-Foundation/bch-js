@@ -1426,18 +1426,43 @@ class Utils {
     }
   }
 
-  // This function aggregates all the available SLP token validation sources.
-  // It starts with the fastest, most-efficient source first, and continues
-  // to other validation sources until the txid is validated (true or false).
-  // If the txid goes through all sources and can't be validated, it will
-  // return null.
-  //
-  // Validation sources from most efficient to least efficient:
-  // - SLPDB whitelist
-  // - SLPDB general
-  // - slp-api
-  //
-  // Currently only supports a single txid at a time.
+  /**
+   * @api SLP.Utils.waterfallValidateTxid() waterfallValidateTxid()
+   * @apiName waterfallValidateTxid
+   * @apiGroup SLP Utils
+   * @apiDescription Use multiple validators to validate an SLP TXID.
+   *
+   * This function aggregates all the available SLP token validation sources.
+   * It starts with the fastest, most-efficient source first, and continues
+   * to other validation sources until the txid is validated (true or false).
+   * If the txid goes through all sources and can't be validated, it will
+   * return null.
+   *
+   * Validation sources from most efficient to least efficient:
+   * - SLPDB with whitelist filter
+   * - SLPDB general purpose
+   * - slp-api
+   *
+   * Currently only supports a single txid at a time.
+   *
+   * @apiExample Example usage:
+   *
+   * // validate single SLP txid
+   * (async () => {
+   *  try {
+   *    let validated = await bchjs.SLP.Utils.waterfallValidateTxid(
+   *      "df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb"
+   *    );
+   *    console.log(validated);
+   *  } catch (error) {
+   *    console.error(error);
+   *  }
+   * })();
+   *
+   * // returns
+   * true
+   */
+
   async waterfallValidateTxid (txid) {
     try {
       const cachedTxValidation = {}
@@ -1471,7 +1496,7 @@ class Utils {
       const whitelistResult = await this.validateTxid3(txid)
       // console.log(
       //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
-      //     isValid,
+      //     whitelistResult,
       //     null,
       //     2
       //   )}`
@@ -1491,11 +1516,11 @@ class Utils {
       // Try the general SLPDB, if the whitelist returned null.
       const generalResult = await this.validateTxid(txid)
       // console.log(
-      //   `validateTxid() isValid: ${JSON.stringify(isValid, null, 2)}`
+      //   `validateTxid() isValid: ${JSON.stringify(generalResult, null, 2)}`
       // )
 
       // Safely retrieve the returned value.
-      if (generalResult[0] === null) isValid = generalResult[0].valid
+      if (generalResult[0] !== null) isValid = generalResult[0].valid
 
       // Exit if isValid is not null.
       if (isValid !== null) {
@@ -1513,7 +1538,7 @@ class Utils {
         /* exit quietly */
       }
       // console.log(
-      //   `slp-validate isValid: ${JSON.stringify(isValid, null, 2)}`
+      //   `slpValidateResult: ${JSON.stringify(slpValidateResult, null, 2)}`
       // )
 
       // Exit if isValid is not null.
