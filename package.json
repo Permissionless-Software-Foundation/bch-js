@@ -15,7 +15,7 @@
     "test:integration:testnet": "IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/chains/testnet/",
     "test:integration:local:abc": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 test/integration && mocha --timeout 30000 test/integration/chains/abc/",
     "test:integration:local:bchn": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
-    "test:integration:local:testnet": "RESTURL=http://localhost:4000/v4/ mocha --timeout 30000 test/integration/testnet",
+    "test:integration:local:testnet": "RESTURL=http://localhost:4000/v4/ mocha --timeout 30000 test/integration/chains/testnet",
     "test:temp": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 -g '#hydrateUtxos' test/integration/",
     "test:temp2": "mocha --timeout=30000 -g '#tokenUtxoDetailsWL' test/unit/",
     "test:temp3": "RESTURL=http://localhost:3000/v4/ mocha --timeout 30000 test/integration/chains/abc/",
