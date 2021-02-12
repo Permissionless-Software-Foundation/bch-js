@@ -5,11 +5,11 @@ const bchjs = new BCHJS()
 const sinon = require('sinon')
 
 describe('#Control', () => {
-  describe('#getNetworkInfo', () => {
-    let sandbox
-    beforeEach(() => (sandbox = sinon.createSandbox()))
-    afterEach(() => sandbox.restore())
+  let sandbox
+  beforeEach(() => (sandbox = sinon.createSandbox()))
+  afterEach(() => sandbox.restore())
 
+  describe('#getNetworkInfo', () => {
     it('should get info', done => {
       const data = {
         version: 170000,
@@ -36,10 +36,6 @@ describe('#Control', () => {
   })
 
   describe('#getMemoryInfo', () => {
-    let sandbox
-    beforeEach(() => (sandbox = sinon.createSandbox()))
-    afterEach(() => sandbox.restore())
-
     it('should get memory info', done => {
       const data = {
         locked: {
