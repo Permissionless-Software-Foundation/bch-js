@@ -22,9 +22,33 @@ describe('#UTXO', () => {
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.isArray(result.bchUtxos)
-      assert.isArray(result.slpUtxos)
-      assert.isArray(result.nullUtxos)
+      assert.isArray(result)
+      assert.property(result[0], 'address')
+      assert.property(result[0], 'bchUtxos')
+      assert.property(result[0], 'nullUtxos')
+      assert.property(result[0], 'slpUtxos')
+      assert.isArray(result[0].bchUtxos)
+      assert.isArray(result[0].slpUtxos)
+      assert.isArray(result[0].nullUtxos)
+    })
+
+    it('should handle an array of addresses', async () => {
+      const addr = [
+        'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9',
+        'bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9'
+      ]
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], 'address')
+      assert.property(result[0], 'bchUtxos')
+      assert.property(result[0], 'nullUtxos')
+      assert.property(result[0], 'slpUtxos')
+      assert.isArray(result[0].bchUtxos)
+      assert.isArray(result[0].slpUtxos)
+      assert.isArray(result[0].nullUtxos)
     })
   })
 })

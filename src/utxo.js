@@ -79,26 +79,42 @@ class UTXO {
    */
   async get (address) {
     try {
-      const addr = this.slp.Address.toCashAddress(address)
+      // Convert address to an array if it is a string.
+      if (typeof address === 'string') address = [address]
+
+      // Throw an error if there are more than 20 addresses passed in at a time.
+      if (address.length > 20) throw new Error('Too many elements, 20 max.')
+
+      // Covert each address to a BCH address.
+      const addr = address.map(elem => this.slp.Address.toCashAddress(elem))
 
       // Get the UTXOs associated with the address.
-      const utxoData = await this.electrumx.utxo([addr])
+      const utxoData = await this.electrumx.utxo(addr)
       // console.log(`utxoData: ${JSON.stringify(utxoData, null, 2)}`)
 
       // Hydate the utxos with token information.
       const hydratedUtxos = await this.slp.Utils.hydrateUtxos(utxoData.utxos)
       // console.log(`hydratedUtxos: ${JSON.stringify(hydratedUtxos, null, 2)}`)
 
-      const retObj = {} // return object
+      const retAry = [] // Return array
 
-      // Filter out the different types of UTXOs.
-      retObj.bchUtxos = hydratedUtxos.slpUtxos[0].utxos.filter(elem => elem.isValid === false)
-      retObj.slpUtxos = hydratedUtxos.slpUtxos[0].utxos.filter(elem => elem.isValid === true)
-      retObj.nullUtxos = hydratedUtxos.slpUtxos[0].utxos.filter(elem => elem.isValid === null)
-      // Note: true, false, and null should be only values. An element with
-      // isValid set to any other value should be ignored.
+      // Loop through each address.
+      for (let i = 0; i < hydratedUtxos.slpUtxos.length; i++) {
+        const thisAddr = hydratedUtxos.slpUtxos[i]
 
-      return retObj
+        const addrObj = {
+          address: thisAddr.address
+        }
+
+        // Filter out the different types of UTXOs.
+        addrObj.bchUtxos = thisAddr.utxos.filter(elem => elem.isValid === false)
+        addrObj.nullUtxos = thisAddr.utxos.filter(elem => elem.isValid === null)
+        addrObj.slpUtxos = thisAddr.utxos.filter(elem => elem.isValid === true)
+
+        retAry.push(addrObj)
+      }
+
+      return retAry
     } catch (err) {
       console.error('Error in bchjs.utxo.get()')
       throw err
