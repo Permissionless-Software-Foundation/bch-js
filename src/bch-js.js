@@ -31,6 +31,7 @@ const Schnorr = require('./schnorr')
 const SLP = require('./slp/slp')
 const IPFS = require('./ipfs')
 const Encryption = require('./encryption')
+const Utxo = require('./utxo')
 
 // Indexers
 const Ninsight = require('./ninsight')
@@ -113,6 +114,7 @@ class BCHJS {
     this.SLP.HDNode = this.HDNode
 
     this.IPFS = new IPFS()
+    this.Utxo = new Utxo(libConfig)
   }
 }
 
