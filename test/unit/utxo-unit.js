@@ -34,7 +34,6 @@ describe('#utxo', () => {
       assert.property(result[0], 'nullUtxos')
       assert.property(result[0], 'slpUtxos')
       assert.isArray(result[0].bchUtxos)
-      assert.isArray(result[0].slpUtxos)
       assert.isArray(result[0].nullUtxos)
     })
 
@@ -57,7 +56,7 @@ describe('#utxo', () => {
 
     it('should handle an array of addresses', async () => {
       // Mock dependencies.
-      sandbox.stub(bchjs.Utxo.electrumx, 'utxo').resolves(mockData.mockUtxoData)
+      sandbox.stub(bchjs.Utxo.electrumx, 'utxo').resolves({ utxos: {} })
       sandbox
         .stub(bchjs.Utxo.slp.Utils, 'hydrateUtxos')
         .resolves(mockData.mockTwoHydratedAddrs)
@@ -77,7 +76,6 @@ describe('#utxo', () => {
       assert.property(result[0], 'nullUtxos')
       assert.property(result[0], 'slpUtxos')
       assert.isArray(result[0].bchUtxos)
-      assert.isArray(result[0].slpUtxos)
       assert.isArray(result[0].nullUtxos)
     })
 
@@ -96,6 +94,33 @@ describe('#utxo', () => {
       } catch (err) {
         assert.include(err.message, 'Too many elements, 20 max.')
       }
+    })
+
+    it('should handle NFTs and minting batons', async () => {
+      // Mock dependencies.
+      sandbox.stub(bchjs.Utxo.electrumx, 'utxo').resolves({ utxos: {} })
+      sandbox
+        .stub(bchjs.Utxo.slp.Utils, 'hydrateUtxos')
+        .resolves(mockData.mockEveryUtxoType)
+
+      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], 'address')
+      assert.property(result[0], 'bchUtxos')
+      assert.property(result[0], 'nullUtxos')
+      assert.property(result[0], 'slpUtxos')
+      assert.isArray(result[0].bchUtxos)
+      assert.isArray(result[0].nullUtxos)
+
+      assert.isArray(result[0].slpUtxos.type1.mintBatons)
+      assert.isArray(result[0].slpUtxos.type1.tokens)
+      assert.isArray(result[0].slpUtxos.nft.groupMintBatons)
+      assert.isArray(result[0].slpUtxos.nft.groupTokens)
+      assert.isArray(result[0].slpUtxos.nft.tokens)
     })
   })
 })

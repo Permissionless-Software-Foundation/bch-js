@@ -125,8 +125,137 @@ const mockTwoHydratedAddrs = {
   ]
 }
 
+const mockEveryUtxoType = {
+  slpUtxos: [
+    {
+      utxos: [
+        {
+          height: 674512,
+          tx_hash:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          tx_pos: 1,
+          value: 546,
+          txid:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          vout: 1,
+          utxoType: 'token',
+          tokenQty: '100',
+          tokenId:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          tokenTicker: 'SLPTEST',
+          tokenName: 'SLP Test Token',
+          tokenDocumentUrl: 'https://FullStack.cash',
+          tokenDocumentHash: '',
+          decimals: 8,
+          tokenType: 1,
+          isValid: true
+        },
+        {
+          height: 674512,
+          tx_hash:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          tx_pos: 2,
+          value: 546,
+          txid:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          vout: 2,
+          utxoType: 'minting-baton',
+          tokenId:
+            'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+          tokenTicker: 'SLPTEST',
+          tokenName: 'SLP Test Token',
+          tokenDocumentUrl: 'https://FullStack.cash',
+          tokenDocumentHash: '',
+          decimals: 8,
+          tokenType: 1,
+          isValid: true
+        },
+        {
+          height: 674512,
+          tx_hash:
+            'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b',
+          tx_pos: 1,
+          value: 546,
+          txid:
+            'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b',
+          vout: 1,
+          utxoType: 'token',
+          tokenQty: '1',
+          tokenId:
+            'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b',
+          tokenTicker: 'NFT004',
+          tokenName: 'NFT Child',
+          tokenDocumentUrl: 'https://FullStack.cash',
+          tokenDocumentHash: '',
+          decimals: 0,
+          tokenType: 65,
+          isValid: true
+        },
+        {
+          height: 674513,
+          tx_hash:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          tx_pos: 1,
+          value: 546,
+          txid:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          vout: 1,
+          utxoType: 'token',
+          tokenQty: '10',
+          transactionType: 'mint',
+          tokenId:
+            'a9a2458a0f9f0761d5b8725c256f2e7fa35b9de4dec6f47b46e9f20d92d0e395',
+          tokenType: 129,
+          tokenTicker: 'NFTGT',
+          tokenName: 'NFT Test Group Token',
+          tokenDocumentUrl: 'https://FullStack.cash',
+          tokenDocumentHash: '',
+          decimals: 0,
+          mintBatonVout: 2,
+          isValid: true
+        },
+        {
+          height: 674513,
+          tx_hash:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          tx_pos: 2,
+          value: 546,
+          txid:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          vout: 2,
+          utxoType: 'minting-baton',
+          transactionType: 'mint',
+          tokenId:
+            'a9a2458a0f9f0761d5b8725c256f2e7fa35b9de4dec6f47b46e9f20d92d0e395',
+          tokenType: 129,
+          tokenTicker: 'NFTGT',
+          tokenName: 'NFT Test Group Token',
+          tokenDocumentUrl: 'https://FullStack.cash',
+          tokenDocumentHash: '',
+          decimals: 0,
+          mintBatonVout: 2,
+          isValid: true
+        },
+        {
+          height: 674513,
+          tx_hash:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          tx_pos: 3,
+          value: 38134,
+          txid:
+            '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+          vout: 3,
+          isValid: false
+        }
+      ],
+      address: 'bitcoincash:qrm0c67wwqh0w7wjxua2gdt2xggnm90xws00a3lezv'
+    }
+  ]
+}
+
 module.exports = {
   mockUtxoData,
   mockHydratedUtxos,
-  mockTwoHydratedAddrs
+  mockTwoHydratedAddrs,
+  mockEveryUtxoType
 }
