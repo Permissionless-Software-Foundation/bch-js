@@ -69,6 +69,26 @@ describe('#UTXO', () => {
       assert.isArray(result[0].slpUtxos.nft.groupTokens)
       assert.isArray(result[0].slpUtxos.nft.tokens)
     })
+
+    it('should use the whitelist when flag is set', async () => {
+      const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
+      const useWhitelist = true
+
+      const result = await bchjs.Utxo.get(addr, useWhitelist)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], 'address')
+      assert.property(result[0], 'bchUtxos')
+      assert.property(result[0], 'nullUtxos')
+      assert.property(result[0], 'slpUtxos')
+      assert.isArray(result[0].bchUtxos)
+      assert.isArray(result[0].nullUtxos)
+
+      // Most token UTXOs should end up in the nullUtxos array.
+      assert.isAbove(result[0].bchUtxos.length, 0)
+      assert.isAbove(result[0].nullUtxos.length, 1)
+    })
   })
 })
 

@@ -122,5 +122,27 @@ describe('#utxo', () => {
       assert.isArray(result[0].slpUtxos.nft.groupTokens)
       assert.isArray(result[0].slpUtxos.nft.tokens)
     })
+
+    it('should use the whitelist when flag is set', async () => {
+      // Mock dependencies.
+      sandbox.stub(bchjs.Utxo.electrumx, 'utxo').resolves(mockData.mockUtxoData)
+      sandbox
+        .stub(bchjs.Utxo.slp.Utils, 'hydrateUtxosWL')
+        .resolves(mockData.mockHydratedUtxos)
+
+      const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
+      const useWhitelist = true
+
+      const result = await bchjs.Utxo.get(addr, useWhitelist)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isArray(result)
+      assert.property(result[0], 'address')
+      assert.property(result[0], 'bchUtxos')
+      assert.property(result[0], 'nullUtxos')
+      assert.property(result[0], 'slpUtxos')
+      assert.isArray(result[0].bchUtxos)
+      assert.isArray(result[0].nullUtxos)
+    })
   })
 })

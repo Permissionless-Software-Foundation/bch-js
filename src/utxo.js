@@ -37,6 +37,11 @@ class UTXO {
    *     - groupTokens: [] - NFT Group tokens, used to create NFT tokens.
    *     - groupMintBatons: [] - Minting baton to create more NFT Group tokens.
    *
+   * Note: You can pass in an optional second Boolean argument. The default
+   * `false` will use the normal waterfall validation method. Set to `true`,
+   * SLP UTXOs will be validated with the whitelist filtered SLPDB. This will
+   * result is many more UTXOs in the `nullUtxos` array.
+   *
    * @apiExample Example usage:
    * (async () => {
    *   try {
@@ -176,7 +181,7 @@ class UTXO {
    *
    *
    */
-  async get (address) {
+  async get (address, useWhitelist = false) {
     try {
       // Convert address to an array if it is a string.
       if (typeof address === 'string') address = [address]
@@ -192,7 +197,12 @@ class UTXO {
       // console.log(`utxoData: ${JSON.stringify(utxoData, null, 2)}`)
 
       // Hydate the utxos with token information.
-      const hydratedUtxos = await this.slp.Utils.hydrateUtxos(utxoData.utxos)
+      let hydratedUtxos
+      if (useWhitelist) {
+        hydratedUtxos = await this.slp.Utils.hydrateUtxosWL(utxoData.utxos)
+      } else {
+        hydratedUtxos = await this.slp.Utils.hydrateUtxos(utxoData.utxos)
+      }
       // console.log(`hydratedUtxos: ${JSON.stringify(hydratedUtxos, null, 2)}`)
 
       const retAry = [] // Return array
