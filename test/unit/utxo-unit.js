@@ -145,4 +145,47 @@ describe('#utxo', () => {
       assert.isArray(result[0].nullUtxos)
     })
   })
+
+  describe('#findBiggestUtxo', () => {
+    it('should throw error for non-array input', async () => {
+      try {
+        await bchjs.Utxo.findBiggestUtxo({})
+
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        assert.include(
+          err.message,
+          'utxos input to findBiggestUtxo() must be an array'
+        )
+      }
+    })
+
+    it('should throw an error if input does not have a value or satoshis property', async () => {
+      try {
+        const badUtxos = [
+          {
+            height: 0,
+            tx_hash:
+              '192f5037bb3822afd92d6b6ab51842a5dcfbe6bff783290057342da1f27ed414',
+            tx_pos: 0
+          }
+        ]
+
+        await bchjs.Utxo.findBiggestUtxo(badUtxos)
+      } catch (err) {
+        assert.include(
+          err.message,
+          'UTXOs require a satoshis or value property for findBiggestUtxo()'
+        )
+      }
+    })
+
+    it('should sort UTXOs from Electrumx', async () => {
+      const result = bchjs.Utxo.findBiggestUtxo(mockData.electrumxUtxos.utxos)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'satoshis')
+      assert.equal(result.satoshis, 800)
+    })
+  })
 })

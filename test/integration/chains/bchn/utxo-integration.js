@@ -90,6 +90,34 @@ describe('#UTXO', () => {
       assert.isAbove(result[0].nullUtxos.length, 1)
     })
   })
+
+  describe('#findBiggestUtxo', () => {
+    it('should sort UTXOs from Electrumx', async () => {
+      const addr = 'bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z'
+
+      const electrumxUtxos = await bchjs.Electrumx.utxo(addr)
+      // console.log(`Electrumx utxos: ${JSON.stringify(electrumxUtxos, null, 2)}`)
+
+      const result = bchjs.Utxo.findBiggestUtxo(electrumxUtxos.utxos)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'satoshis')
+      assert.equal(result.satoshis, 800)
+    })
+
+    it('should sort UTXOs from Utxos.get()', async () => {
+      const addr = 'bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z'
+
+      const utxos = await bchjs.Utxo.get(addr)
+      // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
+
+      const result = bchjs.Utxo.findBiggestUtxo(utxos[0].bchUtxos)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'satoshis')
+      assert.equal(result.satoshis, 800)
+    })
+  })
 })
 
 function sleep (ms) {
