@@ -28,6 +28,41 @@ class Util {
   }
 
   /**
+   * @api util.floor8() floor8()
+   * @apiName floor8
+   * @apiGroup Util
+   * @apiDescription Round a number down to 8 decimal places.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const num = 1.234567891111
+   *     const result = bchjs.Util.floor8(num)
+   *     console.log(result)
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  1.23456789
+   */
+  // floor8 - round to 8 decimal places
+  // Takes a number and returns it, rounded to the nearest 8 decimal place.
+  floor8 (num) {
+    const thisNum = Number(num)
+
+    if (isNaN(thisNum)) throw new Error('input must be a number')
+
+    let tempNum = thisNum * 100000000
+    tempNum = Math.floor(tempNum)
+    tempNum = tempNum / 100000000
+
+    return tempNum
+  }
+
+  /**
    * @api util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util

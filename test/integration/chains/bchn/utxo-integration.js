@@ -112,7 +112,7 @@ describe('#UTXO', () => {
       // console.log(`utxos: ${JSON.stringify(utxos, null, 2)}`)
 
       const result = bchjs.Utxo.findBiggestUtxo(utxos[0].bchUtxos)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result, 'satoshis')
       assert.equal(result.satoshis, 800)

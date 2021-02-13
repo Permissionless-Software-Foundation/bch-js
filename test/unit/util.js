@@ -1,4 +1,5 @@
 const assert = require('assert')
+const assert2 = require('chai').assert
 const axios = require('axios')
 const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
@@ -30,6 +31,39 @@ describe('#Util', () => {
           assert.deepStrictEqual(data, result)
         })
         .then(done, done)
+    })
+  })
+
+  describe('#floor8', () => {
+    it('should floor a number to 8 decimals', () => {
+      const num = 1.234567891111
+
+      const result = bchjs.Util.floor8(num)
+      // console.log(result)
+
+      assert2.equal(result, 1.23456789)
+    })
+
+    it('should throw an error for non-number input', () => {
+      try {
+        const num = 'string'
+
+        bchjs.Util.floor8(num)
+
+        assert2.equal(true, false, 'Unexpected result')
+      } catch (err) {
+        // console.log(err)
+        assert2.include(err.message, 'input must be a number')
+      }
+    })
+
+    it('should not effect a number with less than 8 decimals', () => {
+      const num = 1.23
+
+      const result = bchjs.Util.floor8(num)
+      // console.log(result)
+
+      assert2.equal(result, 1.23)
     })
   })
 })

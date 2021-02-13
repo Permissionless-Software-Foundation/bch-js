@@ -280,6 +280,38 @@ class UTXO {
     }
   }
 
+  /**
+   * @api Utxo.findBiggestUtxo() findBiggestUtxo()
+   * @apiName findBiggestUtxo
+   * @apiGroup UTXO
+   * @apiDescription Get the biggest UTXO in an array.
+   *
+   * Given an array of BCH UTXOs, this method will return the biggest UTXO.
+   * This is often the simplest way to pick a UTXO for generating a transaction.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const utxos = await bchjs.Utxo.get('bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z');
+   *     const utxo = bchjs.Utxo.findBiggestUtxo(utxos[0].bchUtxos)
+   *     console.log(utxo);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  {
+   *   "height": 655431,
+   *   "tx_hash": "7a091716f8137e94f87e7760648cd34a17e32754ef95f7c7bda38a635c9b2b1b",
+   *   "tx_pos": 0,
+   *   "value": 800,
+   *   "txid": "7a091716f8137e94f87e7760648cd34a17e32754ef95f7c7bda38a635c9b2b1b",
+   *   "vout": 0,
+   *   "isValid": false,
+   *   "satoshis": 800
+   *  }
+   */
   // Returns the utxo with the biggest balance from an array of utxos.
   findBiggestUtxo (utxos) {
     let largestAmount = 0
