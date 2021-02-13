@@ -289,7 +289,7 @@ class UTXO {
       throw new Error('utxos input to findBiggestUtxo() must be an array')
     }
 
-    for (var i = 0; i < utxos.length; i++) {
+    for (let i = 0; i < utxos.length; i++) {
       const thisUtxo = utxos[i]
 
       // Give Elecrumx utxos a satoshis property.
