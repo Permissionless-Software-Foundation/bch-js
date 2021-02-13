@@ -63,6 +63,41 @@ class Util {
   }
 
   /**
+   * @api util.floor2() floor2()
+   * @apiName floor2
+   * @apiGroup Util
+   * @apiDescription Round a number down to 2 decimal places.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const num = 1.234567891111
+   *     const result = bchjs.Util.floor2(num)
+   *     console.log(result)
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  1.23
+   */
+  // floor2 - round down to 2 decimal places
+  // Takes a number and returns it, rounded to the nearest 2 decimal place.
+  floor2 (num) {
+    const thisNum = Number(num)
+
+    if (isNaN(thisNum)) throw new Error('input must be a number')
+
+    let tempNum = thisNum * 100
+    tempNum = Math.floor(tempNum)
+    tempNum = tempNum / 100
+
+    return tempNum
+  }
+
+  /**
    * @api util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util

@@ -66,4 +66,37 @@ describe('#Util', () => {
       assert2.equal(result, 1.23)
     })
   })
+
+  describe('#floor2', () => {
+    it('should round a number to 2 decimals', () => {
+      const num = 1.234567891111
+
+      const result = bchjs.Util.floor2(num)
+      // console.log(result)
+
+      assert2.equal(result, 1.23)
+    })
+
+    it('should throw an error for non-number input', () => {
+      try {
+        const num = 'string'
+
+        bchjs.Util.floor2(num)
+
+        assert2.equal(true, false, 'Unexpected result')
+      } catch (err) {
+        // console.log(err)
+        assert2.include(err.message, 'input must be a number')
+      }
+    })
+
+    it('should not effect a number with less than 8 decimals', () => {
+      const num = 1.2
+
+      const result = bchjs.Util.floor2(num)
+      // console.log(result)
+
+      assert2.equal(result, 1.2)
+    })
+  })
 })
