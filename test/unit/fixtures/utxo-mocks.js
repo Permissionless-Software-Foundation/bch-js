@@ -253,9 +253,37 @@ const mockEveryUtxoType = {
   ]
 }
 
+const electrumxUtxos = {
+  success: true,
+  utxos: [
+    {
+      height: 0,
+      tx_hash:
+        '192f5037bb3822afd92d6b6ab51842a5dcfbe6bff783290057342da1f27ed414',
+      tx_pos: 0,
+      value: 600
+    },
+    {
+      height: 0,
+      tx_hash:
+        'f913646f7c180f8de020cb1387951272e8a3f764a0f88e68f7fc1145a0bf02e9',
+      tx_pos: 0,
+      value: 700
+    },
+    {
+      height: 0,
+      tx_hash:
+        '7a091716f8137e94f87e7760648cd34a17e32754ef95f7c7bda38a635c9b2b1b',
+      tx_pos: 0,
+      value: 800
+    }
+  ]
+}
+
 module.exports = {
   mockUtxoData,
   mockHydratedUtxos,
   mockTwoHydratedAddrs,
-  mockEveryUtxoType
+  mockEveryUtxoType,
+  electrumxUtxos
 }
