@@ -98,6 +98,59 @@ class Util {
   }
 
   /**
+   * @api util.chunk20() chunk20()
+   * @apiName chunk20
+   * @apiGroup Util
+   * @apiDescription chunk up an array into multiple arrays of 20 elements each.
+   * Input: arrayToSlice - a one-dimensional array of elements.
+   * Returns a two-dimensional array. An array of 20-element arrays.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *      const bigArray = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
+   *
+   *      const chunked = bchjs.Util.chunk20(bigArray)
+   *      console.log(chunked)
+   *   } catch(error) {
+   *      console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  [
+   *    [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+   *    [20,21,22,23,24,25,26]
+   *  ]
+   */
+  // chunk20 - chunk up an array into multiple arrays of 20 elements each.
+  // Input: arrayToSlice - a one-dimensional array of elements.
+  // Returns a two-dimensional array. An array of 20-element arrays.
+  chunk20 (arrayToSlice) {
+    try {
+      // Validate inputs
+      if (!Array.isArray(arrayToSlice)) {
+        throw new Error('input must be an array')
+      }
+
+      let offset = 0
+      const result = []
+
+      // Loop over the array and slice off chunks of 20 elements.
+      while (offset < arrayToSlice.length) {
+        const chunk = arrayToSlice.slice(offset, offset + 20)
+        result.push(chunk)
+        offset = offset + 20
+      }
+
+      return result
+    } catch (err) {
+      console.error('Error in chunk20()')
+      throw err
+    }
+  }
+
+  /**
    * @api util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util
