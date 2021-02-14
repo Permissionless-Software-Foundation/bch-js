@@ -118,11 +118,11 @@ class TokenType1 {
 
         // Convert the send quantity to the format expected by slp-mdm.
         const baseQty = sendQtyBig.toString()
-        console.log('baseQty: ', baseQty)
+        // console.log('baseQty: ', baseQty)
 
         // Convert the change quantity to the format expected by slp-mdm.
         const baseChange = change.toString()
-        console.log('baseChange: ', baseChange)
+        // console.log('baseChange: ', baseChange)
 
         // Check for potential burns
         const outputQty = new BigNumber(baseChange).plus(
