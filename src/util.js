@@ -151,6 +151,30 @@ class Util {
   }
 
   /**
+   * @api util.sleep() sleep()
+   * @apiName sleep
+   * @apiGroup Util
+   * @apiDescription Promise-based delay.
+   * Expects an integer as input, which represents milliseconds. This function
+   * will return a Promise that resolves that many milliseconds later.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const tenSeconds = 10000
+   *     await bchjs.Util.sleep(tenSeconds)
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   */
+  sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  /**
    * @api util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util
