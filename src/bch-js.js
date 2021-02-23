@@ -26,7 +26,6 @@ const TransactionBuilder = require('./transaction-builder')
 const ECPair = require('./ecpair')
 const Script = require('./script')
 const Price = require('./price')
-const Socket = require('./socket')
 const Schnorr = require('./schnorr')
 const SLP = require('./slp/slp')
 const IPFS = require('./ipfs')
@@ -107,7 +106,6 @@ class BCHJS {
     this.TransactionBuilder = TransactionBuilder
     this.TransactionBuilder.setAddress(this.Address)
     this.Util = new Util(libConfig)
-    this.Socket = Socket
     this.Schnorr = new Schnorr(libConfig)
 
     this.SLP = new SLP(libConfig)
