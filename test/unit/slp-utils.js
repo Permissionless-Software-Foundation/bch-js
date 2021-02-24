@@ -273,8 +273,8 @@ describe('#SLP Utils', () => {
       try {
         // Mock the call to the REST API
         sandbox
-          .stub(uut.Utils.axios, 'get')
-          .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
+          .stub(uut.Utils.axios, 'post')
+          .resolves({ data: [mockData.nonSLPTxDetailsWithoutOpReturn] })
 
         const txid =
           '3793d4906654f648e659f384c0f40b19c8f10c1e9fb72232a9b8edd61abaa1ec'
@@ -292,8 +292,8 @@ describe('#SLP Utils', () => {
       try {
         // Mock the call to the REST API
         sandbox
-          .stub(uut.Utils.axios, 'get')
-          .resolves({ data: mockData.nonSLPTxDetailsWithOpReturn })
+          .stub(uut.Utils.axios, 'post')
+          .resolves({ data: [mockData.nonSLPTxDetailsWithOpReturn] })
 
         const txid =
           '2ff74c48a5d657cf45f699601990bffbbe7a2a516d5480674cbf6c6a4497908f'
@@ -310,8 +310,8 @@ describe('#SLP Utils', () => {
     it('should decode a genesis transaction', async () => {
       // Mock the call to the REST API
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPGenesis })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPGenesis] })
 
       const txid =
         'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90'
@@ -336,8 +336,8 @@ describe('#SLP Utils', () => {
     it('should decode a mint transaction', async () => {
       // Mock the call to the REST API
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPMint })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPMint] })
 
       const txid =
         '65f21bbfcd545e5eb515e38e861a9dfe2378aaa2c4e458eb9e59e4d40e38f3a4'
@@ -357,8 +357,8 @@ describe('#SLP Utils', () => {
     it('should decode a send transaction', async () => {
       // Mock the call to the REST API
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPSend })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPSend] })
 
       const txid =
         '4f922565af664b6fdf0a1ba3924487344be721b3d8815c62cafc8a51e04a8afa'
@@ -372,8 +372,8 @@ describe('#SLP Utils', () => {
     it('should properly decode a Genesis transaction with no minting baton', async () => {
       // Mock the call to the REST API.
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPGenesisNoBaton })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPGenesisNoBaton] })
 
       const txid =
         '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7'
@@ -387,8 +387,8 @@ describe('#SLP Utils', () => {
     it('should decode a send transaction with alternate encoding', async () => {
       // Mock the call to the REST API
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPSendAlt })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPSendAlt] })
 
       const txid =
         'd94357179775425ebc59c93173bd6dc9854095f090a2eb9dcfe9797398bc8eae'
@@ -411,8 +411,8 @@ describe('#SLP Utils', () => {
       try {
         // Mock the call to the REST API
         sandbox
-          .stub(uut.Utils.axios, 'get')
-          .resolves({ data: mockData.mockInvalidSlpSend })
+          .stub(uut.Utils.axios, 'post')
+          .resolves({ data: [mockData.mockInvalidSlpSend] })
 
         const txid =
           'a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415'
@@ -428,8 +428,8 @@ describe('#SLP Utils', () => {
     it('should decode a NFT Parent transaction', async () => {
       // Mock the call to the REST API.
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPNftGenesis })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPNftGenesis] })
 
       const txid =
         '4ef6eb92950a13a69e97c2c02c7967d806aa874c0e2a6b5546a8880f2cd14bc4'
