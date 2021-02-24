@@ -436,11 +436,11 @@ class Utils {
   // will be like the examples above. If SLPDB has fallen behind real-time
   // processing, it will return this output:
   // [ null ]
-  async validateTxid (txid, origin = null) {
+  async validateTxid (txid, ip = null) {
     const path = `${this.restURL}slp/validateTxid`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
-    console.log('validateTxid origin: ', origin)
+    console.log('validateTxid ip: ', ip)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -650,12 +650,12 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
-  async validateTxid3 (txid, origin = null) {
+  async validateTxid3 (txid, ip = null) {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
     // console.log(`path: ${JSON.stringify(path, null, 2)}`)
-    console.log('origin: ', origin)
+    console.log('ip: ', ip)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -667,7 +667,7 @@ class Utils {
         path,
         {
           txids: txids,
-          origin
+          ip
         },
         _this.axiosOptions
       )
@@ -1064,7 +1064,7 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
 
   // CT 5/31/20: Refactored to use slp-parse library.
-  async tokenUtxoDetails (utxos, origin = null) {
+  async tokenUtxoDetails (utxos, ip = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1116,7 +1116,7 @@ class Utils {
           // information.
 
           // Validate using a 'waterfall' of validators.
-          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, origin)
+          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, ip)
           // console.log(`isValid: ${JSON.stringify(utxo.isValid, null, 2)}`)
         }
       }
@@ -1453,7 +1453,7 @@ class Utils {
    * // returns
    * true
    */
-  async waterfallValidateTxid (txid, origin = null) {
+  async waterfallValidateTxid (txid, ip = null) {
     try {
       // console.log('txid: ', txid)
 
@@ -1485,7 +1485,7 @@ class Utils {
       // validateTxid2() uses slp-validate, which has a different output format.
 
       // Validate against the whitelist SLPDB first.
-      const whitelistResult = await this.validateTxid3(txid, origin)
+      const whitelistResult = await this.validateTxid3(txid, ip)
       // console.log(
       //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
       //     whitelistResult,
@@ -1506,7 +1506,7 @@ class Utils {
       }
 
       // Try the general SLPDB, if the whitelist returned null.
-      const generalResult = await this.validateTxid(txid, origin)
+      const generalResult = await this.validateTxid(txid, ip)
       // console.log(
       //   `validateTxid() isValid: ${JSON.stringify(generalResult, null, 2)}`
       // )
