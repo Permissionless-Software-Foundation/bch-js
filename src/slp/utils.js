@@ -655,7 +655,7 @@ class Utils {
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
     // console.log(`path: ${JSON.stringify(path, null, 2)}`)
-    console.log('ip: ', ip)
+    console.log('validateTxid3 ip: ', ip)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -925,7 +925,7 @@ class Utils {
    *
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn (txid, cache = null) {
+  async decodeOpReturn (txid, cache = null, ip = null) {
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -942,16 +942,32 @@ class Utils {
       if (cachedVal) return cachedVal
     }
 
+    console.log(`decodeOpReturn ip: ${ip}`)
+
     try {
       // Validate the txid input.
       if (!txid || txid === '' || typeof txid !== 'string') {
         throw new Error('txid string must be included.')
       }
 
+      // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
-      const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
-      const response = await _this.axios.get(path, _this.axiosOptions)
-      const txDetails = response.data
+      // const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
+      // const response = await _this.axios.get(path, _this.axiosOptions)
+      // const txDetails = response.data
+
+      const path = `${this.restURL}rawtransactions/getRawTransaction`
+      const response = await _this.axios.post(
+        path,
+        {
+          verbose: true,
+          txids: [txid],
+          ip
+        },
+        _this.axiosOptions
+      )
+      const txDetails = response.data[0]
+
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
       // SLP spec expects OP_RETURN to be the first output of the transaction.
@@ -1069,6 +1085,8 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
+      console.log(`tokenUtxoDetails ip: ${ip}`)
+
       // Loop through each element in the array and validate the input before
       // further processing.
       for (let i = 0; i < utxos.length; i++) {
@@ -1100,7 +1118,7 @@ class Utils {
       }
 
       // Hydrate each UTXO with data from SLP OP_REUTRNs.
-      const outAry = await this._hydrateUtxo(utxos)
+      const outAry = await this._hydrateUtxo(utxos, ip)
       // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       // *After* each UTXO has been hydrated with SLP data,
@@ -1220,9 +1238,11 @@ class Utils {
   // This is a private function that is called by tokenUtxoDetails().
   // It loops through an array of UTXOs and tries to hydrate them with SLP
   // token information from the OP_RETURN data.
-  async _hydrateUtxo (utxos) {
+  async _hydrateUtxo (utxos, ip = null) {
     try {
       const decodeOpReturnCache = {}
+
+      console.log(`_hydrateUtxo ip: ${ip}`)
 
       // Output Array
       const outAry = []
@@ -1236,7 +1256,11 @@ class Utils {
         // If there is no OP_RETURN, mark the UTXO as false.
         let slpData = false
         try {
-          slpData = await this.decodeOpReturn(utxo.txid, decodeOpReturnCache)
+          slpData = await this.decodeOpReturn(
+            utxo.txid,
+            decodeOpReturnCache,
+            ip
+          )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
           // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
@@ -1326,7 +1350,8 @@ class Utils {
 
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
-              decodeOpReturnCache
+              decodeOpReturnCache,
+              ip
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1378,7 +1403,8 @@ class Utils {
 
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
-              decodeOpReturnCache
+              decodeOpReturnCache,
+              ip
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
