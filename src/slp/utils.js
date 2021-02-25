@@ -440,7 +440,7 @@ class Utils {
     const path = `${this.restURL}slp/validateTxid`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
-    console.log(`validateTxid usrObj: ${JSON.stringify(usrObj, null, 2)}`)
+    // console.log(`validateTxid usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -452,7 +452,7 @@ class Utils {
         path,
         {
           txids: txids,
-          usrObj
+          usrObj // pass user data when making an internal call.
         },
         _this.axiosOptions
       )
@@ -656,7 +656,7 @@ class Utils {
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
     // console.log(`path: ${JSON.stringify(path, null, 2)}`)
-    console.log('validateTxid3 usrObj: ', usrObj)
+    // console.log('validateTxid3 usrObj: ', usrObj)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -668,7 +668,7 @@ class Utils {
         path,
         {
           txids: txids,
-          usrObj
+          usrObj // pass user data when making an internal call.
         },
         _this.axiosOptions
       )
@@ -943,7 +943,7 @@ class Utils {
       if (cachedVal) return cachedVal
     }
 
-    console.log(`decodeOpReturn usrObj: ${JSON.stringify(usrObj, null, 2)}`)
+    // console.log(`decodeOpReturn usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
     try {
       // Validate the txid input.
@@ -963,7 +963,7 @@ class Utils {
         {
           verbose: true,
           txids: [txid],
-          usrObj
+          usrObj // pass user data when making an internal call.
         },
         _this.axiosOptions
       )
@@ -1086,7 +1086,7 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
-      console.log(`tokenUtxoDetails usrObj: ${JSON.stringify(usrObj, null, 2)}`)
+      // console.log(`tokenUtxoDetails usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
       // Loop through each element in the array and validate the input before
       // further processing.
@@ -1243,7 +1243,7 @@ class Utils {
     try {
       const decodeOpReturnCache = {}
 
-      console.log(`_hydrateUtxo usrObj: ${JSON.stringify(usrObj, null, 2)}`)
+      // console.log(`_hydrateUtxo usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
       // Output Array
       const outAry = []
@@ -1260,7 +1260,7 @@ class Utils {
           slpData = await this.decodeOpReturn(
             utxo.txid,
             decodeOpReturnCache,
-            usrObj
+            usrObj // pass user data when making an internal call.
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
@@ -1352,7 +1352,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              usrObj
+              usrObj // pass user data when making an internal call.
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1405,7 +1405,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              usrObj
+              usrObj // pass user data when making an internal call.
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 

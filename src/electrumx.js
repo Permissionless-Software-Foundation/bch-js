@@ -284,7 +284,7 @@ class ElectrumX {
    *   }
    *
    */
-  async transactions (address) {
+  async transactions (address, usrObj = null) {
     try {
       // Handle single address.
       if (typeof address === 'string') {
@@ -299,7 +299,8 @@ class ElectrumX {
         const response = await axios.post(
           `${this.restURL}electrumx/transactions`,
           {
-            addresses: address
+            addresses: address,
+            usrObj // pass user data when making an internal call.
           },
           _this.axiosOptions
         )
