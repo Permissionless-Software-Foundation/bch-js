@@ -436,11 +436,11 @@ class Utils {
   // will be like the examples above. If SLPDB has fallen behind real-time
   // processing, it will return this output:
   // [ null ]
-  async validateTxid (txid, ip = null) {
+  async validateTxid (txid, usrObj = null) {
     const path = `${this.restURL}slp/validateTxid`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
-    console.log('validateTxid ip: ', ip)
+    console.log(`validateTxid usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -451,7 +451,8 @@ class Utils {
       const response = await _this.axios.post(
         path,
         {
-          txids: txids
+          txids: txids,
+          usrObj
         },
         _this.axiosOptions
       )
@@ -650,12 +651,12 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
-  async validateTxid3 (txid, ip = null) {
+  async validateTxid3 (txid, usbObj = null) {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
     // console.log(`path: ${JSON.stringify(path, null, 2)}`)
-    console.log('validateTxid3 ip: ', ip)
+    console.log('validateTxid3 usbObj: ', usbObj)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -667,7 +668,7 @@ class Utils {
         path,
         {
           txids: txids,
-          ip
+          usbObj
         },
         _this.axiosOptions
       )
@@ -1080,12 +1081,12 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
 
   // CT 5/31/20: Refactored to use slp-parse library.
-  async tokenUtxoDetails (utxos, ip = null) {
+  async tokenUtxoDetails (utxos, usbObj = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
-      console.log(`tokenUtxoDetails ip: ${ip}`)
+      console.log(`tokenUtxoDetails usbObj: ${JSON.stringify(usbObj, null, 2)}`)
 
       // Loop through each element in the array and validate the input before
       // further processing.
@@ -1118,7 +1119,7 @@ class Utils {
       }
 
       // Hydrate each UTXO with data from SLP OP_REUTRNs.
-      const outAry = await this._hydrateUtxo(utxos, ip)
+      const outAry = await this._hydrateUtxo(utxos, usbObj)
       // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       // *After* each UTXO has been hydrated with SLP data,
@@ -1134,7 +1135,7 @@ class Utils {
           // information.
 
           // Validate using a 'waterfall' of validators.
-          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, ip)
+          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, usbObj)
           // console.log(`isValid: ${JSON.stringify(utxo.isValid, null, 2)}`)
         }
       }
@@ -1238,11 +1239,11 @@ class Utils {
   // This is a private function that is called by tokenUtxoDetails().
   // It loops through an array of UTXOs and tries to hydrate them with SLP
   // token information from the OP_RETURN data.
-  async _hydrateUtxo (utxos, ip = null) {
+  async _hydrateUtxo (utxos, usbObj = null) {
     try {
       const decodeOpReturnCache = {}
 
-      console.log(`_hydrateUtxo ip: ${ip}`)
+      console.log(`_hydrateUtxo usbObj: ${JSON.stringify(usbObj, null, 2)}`)
 
       // Output Array
       const outAry = []
@@ -1259,7 +1260,7 @@ class Utils {
           slpData = await this.decodeOpReturn(
             utxo.txid,
             decodeOpReturnCache,
-            ip
+            usbObj
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
@@ -1351,7 +1352,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              ip
+              usbObj
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1404,7 +1405,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              ip
+              usbObj
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1479,7 +1480,7 @@ class Utils {
    * // returns
    * true
    */
-  async waterfallValidateTxid (txid, ip = null) {
+  async waterfallValidateTxid (txid, usbObj = null) {
     try {
       // console.log('txid: ', txid)
 
@@ -1511,7 +1512,7 @@ class Utils {
       // validateTxid2() uses slp-validate, which has a different output format.
 
       // Validate against the whitelist SLPDB first.
-      const whitelistResult = await this.validateTxid3(txid, ip)
+      const whitelistResult = await this.validateTxid3(txid, usbObj)
       // console.log(
       //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
       //     whitelistResult,
@@ -1532,7 +1533,7 @@ class Utils {
       }
 
       // Try the general SLPDB, if the whitelist returned null.
-      const generalResult = await this.validateTxid(txid, ip)
+      const generalResult = await this.validateTxid(txid, usbObj)
       // console.log(
       //   `validateTxid() isValid: ${JSON.stringify(generalResult, null, 2)}`
       // )
