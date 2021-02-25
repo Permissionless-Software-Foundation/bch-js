@@ -926,7 +926,7 @@ class Utils {
    *
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn (txid, cache = null, ip = null) {
+  async decodeOpReturn (txid, cache = null, usrObj = null) {
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -943,7 +943,7 @@ class Utils {
       if (cachedVal) return cachedVal
     }
 
-    console.log(`decodeOpReturn ip: ${ip}`)
+    console.log(`decodeOpReturn usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
     try {
       // Validate the txid input.
@@ -963,7 +963,7 @@ class Utils {
         {
           verbose: true,
           txids: [txid],
-          ip
+          usrObj
         },
         _this.axiosOptions
       )
