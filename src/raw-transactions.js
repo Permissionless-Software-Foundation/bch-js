@@ -263,7 +263,7 @@ class RawTransactions {
    * //   time: 1547752564,
    * //   blocktime: 1547752564 } ]
    */
-  async getRawTransaction (txid, verbose = false) {
+  async getRawTransaction (txid, verbose = false, usrObj = null) {
     try {
       if (typeof txid === 'string') {
         const response = await axios.get(
@@ -278,7 +278,8 @@ class RawTransactions {
           url: `${this.restURL}rawtransactions/getRawTransaction`,
           data: {
             txids: txid,
-            verbose: verbose
+            verbose: verbose,
+            usrObj // pass user data when making an internal call.
           },
           headers: _this.axiosOptions.headers
         }
