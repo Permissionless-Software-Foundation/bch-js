@@ -651,12 +651,12 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
-  async validateTxid3 (txid, usbObj = null) {
+  async validateTxid3 (txid, usrObj = null) {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
     // console.log(`path: ${JSON.stringify(path, null, 2)}`)
-    console.log('validateTxid3 usbObj: ', usbObj)
+    console.log('validateTxid3 usrObj: ', usrObj)
 
     // Handle a single TXID or an array of TXIDs.
     let txids
@@ -668,7 +668,7 @@ class Utils {
         path,
         {
           txids: txids,
-          usbObj
+          usrObj
         },
         _this.axiosOptions
       )
@@ -1081,12 +1081,12 @@ class Utils {
   // https://github.com/Bitcoin-com/slp-sdk/issues/84
 
   // CT 5/31/20: Refactored to use slp-parse library.
-  async tokenUtxoDetails (utxos, usbObj = null) {
+  async tokenUtxoDetails (utxos, usrObj = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
-      console.log(`tokenUtxoDetails usbObj: ${JSON.stringify(usbObj, null, 2)}`)
+      console.log(`tokenUtxoDetails usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
       // Loop through each element in the array and validate the input before
       // further processing.
@@ -1119,7 +1119,7 @@ class Utils {
       }
 
       // Hydrate each UTXO with data from SLP OP_REUTRNs.
-      const outAry = await this._hydrateUtxo(utxos, usbObj)
+      const outAry = await this._hydrateUtxo(utxos, usrObj)
       // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       // *After* each UTXO has been hydrated with SLP data,
@@ -1135,7 +1135,7 @@ class Utils {
           // information.
 
           // Validate using a 'waterfall' of validators.
-          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, usbObj)
+          utxo.isValid = await this.waterfallValidateTxid(utxo.txid, usrObj)
           // console.log(`isValid: ${JSON.stringify(utxo.isValid, null, 2)}`)
         }
       }
@@ -1239,11 +1239,11 @@ class Utils {
   // This is a private function that is called by tokenUtxoDetails().
   // It loops through an array of UTXOs and tries to hydrate them with SLP
   // token information from the OP_RETURN data.
-  async _hydrateUtxo (utxos, usbObj = null) {
+  async _hydrateUtxo (utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
 
-      console.log(`_hydrateUtxo usbObj: ${JSON.stringify(usbObj, null, 2)}`)
+      console.log(`_hydrateUtxo usrObj: ${JSON.stringify(usrObj, null, 2)}`)
 
       // Output Array
       const outAry = []
@@ -1260,7 +1260,7 @@ class Utils {
           slpData = await this.decodeOpReturn(
             utxo.txid,
             decodeOpReturnCache,
-            usbObj
+            usrObj
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
@@ -1352,7 +1352,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              usbObj
+              usrObj
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1405,7 +1405,7 @@ class Utils {
             const genesisData = await this.decodeOpReturn(
               slpData.tokenId,
               decodeOpReturnCache,
-              usbObj
+              usrObj
             )
             // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
@@ -1480,7 +1480,7 @@ class Utils {
    * // returns
    * true
    */
-  async waterfallValidateTxid (txid, usbObj = null) {
+  async waterfallValidateTxid (txid, usrObj = null) {
     try {
       // console.log('txid: ', txid)
 
@@ -1512,7 +1512,7 @@ class Utils {
       // validateTxid2() uses slp-validate, which has a different output format.
 
       // Validate against the whitelist SLPDB first.
-      const whitelistResult = await this.validateTxid3(txid, usbObj)
+      const whitelistResult = await this.validateTxid3(txid, usrObj)
       // console.log(
       //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
       //     whitelistResult,
@@ -1533,7 +1533,7 @@ class Utils {
       }
 
       // Try the general SLPDB, if the whitelist returned null.
-      const generalResult = await this.validateTxid(txid, usbObj)
+      const generalResult = await this.validateTxid(txid, usrObj)
       // console.log(
       //   `validateTxid() isValid: ${JSON.stringify(generalResult, null, 2)}`
       // )
