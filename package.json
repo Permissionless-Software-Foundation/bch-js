@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@psf/bip21": "^2.0.1",
-    "@psf/bip32-utils": "^0.13.1",
+    "@psf/bip32-utils": "^1.0.0",
     "@psf/bitcoincash-ops": "^2.0.0",
     "@psf/bitcoincashjs-lib": "^4.0.2",
     "@psf/coininfo": "^4.0.0",
