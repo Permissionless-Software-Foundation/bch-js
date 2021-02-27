@@ -495,8 +495,37 @@ describe('#SLP Utils', () => {
 
         assert.fail('Unexpect result')
       } catch (err) {
-        console.log('err: ', err)
-        // assert.include(err.message, 'amount string size not 8 bytes')
+        // console.log('err: ', err)
+
+        assert.property(err, 'message')
+        assert.property(err, 'response')
+        assert.equal(err.response.status, 429)
+        assert.equal(err.response.statusText, 'Too Many Requests')
+        assert.include(err.response.data.error, 'Too many requests')
+      }
+    })
+
+    // 503 means the service is down.
+    it('should throw error when axios returns 503 status', async () => {
+      try {
+        // Mock the call to the REST API
+        sandbox.stub(uut.Utils.axios, 'post').rejects(mockData.mock503Error)
+
+        const txid =
+          'a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415'
+
+        await uut.Utils.decodeOpReturn(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.fail('Unexpect result')
+      } catch (err) {
+        // console.log('err: ', err)
+
+        assert.property(err, 'message')
+        assert.property(err, 'response')
+        assert.equal(err.response.status, 503)
+        assert.equal(err.response.statusText, 'Service Unavailable')
+        assert.property(err.response, 'data')
       }
     })
   })

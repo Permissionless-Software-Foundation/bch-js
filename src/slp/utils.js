@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+
 // Public npm libraries
 const axios = require('axios')
 const slpParser = require('slp-parser')
@@ -1014,21 +1016,16 @@ class Utils {
 
       return tokenData
     } catch (error) {
-      console.log('decodeOpReturn error: ', error)
-      console.log(`decodeOpReturn error.message: ${error.message}`)
-
-      if (error.response && error.response.data) {
-        // throw error.response.data
-
-        // error.bchApiMessage = error.message
-        // error.message = error.response.data
-        // error.data = error.response.data
-        console.log(
-          `decodeOpReturn error.response.data: ${JSON.stringify(
-            error.response.data
-          )}`
-        )
-      }
+      // Used for debugging
+      // console.log('decodeOpReturn error: ', error)
+      // console.log(`decodeOpReturn error.message: ${error.message}`)
+      // if (error.response && error.response.data) {
+      //   console.log(
+      //     `decodeOpReturn error.response.data: ${JSON.stringify(
+      //       error.response.data
+      //     )}`
+      //   )
+      // }
       throw error
     }
   }

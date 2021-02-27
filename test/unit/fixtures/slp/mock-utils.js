@@ -1366,6 +1366,23 @@ const txDetailsSLPNftChild = {
 }
 
 const mock429Error = new Error('Request failed with status code 429')
+mock429Error.response = {
+  status: 429,
+  statusText: 'Too Many Requests',
+  data: {
+    error:
+      'Too many requests. Your limits are currently 100 requests per minute. Increase rate limits at https://fullstack.cash'
+  }
+}
+
+const mock503Error = new Error('Request failed with status code 503')
+mock503Error.response = {
+  status: 503,
+  statusText: 'Service Unavailable',
+  data: {
+    error: 'Some error message'
+  }
+}
 
 module.exports = {
   mockList,
@@ -1399,5 +1416,6 @@ module.exports = {
   whitelist,
   slpdbStatus,
   mockValidateTxidArray,
-  mock429Error
+  mock429Error,
+  mock503Error
 }
