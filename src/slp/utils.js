@@ -1015,7 +1015,7 @@ class Utils {
 
       return tokenData
     } catch (error) {
-      // console.log('decodeOpReturn error: ', error)
+      console.log('decodeOpReturn error: ', error)
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
