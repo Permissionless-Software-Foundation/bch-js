@@ -1439,6 +1439,7 @@ class Utils {
 
       return outAry
     } catch (error) {
+      console.log('_hydrateUtxo error: ', error)
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
