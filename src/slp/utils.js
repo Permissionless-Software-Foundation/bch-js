@@ -1016,6 +1016,8 @@ class Utils {
       return tokenData
     } catch (error) {
       console.log('decodeOpReturn error: ', error)
+      console.log(`decodeOpReturn error.message: ${error.message}`)
+
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
@@ -1239,6 +1241,7 @@ class Utils {
   // This is a private function that is called by tokenUtxoDetails().
   // It loops through an array of UTXOs and tries to hydrate them with SLP
   // token information from the OP_RETURN data.
+  // If this function hits a rate limit... TODO: describe specific behavior.
   async _hydrateUtxo (utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
