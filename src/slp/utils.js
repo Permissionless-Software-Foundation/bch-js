@@ -1017,13 +1017,18 @@ class Utils {
       console.log('decodeOpReturn error: ', error)
       console.log(`decodeOpReturn error.message: ${error.message}`)
 
-      // if (error.response && error.response.data) {
-      //   // throw error.response.data
-      //
-      //   // error.bchApiMessage = error.message
-      //   // error.message = error.response.data
-      //   // error.data = error.response.data
-      // }
+      if (error.response && error.response.data) {
+        // throw error.response.data
+
+        // error.bchApiMessage = error.message
+        // error.message = error.response.data
+        // error.data = error.response.data
+        console.log(
+          `decodeOpReturn error.response.data: ${JSON.stringify(
+            error.response.data
+          )}`
+        )
+      }
       throw error
     }
   }

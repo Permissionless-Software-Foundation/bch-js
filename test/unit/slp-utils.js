@@ -456,14 +456,14 @@ describe('#SLP Utils', () => {
     it('should decode a NFT Child transaction', async () => {
       // Mock the call to the REST API.
       sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.txDetailsSLPNftChild })
+        .stub(uut.Utils.axios, 'post')
+        .resolves({ data: [mockData.txDetailsSLPNftChild] })
 
       const txid =
         'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b'
 
       const data = await uut.Utils.decodeOpReturn(txid)
-      console.log(`data: ${JSON.stringify(data, null, 2)}`)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert.property(data, 'tokenType')
       assert.property(data, 'txType')
@@ -479,6 +479,25 @@ describe('#SLP Utils', () => {
       assert.equal(data.tokenType, 65)
       assert.equal(data.mintBatonVout, 0)
       assert.equal(data.qty, '1')
+    })
+
+    // 429 means the user is exceeding the rate limits.
+    it('should throw error when axios returns 429 status', async () => {
+      try {
+        // Mock the call to the REST API
+        sandbox.stub(uut.Utils.axios, 'post').rejects(mockData.mock429Error)
+
+        const txid =
+          'a60a522cc11ad7011b74e57fbabbd99296e4b9346bcb175dcf84efb737030415'
+
+        await uut.Utils.decodeOpReturn(txid)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+        assert.fail('Unexpect result')
+      } catch (err) {
+        console.log('err: ', err)
+        // assert.include(err.message, 'amount string size not 8 bytes')
+      }
     })
   })
 
