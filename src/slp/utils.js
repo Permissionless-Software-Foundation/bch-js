@@ -899,6 +899,9 @@ class Utils {
    * If optional associative array parameter cache is used, will cache and
    * reuse responses for the same input.
    *
+   * A third optional input, `usrObj`, is used by bch-api for managing rate limits.
+   * It can be safely ignored when writing apps using this call.
+   *
    *
    * @apiExample Example usage:
    *
@@ -955,10 +958,6 @@ class Utils {
 
       // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
-      // const path = `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=true`
-      // const response = await _this.axios.get(path, _this.axiosOptions)
-      // const txDetails = response.data
-
       const path = `${this.restURL}rawtransactions/getRawTransaction`
       const response = await _this.axios.post(
         path,
@@ -1038,18 +1037,26 @@ class Utils {
    *
    * Expects an array of UTXO objects as input. Returns an array of equal size.
    * Returns UTXO data hydrated with token information.
-   * If the
-   * UTXO does not belong to a SLP transaction, it will return an `isValid` property
-   * set to false.
-   * If the UTXO is part of an SLP transaction, it will return the UTXO object
-   * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO.
-   * If the isValid value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed,
-   * or a 429 rate-limit error was enountered during the processing of the request.
    *
-   * This is an API-heavy call. If you get a lot of null values, then slow down
-   * the calls or request info on fewer UTXOs at a time.
+   * - If the UTXO does not belong to a SLP transaction, it will return an
+   * `isValid` property set to `false`.
+   *
+   * - If the UTXO is part of an SLP transaction, it will return the UTXO object
+   * with additional SLP information attached. An `isValid` property will be
+   * included.
+   *   - If the `isValid` property is `true`, the UTXO is a valid SLP UTXO.
+   *   - If the `isValid` property is `null`, then SLPDB has not yet processed
+   *     that txid and validity has not been confirmed, or a 429 rate-limit error
+   *     was enountered during the processing of the request.
+   *
+   * This is an API-heavy call. If you get a lot of `null` values, then slow down
+   * the calls by adding artifical delays, or request info on fewer UTXOs at a
+   * time. `null` indicates that the UTXO can *not* be safely spent, because
+   * a judgement as to weather it is a token UTXO has not been made. Spending it
+   * could burn tokens. It's safest to ignore UTXOs with a value of `null`.
+   *
+   * A second, optional input, `usrObj`, is used by bch-api for managing rate
+   * limits. It can be safely ignored when writing apps using this call.
    *
    * @apiExample Example usage:
    *
@@ -1139,7 +1146,7 @@ class Utils {
         // *After* the UTXO has been hydrated with SLP data,
         // validate the TXID with SLPDB.
         if (utxo.tokenType) {
-          // Only execute this block if the current UTXO has a 'tokenType'
+          // Only execute this code-path if the current UTXO has a 'tokenType'
           // property. i.e. it has been successfully hydrated with SLP
           // information.
 
@@ -1284,10 +1291,10 @@ class Utils {
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          console.log(
-            `error in _hydrateUtxo() from decodeOpReturn(${utxo.txid}): `,
-            err
-          )
+          // console.log(
+          //   `error in _hydrateUtxo() from decodeOpReturn(${utxo.txid}): `,
+          //   err
+          // )
 
           // An error will be thrown if the txid is not SLP.
           // If error is for some other reason, like a 429 error, mark utxo as 'null'
@@ -1298,10 +1305,10 @@ class Utils {
               err.message.indexOf('lokad id') === -1 &&
               err.message.indexOf('trailing data') === -1)
           ) {
-            console.log(
-              "unknown error from decodeOpReturn(). Marking as 'null'",
-              err
-            )
+            // console.log(
+            //   "unknown error from decodeOpReturn(). Marking as 'null'",
+            //   err
+            // )
 
             utxo.isValid = null
             outAry.push(utxo)
@@ -1310,7 +1317,7 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
-            console.log('marking as invalid')
+            // console.log('marking as invalid')
             utxo.isValid = false
             outAry.push(utxo)
           }
@@ -1475,8 +1482,7 @@ class Utils {
 
       return outAry
     } catch (error) {
-      console.log('_hydrateUtxo error: ', error)
-      // if (error.response && error.response.data) throw error.response.data
+      // console.log('_hydrateUtxo error: ', error)
       throw error
     }
   }
@@ -1623,22 +1629,27 @@ class Utils {
    * @apiDescription Hydrate a UTXO with SLP token metadata.
    *
    * The same as tokenUtxoDetails(), but uses bch-api to do the heavy lifting,
-   * which greatly reduces the number of API calls.
+   * which greatly increases the speed, since fewer API calls need to be made.
+   * However, internal API calls are still counted against your rate limits.
    *
-   * Expects an array of UTXO objects as input. Returns an array of equal size.
-   * Returns UTXO data hydrated with token information.
-   * If the
-   * UTXO does not belong to a SLP transaction, it will return an `isValid` property
-   * set to false.
-   * If the UTXO is part of an SLP transaction, it will return the UTXO object
-   * with additional SLP information attached. An `isValid` property will be included.
-   * If its value is true, the UTXO is a valid SLP UTXO.
-   * If the isValid value is null,
-   * then SLPDB has not yet processed that txid and validity has not been confirmed,
-   * or a 429 rate-limit error was enountered during the processing of the request.
+   * This function expects an array of UTXO objects as input. It returns an
+   * array of equal size. The UTXO data hydrated with token information.
+   * - If the UTXO does not belong to a SLP transaction, it will return an
+   *   `isValid` property set to `false`.
+   * - If the UTXO is part of an SLP transaction, it will return the UTXO object
+   *   with additional SLP information attached. An `isValid` property will be
+   *   included.
+   *     - If `isValid` is `true`, the UTXO is a valid SLP UTXO.
+   *     - If `isValid` is `null`, then SLPDB has not yet processed that txid
+   *       and validity has not been confirmed,
+   *       or a 429 rate-limit error was enountered during the processing of the
+   *       request.
    *
-   * This is an API-heavy call. If you get a lot of null values, then slow down
+   * This is an API-heavy call. If you get a lot of `null` values, then slow down
    * the calls or request info on fewer UTXOs at a time.
+   * `null` indicates that the UTXO can not be safely spent, because a judgement
+   * as to weather it is a token UTXO has not been made. Spending it could burn
+   * tokens. It's safest to ignore UTXOs with a value of `null`.
    *
    * @apiExample Example usage:
    *
