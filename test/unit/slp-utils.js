@@ -530,6 +530,253 @@ describe('#SLP Utils', () => {
     })
   })
 
+  describe('#_hydrateUtxo', () => {
+    // // This captures an important corner-case. When an SLP token is created, the
+    // // change UTXO will contain the same SLP txid, but it is not an SLP UTXO.
+    it('should return details on minting baton from genesis transaction', async () => {
+      // Mock the call to REST API
+      // sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
+
+      // Stub the calls to decodeOpReturn.
+      sandbox.stub(uut.Utils, 'decodeOpReturn').resolves({
+        tokenType: 1,
+        txType: 'GENESIS',
+        ticker: 'SLPSDK',
+        name: 'SLP SDK example using BITBOX',
+        tokenId:
+          'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+        documentUri: 'developer.bitcoin.com',
+        documentHash: '',
+        decimals: 8,
+        mintBatonVout: 2,
+        qty: '50700000000'
+      })
+
+      const utxos = [
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 3,
+          amount: 0.00002015,
+          satoshis: 2015,
+          height: 594892,
+          confirmations: 5
+        },
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 2,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 594892,
+          confirmations: 5
+        }
+      ]
+
+      const data = await uut.Utils._hydrateUtxo(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      // assert.equal(data[0], false, "Change UTXO marked as false.")
+      assert.property(data[0], 'txid')
+      assert.property(data[0], 'vout')
+      assert.property(data[0], 'amount')
+      assert.property(data[0], 'satoshis')
+      assert.property(data[0], 'height')
+      assert.property(data[0], 'confirmations')
+      assert.property(data[0], 'isValid')
+      assert.equal(data[0].isValid, false)
+
+      assert.property(data[1], 'txid')
+      assert.property(data[1], 'vout')
+      assert.property(data[1], 'amount')
+      assert.property(data[1], 'satoshis')
+      assert.property(data[1], 'height')
+      assert.property(data[1], 'confirmations')
+      assert.property(data[1], 'utxoType')
+      assert.property(data[1], 'tokenId')
+      assert.property(data[1], 'tokenTicker')
+      assert.property(data[1], 'tokenName')
+      assert.property(data[1], 'tokenDocumentUrl')
+      assert.property(data[1], 'tokenDocumentHash')
+      assert.property(data[1], 'decimals')
+    })
+
+    // 429 means the user is exceeding the rate limits.
+    it('should return isValid=null for 429 rate limit error', async () => {
+      // Force decodeOpReturn() to throw a 429 error.
+      sandbox.stub(uut.Utils, 'decodeOpReturn').rejects(mockData.mock429Error)
+
+      const utxos = [
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 3,
+          amount: 0.00002015,
+          satoshis: 2015,
+          height: 594892,
+          confirmations: 5
+        },
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 2,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 594892,
+          confirmations: 5
+        }
+      ]
+
+      const result = await uut.Utils._hydrateUtxo(utxos)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result[0].isValid, null)
+      assert.equal(result[1].isValid, null)
+    })
+
+    // 503 means the server is down or is not responding.
+    it('should return isValid=null for 503 rate limit error', async () => {
+      // Force decodeOpReturn() to throw a 429 error.
+      sandbox.stub(uut.Utils, 'decodeOpReturn').rejects(mockData.mock503Error)
+
+      const utxos = [
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 3,
+          amount: 0.00002015,
+          satoshis: 2015,
+          height: 594892,
+          confirmations: 5
+        },
+        {
+          txid:
+            'bd158c564dd4ef54305b14f44f8e94c44b649f246dab14bcb42fb0d0078b8a90',
+          vout: 2,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 594892,
+          confirmations: 5
+        }
+      ]
+
+      const result = await uut.Utils._hydrateUtxo(utxos)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result[0].isValid, null)
+      assert.equal(result[1].isValid, null)
+    })
+
+    it('should return details for a simple SEND SLP token utxo', async () => {
+      // Mock the call to REST API
+      // Stub the calls to decodeOpReturn.
+      sandbox
+        .stub(uut.Utils, 'decodeOpReturn')
+        .onCall(0)
+        .resolves({
+          tokenType: 1,
+          txType: 'SEND',
+          tokenId:
+            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+          amounts: ['200000000', '99887500000000']
+        })
+        .onCall(1)
+        .resolves({
+          tokenType: 1,
+          txType: 'GENESIS',
+          ticker: 'TOK-CH',
+          name: 'TokyoCash',
+          tokenId:
+            '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+          documentUri: '',
+          documentHash: '',
+          decimals: 8,
+          mintBatonVout: 0,
+          qty: '2100000000000000'
+        })
+
+      // sandbox.stub(uut.Utils, 'waterfallValidateTxid').resolves(true)
+
+      const utxos = [
+        {
+          txid:
+            'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
+          vout: 1,
+          amount: 0.00000546,
+          satoshis: 546,
+          height: 596089,
+          confirmations: 748
+        }
+      ]
+
+      const data = await uut.Utils._hydrateUtxo(utxos)
+      // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert.property(data[0], 'txid')
+      assert.property(data[0], 'vout')
+      assert.property(data[0], 'amount')
+      assert.property(data[0], 'satoshis')
+      assert.property(data[0], 'height')
+      assert.property(data[0], 'confirmations')
+      assert.property(data[0], 'utxoType')
+      assert.property(data[0], 'tokenId')
+      assert.property(data[0], 'tokenTicker')
+      assert.property(data[0], 'tokenName')
+      assert.property(data[0], 'tokenDocumentUrl')
+      assert.property(data[0], 'tokenDocumentHash')
+      assert.property(data[0], 'decimals')
+      assert.property(data[0], 'tokenQty')
+      assert.property(data[0], 'isValid')
+      assert.equal(data[0].isValid, null)
+    })
+
+    // I don't know if this is the ideal behavior, but this is the behavior
+    // that is in production, so I wanted to capture it in a test case. This
+    // behavior can always be changed in the future.
+    it('should throw error if 429 when querying Genesis transaction', async () => {
+      try {
+        // Mock the call to REST API
+        // Stub the calls to decodeOpReturn.
+        sandbox
+          .stub(uut.Utils, 'decodeOpReturn')
+          .onCall(0)
+          .resolves({
+            tokenType: 1,
+            txType: 'SEND',
+            tokenId:
+              '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+            amounts: ['200000000', '99887500000000']
+          })
+          .onCall(1)
+          .rejects(mockData.mock429Error)
+
+        const utxos = [
+          {
+            txid:
+              'fde117b1f176b231e2fa9a6cb022e0f7c31c288221df6bcb05f8b7d040ca87cb',
+            vout: 1,
+            amount: 0.00000546,
+            satoshis: 546,
+            height: 596089,
+            confirmations: 748
+          }
+        ]
+
+        await uut.Utils._hydrateUtxo(utxos)
+
+        assert.fail('Unexpected result')
+      } catch (err) {
+        // console.log('error: ', err)
+
+        assert.property(err, 'message')
+        assert.property(err, 'response')
+        assert.equal(err.response.status, 429)
+        assert.equal(err.response.statusText, 'Too Many Requests')
+        assert.include(err.response.data.error, 'Too many requests')
+      }
+    })
+  })
+
   describe('#tokenUtxoDetails', () => {
     it('should throw error if input is not an array.', async () => {
       try {
