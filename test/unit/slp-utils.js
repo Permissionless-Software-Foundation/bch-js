@@ -453,33 +453,33 @@ describe('#SLP Utils', () => {
       assert.equal(data.qty, 1)
     })
 
-    // it("should decode a NFT Child transaction", async () => {
-    //   // Mock the call to the REST API.
-    //   // sandbox
-    //   //   .stub(uut.Utils.axios, "get")
-    //   //   .resolves({ data: mockData.txDetailsSLPNftGenesis })
-    //
-    //   const txid =
-    //     "3de3766b10506c9156533f1639979e49d1884521543c13e4af73647df1ed3f76"
-    //
-    //   const data = await uut.Utils.decodeOpReturn(txid)
-    //   console.log(`data: ${JSON.stringify(data, null, 2)}`)
-    //
-    //   // assert.property(data, "tokenType")
-    //   // assert.property(data, "txType")
-    //   // assert.property(data, "ticker")
-    //   // assert.property(data, "name")
-    //   // assert.property(data, "tokenId")
-    //   // assert.property(data, "documentUri")
-    //   // assert.property(data, "documentHash")
-    //   // assert.property(data, "decimals")
-    //   // assert.property(data, "mintBatonVout")
-    //   // assert.property(data, "qty")
-    //   //
-    //   // assert.equal(data.tokenType, 129)
-    //   // assert.equal(data.mintBatonVout, 2)
-    //   // assert.equal(data.qty, 1)
-    // })
+    it('should decode a NFT Child transaction', async () => {
+      // Mock the call to the REST API.
+      sandbox
+        .stub(uut.Utils.axios, 'get')
+        .resolves({ data: mockData.txDetailsSLPNftChild })
+
+      const txid =
+        'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b'
+
+      const data = await uut.Utils.decodeOpReturn(txid)
+      console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+      assert.property(data, 'tokenType')
+      assert.property(data, 'txType')
+      assert.property(data, 'ticker')
+      assert.property(data, 'name')
+      assert.property(data, 'tokenId')
+      assert.property(data, 'documentUri')
+      assert.property(data, 'documentHash')
+      assert.property(data, 'decimals')
+      assert.property(data, 'mintBatonVout')
+      assert.property(data, 'qty')
+
+      assert.equal(data.tokenType, 65)
+      assert.equal(data.mintBatonVout, 0)
+      assert.equal(data.qty, '1')
+    })
   })
 
   describe('#tokenUtxoDetails', () => {
