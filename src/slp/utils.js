@@ -1264,7 +1264,7 @@ class Utils {
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          // console.log(`error from decodeOpReturn(${utxo.txid}): `, err)
+          console.log(`error in _hydrateUtxo() from decodeOpReturn(${utxo.txid}): `, err)
 
           // An error will be thrown if the txid is not SLP.
           // If error is for some other reason, like a 429 error, mark utxo as 'null'
@@ -1275,10 +1275,10 @@ class Utils {
               err.message.indexOf('lokad id') === -1 &&
               err.message.indexOf('trailing data') === -1)
           ) {
-            // console.log(
-            //   'unknown error from decodeOpReturn(). Marking as \'null\'',
-            //   err
-            // )
+            console.log(
+              'unknown error from decodeOpReturn(). Marking as \'null\'',
+              err
+            )
 
             utxo.isValid = null
             outAry.push(utxo)
@@ -1287,7 +1287,7 @@ class Utils {
             // an SLP UTXO.
             // Mark as false and continue the loop.
           } else {
-            // console.log('marking as invalid')
+            console.log('marking as invalid')
             utxo.isValid = false
             outAry.push(utxo)
           }
