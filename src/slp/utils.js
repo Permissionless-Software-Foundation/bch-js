@@ -1018,12 +1018,13 @@ class Utils {
       console.log('decodeOpReturn error: ', error)
       console.log(`decodeOpReturn error.message: ${error.message}`)
 
-      if (error.response && error.response.data) {
-        // throw error.response.data
-
-        error.bchApiMessage = error.message
-        error.message = error.response.data
-      }
+      // if (error.response && error.response.data) {
+      //   // throw error.response.data
+      //
+      //   // error.bchApiMessage = error.message
+      //   // error.message = error.response.data
+      //   // error.data = error.response.data
+      // }
       throw error
     }
   }
@@ -1272,7 +1273,10 @@ class Utils {
           )
           // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
         } catch (err) {
-          console.log(`error in _hydrateUtxo() from decodeOpReturn(${utxo.txid}): `, err)
+          console.log(
+            `error in _hydrateUtxo() from decodeOpReturn(${utxo.txid}): `,
+            err
+          )
 
           // An error will be thrown if the txid is not SLP.
           // If error is for some other reason, like a 429 error, mark utxo as 'null'
@@ -1284,7 +1288,7 @@ class Utils {
               err.message.indexOf('trailing data') === -1)
           ) {
             console.log(
-              'unknown error from decodeOpReturn(). Marking as \'null\'',
+              "unknown error from decodeOpReturn(). Marking as 'null'",
               err
             )
 
