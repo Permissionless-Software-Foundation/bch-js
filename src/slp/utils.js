@@ -968,7 +968,6 @@ class Utils {
         _this.axiosOptions
       )
       const txDetails = response.data[0]
-
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
       // SLP spec expects OP_RETURN to be the first output of the transaction.
@@ -1018,13 +1017,18 @@ class Utils {
       console.log('decodeOpReturn error: ', error)
       console.log(`decodeOpReturn error.message: ${error.message}`)
 
-      // if (error.response && error.response.data) {
-      //   // throw error.response.data
-      //
-      //   // error.bchApiMessage = error.message
-      //   // error.message = error.response.data
-      //   // error.data = error.response.data
-      // }
+      if (error.response && error.response.data) {
+        // throw error.response.data
+
+        // error.bchApiMessage = error.message
+        // error.message = error.response.data
+        // error.data = error.response.data
+        console.log(
+          `decodeOpReturn error.response.data: ${JSON.stringify(
+            error.response.data
+          )}`
+        )
+      }
       throw error
     }
   }
@@ -1247,7 +1251,11 @@ class Utils {
   // This is a private function that is called by tokenUtxoDetails().
   // It loops through an array of UTXOs and tries to hydrate them with SLP
   // token information from the OP_RETURN data.
-  // If this function hits a rate limit... TODO: describe specific behavior.
+  //
+  // This function makes several calls to decodeOpReturn() to retrieve SLP
+  // token data. If that call throws an error due to hitting rate limits, this
+  // function will not throw an error. Instead, it will mark the `isValid`
+  // property as `null`
   async _hydrateUtxo (utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
