@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+
 // Public npm libraries
 const axios = require('axios')
 const slpParser = require('slp-parser')
@@ -1014,21 +1016,16 @@ class Utils {
 
       return tokenData
     } catch (error) {
-      console.log('decodeOpReturn error: ', error)
-      console.log(`decodeOpReturn error.message: ${error.message}`)
-
-      if (error.response && error.response.data) {
-        // throw error.response.data
-
-        // error.bchApiMessage = error.message
-        // error.message = error.response.data
-        // error.data = error.response.data
-        console.log(
-          `decodeOpReturn error.response.data: ${JSON.stringify(
-            error.response.data
-          )}`
-        )
-      }
+      // Used for debugging
+      // console.log('decodeOpReturn error: ', error)
+      // console.log(`decodeOpReturn error.message: ${error.message}`)
+      // if (error.response && error.response.data) {
+      //   console.log(
+      //     `decodeOpReturn error.response.data: ${JSON.stringify(
+      //       error.response.data
+      //     )}`
+      //   )
+      // }
       throw error
     }
   }
@@ -1256,6 +1253,12 @@ class Utils {
   // token data. If that call throws an error due to hitting rate limits, this
   // function will not throw an error. Instead, it will mark the `isValid`
   // property as `null`
+  //
+  // Exception to the above: It *will* throw an error if decodeOpReturn() throws
+  // an error while trying to get the Genesis transaction for a Send or Mint
+  // transaction. However, that is a rare occurence since the cache of
+  // decodeOpReturn() will minimize API calls for this case. This behavior
+  // could be changed, but right now it's a corner case of a corner case.
   async _hydrateUtxo (utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
@@ -1315,6 +1318,7 @@ class Utils {
           // Halt the execution of the loop and increase to the next index.
           continue
         }
+        // console.log(`slpData: ${JSON.stringify(slpData, null, 2)}`)
 
         const txType = slpData.txType.toLowerCase()
 
@@ -1351,6 +1355,10 @@ class Utils {
             utxo.tokenDocumentHash = slpData.documentHash
             utxo.decimals = slpData.decimals
             utxo.tokenType = slpData.tokenType
+
+            // Initial value is null until UTXO can be validated and confirmed
+            // to be valid (true) or not (false).
+            utxo.isValid = null
 
             outAry[i] = utxo
           }
@@ -1401,6 +1409,10 @@ class Utils {
 
             utxo.mintBatonVout = slpData.mintBatonVout
 
+            // Initial value is null until UTXO can be validated and confirmed
+            // to be valid (true) or not (false).
+            utxo.isValid = null
+
             outAry[i] = utxo
           }
         }
@@ -1442,6 +1454,10 @@ class Utils {
             utxo.decimals = genesisData.decimals
             utxo.tokenType = slpData.tokenType
 
+            // Initial value is null until UTXO can be validated and confirmed
+            // to be valid (true) or not (false).
+            utxo.isValid = null
+
             // Calculate the real token quantity.
 
             const tokenQtyBig = new BigNumber(tokenQty).div(
@@ -1460,7 +1476,7 @@ class Utils {
       return outAry
     } catch (error) {
       console.log('_hydrateUtxo error: ', error)
-      if (error.response && error.response.data) throw error.response.data
+      // if (error.response && error.response.data) throw error.response.data
       throw error
     }
   }
