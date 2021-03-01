@@ -31,6 +31,31 @@ describe('#SLP', () => {
   })
 
   describe('#util', () => {
+    describe('#decodeOpReturn', () => {
+      it('should decode a NFT Child transaction', async () => {
+        const txid =
+          'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b'
+
+        const data = await bchjs.SLP.Utils.decodeOpReturn(txid)
+        // console.log(`data: ${JSON.stringify(data, null, 2)}`)
+
+        assert.property(data, 'tokenType')
+        assert.property(data, 'txType')
+        assert.property(data, 'ticker')
+        assert.property(data, 'name')
+        assert.property(data, 'tokenId')
+        assert.property(data, 'documentUri')
+        assert.property(data, 'documentHash')
+        assert.property(data, 'decimals')
+        assert.property(data, 'mintBatonVout')
+        assert.property(data, 'qty')
+
+        assert.equal(data.tokenType, 65)
+        assert.equal(data.mintBatonVout, 0)
+        assert.equal(data.qty, '1')
+      })
+    })
+
     describe('#tokenUtxoDetails', () => {
       it('should handle a range of UTXO types', async () => {
         const utxos = [
