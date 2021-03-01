@@ -5,10 +5,8 @@ const axios = require('axios')
 const slpParser = require('slp-parser')
 const BigNumber = require('bignumber.js')
 
-// const Script = require("../script")
-// const scriptLib = new Script()
-
-// const BigNumber = require("bignumber.js")
+// Local libraries
+const Util = require('../util')
 
 let _this
 
@@ -39,6 +37,8 @@ class Utils {
     _this = this
 
     this.whitelist = []
+
+    this.util = new Util(config)
   }
 
   /**
@@ -1049,14 +1049,18 @@ class Utils {
    *     that txid and validity has not been confirmed, or a 429 rate-limit error
    *     was enountered during the processing of the request.
    *
+   * An optional second input object, `usrObj`, allows the user to inject an
+   * artifical delay while processing UTXOs. If `usrObj.utxoDelay` is set to
+   * a number, the call will delay by that number of milliseconds between
+   * processing UTXOs.
+   *
    * This is an API-heavy call. If you get a lot of `null` values, then slow down
-   * the calls by adding artifical delays, or request info on fewer UTXOs at a
+   * the calls by using the usrObj.utxoDelay property, or request info on fewer
+   * UTXOs at a
    * time. `null` indicates that the UTXO can *not* be safely spent, because
    * a judgement as to weather it is a token UTXO has not been made. Spending it
    * could burn tokens. It's safest to ignore UTXOs with a value of `null`.
    *
-   * A second, optional input, `usrObj`, is used by bch-api for managing rate
-   * limits. It can be safely ignored when writing apps using this call.
    *
    * @apiExample Example usage:
    *
@@ -1064,7 +1068,8 @@ class Utils {
    * try {
    *  const utxos = await bchjs.Electrumx.utxo(`bitcoincash:qpcqs0n5xap26un2828n55gan2ylj7wavvzeuwdx05`)
    *
-   *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos)
+   *  // Delay 100mS between processing UTXOs, to prevent rate-limit errors.
+   *  const utxoInfo = await bchjs.SLP.Utils.tokenUtxoDetails(utxos, { utxoDelay: 100 })
    *
    *  console.log(`utxoInfo: ${JSON.stringify(utxoInfo, null, 2)}`)
    * } catch (error) {
@@ -1266,6 +1271,9 @@ class Utils {
   // transaction. However, that is a rare occurence since the cache of
   // decodeOpReturn() will minimize API calls for this case. This behavior
   // could be changed, but right now it's a corner case of a corner case.
+  //
+  // If the usrObj has a utxoDelay property, then it will delay the loop for
+  // each UTXO by that many milliseconds.
   async _hydrateUtxo (utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
@@ -1278,6 +1286,12 @@ class Utils {
       // Loop through each utxo
       for (let i = 0; i < utxos.length; i++) {
         const utxo = utxos[i]
+
+        // If the user passes in a delay, then wait.
+        if (usrObj && usrObj.utxoDelay && !isNaN(Number(usrObj.utxoDelay))) {
+          const delayMs = Number(usrObj.utxoDelay)
+          await this.util.sleep(delayMs)
+        }
 
         // Get raw transaction data from the full node and attempt to decode
         // the OP_RETURN data.
