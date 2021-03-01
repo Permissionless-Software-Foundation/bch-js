@@ -1659,11 +1659,17 @@ class Utils {
    *       or a 429 rate-limit error was enountered during the processing of the
    *       request.
    *
+   * An optional second input object, `usrObj`, allows the user to inject an
+   * artifical delay while processing UTXOs. If `usrObj.utxoDelay` is set to
+   * a number, the call will delay by that number of milliseconds between
+   * processing UTXOs.
+   *
    * This is an API-heavy call. If you get a lot of `null` values, then slow down
-   * the calls or request info on fewer UTXOs at a time.
-   * `null` indicates that the UTXO can not be safely spent, because a judgement
-   * as to weather it is a token UTXO has not been made. Spending it could burn
-   * tokens. It's safest to ignore UTXOs with a value of `null`.
+   * the calls by using the usrObj.utxoDelay property, or request info on fewer
+   * UTXOs at a
+   * time. `null` indicates that the UTXO can *not* be safely spent, because
+   * a judgement as to weather it is a token UTXO has not been made. Spending it
+   * could burn tokens. It's safest to ignore UTXOs with a value of `null`.
    *
    * @apiExample Example usage:
    *
@@ -1675,7 +1681,8 @@ class Utils {
    *   "bitcoincash:qzygn28zpgeemnptkn26xzyuzzfu9l8f9vfvq7kptk"
    *  ])
    *
-   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos)
+   *  // Wait 100mS between processing UTXOs, to prevent rate limit errors.
+   *  const utxoInfo = await bchjs.SLP.Utils.hydrateUtxos(utxos.utxos, { utxoDelay: 100 })
    *
    *  console.log(`${JSON.stringify(utxoInfo, null, 2)}`)
    * } catch (error) {
@@ -1809,7 +1816,7 @@ class Utils {
    */
   // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
   // do the heavy lifting.
-  async hydrateUtxos (utxos) {
+  async hydrateUtxos (utxos, usrObj) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1817,7 +1824,8 @@ class Utils {
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
         {
-          utxos: utxos
+          utxos: utxos,
+          usrObj
         },
         _this.axiosOptions
       )
