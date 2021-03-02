@@ -1833,7 +1833,7 @@ class Utils {
       return response.data
     } catch (error) {
       if (error.response && error.response.data) {
-        throw new Error(error.response.data)
+        throw new Error(JSON.stringify(error.response.data, null, 2))
       }
       throw error
     }
