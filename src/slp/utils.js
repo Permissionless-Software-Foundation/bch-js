@@ -1832,8 +1832,10 @@ class Utils {
 
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        throw new Error(error.response.data)
+      }
+      throw error
     }
   }
 
