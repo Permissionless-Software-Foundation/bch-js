@@ -67,4 +67,26 @@ describe('#price', () => {
       assert.isNumber(result)
     })
   })
+  describe('#getBchUsd', () => {
+    it('should get the USD price of BCH', async () => {
+      sandbox.stub(bchjs.Price.axios, 'get').resolves({ data: { usd: 510.39 } })
+
+      const result = await bchjs.Price.getBchUsd()
+      // console.log(result)
+
+      assert.isNumber(result)
+    })
+    it('should handle error', async () => {
+      try {
+        sandbox.stub(bchjs.Price.axios, 'get').throws(new Error('test error'))
+
+        await bchjs.Price.getBchUsd()
+        // console.log(result)
+
+        assert.equal(false, true, 'unexpected error')
+      } catch (err) {
+        assert.include(err.message, 'test error')
+      }
+    })
+  })
 })
