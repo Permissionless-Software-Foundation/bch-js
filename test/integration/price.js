@@ -33,6 +33,14 @@ describe('#price', () => {
       assert.isNumber(result)
     })
   })
+  describe('#getBchUsd', () => {
+    it('should get the USD price of BCH', async () => {
+      const result = await bchjs.Price.getBchUsd()
+      console.log(result)
+
+      assert.isNumber(result)
+    })
+  })
 
   describe('#rates', () => {
     it('should get the price of BCH in several currencies', async () => {
