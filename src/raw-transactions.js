@@ -116,9 +116,7 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: {
-            authorization: `Token ${_this.apiToken}`
-          }
+          headers: _this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -183,9 +181,7 @@ class RawTransactions {
           data: {
             hexes: script
           },
-          headers: {
-            authorization: `Token ${this.apiToken}`
-          }
+          headers: _this.axiosOptions.headers
         }
         const response = await axios(options)
 
