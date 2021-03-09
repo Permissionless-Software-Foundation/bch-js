@@ -1179,8 +1179,20 @@ class Utils {
    * but much more performant handling of SLP tokens. Some wallet apps prefer
    * the scaling performance over the breadth of supported tokens.
    *
+   * An optional second input object, `usrObj`, allows the user to inject an
+   * artifical delay while processing UTXOs. If `usrObj.utxoDelay` is set to
+   * a number, the call will delay by that number of milliseconds between
+   * processing UTXOs.
+   *
+   * This is an API-heavy call. If you get a lot of `null` values, then slow down
+   * the calls by using the usrObj.utxoDelay property, or request info on fewer
+   * UTXOs at a
+   * time. `null` indicates that the UTXO can *not* be safely spent, because
+   * a judgement as to weather it is a token UTXO has not been made. Spending it
+   * could burn tokens. It's safest to ignore UTXOs with a value of `null`.
+   *
    */
-  async tokenUtxoDetailsWL (utxos) {
+  async tokenUtxoDetailsWL (utxos, usrObj = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1216,7 +1228,7 @@ class Utils {
       }
 
       // Hydrate each UTXO with data from SLP OP_REUTRNs.
-      const outAry = await this._hydrateUtxo(utxos)
+      const outAry = await this._hydrateUtxo(utxos, usrObj)
       // console.log(`outAry: ${JSON.stringify(outAry, null, 2)}`)
 
       // *After* each UTXO has been hydrated with SLP data,
@@ -1232,7 +1244,7 @@ class Utils {
           // information.
 
           // Validate against the whitelist SLPDB.
-          const whitelistResult = await this.validateTxid3(utxo.txid)
+          const whitelistResult = await this.validateTxid3(utxo.txid, usrObj)
           // console.log(
           //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
           //     whitelistResult,
