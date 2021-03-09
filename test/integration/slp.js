@@ -639,7 +639,7 @@ describe('#SLP', () => {
       })
     })
 
-    describe('#hydrateUtxos', () => {
+    describe('#hydrateUtxos-', () => {
       it('should hydrate UTXOs', async () => {
         const utxos = [
           {
