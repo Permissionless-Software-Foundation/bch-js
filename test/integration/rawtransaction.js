@@ -1,6 +1,5 @@
 /*
-  Integration tests for the bchjs. Only covers calls made to
-  rest.bitcoin.com.
+  Integration tests for the bchjs.
 
   TODO
 */
@@ -263,6 +262,7 @@ describe('#rawtransaction', () => {
       assert.equal(result.length, 1)
       assert.property(result[0], 'vin')
       assert.property(result[0], 'address')
+      assert.property(result[0], 'value')
     })
   })
 
@@ -274,32 +274,33 @@ describe('#rawtransaction', () => {
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result.vin[0], 'address')
+      assert.property(result.vin[0], 'value')
     })
   })
 
-  describe('#getTxDataSlp', () => {
-    it('should return tx data with SLP information', async () => {
-      const txid = 'b438855cfcab64516b44097d7212df9cdb99226c8d7c7ab504d35fcfd834cb5b'
-
-      const result = await bchjs.RawTransactions.getTxDataSlp(txid)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-      assert.property(result.vin[0], 'address')
-      assert.property(result.vin[0], 'tokenQty')
-
-      assert.equal(result.vin[0].tokenQty, null)
-      assert.equal(result.vin[1].tokenQty, '100000000000')
-    })
-
-    it('should handle non-slp tx', async () => {
-      const txid = '04a6aca328af2445327015895b8da9766093b1989b52e477559759eb8072fc0a'
-
-      const result = await bchjs.RawTransactions.getTxDataSlp(txid)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-      assert.equal(result, false)
-    })
-  })
+  // describe('#getTxDataSlp', () => {
+  //   it('should return tx data with SLP information', async () => {
+  //     const txid = 'b438855cfcab64516b44097d7212df9cdb99226c8d7c7ab504d35fcfd834cb5b'
+  //
+  //     const result = await bchjs.RawTransactions.getTxDataSlp(txid)
+  //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+  //
+  //     assert.property(result.vin[0], 'address')
+  //     assert.property(result.vin[0], 'tokenQty')
+  //
+  //     assert.equal(result.vin[0].tokenQty, null)
+  //     assert.equal(result.vin[1].tokenQty, '100000000000')
+  //   })
+  //
+  //   it('should handle non-slp tx', async () => {
+  //     const txid = '04a6aca328af2445327015895b8da9766093b1989b52e477559759eb8072fc0a'
+  //
+  //     const result = await bchjs.RawTransactions.getTxDataSlp(txid)
+  //     // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+  //
+  //     assert.equal(result, false)
+  //   })
+  // })
 })
 
 function sleep (ms) {

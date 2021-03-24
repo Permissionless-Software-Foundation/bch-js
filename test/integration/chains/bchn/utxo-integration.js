@@ -11,7 +11,7 @@ describe('#UTXO', () => {
   beforeEach(async () => {
     // sandbox = sinon.createSandbox()
 
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(2000)
   })
 
   describe('#get', () => {

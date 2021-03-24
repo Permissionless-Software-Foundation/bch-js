@@ -31,6 +31,7 @@ const SLP = require('./slp/slp')
 const IPFS = require('./ipfs')
 const Encryption = require('./encryption')
 const Utxo = require('./utxo')
+const Transaction = require('./transaction')
 
 // Indexers
 const Ninsight = require('./ninsight')
@@ -113,6 +114,7 @@ class BCHJS {
 
     this.IPFS = new IPFS()
     this.Utxo = new Utxo(libConfig)
+    this.Transaction = new Transaction(libConfig)
   }
 }
 

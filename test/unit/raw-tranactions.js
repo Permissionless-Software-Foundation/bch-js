@@ -1,6 +1,5 @@
 /*
-  TODO:
-  -Create a mocking library of data to compare unit and integration tests.
+  Unit tests for raw-transactions.js library.
 */
 
 // Public npm libraries

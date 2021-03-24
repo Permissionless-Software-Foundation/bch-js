@@ -25,7 +25,7 @@ describe('#SLP', () => {
 
   beforeEach(async () => {
     // Introduce a delay so that the BVT doesn't trip the rate limits.
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(2000)
 
     bchjs = new BCHJS()
   })
