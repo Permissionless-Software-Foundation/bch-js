@@ -17,7 +17,7 @@ describe('#transaction', () => {
         '2b37bdb3b63dd0bca720437754a36671431a950e684b64c44ea910ea9d5297c7'
 
       const result = await bchjs.Transaction.get(txid)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
       assert.property(result, 'txid')
@@ -31,6 +31,14 @@ describe('#transaction', () => {
       // TODO: Add value to input
       assert.property(result, 'isValidSLPTx')
       assert.equal(result.isValidSLPTx, false)
+    })
+
+    it('should get details about a SLP transaction', async () => {
+      const txid =
+        '266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1'
+
+      const result = await bchjs.Transaction.get(txid)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
     })
   })
 })

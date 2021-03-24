@@ -319,7 +319,8 @@ class RawTransactions {
 
         retArray.push({
           vin: i,
-          address: voutSender.scriptPubKey.addresses[0]
+          address: voutSender.scriptPubKey.addresses[0],
+          value: voutSender.value
         })
       }
 
@@ -373,6 +374,7 @@ class RawTransactions {
       // Add the input address to the transaction data.
       for (let i = 0; i < inAddrs.length; i++) {
         txDetails.vin[i].address = inAddrs[i].address
+        txDetails.vin[i].value = inAddrs[i].value
       }
 
       return txDetails

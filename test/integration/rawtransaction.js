@@ -262,6 +262,7 @@ describe('#rawtransaction', () => {
       assert.equal(result.length, 1)
       assert.property(result[0], 'vin')
       assert.property(result[0], 'address')
+      assert.property(result[0], 'value')
     })
   })
 
@@ -273,6 +274,7 @@ describe('#rawtransaction', () => {
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result.vin[0], 'address')
+      assert.property(result.vin[0], 'value')
     })
   })
 
