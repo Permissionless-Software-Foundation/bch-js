@@ -6,7 +6,7 @@ const assert = require('chai').assert
 const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
 
-describe('#transaction', () => {
+describe('#Transaction', () => {
   beforeEach(async () => {
     if (process.env.IS_USING_FREE_TIER) await bchjs.Util.sleep(1000)
   })
