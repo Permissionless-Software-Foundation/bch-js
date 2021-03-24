@@ -1097,11 +1097,6 @@ class Utils {
    *  "tokenType": 1
    * }
    */
-
-  // CT 1/11/20: Refactored to comply with this GitHub Issue:
-  // https://github.com/Bitcoin-com/slp-sdk/issues/84
-
-  // CT 5/31/20: Refactored to use slp-parse library.
   async tokenUtxoDetails (utxos, usrObj = null) {
     try {
       // Throw error if input is not an array.

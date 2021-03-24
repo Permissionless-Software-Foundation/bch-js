@@ -32,13 +32,38 @@ class Transaction {
         outTokenData = await this.slpUtils.decodeOpReturn(txid)
         // console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
 
+        // Get Genesis data for this token.
+        const genesisData = await this.slpUtils.decodeOpReturn(
+          outTokenData.tokenId
+          // decodeOpReturnCache
+          // usrObj // pass user data when making an internal call.
+        )
+        // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
+
         // Add token information to the tx details object.
         txDetails.tokenTxType = outTokenData.txType
         txDetails.tokenId = outTokenData.tokenId
+        txDetails.tokenTicker = genesisData.ticker
+        txDetails.tokenName = genesisData.name
+        txDetails.tokenDecimals = genesisData.decimals
+        txDetails.tokenUri = genesisData.documentUri
+        txDetails.tokenDocHash = genesisData.documentHash
 
         // Add the token quantity to each output.
         for (let i = 0; i < outTokenData.amounts.length; i++) {
-          txDetails.vout[i + 1].tokenQty = outTokenData.amounts[i]
+          const rawQty = outTokenData.amounts[i]
+          const realQty = Number(rawQty) / Math.pow(10, txDetails.tokenDecimals)
+
+          txDetails.vout[i + 1].tokenQty = realQty
+        }
+
+        // Add tokenQty = null to any outputs that don't have a value.
+        for (let i = 0; i < txDetails.vout.length; i++) {
+          const thisVout = txDetails.vout[i]
+
+          if (!thisVout.tokenQty && thisVout.tokenQty !== 0) {
+            thisVout.tokenQty = null
+          }
         }
 
         // Loop through each input and retrieve the token data.
@@ -60,24 +85,29 @@ class Transaction {
             // console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
 
             if (tokenQty) {
-              thisVin.tokenQty = tokenQty
+              const realQty =
+                Number(tokenQty) / Math.pow(10, txDetails.tokenDecimals)
+
+              thisVin.tokenQty = realQty
               // txDetails.vin[i].tokenQty = tokenQty
             } else {
               thisVin.tokenQty = null
             }
           } catch (err) {
-            // console.log('catch 2: ', err)
             // If decodeOpReturn() throws an error, then this input is not
             // from an SLP transaction and can be ignored.
             // thisVin.tokenQty = null
             thisVin.tokenQty = null
             continue
           }
-          // console.log(
-          //   `2: txDetails.vin[i]: ${JSON.stringify(txDetails.vin[i], null, 2)}`
-          // )
         }
+
+        // Finally, validate the SLP TX.
+        // this.slpUtils.waterfallValidateTxid(txid, usrObj)
+        txDetails.isValidSLPTx = await this.slpUtils.waterfallValidateTxid(txid)
       } catch (err) {
+        // console.log('Error: ', err)
+
         // If decoding the op_return fails, then it's not an SLP transaction,
         // and the non-hyrated TX details can be returned.
         return txDetails

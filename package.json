@@ -20,7 +20,7 @@
     "test:integration:temp:bchn": "export RESTURL=http://157.90.174.219:3000/v4/ && mocha --timeout 30000 test/integration/",
     "test:temp": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 -g '#Encryption' test/integration/",
     "test:temp2": "mocha --timeout=30000 -g '#_hydrateUtxo' test/unit/",
-    "test:temp3": "export RESTURL=https://bchn.fullstack.cash/v4/ && mocha --timeout 30000 -g '#getTxData' test/integration/",
+    "test:temp3": "export RESTURL=https://bchn.fullstack.cash/v4/ && mocha --timeout 30000 -g '#transaction' test/integration/",
     "test:temp4": "export RESTURL=http://localhost:3000/v4/ && mocha --timeout 30000 -g '#decodeOpReturn' test/integration/",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
