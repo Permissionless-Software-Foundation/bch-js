@@ -1158,6 +1158,7 @@ class Utils {
 
       return outAry
     } catch (error) {
+      console.log('Error in tokenUtxoDetails()')
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
@@ -1503,6 +1504,7 @@ class Utils {
 
       return outAry
     } catch (error) {
+      console.log('Error in _hydrateUtxo()')
       // console.log('_hydrateUtxo error: ', error)
       throw error
     }
@@ -1638,6 +1640,7 @@ class Utils {
       // could not be validated.
       return isValid
     } catch (error) {
+      console.log('Error in waterfallValidateTxid()')
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
