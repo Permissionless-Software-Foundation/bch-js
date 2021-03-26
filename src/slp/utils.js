@@ -1098,6 +1098,7 @@ class Utils {
    * }
    */
   async tokenUtxoDetails (utxos, usrObj = null) {
+    console.log('Entering tokenUtxoDetails()')
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1155,6 +1156,8 @@ class Utils {
           // console.log(`isValid: ${JSON.stringify(utxo.isValid, null, 2)}`)
         }
       }
+
+      console.log('Existing tokenUtxoDetails()')
 
       return outAry
     } catch (error) {
@@ -1283,6 +1286,7 @@ class Utils {
   // If the usrObj has a utxoDelay property, then it will delay the loop for
   // each UTXO by that many milliseconds.
   async _hydrateUtxo (utxos, usrObj = null) {
+    console.log('Entering _hydrateUtxo()')
     try {
       const decodeOpReturnCache = {}
 
@@ -1502,6 +1506,7 @@ class Utils {
         }
       }
 
+      console.log('Exiting _hydrateUtxo()')
       return outAry
     } catch (error) {
       console.log('Error in _hydrateUtxo()')
@@ -1547,6 +1552,7 @@ class Utils {
    * true
    */
   async waterfallValidateTxid (txid, usrObj = null) {
+    console.log('Entering waterfallValidateTxid()')
     try {
       // console.log('txid: ', txid)
 
@@ -1635,6 +1641,8 @@ class Utils {
 
         return isValid
       }
+
+      console.log('Exiting waterfallValidateTxid()')
 
       // If isValid is still null, return that value, signaling that the txid
       // could not be validated.
