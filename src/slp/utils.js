@@ -957,6 +957,8 @@ class Utils {
         throw new Error('txid string must be included.')
       }
 
+      console.log(`axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`)
+
       // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction`
@@ -1842,7 +1844,9 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
-      console.log(`axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`)
+      console.log(
+        `axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`
+      )
 
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
