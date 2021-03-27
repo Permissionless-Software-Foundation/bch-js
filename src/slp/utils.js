@@ -932,7 +932,6 @@ class Utils {
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
   async decodeOpReturn (txid, cache = null, usrObj = null) {
-    console.log(`Entering decodeOpReturn with txid ${txid}.`)
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -956,8 +955,6 @@ class Utils {
       if (!txid || txid === '' || typeof txid !== 'string') {
         throw new Error('txid string must be included.')
       }
-
-      console.log(`axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`)
 
       // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
@@ -1016,20 +1013,18 @@ class Utils {
 
       if (cache) cache[txid] = tokenData
 
-      console.log('Exiting decodeOpReturn()')
-
       return tokenData
     } catch (error) {
       // Used for debugging
-      console.log('decodeOpReturn error: ', error)
-      console.log(`decodeOpReturn error.message: ${error.message}`)
-      if (error.response && error.response.data) {
-        console.log(
-          `decodeOpReturn error.response.data: ${JSON.stringify(
-            error.response.data
-          )}`
-        )
-      }
+      // console.log('decodeOpReturn error: ', error)
+      // console.log(`decodeOpReturn error.message: ${error.message}`)
+      // if (error.response && error.response.data) {
+      //   console.log(
+      //     `decodeOpReturn error.response.data: ${JSON.stringify(
+      //       error.response.data
+      //     )}`
+      //   )
+      // }
       throw error
     }
   }
@@ -1103,7 +1098,6 @@ class Utils {
    * }
    */
   async tokenUtxoDetails (utxos, usrObj = null) {
-    console.log('Entering tokenUtxoDetails()')
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1162,11 +1156,9 @@ class Utils {
         }
       }
 
-      console.log('Exiting tokenUtxoDetails()')
-
       return outAry
     } catch (error) {
-      console.log('Error in tokenUtxoDetails()')
+      // console.log('Error in tokenUtxoDetails()')
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
@@ -1291,7 +1283,6 @@ class Utils {
   // If the usrObj has a utxoDelay property, then it will delay the loop for
   // each UTXO by that many milliseconds.
   async _hydrateUtxo (utxos, usrObj = null) {
-    console.log('Entering _hydrateUtxo()')
     try {
       const decodeOpReturnCache = {}
 
@@ -1511,10 +1502,8 @@ class Utils {
         }
       }
 
-      console.log('Exiting _hydrateUtxo()')
       return outAry
     } catch (error) {
-      console.log('Error in _hydrateUtxo()')
       // console.log('_hydrateUtxo error: ', error)
       throw error
     }
@@ -1557,7 +1546,6 @@ class Utils {
    * true
    */
   async waterfallValidateTxid (txid, usrObj = null) {
-    console.log('Entering waterfallValidateTxid()')
     try {
       // console.log('txid: ', txid)
 
@@ -1647,13 +1635,11 @@ class Utils {
         return isValid
       }
 
-      console.log('Exiting waterfallValidateTxid()')
-
       // If isValid is still null, return that value, signaling that the txid
       // could not be validated.
       return isValid
     } catch (error) {
-      console.log('Error in waterfallValidateTxid()')
+      // console.log('Error in waterfallValidateTxid()')
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
@@ -1843,10 +1829,6 @@ class Utils {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
-
-      console.log(
-        `axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`
-      )
 
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
