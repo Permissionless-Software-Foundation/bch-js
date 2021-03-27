@@ -932,6 +932,7 @@ class Utils {
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
   async decodeOpReturn (txid, cache = null, usrObj = null) {
+    console.log(`Entering decodeOpReturn with txid ${txid}.`)
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -1013,18 +1014,20 @@ class Utils {
 
       if (cache) cache[txid] = tokenData
 
+      console.log('Exiting decodeOpReturn()')
+
       return tokenData
     } catch (error) {
       // Used for debugging
-      // console.log('decodeOpReturn error: ', error)
-      // console.log(`decodeOpReturn error.message: ${error.message}`)
-      // if (error.response && error.response.data) {
-      //   console.log(
-      //     `decodeOpReturn error.response.data: ${JSON.stringify(
-      //       error.response.data
-      //     )}`
-      //   )
-      // }
+      console.log('decodeOpReturn error: ', error)
+      console.log(`decodeOpReturn error.message: ${error.message}`)
+      if (error.response && error.response.data) {
+        console.log(
+          `decodeOpReturn error.response.data: ${JSON.stringify(
+            error.response.data
+          )}`
+        )
+      }
       throw error
     }
   }
@@ -1157,7 +1160,7 @@ class Utils {
         }
       }
 
-      console.log('Existing tokenUtxoDetails()')
+      console.log('Exiting tokenUtxoDetails()')
 
       return outAry
     } catch (error) {
