@@ -1842,6 +1842,8 @@ class Utils {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
 
+      console.log(`axiosOptions: ${JSON.stringify(_this.axiosOptions, null, 2)}`)
+
       const response = await _this.axios.post(
         `${this.restURL}slp/hydrateUtxos`,
         {
