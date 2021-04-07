@@ -68,8 +68,8 @@ class Blockchain {
    * @apiName getBlock
    * @apiGroup Blockchain
    * @apiDescription
-   * If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash.
-   *
+   * If verbose is 0, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is 1, returns an Object with information about block hash.
+   * If verbose is 2, returns an Object with information about block hash and information about tx.
    * @apiExample Example usage:
    * (async () => {
    * try {
@@ -80,28 +80,38 @@ class Blockchain {
    * }
    * })()
    *
-   * // { hash: '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09',
-   * // confirmations: 528236,
-   * // size: 216,
-   * // height: 1000,
-   * // version: 1,
-   * // versionHex: '00000001',
-   * // merkleroot: 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33',
-   * // tx:
-   * //  [ 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33' ],
-   * // time: 1232346882,
-   * // mediantime: 1232344831,
-   * // nonce: 2595206198,
-   * // bits: '1d00ffff',
-   * // difficulty: 1,
-   * // chainwork: '000000000000000000000000000000000000000000000000000003e903e903e9',
-   * // previousblockhash: '0000000008e647742775a230787d66fdf92c46a48c896bfbc85cdc8acc67e87d',
-   * // nextblockhash: '00000000a2887344f8db859e372e7e4bc26b23b9de340f725afbf2edb265b4c6' }
+   * // {
+   * //  hash: '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09',
+   * //  confirmations: 528236,
+   * //  size: 216,
+   * //  height: 1000,
+   * //  version: 1,
+   * //  versionHex: '00000001',
+   * //  merkleroot: 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33',
+   * //  tx:
+   * //   [ 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33' ],
+   * //  time: 1232346882,
+   * //  mediantime: 1232344831,
+   * //  nonce: 2595206198,
+   * //  bits: '1d00ffff',
+   * //  difficulty: 1,
+   * //  chainwork: '000000000000000000000000000000000000000000000000000003e903e903e9',
+   * //  previousblockhash: '0000000008e647742775a230787d66fdf92c46a48c896bfbc85cdc8acc67e87d',
+   * //  nextblockhash: '00000000a2887344f8db859e372e7e4bc26b23b9de340f725afbf2edb265b4c6'
+   * // }
    */
-  async getBlock (blockhash, verbose = true) {
+  async getBlock (blockhash, verbosity = 1) {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBlock/${blockhash}?verbose=${verbose}`,
+      // Input validation
+      if (!blockhash || typeof blockhash !== 'string') {
+        throw new Error('blockhash must be a string')
+      }
+      const response = await axios.post(
+        `${this.restURL}blockchain/getblock`,
+        {
+          blockhash,
+          verbosity
+        },
         _this.axiosOptions
       )
       return response.data
