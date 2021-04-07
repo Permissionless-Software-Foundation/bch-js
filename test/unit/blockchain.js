@@ -61,15 +61,39 @@ describe('#Blockchain', () => {
 
     it('should get block by hash', done => {
       const resolved = new Promise(resolve => resolve({ data: data }))
-      sandbox.stub(axios, 'get').returns(resolved)
+      sandbox.stub(axios, 'post').returns(resolved)
 
-      bchjs.Blockchain.getBlock(
+      const blockhash =
         '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09'
-      )
+      bchjs.Blockchain.getBlock(blockhash)
         .then(result => {
           assert.deepStrictEqual(data, result)
         })
         .then(done, done)
+    })
+    it('should throw error if blockhash is not provided', async () => {
+      try {
+        await bchjs.Blockchain.getBlock()
+        assert2.fail('Unexpected result')
+      } catch (err) {
+        assert2.include(err.message, 'blockhash must be a string')
+      }
+    })
+    it('should handle response error', async () => {
+      try {
+        const error = new Error()
+        error.response = {
+          data: 'Test Error'
+        }
+        sandbox.stub(axios, 'post').throws(error)
+
+        const blockhash =
+          '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09'
+        await bchjs.Blockchain.getBlock(blockhash)
+        assert2.fail('Unexpected result')
+      } catch (err) {
+        assert2.include(err, 'Test Error')
+      }
     })
   })
 
@@ -355,10 +379,7 @@ describe('#Blockchain', () => {
       try {
         await bchjs.Blockchain.getTxOut('badtxid')
       } catch (err) {
-        assert2.include(
-          err.message,
-          'txid needs to be a proper transaction ID'
-        )
+        assert2.include(err.message, 'txid needs to be a proper transaction ID')
       }
     })
 

@@ -276,6 +276,43 @@ describe('#blockchain', () => {
       assert.equal(result, null)
     })
   })
+  describe('#getBlock', () => {
+    it('should get block information with default verbosity', async () => {
+      const blockhash =
+        '0000000000000000008e8d83cba6d45a9314bc2ef4538d4e0577c6bed8593536'
+      const result = await bchjs.Blockchain.getBlock(blockhash)
+
+      assert.hasAllKeys(result, [
+        'hash',
+        'confirmations',
+        'size',
+        'height',
+        'version',
+        'versionHex',
+        'merkleroot',
+        'tx',
+        'time',
+        'mediantime',
+        'nonce',
+        'bits',
+        'difficulty',
+        'chainwork',
+        'nTx',
+        'previousblockhash',
+        'nextblockhash'
+      ])
+      assert.isArray(result.tx)
+    })
+
+    it('should get block information with verbosity 0', async () => {
+      const blockhash =
+        '0000000000000000008e8d83cba6d45a9314bc2ef4538d4e0577c6bed8593536'
+      const verbosity = 0
+      const result = await bchjs.Blockchain.getBlock(blockhash, verbosity)
+
+      assert.isString(result)
+    })
+  })
 })
 
 function sleep (ms) {
