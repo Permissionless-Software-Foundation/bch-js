@@ -4,7 +4,7 @@
 
 const assert = require('chai').assert
 const sinon = require('sinon')
-const axios = require("axios")
+const axios = require('axios')
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = 'unit'
@@ -14,7 +14,7 @@ const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
 
 // Mock data used for unit tests
-const mockData = require("./fixtures/slp/mock-utils")
+const mockData = require('./fixtures/slp/mock-utils')
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = 'unit'
