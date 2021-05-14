@@ -435,8 +435,7 @@ class Nft1 {
    * const children = await bchjs.SLP.Nft1.listNFTGroupChildren(groupId)
    *
    * children = {
-   *  "success": true,
-   *  "children": [
+   *  "nftChildren": [
    *    "45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9",
    *    "928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55"
    *  ]
