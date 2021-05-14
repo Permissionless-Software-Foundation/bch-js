@@ -264,6 +264,17 @@ describe('#SLP', () => {
       })
     })
   })
+  describe('#nft1', () => {
+    describe('#listNFTGroupChildren', () => {
+      it.only('should return array of children GENESIS transactions IDs', async () => {
+        const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
+        const result = await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        assert.property(result, 'nftChildren')
+        assert.isArray(result.nftChildren)
+      })
+    })
+  })
 })
 
 // Promise-based sleep function
