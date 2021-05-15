@@ -8,16 +8,21 @@
   (Parent) token.
 */
 
+// Public npm libraries
+const axios = require('axios')
+
+// Local libraries.
 const Address = require('./address')
 
 // const BigNumber = require('bignumber.js')
 const slpMdm = require('slp-mdm')
 
+let _this
 // const addy = new Address()
 let addy
 const TransactionBuilder = require('../transaction-builder')
 
-class TokenType1 {
+class Nft1 {
   constructor (config) {
     this.restURL = config.restURL
 
@@ -25,6 +30,8 @@ class TokenType1 {
 
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
+
+    _this = this
   }
 
   /**
@@ -412,6 +419,45 @@ class TokenType1 {
       throw err
     }
   }
+
+  /**
+   * @api SLP.Nft1.listNFTGroupChildren() listNFTGroupChildren()
+   * @apiName listNFTGroupChildren
+   * @apiGroup SLP Nft1
+   * @apiDescription Return list of NFT children tokens in a NFT Group.
+   * It's assumed provided groupId parameter is for an NFT Group token (type=129)
+   *
+   * Returns an Array with GENESIS transaction IDs of the children tokens.
+   *
+   * @apiExample Example usage:
+   *
+   * const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
+   * const children = await bchjs.SLP.Nft1.listNFTGroupChildren(groupId)
+   *
+   * children = {
+   *  "nftChildren": [
+   *    "45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9",
+   *    "928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55"
+   *  ]
+   * }
+   */
+  async listNFTGroupChildren (groupId) {
+    try {
+      if (typeof groupId === 'string') {
+        const response = await axios.get(
+          `${this.restURL}slp/nftChildren/${groupId}`,
+          _this.axiosOptions
+        )
+        return response.data
+      }
+
+      throw new Error('groupId must be a string.')
+    } catch (error) {
+      // console.log('Error in listNFTGroupChildren()')
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
-module.exports = TokenType1
+module.exports = Nft1

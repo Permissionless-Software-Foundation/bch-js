@@ -4,7 +4,7 @@
 
 const assert = require('chai').assert
 const sinon = require('sinon')
-// const axios = require("axios")
+const axios = require('axios')
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = 'unit'
@@ -14,7 +14,7 @@ const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
 
 // Mock data used for unit tests
-// const mockData = require("./fixtures/slp/mock-utils")
+const mockData = require('./fixtures/slp/mock-utils')
 
 // Default to unit tests unless some other value for TEST is passed.
 if (!process.env.TEST) process.env.TEST = 'unit'
@@ -251,6 +251,49 @@ describe('#SLP NFT1', () => {
 
       assert.hasAllKeys(result, ['script', 'outputs'])
       assert.isNumber(result.outputs)
+    })
+  })
+  describe('#listNFTGroupChildren', () => {
+    it('should throw an error for improper input', async () => {
+      try {
+        const groupId = 12345
+
+        await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          'groupId must be a string'
+        )
+      }
+    })
+    it('should handle API response error', async () => {
+      try {
+        const error = new Error()
+        error.response = {
+          error: 'NFT group does not exists'
+        }
+        sandbox.stub(axios, 'get').throws(error)
+
+        const groupId = 'non-exists'
+        await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
+      } catch (err) {
+        assert.include(
+          err.response,
+          { error: 'NFT group does not exists' }
+        )
+      }
+    })
+    it('should return array of children GENESIS transactions IDs', async () => {
+      sandbox.stub(axios, 'get').resolves({ data: mockData.mockNftChildrenList })
+
+      const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
+      const result = await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'nftChildren')
+      assert.isArray(result.nftChildren)
     })
   })
 })

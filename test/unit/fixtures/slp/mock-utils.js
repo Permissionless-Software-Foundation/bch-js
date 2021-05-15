@@ -119,6 +119,13 @@ const mockTokens = [
   }
 ]
 
+const mockNftChildrenList = {
+  nftChildren: [
+    '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9',
+    '928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55'
+  ]
+}
+
 const balancesForAddress = [
   {
     tokenId: 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
@@ -1388,6 +1395,7 @@ module.exports = {
   mockList,
   mockToken,
   mockTokens,
+  mockNftChildrenList,
   balancesForAddress,
   balancesForAddresses,
   mockRawTx,
