@@ -296,4 +296,52 @@ describe('#SLP NFT1', () => {
       assert.isArray(result.nftChildren)
     })
   })
+  describe('#parentNFTGroup', () => {
+    it('should throw an error for improper input', async () => {
+      try {
+        const tokenId = 12345
+
+        await bchjs.SLP.NFT1.parentNFTGroup(tokenId)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          'tokenId must be a string'
+        )
+      }
+    })
+    it('should handle API response error', async () => {
+      try {
+        const error = new Error()
+        error.response = {
+          error: 'NFT child does not exists'
+        }
+        sandbox.stub(axios, 'get').throws(error)
+
+        const tokenId = 'non-exists'
+        await bchjs.SLP.NFT1.parentNFTGroup(tokenId)
+      } catch (err) {
+        assert.include(
+          err.response,
+          { error: 'NFT child does not exists' }
+        )
+      }
+    })
+    it('should return parent NFT group information', async () => {
+      sandbox.stub(axios, 'get').resolves({ data: mockData.mockNftGroup })
+
+      const tokenId = '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9'
+      const result = await bchjs.SLP.NFT1.parentNFTGroup(tokenId)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'nftGroup')
+      assert.property(result.nftGroup, 'id')
+      assert.property(result.nftGroup, 'name')
+      assert.property(result.nftGroup, 'symbol')
+      assert.property(result.nftGroup, 'documentUri')
+      assert.property(result.nftGroup, 'versionType')
+      assert.property(result.nftGroup, 'initialTokenQty')
+    })
+  })
 })
