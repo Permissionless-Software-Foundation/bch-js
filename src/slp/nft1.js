@@ -421,9 +421,9 @@ class Nft1 {
   }
 
   /**
-   * @api SLP.Nft1.listNFTGroupChildren() listNFTGroupChildren()
+   * @api SLP.NFT1.listNFTGroupChildren() listNFTGroupChildren()
    * @apiName listNFTGroupChildren
-   * @apiGroup SLP Nft1
+   * @apiGroup SLP NFT1
    * @apiDescription Return list of NFT children tokens in a NFT Group.
    * It's assumed provided groupId parameter is for an NFT Group token (type=129)
    *
@@ -460,9 +460,9 @@ class Nft1 {
   }
 
   /**
-   * @api SLP.Nft1.parentNFTGroup() parentNFTGroup()
+   * @api SLP.NFT1.parentNFTGroup() parentNFTGroup()
    * @apiName parentNFTGroup
-   * @apiGroup SLP Nft1
+   * @apiGroup SLP NFT1
    * @apiDescription Return parent NFT Group information for a given NFT child token.
    * It's assumed provided groupId parameter is for an NFT Child token (type=65)
    *
