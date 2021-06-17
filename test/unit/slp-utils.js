@@ -10,7 +10,7 @@ let uut
 
 const REST_URL = process.env.RESTURL
   ? process.env.RESTURL
-  : 'https://bchn.fullstack.cash/v4/'
+  : 'https://bchn.fullstack.cash/v5/'
 
 // Mock data used for unit tests
 const mockDataLib = require('./fixtures/slp/mock-utils')

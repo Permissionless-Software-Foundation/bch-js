@@ -6,7 +6,7 @@ const coininfo = require('@psf/coininfo')
 class Address {
   constructor (config) {
     const tmp = {}
-    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v4/'
+    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v5/'
     else tmp.restURL = config.restURL
 
     this.restURL = tmp.restURL
