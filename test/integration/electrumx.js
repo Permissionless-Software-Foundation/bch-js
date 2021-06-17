@@ -359,10 +359,12 @@ describe('#ElectrumX', () => {
       try {
         await bchjs.Electrumx.broadcast(txHex)
       } catch (err) {
+        // console.log('err: ', err)
+
         assert.property(err, 'success')
         assert.equal(err.success, false)
         assert.include(
-          err.error,
+          err.error.error,
           'the transaction was rejected by network rules'
         )
       }
