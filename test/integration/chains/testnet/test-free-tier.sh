@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export RESTURL=https://free-test.fullstack.cash/v4/
+export RESTURL=https://free-test.fullstack.cash/v5/
 export NETWORK=testnet
 export IS_USING_FREE_TIER=true
 

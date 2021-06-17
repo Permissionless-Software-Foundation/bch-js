@@ -7,11 +7,11 @@ const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
-  : 'https://testnet3.fullstack.cash/v4/'
+  : 'https://testnet3.fullstack.cash/v5/'
 // if (process.env.RESTURL) RESTURL = process.env.RESTURL
 
 const BCHJS = require('../../../../src/bch-js')
-// const bchjs = new BCHJS({ restURL: `https://testnet.bchjs.cash/v4/` })
+// const bchjs = new BCHJS({ restURL: `https://testnet.bchjs.cash/v5/` })
 const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 // Inspect utility used for debugging.
