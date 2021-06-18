@@ -68,7 +68,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2')
+        }
 
         // const result = await bchjs.Electrumx.utxo(addr)
         // console.log(`result: ${util.inspect(result)}`)
@@ -121,7 +123,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2')
+        }
 
         const result = await bchjs.Electrumx.balance(addr)
 
@@ -175,7 +179,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2')
+        }
 
         const result = await bchjs.Electrumx.transactions(addr)
 
@@ -236,7 +242,9 @@ describe('#ElectrumX', () => {
     it('should throw error on array size rate limit', async () => {
       try {
         const addr = []
-        for (let i = 0; i < 25; i++) { addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2') }
+        for (let i = 0; i < 25; i++) {
+          addr.push('bchtest:qrvn2n228aa39xupcw9jw0d3fj8axxky656e4j62z2')
+        }
 
         await bchjs.Electrumx.unconfirmed(addr)
         // console.log(`result: ${util.inspect(result)}`)
@@ -355,7 +363,7 @@ describe('#ElectrumX', () => {
         assert.property(err, 'success')
         assert.equal(err.success, false)
         assert.include(
-          err.error,
+          err.error.error,
           'the transaction was rejected by network rules'
         )
       }
