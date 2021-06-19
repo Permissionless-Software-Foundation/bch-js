@@ -137,6 +137,8 @@ class Transaction {
       return txDetails
     } catch (err) {
       console.error('Error in transactions.js/get()')
+
+      if (err.error) throw new Error(err.error)
       throw err
     }
   }

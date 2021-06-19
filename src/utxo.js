@@ -276,6 +276,8 @@ class UTXO {
       return retAry
     } catch (err) {
       console.error('Error in bchjs.utxo.get()')
+
+      if (err.error) throw new Error(err.error)
       throw err
     }
   }
