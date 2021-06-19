@@ -251,9 +251,13 @@ describe('#rawtransaction', () => {
   describe('#_getInputAddrs', () => {
     it('should return an array of input addresses', async () => {
       // const txid = '32233db13f2ae6d82b6262f335643dccf09fc0bcfcef4bc3fbe023355f02e112'
-      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+      const txid =
+        '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
-      const txDetails = await bchjs.RawTransactions.getRawTransaction(txid, true)
+      const txDetails = await bchjs.RawTransactions.getRawTransaction(
+        txid,
+        true
+      )
 
       const result = await bchjs.RawTransactions._getInputAddrs(txDetails)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -268,7 +272,8 @@ describe('#rawtransaction', () => {
 
   describe('#getTxData', () => {
     it('should return tx data with input addresses', async () => {
-      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+      const txid =
+        '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
       const result = await bchjs.RawTransactions.getTxData(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
