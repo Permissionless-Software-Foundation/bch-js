@@ -120,8 +120,8 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -186,8 +186,8 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -283,8 +283,8 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -329,8 +329,8 @@ class RawTransactions {
 
       return retArray
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -383,8 +383,8 @@ class RawTransactions {
 
       return txDetails
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -457,8 +457,8 @@ class RawTransactions {
 
       throw new Error('Input hex must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
       if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
