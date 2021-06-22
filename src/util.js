@@ -28,7 +28,7 @@ class Util {
   }
 
   /**
-   * @api util.floor8() floor8()
+   * @api Util.floor8() floor8()
    * @apiName floor8
    * @apiGroup Util
    * @apiDescription Round a number down to 8 decimal places.
@@ -63,7 +63,7 @@ class Util {
   }
 
   /**
-   * @api util.floor2() floor2()
+   * @api Util.floor2() floor2()
    * @apiName floor2
    * @apiGroup Util
    * @apiDescription Round a number down to 2 decimal places.
@@ -98,7 +98,7 @@ class Util {
   }
 
   /**
-   * @api util.chunk20() chunk20()
+   * @api Util.chunk20() chunk20()
    * @apiName chunk20
    * @apiGroup Util
    * @apiDescription chunk up an array into multiple arrays of 20 elements each.
@@ -151,7 +151,7 @@ class Util {
   }
 
   /**
-   * @api util.sleep() sleep()
+   * @api Util.sleep() sleep()
    * @apiName sleep
    * @apiGroup Util
    * @apiDescription Promise-based delay.
@@ -175,7 +175,7 @@ class Util {
   }
 
   /**
-   * @api util.validateAddress() validateAddress()
+   * @api Util.validateAddress() validateAddress()
    * @apiName Validate Address.
    * @apiGroup Util
    * @apiDescription Return information about the given bitcoin address.

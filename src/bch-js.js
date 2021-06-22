@@ -32,6 +32,7 @@ const IPFS = require('./ipfs')
 const Encryption = require('./encryption')
 const Utxo = require('./utxo')
 const Transaction = require('./transaction')
+const DSProof = require('./dsproof')
 
 // Indexers
 const Ninsight = require('./ninsight')
@@ -115,6 +116,8 @@ class BCHJS {
     this.IPFS = new IPFS()
     this.Utxo = new Utxo(libConfig)
     this.Transaction = new Transaction(libConfig)
+
+    this.DSProof = new DSProof(libConfig)
   }
 }
 
