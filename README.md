@@ -57,7 +57,7 @@ rate limits when interacting with the back end server. See [this article](https:
 ```
 const BCHJS = require("@psf/bch-js")
 let bchjs = new BCHJS({
-  restURL: 'https://bchn.fullstack.cash/v3/',
+  restURL: 'https://bchn.fullstack.cash/v5/',
   apiToken: 'eyJhbGciO...' // Your JWT token here.
 })
 ```
