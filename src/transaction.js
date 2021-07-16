@@ -37,7 +37,9 @@ class Transaction {
   async get (txid) {
     try {
       if (typeof txid !== 'string') {
-        throw new Error('Input must be a string or array of strings.')
+        throw new Error(
+          'Input to Transaction.get() must be a string containing a TXID.'
+        )
       }
 
       const txDetails = await this.rawTransaction.getTxData(txid)
@@ -136,7 +138,7 @@ class Transaction {
 
       return txDetails
     } catch (err) {
-      console.error('Error in transactions.js/get()')
+      // console.error('Error in transactions.js/get(): ', err)
 
       if (err.error) throw new Error(err.error)
       throw err
