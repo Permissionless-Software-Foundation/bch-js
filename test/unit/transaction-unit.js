@@ -25,7 +25,7 @@ describe('#TransactionLib', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'Input must be a string or array of strings.'
+          'Input to Transaction.get() must be a string containing a TXID.'
         )
       }
     })

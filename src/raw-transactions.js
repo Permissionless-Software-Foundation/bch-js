@@ -365,7 +365,9 @@ class RawTransactions {
   async getTxData (txid) {
     try {
       if (typeof txid !== 'string') {
-        throw new Error('Input must be a string or array of strings.')
+        throw new Error(
+          'Input to raw-transaction.js/getTxData() must be a string containg a TXID.'
+        )
       }
 
       // Get the TX details for the transaction under consideration.
