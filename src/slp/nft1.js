@@ -432,7 +432,7 @@ class Nft1 {
    * @apiExample Example usage:
    *
    * const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
-   * const children = await bchjs.SLP.Nft1.listNFTGroupChildren(groupId)
+   * const children = await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
    *
    * children = {
    *  "nftChildren": [
@@ -471,7 +471,7 @@ class Nft1 {
    * @apiExample Example usage:
    *
    * const tokenId = '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9'
-   * const group = await bchjs.SLP.Nft1.parentNFTGroup(tokenId)
+   * const group = await bchjs.SLP.NFT1.parentNFTGroup(tokenId)
    *
    * group = {
    *   "nftGroup": {
