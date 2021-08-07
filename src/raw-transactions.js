@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class RawTransactions {
   constructor (config) {
@@ -27,7 +27,7 @@ class RawTransactions {
     // Encapsulate dependencies
     this.axios = axios
 
-    _this = this
+    // this = this
   }
 
   /**
@@ -98,7 +98,7 @@ class RawTransactions {
       if (typeof hex === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -111,7 +111,7 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -166,7 +166,7 @@ class RawTransactions {
       if (typeof script === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeScript/${script}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -177,7 +177,7 @@ class RawTransactions {
           data: {
             hexes: script
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -261,7 +261,7 @@ class RawTransactions {
       if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -274,7 +274,7 @@ class RawTransactions {
             verbose: verbose,
             usrObj // pass user data when making an internal call.
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -429,7 +429,7 @@ class RawTransactions {
       if (typeof hex === 'string') {
         const response = await this.axios.get(
           `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         if (response.data === '66: insufficient priority') {
@@ -450,9 +450,9 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
-        const response = await _this.axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }
