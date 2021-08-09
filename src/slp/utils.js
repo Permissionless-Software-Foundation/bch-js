@@ -450,13 +450,14 @@ class Utils {
     else txids = txid
 
     try {
+      console.log('validateTxid() this.axiosOptions: ', this.axiosOptions)
       const response = await _this.axios.post(
         path,
         {
           txids: txids,
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(
       //   `validateTxid response.data: ${JSON.stringify(response.data, null, 2)}`
@@ -520,7 +521,8 @@ class Utils {
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      console.log('validateTxid2() this.axiosOptions: ', this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -666,13 +668,14 @@ class Utils {
     else txids = txid
 
     try {
+      console.log('validateTxid3() this.axiosOptions: ', this.axiosOptions)
       const response = await _this.axios.post(
         path,
         {
           txids: txids,
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
@@ -967,14 +970,15 @@ class Utils {
       // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction`
-      const response = await _this.axios.post(
+      console.log('decodeOpReturn() this.axiosOptions: ', this.axiosOptions)
+      const response = await this.axios.post(
         path,
         {
           verbose: true,
           txids: [txid],
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       const txDetails = response.data[0]
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
@@ -1647,6 +1651,11 @@ class Utils {
       // could not be validated.
       return isValid
     } catch (error) {
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      }
+
       // console.log('Error in waterfallValidateTxid()')
       if (error.response && error.response.data) throw error.response.data
       throw error
