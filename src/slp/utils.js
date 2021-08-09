@@ -11,7 +11,7 @@ const Util = require('../util')
 let _this
 
 class Utils {
-  constructor (config) {
+  constructor(config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.slpParser = slpParser
@@ -197,7 +197,7 @@ class Utils {
    * circulatingSupply: 19882.03820723,
    * mintingBatonStatus: 'ALIVE' } ]
    */
-  async list (id) {
+  async list(id) {
     let path
     let method
 
@@ -309,7 +309,7 @@ class Utils {
    * array of addresses.
    */
   // Retrieve token balances for a given address.
-  async balancesForAddress (address) {
+  async balancesForAddress(address) {
     try {
       // Single address.
       if (typeof address === 'string') {
@@ -376,7 +376,7 @@ class Utils {
    *
    */
   // Retrieve token balances for a given tokenId.
-  async balancesForToken (tokenId) {
+  async balancesForToken(tokenId) {
     try {
       const path = `${this.restURL}slp/balancesForToken/${tokenId}`
 
@@ -438,7 +438,7 @@ class Utils {
   // will be like the examples above. If SLPDB has fallen behind real-time
   // processing, it will return this output:
   // [ null ]
-  async validateTxid (txid, usrObj = null) {
+  async validateTxid(txid, usrObj = null) {
     const path = `${this.restURL}slp/validateTxid`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
@@ -506,7 +506,7 @@ class Utils {
    * 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
    * valid: true } ]
    */
-  async validateTxid2 (txid) {
+  async validateTxid2(txid) {
     try {
       // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
 
@@ -585,7 +585,7 @@ class Utils {
    *   }
    * ]
    */
-  async getWhitelist () {
+  async getWhitelist() {
     try {
       const path = `${this.restURL}slp/whitelist`
 
@@ -655,7 +655,7 @@ class Utils {
    *     '00ea27261196a411776f81029c0ebe34362936b4a9847deb1f7a40a02b3a1476',
    *    valid: true } ]
    */
-  async validateTxid3 (txid, usrObj = null) {
+  async validateTxid3(txid, usrObj = null) {
     const path = `${this.restURL}slp/validateTxid3`
 
     // console.log(`txid: ${JSON.stringify(txid, null, 2)}`)
@@ -731,7 +731,7 @@ class Utils {
    *  satoshisLockedUp: 135408
    * }
    */
-  async tokenStats (tokenId) {
+  async tokenStats(tokenId) {
     try {
       const path = `${this.restURL}slp/tokenStats/${tokenId}`
 
@@ -802,7 +802,7 @@ class Utils {
    * ]
    */
   // Retrieve token transactions for a given tokenId and address.
-  async transactions (tokenId, address) {
+  async transactions(tokenId, address) {
     try {
       const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
 
@@ -842,7 +842,7 @@ class Utils {
    *  burnTotal: 100
    * }
    */
-  async burnTotal (transactionId) {
+  async burnTotal(transactionId) {
     try {
       const path = `${this.restURL}slp/burnTotal/${transactionId}`
 
@@ -876,7 +876,7 @@ class Utils {
    * })()
    *
    */
-  async txDetails (txid) {
+  async txDetails(txid) {
     try {
       if (
         !txid ||
@@ -942,7 +942,7 @@ class Utils {
    *
    */
   // Reimplementation of decodeOpReturn() using slp-parser.
-  async decodeOpReturn (txid, cache = null, usrObj = null) {
+  async decodeOpReturn(txid, cache = null, usrObj = null) {
     // The cache object is an in-memory cache (JS Object) that can be passed
     // into this function. It helps if multiple vouts from the same TXID are
     // being evaluated. In that case, it can significantly reduce the number
@@ -1109,7 +1109,7 @@ class Utils {
    *  "tokenType": 1
    * }
    */
-  async tokenUtxoDetails (utxos, usrObj = null) {
+  async tokenUtxoDetails(utxos, usrObj = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1200,7 +1200,7 @@ class Utils {
    * could burn tokens. It's safest to ignore UTXOs with a value of `null`.
    *
    */
-  async tokenUtxoDetailsWL (utxos, usrObj = null) {
+  async tokenUtxoDetailsWL(utxos, usrObj = null) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1294,7 +1294,7 @@ class Utils {
   //
   // If the usrObj has a utxoDelay property, then it will delay the loop for
   // each UTXO by that many milliseconds.
-  async _hydrateUtxo (utxos, usrObj = null) {
+  async _hydrateUtxo(utxos, usrObj = null) {
     try {
       const decodeOpReturnCache = {}
 
@@ -1557,7 +1557,7 @@ class Utils {
    * // returns
    * true
    */
-  async waterfallValidateTxid (txid, usrObj = null) {
+  async waterfallValidateTxid(txid, usrObj = null) {
     try {
       // console.log('txid: ', txid)
 
@@ -1588,25 +1588,31 @@ class Utils {
       // Note: validateTxid3() has the same output as validateTxid().
       // validateTxid2() uses slp-validate, which has a different output format.
 
-      // Validate against the whitelist SLPDB first.
-      const whitelistResult = await this.validateTxid3(txid, usrObj)
-      // console.log(
-      //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
-      //     whitelistResult,
-      //     null,
-      //     2
-      //   )}`
-      // )
+      // If the whitelist SLPDB is having issues, the try/catch will skip it
+      // and continue execution.
+      try {
+        // Validate against the whitelist SLPDB first.
+        const whitelistResult = await this.validateTxid3(txid, usrObj)
+        // console.log(
+        //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
+        //     whitelistResult,
+        //     null,
+        //     2
+        //   )}`
+        // )
 
-      // Safely retrieve the returned value.
-      if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
+        // Safely retrieve the returned value.
+        if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
 
-      // Exit if isValid is not null.
-      if (isValid !== null) {
-        // Save to the cache.
-        cachedTxValidation[txid] = isValid
+        // Exit if isValid is not null.
+        if (isValid !== null) {
+          // Save to the cache.
+          cachedTxValidation[txid] = isValid
 
-        return isValid
+          return isValid
+        }
+      } catch {
+        /* exit quietly */
       }
 
       // Try the general SLPDB, if the whitelist returned null.
@@ -1842,7 +1848,7 @@ class Utils {
    */
   // Same as tokenUtxoDetails(), but reduces API calls by having bch-api server
   // do the heavy lifting.
-  async hydrateUtxos (utxos, usrObj) {
+  async hydrateUtxos(utxos, usrObj) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1858,6 +1864,8 @@ class Utils {
 
       return response.data
     } catch (error) {
+      console.log('Error in hydrateUtxos(): ', error)
+
       if (error.response && error.response.data) {
         throw new Error(JSON.stringify(error.response.data, null, 2))
       }
@@ -1881,7 +1889,7 @@ class Utils {
    */
   // Same as tokenUtxoDetailsWL(), but reduces API calls by having bch-api server
   // do the heavy lifting.
-  async hydrateUtxosWL (utxos) {
+  async hydrateUtxosWL(utxos) {
     try {
       // Throw error if input is not an array.
       if (!Array.isArray(utxos)) throw new Error('Input must be an array.')
@@ -1927,7 +1935,7 @@ class Utils {
    * valid: true } ]
    *
    */
-  async getStatus (txid) {
+  async getStatus(txid) {
     const path = `${this.restURL}slp/status`
 
     try {
