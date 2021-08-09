@@ -1588,25 +1588,31 @@ class Utils {
       // Note: validateTxid3() has the same output as validateTxid().
       // validateTxid2() uses slp-validate, which has a different output format.
 
-      // Validate against the whitelist SLPDB first.
-      const whitelistResult = await this.validateTxid3(txid, usrObj)
-      // console.log(
-      //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
-      //     whitelistResult,
-      //     null,
-      //     2
-      //   )}`
-      // )
+      // If the whitelist SLPDB is having issues, the try/catch will skip it
+      // and continue execution.
+      try {
+        // Validate against the whitelist SLPDB first.
+        const whitelistResult = await this.validateTxid3(txid, usrObj)
+        // console.log(
+        //   `whitelist-SLPDB for ${txid}: ${JSON.stringify(
+        //     whitelistResult,
+        //     null,
+        //     2
+        //   )}`
+        // )
 
-      // Safely retrieve the returned value.
-      if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
+        // Safely retrieve the returned value.
+        if (whitelistResult[0] !== null) isValid = whitelistResult[0].valid
 
-      // Exit if isValid is not null.
-      if (isValid !== null) {
-        // Save to the cache.
-        cachedTxValidation[txid] = isValid
+        // Exit if isValid is not null.
+        if (isValid !== null) {
+          // Save to the cache.
+          cachedTxValidation[txid] = isValid
 
-        return isValid
+          return isValid
+        }
+      } catch {
+        /* exit quietly */
       }
 
       // Try the general SLPDB, if the whitelist returned null.
@@ -1858,6 +1864,8 @@ class Utils {
 
       return response.data
     } catch (error) {
+      console.log('Error in hydrateUtxos(): ', error)
+
       if (error.response && error.response.data) {
         throw new Error(JSON.stringify(error.response.data, null, 2))
       }
