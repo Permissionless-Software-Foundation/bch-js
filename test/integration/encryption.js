@@ -5,7 +5,7 @@ const bchjs = new BCHJS()
 
 describe('#Encryption', () => {
   beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
   describe('#getPubKey', () => {
