@@ -68,7 +68,7 @@ class DSProof {
       }
       const response = await _this.axios.get(
         `${this.restURL}dsproof/getdsproof/${txid}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {

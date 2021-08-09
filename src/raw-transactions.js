@@ -259,6 +259,10 @@ class RawTransactions {
   async getRawTransaction (txid, verbose = false, usrObj = null) {
     try {
       if (typeof txid === 'string') {
+        // console.log(
+        //   'getRawTransaction() this.axiosOptions: ',
+        //   this.axiosOptions
+        // )
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
           this.axiosOptions
@@ -284,8 +288,13 @@ class RawTransactions {
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.error) throw new Error(error.error)
-      else if (error.response && error.response.data) throw error.response.data
-      else throw error
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -330,8 +339,13 @@ class RawTransactions {
       return retArray
     } catch (error) {
       if (error.error) throw new Error(error.error)
-      else if (error.response && error.response.data) throw error.response.data
-      else throw error
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -386,8 +400,13 @@ class RawTransactions {
       return txDetails
     } catch (error) {
       if (error.error) throw new Error(error.error)
-      else if (error.response && error.response.data) throw error.response.data
-      else throw error
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 

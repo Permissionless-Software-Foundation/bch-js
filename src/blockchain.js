@@ -5,7 +5,7 @@
 
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Blockchain {
   constructor (config) {
@@ -29,7 +29,7 @@ class Blockchain {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -54,7 +54,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBestBlockHash`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -112,7 +112,7 @@ class Blockchain {
           blockhash,
           verbosity
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -162,7 +162,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockchainInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -193,7 +193,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockCount`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -226,7 +226,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockHash/${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -273,7 +273,7 @@ class Blockchain {
       if (typeof hash === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/getBlockHeader/${hash}?verbose=${verbose}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -287,7 +287,7 @@ class Blockchain {
             hashes: hash,
             verbose: verbose
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -334,7 +334,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getChainTips`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -366,7 +366,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getDifficulty`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -382,7 +382,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolAncestors/${txid}?verbose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -397,7 +397,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolDescendants/${txid}?verbose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -494,7 +494,7 @@ class Blockchain {
       if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/getMempoolEntry/${txid}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -505,7 +505,7 @@ class Blockchain {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -545,7 +545,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -592,7 +592,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getRawMempool?vebose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -636,7 +636,7 @@ class Blockchain {
       // Send the request to the REST API.
       // const response = await axios.get(
       //   `${this.restURL}blockchain/getTxOut/${txid}/${n}?includeMempool=${includeMempool}`,
-      //   _this.axiosOptions
+      //   this.axiosOptions
       // )
       const response = await axios.post(
         `${this.restURL}blockchain/getTxOut`,
@@ -645,7 +645,7 @@ class Blockchain {
           vout: n,
           mempool: includeMempool
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       return response.data
@@ -698,7 +698,7 @@ class Blockchain {
         const path = `${this.restURL}blockchain/getTxOutProof/${txids}`
         // if (blockhash) path = `${path}?blockhash=${blockhash}`
 
-        const response = await axios.get(path, _this.axiosOptions)
+        const response = await axios.get(path, this.axiosOptions)
         return response.data
 
         // Array of txids.
@@ -709,7 +709,7 @@ class Blockchain {
           {
             txids: txids
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -726,7 +726,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/preciousBlock/${blockhash}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -739,7 +739,7 @@ class Blockchain {
     try {
       const response = await axios.post(
         `${this.restURL}blockchain/pruneBlockchain/${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -752,7 +752,7 @@ class Blockchain {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/verifyChain?checklevel=${checklevel}&nblocks=${nblocks}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -804,7 +804,7 @@ class Blockchain {
       if (typeof proof === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/verifyTxOutProof/${proof}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -816,7 +816,7 @@ class Blockchain {
           {
             proofs: proof
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data

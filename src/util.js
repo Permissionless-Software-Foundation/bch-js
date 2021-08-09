@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Util {
   constructor (config) {
@@ -24,7 +24,7 @@ class Util {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -225,7 +225,7 @@ class Util {
       if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}util/validateAddress/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 

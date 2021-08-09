@@ -217,14 +217,14 @@ class Utils {
     try {
       let response
       if (method === 'get') {
-        response = await _this.axios.get(path, _this.axiosOptions)
+        response = await _this.axios.get(path, this.axiosOptions)
       } else {
         response = await _this.axios.post(
           path,
           {
             tokenIds: id
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
       }
       return response.data
@@ -315,7 +315,7 @@ class Utils {
       if (typeof address === 'string') {
         const path = `${this.restURL}slp/balancesForAddress/${address}`
 
-        const response = await _this.axios.get(path, _this.axiosOptions)
+        const response = await _this.axios.get(path, this.axiosOptions)
         return response.data
 
         // Array of addresses.
@@ -328,7 +328,7 @@ class Utils {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -380,7 +380,7 @@ class Utils {
     try {
       const path = `${this.restURL}slp/balancesForToken/${tokenId}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -450,13 +450,14 @@ class Utils {
     else txids = txid
 
     try {
+      // console.log('validateTxid() this.axiosOptions: ', this.axiosOptions)
       const response = await _this.axios.post(
         path,
         {
           txids: txids,
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(
       //   `validateTxid response.data: ${JSON.stringify(response.data, null, 2)}`
@@ -520,7 +521,8 @@ class Utils {
 
       const path = `${this.restURL}slp/validateTxid2/${txid}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      // console.log('validateTxid2() this.axiosOptions: ', this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -589,7 +591,7 @@ class Utils {
 
       // Retrieve the whitelist from the REST API if we haven't gotten it yet.
       if (this.whitelist.length === 0) {
-        const response = await _this.axios.get(path, _this.axiosOptions)
+        const response = await _this.axios.get(path, this.axiosOptions)
         // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
         this.whitelist = response.data
@@ -666,13 +668,14 @@ class Utils {
     else txids = txid
 
     try {
+      // console.log('validateTxid3() this.axiosOptions: ', this.axiosOptions)
       const response = await _this.axios.post(
         path,
         {
           txids: txids,
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
@@ -732,7 +735,7 @@ class Utils {
     try {
       const path = `${this.restURL}slp/tokenStats/${tokenId}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
 
       return response.data
     } catch (error) {
@@ -803,7 +806,7 @@ class Utils {
     try {
       const path = `${this.restURL}slp/transactions/${tokenId}/${address}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
 
       return response.data
     } catch (error) {
@@ -843,7 +846,7 @@ class Utils {
     try {
       const path = `${this.restURL}slp/burnTotal/${transactionId}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
 
       return response.data
     } catch (error) {
@@ -887,7 +890,7 @@ class Utils {
       // console.log(`this.restURL: ${this.restURL}`)
       const path = `${this.restURL}slp/txDetails/${txid}`
 
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -967,14 +970,15 @@ class Utils {
       // CT: 2/24/21 Deprected GET in favor of POST, to pass IP address.
       // Retrieve the transaction object from the full node.
       const path = `${this.restURL}rawtransactions/getRawTransaction`
-      const response = await _this.axios.post(
+      // console.log('decodeOpReturn() this.axiosOptions: ', this.axiosOptions)
+      const response = await this.axios.post(
         path,
         {
           verbose: true,
           txids: [txid],
           usrObj // pass user data when making an internal call.
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
       const txDetails = response.data[0]
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
@@ -1647,6 +1651,11 @@ class Utils {
       // could not be validated.
       return isValid
     } catch (error) {
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      }
+
       // console.log('Error in waterfallValidateTxid()')
       if (error.response && error.response.data) throw error.response.data
       throw error
@@ -1844,7 +1853,7 @@ class Utils {
           utxos: utxos,
           usrObj
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       return response.data
@@ -1882,7 +1891,7 @@ class Utils {
         {
           utxos: utxos
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       return response.data
@@ -1922,7 +1931,7 @@ class Utils {
     const path = `${this.restURL}slp/status`
 
     try {
-      const response = await _this.axios.get(path, _this.axiosOptions)
+      const response = await _this.axios.get(path, this.axiosOptions)
       // console.log(
       //   `getStatus response.data: ${JSON.stringify(response.data, null, 2)}`
       // )
