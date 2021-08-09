@@ -131,6 +131,11 @@ class Transaction {
       } catch (err) {
         // console.log('Error: ', err)
 
+        // This case handles rate limit errors.
+        if (err.response && err.response.data && err.response.data.error) {
+          throw new Error(err.response.data.error)
+        }
+
         // If decoding the op_return fails, then it's not an SLP transaction,
         // and the non-hyrated TX details can be returned.
         return txDetails
@@ -139,6 +144,11 @@ class Transaction {
       return txDetails
     } catch (err) {
       // console.error('Error in transactions.js/get(): ', err)
+
+      // This case handles rate limit errors.
+      if (err.response && err.response.data && err.response.data.error) {
+        throw new Error(err.response.data.error)
+      }
 
       if (err.error) throw new Error(err.error)
       throw err
