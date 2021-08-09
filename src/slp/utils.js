@@ -680,6 +680,14 @@ class Utils {
 
       return validatedTxids
     } catch (error) {
+      // console.log('validateTxid3 error: ', error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      }
+
+      // Not sure if this can be safely deprecated?
       if (error.response && error.response.data) throw error.response.data
       throw error
     }
