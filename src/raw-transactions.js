@@ -259,10 +259,10 @@ class RawTransactions {
   async getRawTransaction (txid, verbose = false, usrObj = null) {
     try {
       if (typeof txid === 'string') {
-        console.log(
-          'getRawTransaction() this.axiosOptions: ',
-          this.axiosOptions
-        )
+        // console.log(
+        //   'getRawTransaction() this.axiosOptions: ',
+        //   this.axiosOptions
+        // )
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
           this.axiosOptions

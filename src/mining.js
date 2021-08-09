@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Mining {
   constructor (config) {
@@ -24,14 +24,14 @@ class Mining {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   async getBlockTemplate (templateRequest) {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getBlockTemplate/${templateRequest}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -44,7 +44,7 @@ class Mining {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getMiningInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -57,7 +57,7 @@ class Mining {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getNetworkHashps?nblocks=${nblocks}&height=${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -71,7 +71,7 @@ class Mining {
     if (parameters) path = `${path}?parameters=${parameters}`
 
     try {
-      const response = await axios.post(path, _this.axiosOptions)
+      const response = await axios.post(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data

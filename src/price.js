@@ -1,10 +1,10 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Price {
   constructor (config) {
-    _this = this
+    // _this = this
 
     this.restURL = config.restURL
     this.apiToken = config.apiToken
@@ -68,7 +68,7 @@ class Price {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/usd`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
@@ -111,7 +111,7 @@ class Price {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/rates`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
@@ -146,7 +146,7 @@ class Price {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/bchausd`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 
@@ -181,7 +181,7 @@ class Price {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/bchusd`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
 

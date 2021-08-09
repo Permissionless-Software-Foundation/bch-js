@@ -125,13 +125,13 @@ class TokenType1 {
         // console.log('baseChange: ', baseChange)
 
         // Check for potential burns
-        const outputQty = new BigNumber(baseChange).plus(
-          new BigNumber(baseQty)
-        )
+        const outputQty = new BigNumber(baseChange).plus(new BigNumber(baseQty))
         const inputQty = new BigNumber(totalTokens)
         const tokenOutputDelta = outputQty.minus(inputQty).toString() !== '0'
         if (tokenOutputDelta) {
-          throw new Error('Token transaction inputs do not match outputs, cannot send transaction')
+          throw new Error(
+            'Token transaction inputs do not match outputs, cannot send transaction'
+          )
         }
 
         // Generate the OP_RETURN as a Buffer.
@@ -152,7 +152,9 @@ class TokenType1 {
         const tokenSingleOutputError =
           noChangeOutputQty.minus(noChangeInputQty).toString() !== '0'
         if (tokenSingleOutputError) {
-          throw new Error('Token transaction inputs do not match outputs, cannot send transaction')
+          throw new Error(
+            'Token transaction inputs do not match outputs, cannot send transaction'
+          )
         }
 
         // Generate the OP_RETURN as a Buffer.
@@ -378,9 +380,7 @@ class TokenType1 {
 
       // Throw an error if the minting baton could not be found.
       if (!mintBatonUtxo) {
-        throw new Error(
-          'Minting baton could not be found in tokenUtxos array.'
-        )
+        throw new Error('Minting baton could not be found in tokenUtxos array.')
       }
 
       const tokenId = mintBatonUtxo.tokenId
@@ -454,7 +454,7 @@ class TokenType1 {
       const result = await _this.axios.post(
         `${this.restURL}slp/generatesendopreturn`,
         data,
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       const slpSendObj = result.data

@@ -35,11 +35,13 @@ class Encryption {
   // Search the blockchain for a public key associated with a BCH address.
   async getPubKey (addr) {
     try {
-      if (!addr || typeof addr !== 'string') { throw new Error('Input must be a valid Bitcoin Cash address.') }
+      if (!addr || typeof addr !== 'string') {
+        throw new Error('Input must be a valid Bitcoin Cash address.')
+      }
 
       const response = await _this.axios.get(
         `${this.restURL}encryption/publickey/${addr}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
