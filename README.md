@@ -35,15 +35,15 @@ const BCHJS = require("@psf/bch-js")
 let bchjs = new BCHJS() // Defaults to BCHN network.
 
 // testnet
-bchjs = new BCHJS({ restURL: 'https://testnet3.fullstack.cash/v4/' })
+bchjs = new BCHJS({ restURL: 'https://testnet3.fullstack.cash/v5/' })
 ```
 
 This library is intended to be paired with
 the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API, and the infrastructure provided by [FullStack.cash](https://fullstack.cash). The `restURL` property can be changed to work with different Bitcoin Cash networks:
 
-- BCHN Mainnet REST API server: https://bchn.fullstack.cash/v4/
-- ABC Mainnet REST API server: https://abc.fullstack.cash/v4/
-- Testnet3 REST API server: https://testnet3.fullstack.cash/v4/
+- BCHN Mainnet REST API server: https://bchn.fullstack.cash/v5/
+- ABC Mainnet REST API server: https://abc.fullstack.cash/v5/
+- Testnet3 REST API server: https://testnet3.fullstack.cash/v5/
 - Check server status: https://metrics.fullstack.cash
 
 ### API Key
