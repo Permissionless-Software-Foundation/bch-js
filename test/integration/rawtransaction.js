@@ -19,7 +19,7 @@ util.inspect.defaultOptions = {
 
 describe('#rawtransaction', () => {
   beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
   describe('#decodeRawTransaction', () => {
@@ -191,8 +191,7 @@ describe('#rawtransaction', () => {
         console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.include(err.message, 'Array too large')
       }
     })
   })
