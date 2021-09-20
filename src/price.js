@@ -127,8 +127,9 @@ class Price {
    * @apiName Price getBchaUsd()
    * @apiGroup Price
    * @apiDescription Return current price of BCHA in USD.
-   * This endpoint gets the USD price of BCHA from the Coinex API. The price
-   * comes from bch-api, so it has a better chance of working in Tor.
+   * This endpoint gets the USD price of XEC from the Coinex API. The price
+   * denominated in BCHA comes from bch-api, so it has a better chance of 
+   * working in Tor.
    *
    * @apiExample Example usage:
    *(async () => {
@@ -140,9 +141,47 @@ class Price {
    *  }
    *})()
    *
-   * // 18.81
+   * // 212.34
    */
   async getBchaUsd () {
+    try {
+      const response = await this.axios.get(
+        `${this.restURL}price/bchausd`,
+        this.axiosOptions
+      )
+      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+      
+      const bchaPrice = response.data.usd * 1000000
+      // Convert XEC denomination to BCHA denomination
+
+      return bchaPrice
+    } catch (err) {
+      if (err.response && err.response.data) throw err.response.data
+      else throw err
+    }
+  }
+
+    /**
+   * @api price.getXecUsd() getXecUsd()
+   * @apiName Price getXecUsd()
+   * @apiGroup Price
+   * @apiDescription Return current price of XEC in USD.
+   * This endpoint gets the USD price of XEC from the Coinex API. The price
+   * comes from bch-api, so it has a better chance of working in Tor.
+   *
+   * @apiExample Example usage:
+   *(async () => {
+   *  try {
+   *    let current = await bchjs.Price.getXecUsd();
+   *    console.log(current);
+   *  } catch(err) {
+   *   console.err(err)
+   *  }
+   *})()
+   *
+   * // 0.00021234 
+   */
+   async getXecUsd () {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/bchausd`,
