@@ -33,9 +33,6 @@ Here are two YouTube walk-through videos to help you get started:
 ```
 const BCHJS = require("@psf/bch-js")
 let bchjs = new BCHJS() // Defaults to BCHN network.
-
-// testnet
-bchjs = new BCHJS({ restURL: 'https://testnet3.fullstack.cash/v5/' })
 ```
 
 This library is intended to be paired with
@@ -43,7 +40,6 @@ the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) RES
 
 - BCHN Mainnet REST API server: https://bchn.fullstack.cash/v5/
 - ABC Mainnet REST API server: https://abc.fullstack.cash/v5/
-- Testnet3 REST API server: https://testnet3.fullstack.cash/v5/
 - Check server status: https://metrics.fullstack.cash
 
 ### API Key
