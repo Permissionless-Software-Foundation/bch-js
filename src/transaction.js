@@ -43,7 +43,7 @@ class Transaction {
       }
 
       const txDetails = await this.rawTransaction.getTxData(txid)
-      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+      console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
       // Setup default SLP properties.
       txDetails.isValidSLPTx = false
@@ -53,7 +53,7 @@ class Transaction {
       let outTokenData
       try {
         outTokenData = await this.slpUtils.decodeOpReturn(txid)
-        // console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
+        console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
 
         // Get Genesis data for this token.
         const genesisData = await this.slpUtils.decodeOpReturn(
@@ -61,7 +61,7 @@ class Transaction {
           // decodeOpReturnCache
           // usrObj // pass user data when making an internal call.
         )
-        // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
+        console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
         // Add token information to the tx details object.
         txDetails.tokenTxType = outTokenData.txType
@@ -97,15 +97,29 @@ class Transaction {
             // If decodeOpReturn() throws an error, then this input is not
             // from an SLP transaction and can be ignored.
             const inTokenData = await this.slpUtils.decodeOpReturn(thisVin.txid)
-            // console.log(
-            //   `vin[${i}] tokenData: ${JSON.stringify(inTokenData, null, 2)}`
-            // )
+            console.log(
+              `vin[${i}] tokenData: ${JSON.stringify(inTokenData, null, 2)}`
+            )
 
-            // Get the appropriate vout token amount. This may throw an error,
-            // which means this Vin is not actually a token UTXO, it was just
-            // associated with a previous token TX.
-            const tokenQty = inTokenData.amounts[thisVin.vout - 1]
-            // console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
+            let tokenQty = 0
+            if (inTokenData.txType === 'SEND') {
+              // Get the appropriate vout token amount. This may throw an error,
+              // which means this Vin is not actually a token UTXO, it was just
+              // associated with a previous token TX.
+              tokenQty = inTokenData.amounts[thisVin.vout - 1]
+              console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
+            } else if (inTokenData.txType === 'GENESIS') {
+              // Only vout[1] of a Genesis transaction represents the tokens.
+              // Any other outputs in that transaction are normal BCH UTXOs.
+              if (thisVin.vout === 1) {
+                tokenQty = inTokenData.qty
+                console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
+              }
+            } else {
+              console.log('Unexpected code path. Is this a MINT transaction?')
+              console.log(inTokenData)
+              throw new Error('Unexpected code path')
+            }
 
             if (tokenQty) {
               const realQty =
