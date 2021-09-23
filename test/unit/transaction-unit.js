@@ -142,7 +142,7 @@ describe('#TransactionLib', () => {
         '874306bda204d3a5dd15e03ea5732cccdca4c33a52df35162cdd64e30ea7f04e'
 
       const result = await bchjs.Transaction.get(txid)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
       assert.property(result, 'txid')
