@@ -921,7 +921,7 @@ class Utils {
    *  const txid =
    *   "266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1"
    *
-   *  const data = await slp.Utils.decodeOpReturn2(txid)
+   *  const data = await bchjs.SLP.Utils.decodeOpReturn(txid)
    *
    *  console.log(`Decoded OP_RETURN data: ${JSON.stringify(data,null,2)}`)
    * } catch (error) {
