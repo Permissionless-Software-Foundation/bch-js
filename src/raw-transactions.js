@@ -319,6 +319,9 @@ class RawTransactions {
         const inputTxid = vin.txid
         const inputVout = vin.vout
 
+        // TODO: Coinbase TXs have no input transaction. Figure out how to
+        // handle this corner case.
+
         // Get the TX details for the input, in order to retrieve the address of
         // the sender.
         const txDetailsParent = await this.getRawTransaction(inputTxid, true)
