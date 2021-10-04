@@ -1,6 +1,6 @@
 // const axios = require("axios")
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const cashaddr = require('cashaddrjs')
+const cashaddr = require('ecashaddrjs')
 const coininfo = require('@psf/coininfo')
 
 class Address {
@@ -121,6 +121,63 @@ class Address {
 
     const cashAddress = cashaddr.encode(
       prefixString,
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return cashAddress
+    return cashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.toEcashAddress() toEcashAddress()
+   * @apiName toEcashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
+   * // ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   * // mainnet no prefix
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   */
+   toEcashAddress (address, prefix = true) {
+    const decoded = this._decode(address)
+
+    const ecashAddress = cashaddr.encode(
+      'ecash',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return ecashAddress
+    return ecashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.ecashtoCashAddress() ecashtoCashAddress()
+   * @apiName ecashtoCashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da')
+   * // bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   *
+   * // mainnet no prefix
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   */
+   ecashtoCashAddress (address, prefix = true) {
+    const decoded = this._decodeEcashAddress(address)
+
+    const cashAddress = cashaddr.encode(
+      'bitcoincash',
       decoded.type,
       decoded.hash
     )
@@ -266,6 +323,22 @@ class Address {
         cashAddress: this.hash160ToCash(address),
         format: 'hash160'
       }
+    } catch (error) {}
+
+    throw new Error(`Invalid format : ${address}`)
+  }
+
+  _decodeEcashAddress (address) {
+    if (address.indexOf(':') !== -1) {
+      const decoded = cashaddr.decode(address)
+      decoded.format = 'cashaddr'
+      return decoded
+    }
+
+    try {
+      const decoded = cashaddr.decode(`ecash:${address}`)
+      decoded.format = 'cashaddr'
+      return decoded
     } catch (error) {}
 
     throw new Error(`Invalid format : ${address}`)
