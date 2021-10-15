@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
-let _this
+// let _this
 
 class Mining {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -24,14 +24,14 @@ class Mining {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
-  async getBlockTemplate(template_request) {
+  async getBlockTemplate (templateRequest) {
     try {
       const response = await axios.get(
-        `${this.restURL}mining/getBlockTemplate/${template_request}`,
-        _this.axiosOptions
+        `${this.restURL}mining/getBlockTemplate/${templateRequest}`,
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -40,11 +40,11 @@ class Mining {
     }
   }
 
-  async getMiningInfo() {
+  async getMiningInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getMiningInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -53,11 +53,11 @@ class Mining {
     }
   }
 
-  async getNetworkHashps(nblocks = 120, height = 1) {
+  async getNetworkHashps (nblocks = 120, height = 1) {
     try {
       const response = await axios.get(
         `${this.restURL}mining/getNetworkHashps?nblocks=${nblocks}&height=${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -66,12 +66,12 @@ class Mining {
     }
   }
 
-  async submitBlock(hex, parameters) {
+  async submitBlock (hex, parameters) {
     let path = `${this.restURL}mining/submitBlock/${hex}`
     if (parameters) path = `${path}?parameters=${parameters}`
 
     try {
-      const response = await axios.post(path, _this.axiosOptions)
+      const response = await axios.post(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data

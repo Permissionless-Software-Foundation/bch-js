@@ -1,11 +1,14 @@
-const BIP39 = require("bip39")
-const randomBytes = require("randombytes")
-const Bitcoin = require("bitcoincashjs-lib")
-const Buffer = require("safe-buffer").Buffer
-const wif = require("wif")
+/* eslint no-prototype-builtins: "off" */
+/* eslint node/no-callback-literal: "off" */
+
+const BIP39 = require('bip39')
+const randomBytes = require('randombytes')
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const Buffer = require('safe-buffer').Buffer
+const wif = require('wif')
 
 class Mnemonic {
-  constructor(address) {
+  constructor (address) {
     this._address = address
   }
 
@@ -45,7 +48,7 @@ class Mnemonic {
    * bchjs.Mnemonic.generate(256, bitbox.Mnemonic.wordLists().korean)
    * // 기능 단추 교육 비난 시집 근육 운동 코미디 숟가락 과목 한동안 유적 시리즈 삼월 앞날 유난히 흰색 사실 논문 장사 어른 논문 의논 장차
    */
-  generate(bits = 128, wordlist) {
+  generate (bits = 128, wordlist) {
     return BIP39.generateMnemonic(bits, randomBytes, wordlist)
   }
 
@@ -95,11 +98,8 @@ class Mnemonic {
    * // generate 16 bytes of entropy
    * let entropy = bchjs.Crypto.randomBytes(16);
    * //
-   * // turn entropy to 12 japanese word mnemonic
-   * bchjs.Mnemonic.fromEntropy(entropy.toString('hex'), bchjs.Mnemonic.wordLists().japanese)
-   * // ぱそこん　にあう　にんめい　きどく　ちそう　せんきょ　かいが　きおく　いれる　いねむり　しいく　きかんしゃ
    */
-  fromEntropy(bytes, wordlist) {
+  fromEntropy (bytes, wordlist) {
     return BIP39.entropyToMnemonic(bytes, wordlist)
   }
 
@@ -136,8 +136,8 @@ class Mnemonic {
    * bchjs.Mnemonic.toEntropy(mnemonic)
    * // <Buffer f3 79 da 02 cc 42 6e 6e 26 43 0d 25 e6 cc 37 2d fd 0a 1a 2e 4a 33 ac 4d c6 ae 6d 56 01 7f 64 2d>
    */
-  toEntropy(mnemonic, wordlist) {
-    return Buffer.from(BIP39.mnemonicToEntropy(mnemonic, wordlist), "hex")
+  toEntropy (mnemonic, wordlist) {
+    return Buffer.from(BIP39.mnemonicToEntropy(mnemonic, wordlist), 'hex')
   }
 
   /**
@@ -157,11 +157,11 @@ class Mnemonic {
    * bchjs.Mnemonic.validate('boil lonely casino manage habit where total glory muffin name limit mansion boil lonely casino manage habit where total glory muffin name limit mansion', bitbox.Mnemonic.wordLists().english)
    * // Invalid mnemonic
    */
-  validate(mnemonic, wordlist) {
+  validate (mnemonic, wordlist) {
     // Preprocess the words
-    const words = mnemonic.split(" ")
+    const words = mnemonic.split(' ')
     // Detect blank phrase
-    if (words.length === 0) return "Blank mnemonic"
+    if (words.length === 0) return 'Blank mnemonic'
 
     // Check each word
     for (let i = 0; i < words.length; i++) {
@@ -173,11 +173,11 @@ class Mnemonic {
       }
     }
     // Check the words are valid
-    //const properPhrase = words.join()
+    // const properPhrase = words.join()
     const isValid = BIP39.validateMnemonic(mnemonic, wordlist)
-    if (!isValid) return "Invalid mnemonic"
+    if (!isValid) return 'Invalid mnemonic'
 
-    return "Valid mnemonic"
+    return 'Valid mnemonic'
   }
 
   /**
@@ -203,7 +203,7 @@ class Mnemonic {
    * await bchjs.Mnemonic.toSeed('frost deliver coin clutch upon round scene wonder various wise luggage country', 'yayayayay');
    * // <Buffer 1d 00 9f a3 a8 86 51 a4 04 d5 03 3d eb 6d b1 01 e2 f1 3b c3 c8 6d 1f b9 93 b4 d1 33 dc 84 21 12 2c 9b 52 10 ba d8 96 15 e0 b0 9a 34 33 52 f8 07 c8 c4 ... >
    */
-  toSeed(mnemonic, password = "") {
+  toSeed (mnemonic, password = '') {
     return BIP39.mnemonicToSeed(mnemonic, password)
   }
 
@@ -229,7 +229,7 @@ class Mnemonic {
    * //   spanish: []
    * // }
    */
-  wordLists() {
+  wordLists () {
     return BIP39.wordlists
   }
 
@@ -260,10 +260,10 @@ class Mnemonic {
    * //   { privateKeyWIF: 'L5gB66JqhfouEtZG5aRMQ9JaVS2ggkK3YozGfzZegBupaPXqdfaz',
    * //     address: 'bitcoincash:qphwlpu2wzjxrjts94pn4wh778fwsu2afg2aj5her9' } ]
    */
-  async toKeypairs(mnemonic, numberOfKeypairs = 1, regtest = false) {
-    const rootSeedBuffer = await this.toSeed(mnemonic, "")
+  async toKeypairs (mnemonic, numberOfKeypairs = 1, regtest = false) {
+    const rootSeedBuffer = await this.toSeed(mnemonic, '')
     const hdNode = Bitcoin.HDNode.fromSeedBuffer(rootSeedBuffer)
-    const HDPath = `44'/145'/0'/0/`
+    const HDPath = "44'/145'/0'/0/"
 
     const accounts = []
 
@@ -321,7 +321,7 @@ class Mnemonic {
    * bchjs.Mnemonic.findNearestWord(word, wordlist);
    * // neve
    */
-  findNearestWord(word, wordlist) {
+  findNearestWord (word, wordlist) {
     let minDistance = 99
     let closestWord = wordlist[0]
     for (let i = 0; i < wordlist.length; i++) {
@@ -352,7 +352,7 @@ module.exports = Mnemonic
  * @return Object the final object.
  */
 
-const _extend = function(dst) {
+const _extend = function (dst) {
   const sources = Array.prototype.slice.call(arguments, 1)
   for (let i = 0; i < sources.length; ++i) {
     const src = sources[i]
@@ -365,8 +365,8 @@ const _extend = function(dst) {
  * Defer execution of given function.
  * @param  {Function} func
  */
-const _defer = function(func) {
-  if (typeof setImmediate === "function") return setImmediate(func)
+const _defer = function (func) {
+  if (typeof setImmediate === 'function') return setImmediate(func)
 
   return setTimeout(func, 0)
 }
@@ -374,7 +374,7 @@ const _defer = function(func) {
 /**
  * Based on the algorithm at http://en.wikipedia.org/wiki/Levenshtein_distance.
  */
-var Levenshtein = {
+const Levenshtein = {
   /**
    * Calculate levenshtein distance of the two strings.
    *
@@ -382,7 +382,7 @@ var Levenshtein = {
    * @param str2 String the second string.
    * @return Integer the levenshtein distance (0 and above).
    */
-  get: function(str1, str2) {
+  get: function (str1, str2) {
     // base cases
     if (str1 === str2) return 0
     if (str1.length === 0) return str2.length
@@ -432,7 +432,7 @@ var Levenshtein = {
    * @param [options] Object additional options.
    * @param [options.progress] Function progress callback with signature: function(percentComplete)
    */
-  getAsync: function(str1, str2, cb, options) {
+  getAsync: function (str1, str2, cb, options) {
     options = _extend(
       {},
       {
@@ -457,7 +457,7 @@ var Levenshtein = {
     i = 0
     j = -1
 
-    var __calculate = function() {
+    const __calculate = function () {
       // reset timer
       startTime = new Date().valueOf()
       currentTime = startTime
@@ -499,7 +499,7 @@ var Levenshtein = {
       }
 
       // send a progress update?
-      if (null !== options.progress) {
+      if (options.progress !== null) {
         try {
           options.progress.call(null, (i * 100.0) / str1.length)
         } catch (err) {

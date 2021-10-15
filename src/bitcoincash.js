@@ -1,16 +1,16 @@
-const Bitcoin = require("bitcoincashjs-lib")
-const sb = require("satoshi-bitcoin")
-const bitcoinMessage = require("bitcoinjs-message")
-const bs58 = require("bs58")
-const bip21 = require("bip21")
-const coininfo = require("coininfo")
-const bip38 = require("bip38")
-const wif = require("wif")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const sb = require('satoshi-bitcoin')
+const bitcoinMessage = require('bitcoinjs-message')
+const bs58 = require('bs58')
+const bip21 = require('@psf/bip21')
+const coininfo = require('@psf/coininfo')
+const bip38 = require('bip38')
+const wif = require('wif')
 
-const Buffer = require("safe-buffer").Buffer
+const Buffer = require('safe-buffer').Buffer
 
 class BitcoinCash {
-  constructor(address) {
+  constructor (address) {
     this._address = address
   }
 
@@ -43,7 +43,7 @@ class BitcoinCash {
    * // 50700000000
    */
   // Translate coins to satoshi value
-  toSatoshi(coins) {
+  toSatoshi (coins) {
     return sb.toSatoshi(coins)
   }
 
@@ -76,7 +76,7 @@ class BitcoinCash {
    * // 507
    */
   // Translate satoshi to coin value
-  toBitcoinCash(satoshis) {
+  toBitcoinCash (satoshis) {
     return sb.toBitcoin(satoshis)
   }
 
@@ -105,13 +105,13 @@ class BitcoinCash {
    * // 0.123
    */
   // Translate satoshi to bits denomination
-  toBits(satoshis) {
+  toBits (satoshis) {
     return parseFloat(satoshis) / 100
   }
 
   // Translate satoshi to bits denomination
   // TODO remove in 2.0
-  satsToBits(satoshis) {
+  satsToBits (satoshis) {
     return parseFloat(satoshis) / 100
   }
 
@@ -147,10 +147,10 @@ class BitcoinCash {
    * // IIYVhlo2Z6TWFjYX1+YM+7vQKz0m+zYdSe4eYpFLuAQDEZXqll7lZC8Au22VI2LLP5x+IerZckVk3QQPsA3e8/8=
    */
   // sign message
-  signMessageWithPrivKey(privateKeyWIF, message) {
-    const network = privateKeyWIF.charAt(0) === "c" ? "testnet" : "mainnet"
+  signMessageWithPrivKey (privateKeyWIF, message) {
+    const network = privateKeyWIF.charAt(0) === 'c' ? 'testnet' : 'mainnet'
     let bitcoincash
-    if (network === "mainnet") bitcoincash = coininfo.bitcoincash.main
+    if (network === 'mainnet') bitcoincash = coininfo.bitcoincash.main
     else bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
@@ -161,7 +161,7 @@ class BitcoinCash {
     const privateKey = keyPair.d.toBuffer(32)
     return bitcoinMessage
       .sign(message, privateKey, keyPair.compressed)
-      .toString("base64")
+      .toString('base64')
   }
 
   /**
@@ -180,7 +180,7 @@ class BitcoinCash {
    * // true
    */
   // verify message
-  verifyMessage(address, signature, message) {
+  verifyMessage (address, signature, message) {
     return bitcoinMessage.verify(
       message,
       this._address.toLegacyAddress(address),
@@ -222,8 +222,8 @@ class BitcoinCash {
    * // 1Ly4gqPddveYHMNkfjoXHanVszXpD3duKg
    */
   // encode base58Check
-  encodeBase58Check(hex) {
-    return bs58.encode(Buffer.from(hex, "hex"))
+  encodeBase58Check (hex) {
+    return bs58.encode(Buffer.from(hex, 'hex'))
   }
 
   /**
@@ -260,8 +260,8 @@ class BitcoinCash {
    * // 00db04c2e6f104997cb04c956bf25da6078e559d303127f08b
    */
   // decode base58Check
-  decodeBase58Check(address) {
-    return bs58.decode(address).toString("hex")
+  decodeBase58Check (address) {
+    return bs58.decode(address).toString('hex')
   }
 
   /**
@@ -298,7 +298,7 @@ class BitcoinCash {
    * // bitcoincash:qzw6tfrh8p0jh834uf9rhg77pjg5rgnt3qw0e54u03?amount=42&label=no%20prefix
    */
   // encode bip21 url
-  encodeBIP21(address, options, regtest = false) {
+  encodeBIP21 (address, options, regtest = false) {
     return bip21.encode(
       this._address.toCashAddress(address, true, regtest),
       options
@@ -335,7 +335,7 @@ class BitcoinCash {
    * // { address: 'qzw6tfrh8p0jh834uf9rhg77pjg5rgnt3qw0e54u03', options: { amount: 42, label: 'no prefix' } }
    */
   // decode bip21 url
-  decodeBIP21(url) {
+  decodeBIP21 (url) {
     return bip21.decode(url)
   }
 
@@ -405,19 +405,19 @@ class BitcoinCash {
    * bchjs.BitcoinCash.getByteCount(inputs, outputs)
    * // 1780
    */
-  getByteCount(inputs, outputs) {
+  getByteCount (inputs, outputs) {
     // from https://github.com/bitcoinjs/bitcoinjs-lib/issues/921#issuecomment-354394004
     let totalWeight = 0
     let hasWitness = false
     // assumes compressed pubkeys in all cases.
     const types = {
       inputs: {
-        "MULTISIG-P2SH": 49 * 4,
-        "MULTISIG-P2WSH": 6 + 41 * 4,
-        "MULTISIG-P2SH-P2WSH": 6 + 76 * 4,
+        'MULTISIG-P2SH': 49 * 4,
+        'MULTISIG-P2WSH': 6 + 41 * 4,
+        'MULTISIG-P2SH-P2WSH': 6 + 76 * 4,
         P2PKH: 148 * 4,
         P2WPKH: 108 + 41 * 4,
-        "P2SH-P2WPKH": 108 + 64 * 4
+        'P2SH-P2WPKH': 108 + 64 * 4
       },
       outputs: {
         P2SH: 32 * 4,
@@ -427,26 +427,26 @@ class BitcoinCash {
       }
     }
 
-    Object.keys(inputs).forEach(function(key) {
-      if (key.slice(0, 8) === "MULTISIG") {
+    Object.keys(inputs).forEach(function (key) {
+      if (key.slice(0, 8) === 'MULTISIG') {
         // ex. "MULTISIG-P2SH:2-3" would mean 2 of 3 P2SH MULTISIG
-        const keyParts = key.split(":")
+        const keyParts = key.split(':')
         if (keyParts.length !== 2) throw new Error(`invalid input: ${key}`)
         const newKey = keyParts[0]
-        const mAndN = keyParts[1].split("-").map(function(item) {
+        const mAndN = keyParts[1].split('-').map(function (item) {
           return parseInt(item)
         })
 
         totalWeight += types.inputs[newKey] * inputs[key]
-        const multiplyer = newKey === "MULTISIG-P2SH" ? 4 : 1
+        const multiplyer = newKey === 'MULTISIG-P2SH' ? 4 : 1
         totalWeight += (73 * mAndN[0] + 34 * mAndN[1]) * multiplyer
       } else {
         totalWeight += types.inputs[key] * inputs[key]
       }
-      if (key.indexOf("W") >= 0) hasWitness = true
+      if (key.indexOf('W') >= 0) hasWitness = true
     })
 
-    Object.keys(outputs).forEach(function(key) {
+    Object.keys(outputs).forEach(function (key) {
       totalWeight += types.outputs[key] * outputs[key]
     })
 
@@ -479,7 +479,7 @@ class BitcoinCash {
    * )
    * // 6PYUAPLwLSEjWSAfoe9NTSPkMZXnJA8j8EFJtKaeSnP18RCouutBrS2735
    */
-  encryptBIP38(privKeyWIF, passphrase) {
+  encryptBIP38 (privKeyWIF, passphrase) {
     const decoded = wif.decode(privKeyWIF)
 
     return bip38.encrypt(decoded.privateKey, decoded.compressed, passphrase)
@@ -509,10 +509,10 @@ class BitcoinCash {
    * )
    * // cSx7KzdH9EcvDEireu2WYpGnXdFYpta7sJUNt5kVCJgA7kcAU8Gm
    */
-  decryptBIP38(encryptedKey, passphrase, network = "mainnet") {
+  decryptBIP38 (encryptedKey, passphrase, network = 'mainnet') {
     const decryptedKey = bip38.decrypt(encryptedKey, passphrase)
     let prefix
-    if (network === "testnet") prefix = 0xef
+    if (network === 'testnet') prefix = 0xef
     else prefix = 0x80
 
     return wif.encode(prefix, decryptedKey.privateKey, decryptedKey.compressed)

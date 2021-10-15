@@ -2,6 +2,8 @@ node_modules/*
 .nyc_output/*
 wallet-info.txt
 wallet.json
+integration-test-sweet.sh
+integration-test-ss.sh
 
 docs/
 coverage/

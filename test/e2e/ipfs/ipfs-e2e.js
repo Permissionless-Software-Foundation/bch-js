@@ -3,15 +3,15 @@
   IPFS is working.
 */
 
-process.env.IPFS_API = `http://localhost:5001`
+process.env.IPFS_API = 'http://localhost:5001'
 // process.env.IPFS_API = `https://ipfs-api.fullstack.cash`
 
-const BCHJS = require("../../../src/bch-js")
+const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS()
 
-describe(`#IPFS`, () => {
-  it("should upload a file to the server", async () => {
-    const path = `${__dirname}/ipfs-e2e.js`
+describe('#IPFS', () => {
+  it('should upload a file to the server', async () => {
+    const path = `${__dirname.toString()}/ipfs-e2e.js`
 
     const fileModel = await bchjs.IPFS.createFileModel(path)
     console.log(`fileModel: ${JSON.stringify(fileModel, null, 2)}`)

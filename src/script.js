@@ -1,8 +1,8 @@
-const Bitcoin = require("bitcoincashjs-lib")
-const opcodes = require("bitcoincash-ops")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const opcodes = require('@psf/bitcoincash-ops')
 
 class Script {
-  constructor() {
+  constructor () {
     this.opcodes = opcodes
     this.nullData = Bitcoin.script.nullData
     this.multisig = {
@@ -58,7 +58,7 @@ class Script {
    * bchjs.Script.classifyInput(bchjs.Script.fromASM(scripthashInput));
    * // scripthash
    */
-  classifyInput(script) {
+  classifyInput (script) {
     return Bitcoin.script.classifyInput(script)
   }
 
@@ -90,7 +90,7 @@ class Script {
    * bchjs.Script.classifyOutput(bchjs.Script.fromASM(scripthashOutput));
    * // scripthash
    */
-  classifyOutput(script) {
+  classifyOutput (script) {
     return Bitcoin.script.classifyOutput(script)
   }
 
@@ -116,7 +116,7 @@ class Script {
    * // 136,
    * // 172 ]
    */
-  decode(scriptBuffer) {
+  decode (scriptBuffer) {
     return Bitcoin.script.decompile(scriptBuffer)
   }
 
@@ -150,7 +150,7 @@ class Script {
    * bchjs.Script.encode(scriptPubKey);
    * // <Buffer 76 a9 14 24 e9 c0 78 04 d0 ee 7e 5b da 93 4e 0a 3a e8 71 0f c0 07 dd 88 ac>
    */
-  encode(scriptChunks) {
+  encode (scriptChunks) {
     const arr = []
     scriptChunks.forEach(chunk => {
       arr.push(chunk)
@@ -187,7 +187,7 @@ class Script {
    * bchjs.Script.encode2(scriptPubKey);
    * // <Buffer 76 a9 14 24 e9 c0 78 04 d0 ee 7e 5b da 93 4e 0a 3a e8 71 0f c0 07 dd 88 ac>
    */
-  encode2(scriptChunks) {
+  encode2 (scriptChunks) {
     const arr = []
     scriptChunks.forEach(chunk => {
       arr.push(chunk)
@@ -213,7 +213,7 @@ class Script {
    * bchjs.Script.toASM(scriptBuffer);
    * // OP_DUP OP_HASH160 bee4182d9fbc8931a728410a0cd3e0f340f2995a OP_EQUALVERIFY OP_CHECKSIG
    */
-  toASM(buffer) {
+  toASM (buffer) {
     return Bitcoin.script.toASM(buffer)
   }
 
@@ -235,7 +235,7 @@ class Script {
    * bchjs.Script.fromASM(scriptPubKeyASM);
    * // <Buffer 76 a9 14 be e4 18 2d 9f bc 89 31 a7 28 41 0a 0c d3 e0 f3 40 f2 99 5a 88 ac>
    */
-  fromASM(asm) {
+  fromASM (asm) {
     return Bitcoin.script.fromASM(asm)
   }
 }

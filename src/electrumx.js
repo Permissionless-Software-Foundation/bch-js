@@ -2,13 +2,16 @@
   This library interacts with the ElectrumX bch-api REST API endpoints operated
   by FullStack.cash
 */
+// Public npm libraries
+const axios = require('axios')
 
-const axios = require("axios")
+// Local libraries.
+const Blockchain = require('./blockchain')
 
-let _this
+// let _this
 
 class ElectrumX {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -29,7 +32,9 @@ class ElectrumX {
       }
     }
 
-    _this = this
+    this.blockchain = new Blockchain(config)
+
+    // _this = this
   }
 
   /**
@@ -97,13 +102,13 @@ class ElectrumX {
    *   }
    *
    */
-  async utxo(address) {
+  async utxo (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/utxos/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -114,13 +119,13 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -181,13 +186,13 @@ class ElectrumX {
    *   }
    *
    */
-  async balance(address) {
+  async balance (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/balance/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -198,13 +203,13 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -279,13 +284,13 @@ class ElectrumX {
    *   }
    *
    */
-  async transactions(address) {
+  async transactions (address, usrObj = null) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/transactions/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -294,15 +299,16 @@ class ElectrumX {
         const response = await axios.post(
           `${this.restURL}electrumx/transactions`,
           {
-            addresses: address
+            addresses: address,
+            usrObj // pass user data when making an internal call.
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -371,13 +377,13 @@ class ElectrumX {
    *   }
    *
    */
-  async unconfirmed(address) {
+  async unconfirmed (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/unconfirmed/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -388,13 +394,13 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -442,19 +448,19 @@ class ElectrumX {
    * }
    *
    */
-  async blockHeader(height, count = 1) {
+  async blockHeader (height, count = 1) {
     try {
       const response = await axios.get(
         `${this.restURL}electrumx/block/headers/${height}?count=${count}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
       // console.log("error: ", error)
       if (error.response && error.response.data) {
-        if (error.response && error.response.data)
+        if (error.response && error.response.data) {
           throw new Error(error.response.data.error)
-        else throw error.response.data
+        } else throw error.response.data
       } else {
         throw error
       }
@@ -531,13 +537,13 @@ class ElectrumX {
    *   ]
    * }
    */
-  async txData(txid) {
+  async txData (txid) {
     try {
       // Handle single transaction.
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/tx/data/${txid}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
       } else if (Array.isArray(txid)) {
@@ -546,13 +552,13 @@ class ElectrumX {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input txId must be a string or array of strings.`)
+      throw new Error('Input txId must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -580,22 +586,121 @@ class ElectrumX {
    *  "txid": "..."
    * }
    */
-  async broadcast(txHex) {
+  async broadcast (txHex) {
     try {
-      if (typeof txHex === "string") {
+      if (typeof txHex === 'string') {
         const response = await axios.post(
           `${this.restURL}electrumx/tx/broadcast`,
           { txHex },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input txHex must be a string.`)
+      throw new Error('Input txHex must be a string.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
+    }
+  }
+
+  /**
+   * @api Electrumx.sortConfTxs()  sortConfTxs()
+   * @apiName ElectrumX sortConfTxs
+   * @apiGroup ElectrumX
+   * @apiDescription Sort the output of Electrum.transactions() by block height.
+   *
+   * A simple sort function for the output of Electrum.transactions(). Ignores
+   * unconfirmed transactions.
+   *
+   * Sorts in 'DESCENDING' order by default, or 'ASCENDING' can be specified.
+   * Descending makes the first element the newest (largest block height).
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
+   *      const sortedTxs = bchjs.Electrumx.sortConfTxs(txs.transactions, 'ASCENDING')
+   *      console.log(sortedTxs)
+   *    })()
+   *
+   * //   [
+   * //     {
+   * //       "height": 560430,
+   * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     },
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
+   * //     }
+   * //   ]
+   */
+  // Sort confirmed Transactions by the block height
+  sortConfTxs (txs, sortingOrder = 'DESCENDING') {
+    try {
+      // Filter out unconfirmed transactions, with a height of 0 or less.
+      txs = txs.filter(elem => elem.height > 0)
+
+      if (sortingOrder === 'DESCENDING') {
+        return txs.sort((a, b) => b.height - a.height)
+      }
+      return txs.sort((a, b) => a.height - b.height)
+    } catch (err) {
+      console.log('Error in util.js/sortConfTxs()')
+      throw err
+    }
+  }
+
+  /**
+   * @api Electrumx.sortAllTxs()  sortAllTxs()
+   * @apiName ElectrumX sortAllTxs
+   * @apiGroup ElectrumX
+   * @apiDescription Sort the output of Electrum.transactions() by block height.
+   *
+   * A simple sort function for the output of Electrum.transactions().
+   * Assumes that unconfirmed transactions will make it into the next block. Any
+   * unconfirmed transactions have their block height with the height of the next
+   * block. Returns a Promise.
+   *
+   * Sorts in 'ASCENDING' order by default, or 'DESCENDING' can be specified.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *      const txs = await bchjs.Electrumx.transactions('bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v')
+   *      const sortedTxs = await bchjs.Electrumx.sortAllTxs(txs.transactions, 'ASCENDING')
+   *      console.log(sortedTxs)
+   *    })()
+   *
+   * //   [
+   * //     {
+   * //       "height": 560430,
+   * //       "tx_hash": "3e1f3e882be9c03897eeb197224bf87f312be556a89f4308fabeeeabcf9bc851"
+   * //     },
+   * //     {
+   * //       "height": 560534,
+   * //       "tx_hash": "4ebbeaac51ce141e262964e3a0ce11b96ca72c0dffe9b4127ce80135f503a280"
+   * //     }
+   * //   ]
+   */
+  // Substitute zero-conf txs with the current block-height + 1
+  async sortAllTxs (txs, sortingOrder = 'DESCENDING') {
+    try {
+      // Calculate the height of the next block
+      const nextBlock = (await this.blockchain.getBlockCount()) + 1
+
+      // Replace the height of any zero-conf transactions with the height of
+      // the next block.
+      const modifiedTxs = txs.map(elem => {
+        if (elem.height <= 0) elem.height = nextBlock
+        return elem
+      })
+      // console.log(`modifiedTxs: ${JSON.stringify(modifiedTxs, null, 2)}`)
+
+      // Sort the modified array of transactions.
+      return this.sortConfTxs(modifiedTxs, sortingOrder)
+    } catch (err) {
+      console.log('Error in util.js/sort0ConfTxs')
+      throw err
     }
   }
 }

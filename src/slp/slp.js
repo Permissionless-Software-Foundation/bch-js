@@ -7,17 +7,17 @@
 
 // imports
 // require deps
-//const BCHJS = require("../bch-js")
-const Address = require("./address")
-const ECPair = require("./ecpair")
+// const BCHJS = require("../bch-js")
+const Address = require('./address')
+const ECPair = require('./ecpair')
 // const HDNode = require("./hdnode")
-const TokenType1 = require("./tokentype1")
-const NFT1 = require("./nft1")
-const Utils = require("./utils")
+const TokenType1 = require('./tokentype1')
+const NFT1 = require('./nft1')
+const Utils = require('./utils')
 
 // SLP is a superset of BITBOX
 class SLP {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -41,7 +41,7 @@ class SLP {
     this.Address = new Address(config)
     this.ECPair = ECPair
     this.TokenType1 = new TokenType1(config)
-    this.NFT1 = new NFT1(this.restURL)
+    this.NFT1 = new NFT1(config)
     this.Utils = new Utils(config)
   }
 }

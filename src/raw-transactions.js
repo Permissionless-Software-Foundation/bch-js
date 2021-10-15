@@ -1,9 +1,9 @@
-const axios = require("axios")
+const axios = require('axios')
 
-let _this
+// let _this
 
 class RawTransactions {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -24,7 +24,10 @@ class RawTransactions {
       }
     }
 
-    _this = this
+    // Encapsulate dependencies
+    this.axios = axios
+
+    // this = this
   }
 
   /**
@@ -89,13 +92,13 @@ class RawTransactions {
    * //   vin: [ [Object] ],
    * //   vout: [ [Object] ] } ]
    */
-  async decodeRawTransaction(hex) {
+  async decodeRawTransaction (hex) {
     try {
       // Single hex
-      if (typeof hex === "string") {
+      if (typeof hex === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -103,23 +106,22 @@ class RawTransactions {
         // Array of hexes
       } else if (Array.isArray(hex)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/decodeRawTransaction`,
           data: {
             hexes: hex
           },
-          headers: {
-            authorization: `Token ${_this.apiToken}`
-          }
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -157,36 +159,35 @@ class RawTransactions {
    * // type: 'nonstandard',
    * // p2sh: 'bitcoincash:pqwndulzwft8dlmqrteqyc9hf823xr3lcc7ypt74ts' }]
    */
-  async decodeScript(script) {
-    //if (typeof script !== "string") script = JSON.stringify(script)
+  async decodeScript (script) {
+    // if (typeof script !== "string") script = JSON.stringify(script)
 
     try {
-      if (typeof script === "string") {
+      if (typeof script === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeScript/${script}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       } else if (Array.isArray(script)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/decodeScript`,
           data: {
             hexes: script
           },
-          headers: {
-            authorization: `Token ${this.apiToken}`
-          }
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -255,34 +256,160 @@ class RawTransactions {
    * //   time: 1547752564,
    * //   blocktime: 1547752564 } ]
    */
-  async getRawTransaction(txid, verbose = false) {
+  async getRawTransaction (txid, verbose = false, usrObj = null) {
     try {
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
+        // console.log(
+        //   'getRawTransaction() this.axiosOptions: ',
+        //   this.axiosOptions
+        // )
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       } else if (Array.isArray(txid)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/getRawTransaction`,
           data: {
             txids: txid,
-            verbose: verbose
+            verbose: verbose,
+            usrObj // pass user data when making an internal call.
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
+    }
+  }
+
+  // Given verbose transaction details, this function retrieves the transaction
+  // data for the inputs (the parent transactions). It returns an array of
+  // objects. Each object corresponds to a transaction input, and contains
+  // the address that generated that input UTXO.
+  //
+  // Assumes a single TX. Does not yet work with an array of TXs.
+  // This function returns an array of objects, each object if formated as follows:
+  // {
+  //   vin: 0, // The position of the input for the given txid
+  //   address: bitcoincash:qzhrpmu7nruyfcemeanqh5leuqcnf6zkjq4qm9nqh0
+  // }
+  async _getInputAddrs (txDetails) {
+    try {
+      const retArray = [] // Return array
+
+      for (let i = 0; i < txDetails.vin.length; i++) {
+        // The first input represents the sender of the BCH or tokens.
+        const vin = txDetails.vin[i]
+        const inputTxid = vin.txid
+        const inputVout = vin.vout
+
+        // TODO: Coinbase TXs have no input transaction. Figure out how to
+        // handle this corner case.
+
+        // Get the TX details for the input, in order to retrieve the address of
+        // the sender.
+        const txDetailsParent = await this.getRawTransaction(inputTxid, true)
+        // console.log(
+        //   `txDetailsParent: ${JSON.stringify(txDetailsParent, null, 2)}`
+        // )
+
+        // The vout from the previous tx that represents the sender.
+        const voutSender = txDetailsParent.vout[inputVout]
+
+        retArray.push({
+          vin: i,
+          address: voutSender.scriptPubKey.addresses[0],
+          value: voutSender.value
+        })
+      }
+
+      return retArray
+    } catch (error) {
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
+    }
+  }
+
+  /**
+   * @api RawTransactions.getTxData() getTxData()
+   * @apiName getTxData
+   * @apiGroup RawTransactions
+   * @apiDescription
+   * Returns an object of transaction data, including addresses for input UTXOs.
+   *
+   * This function is equivalent to running `getRawTransaction (txid, true)`,
+   * execept the `vin` array will be populated with an `address` property that
+   * contains the `bitcoincash:` address of the sender for each input.
+   *
+   * This function will only work with a single txid. It does not yet support an
+   * array of TXIDs.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   * try {
+   *  let txData = await bchjs.RawTransactions.getTxData("0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098");
+   *  console.log(txData);
+   * } catch(error) {
+   * console.error(error)
+   * }
+   * })()
+   */
+  // Equivalent to running: async getRawTransaction (txid, verbose = true)
+  // Only handles a single TXID (not arrays).
+  // Appends the BCH address to the inputs of the transaction.
+  async getTxData (txid) {
+    try {
+      if (typeof txid !== 'string') {
+        throw new Error(
+          'Input to raw-transaction.js/getTxData() must be a string containg a TXID.'
+        )
+      }
+
+      // Get the TX details for the transaction under consideration.
+      const txDetails = await this.getRawTransaction(txid, true)
+      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+      const inAddrs = await this._getInputAddrs(txDetails)
+      // console.log(`inAddrs: ${JSON.stringify(inAddrs, null, 2)}`)
+
+      // Add the input address to the transaction data.
+      for (let i = 0; i < inAddrs.length; i++) {
+        txDetails.vin[i].address = inAddrs[i].address
+        txDetails.vin[i].value = inAddrs[i].value
+      }
+
+      return txDetails
+    } catch (error) {
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -318,16 +445,16 @@ class RawTransactions {
    * })()
    * // ['0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098']
    */
-  async sendRawTransaction(hex, allowhighfees = false) {
+  async sendRawTransaction (hex, allowhighfees = false) {
     try {
       // Single tx hex.
-      if (typeof hex === "string") {
-        const response = await axios.get(
+      if (typeof hex === 'string') {
+        const response = await this.axios.get(
           `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
-        if (response.data === "66: insufficient priority") {
+        if (response.data === '66: insufficient priority') {
           console.warn(
             `WARN: Insufficient Priority! This is likely due to a fee that is too low, or insufficient funds.
             Please ensure that there is BCH in the given wallet. If you are running on the testnet, get some
@@ -340,21 +467,22 @@ class RawTransactions {
         // Array input
       } else if (Array.isArray(hex)) {
         const options = {
-          method: "POST",
+          method: 'POST',
           url: `${this.restURL}rawtransactions/sendRawTransaction`,
           data: {
             hexes: hex
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
-        const response = await axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }
 
-      throw new Error(`Input hex must be a string or array of strings.`)
+      throw new Error('Input hex must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }

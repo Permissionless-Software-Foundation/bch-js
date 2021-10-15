@@ -1,12 +1,12 @@
-//const axios = require("axios")
-const Bitcoin = require("bitcoincashjs-lib")
-const cashaddr = require("cashaddrjs")
-const coininfo = require("coininfo")
+// const axios = require("axios")
+const Bitcoin = require('@psf/bitcoincashjs-lib')
+const cashaddr = require('ecashaddrjs')
+const coininfo = require('@psf/coininfo')
 
 class Address {
-  constructor(config) {
+  constructor (config) {
     const tmp = {}
-    if (!config || !config.restURL) tmp.restURL = `https://api.bchjs.cash/v3/`
+    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v5/'
     else tmp.restURL = config.restURL
 
     this.restURL = tmp.restURL
@@ -54,34 +54,34 @@ class Address {
    * // mqc1tmwY2368LLGktnePzEyPAsgADxbksi
    */
   // Translate address from any address format into a specific format.
-  toLegacyAddress(address) {
+  toLegacyAddress (address) {
     const { prefix, type, hash } = this._decode(address)
 
     let bitcoincash
     switch (prefix) {
-      case "bitcoincash":
+      case 'bitcoincash':
         bitcoincash = coininfo.bitcoincash.main
         break
-      case "bchtest":
+      case 'bchtest':
         bitcoincash = coininfo.bitcoincash.test
         break
-      case "bchreg":
+      case 'bchreg':
         bitcoincash = coininfo.bitcoincash.regtest
         break
       default:
-        throw `unsupported prefix : ${prefix}`
+        throw new Error(`unsupported prefix : ${prefix}`)
     }
 
     let version
     switch (type) {
-      case "P2PKH":
+      case 'P2PKH':
         version = bitcoincash.versions.public
         break
-      case "P2SH":
+      case 'P2SH':
         version = bitcoincash.versions.scripthash
         break
       default:
-        throw `unsupported address type : ${type}`
+        throw new Error(`unsupported address type : ${type}`)
     }
 
     const hashBuf = Buffer.from(hash)
@@ -112,11 +112,11 @@ class Address {
    * bchjs.Address.toCashAddress('msDbtTj7kWXPpYaR7PQmMK84i66fJqQMLx', false)
    * // qzq9je6pntpva3wf6scr7mlnycr54sjgeqxgrr9ku3
    */
-  toCashAddress(address, prefix = true, regtest = false) {
+  toCashAddress (address, prefix = true, regtest = false) {
     const decoded = this._decode(address)
 
     let prefixString
-    if (regtest) prefixString = "bchreg"
+    if (regtest) prefixString = 'bchreg'
     else prefixString = decoded.prefix
 
     const cashAddress = cashaddr.encode(
@@ -126,14 +126,71 @@ class Address {
     )
 
     if (prefix) return cashAddress
-    return cashAddress.split(":")[1]
+    return cashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.toEcashAddress() toEcashAddress()
+   * @apiName toEcashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
+   * // ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   * // mainnet no prefix
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   */
+   toEcashAddress (address, prefix = true) {
+    const decoded = this._decode(address)
+
+    const ecashAddress = cashaddr.encode(
+      'ecash',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return ecashAddress
+    return ecashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.ecashtoCashAddress() ecashtoCashAddress()
+   * @apiName ecashtoCashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da')
+   * // bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   *
+   * // mainnet no prefix
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   */
+   ecashtoCashAddress (address, prefix = true) {
+    const decoded = this._decodeEcashAddress(address)
+
+    const cashAddress = cashaddr.encode(
+      'bitcoincash',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return cashAddress
+    return cashAddress.split(':')[1]
   }
 
   // Converts any address format to hash160
-  toHash160(address) {
+  toHash160 (address) {
     const legacyAddress = this.toLegacyAddress(address)
     const bytes = Bitcoin.address.fromBase58Check(legacyAddress)
-    return bytes.hash.toString("hex")
+    return bytes.hash.toString('hex')
   }
 
   /**
@@ -156,8 +213,8 @@ class Address {
    * // mhTg9sgNgvAGfmJs192oUzQWqAXHH5nqLE
    */
   // Converts hash160 to Legacy Address
-  hash160ToLegacy(hash160, network = Bitcoin.networks.bitcoin.pubKeyHash) {
-    const buffer = Buffer.from(hash160, "hex")
+  hash160ToLegacy (hash160, network = Bitcoin.networks.bitcoin.pubKeyHash) {
+    const buffer = Buffer.from(hash160, 'hex')
     const legacyAddress = Bitcoin.address.toBase58Check(buffer, network)
     return legacyAddress
   }
@@ -177,7 +234,7 @@ class Address {
    * 'bchtest:qq24rpar9qas3vc9r8d4p0prhwaf7jmx2u22nzt946'
    */
   // Converts hash160 to Cash Address
-  hash160ToCash(
+  hash160ToCash (
     hash160,
     network = Bitcoin.networks.bitcoin.pubKeyHash,
     regtest = false
@@ -186,7 +243,7 @@ class Address {
     return this.toCashAddress(legacyAddress, true, regtest)
   }
 
-  _decode(address) {
+  _decode (address) {
     try {
       return this._decodeLegacyAddress(address)
     } catch (error) {}
@@ -202,56 +259,56 @@ class Address {
     throw new Error(`Unsupported address format : ${address}`)
   }
 
-  _decodeLegacyAddress(address) {
+  _decodeLegacyAddress (address) {
     const { version, hash } = Bitcoin.address.fromBase58Check(address)
     const info = coininfo.bitcoincash
 
     switch (version) {
       case info.main.versions.public:
         return {
-          prefix: "bitcoincash",
-          type: "P2PKH",
+          prefix: 'bitcoincash',
+          type: 'P2PKH',
           hash: hash,
-          format: "legacy"
+          format: 'legacy'
         }
       case info.main.versions.scripthash:
         return {
-          prefix: "bitcoincash",
-          type: "P2SH",
+          prefix: 'bitcoincash',
+          type: 'P2SH',
           hash: hash,
-          format: "legacy"
+          format: 'legacy'
         }
       case info.test.versions.public:
         return {
-          prefix: "bchtest",
-          type: "P2PKH",
+          prefix: 'bchtest',
+          type: 'P2PKH',
           hash: hash,
-          format: "legacy"
+          format: 'legacy'
         }
       case info.test.versions.scripthash:
         return {
-          prefix: "bchtest",
-          type: "P2SH",
+          prefix: 'bchtest',
+          type: 'P2SH',
           hash: hash,
-          format: "legacy"
+          format: 'legacy'
         }
       default:
         throw new Error(`Invalid format : ${address}`)
     }
   }
 
-  _decodeCashAddress(address) {
-    if (address.indexOf(":") !== -1) {
+  _decodeCashAddress (address) {
+    if (address.indexOf(':') !== -1) {
       const decoded = cashaddr.decode(address)
-      decoded.format = "cashaddr"
+      decoded.format = 'cashaddr'
       return decoded
     }
 
-    const prefixes = ["bitcoincash", "bchtest", "bchreg"]
+    const prefixes = ['bitcoincash', 'bchtest', 'bchreg']
     for (let i = 0; i < prefixes.length; ++i) {
       try {
         const decoded = cashaddr.decode(`${prefixes[i]}:${address}`)
-        decoded.format = "cashaddr"
+        decoded.format = 'cashaddr'
         return decoded
       } catch (error) {}
     }
@@ -259,13 +316,29 @@ class Address {
     throw new Error(`Invalid format : ${address}`)
   }
 
-  _encodeAddressFromHash160(address) {
+  _encodeAddressFromHash160 (address) {
     try {
       return {
         legacyAddress: this.hash160ToLegacy(address),
         cashAddress: this.hash160ToCash(address),
-        format: "hash160"
+        format: 'hash160'
       }
+    } catch (error) {}
+
+    throw new Error(`Invalid format : ${address}`)
+  }
+
+  _decodeEcashAddress (address) {
+    if (address.indexOf(':') !== -1) {
+      const decoded = cashaddr.decode(address)
+      decoded.format = 'cashaddr'
+      return decoded
+    }
+
+    try {
+      const decoded = cashaddr.decode(`ecash:${address}`)
+      decoded.format = 'cashaddr'
+      return decoded
     } catch (error) {}
 
     throw new Error(`Invalid format : ${address}`)
@@ -303,8 +376,8 @@ class Address {
    * // true
    */
   // Test for address format.
-  isLegacyAddress(address) {
-    return this.detectAddressFormat(address) === "legacy"
+  isLegacyAddress (address) {
+    return this.detectAddressFormat(address) === 'legacy'
   }
 
   /**
@@ -338,8 +411,8 @@ class Address {
    * bchjs.Address.isCashAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    * // false
    */
-  isCashAddress(address) {
-    return this.detectAddressFormat(address) === "cashaddr"
+  isCashAddress (address) {
+    return this.detectAddressFormat(address) === 'cashaddr'
   }
 
   /**
@@ -357,8 +430,8 @@ class Address {
    *  bchjs.Address.isHash160(notHash160Address);
    *  // false
    */
-  isHash160(address) {
-    return this.detectAddressFormat(address) === "hash160"
+  isHash160 (address) {
+    return this.detectAddressFormat(address) === 'hash160'
   }
 
   /**
@@ -393,11 +466,11 @@ class Address {
    * // false
    */
   // Test for address network.
-  isMainnetAddress(address) {
-    if (address[0] === "x") return true
-    else if (address[0] === "t") return false
+  isMainnetAddress (address) {
+    if (address[0] === 'x') return true
+    else if (address[0] === 't') return false
 
-    return this.detectAddressNetwork(address) === "mainnet"
+    return this.detectAddressNetwork(address) === 'mainnet'
   }
 
   /**
@@ -431,11 +504,11 @@ class Address {
    * bchjs.Address.isTestnetAddress('mqc1tmwY2368LLGktnePzEyPAsgADxbksi')
    * // true
    */
-  isTestnetAddress(address) {
-    if (address[0] === "x") return false
-    else if (address[0] === "t") return true
+  isTestnetAddress (address) {
+    if (address[0] === 'x') return false
+    else if (address[0] === 't') return true
 
-    return this.detectAddressNetwork(address) === "testnet"
+    return this.detectAddressNetwork(address) === 'testnet'
   }
 
   /**
@@ -473,8 +546,8 @@ class Address {
    * bchjs.Address.isRegTestAddress('qph2v4mkxjgdqgmlyjx6njmey0ftrxlnggt9t0a6zy')
    * // false
    */
-  isRegTestAddress(address) {
-    return this.detectAddressNetwork(address) === "regtest"
+  isRegTestAddress (address) {
+    return this.detectAddressNetwork(address) === 'regtest'
   }
 
   /**
@@ -510,8 +583,8 @@ class Address {
    */
 
   // Test for address type.
-  isP2PKHAddress(address) {
-    return this.detectAddressType(address) === "p2pkh"
+  isP2PKHAddress (address) {
+    return this.detectAddressType(address) === 'p2pkh'
   }
 
   /**
@@ -546,8 +619,8 @@ class Address {
    *  // false
    */
 
-  isP2SHAddress(address) {
-    return this.detectAddressType(address) === "p2sh"
+  isP2SHAddress (address) {
+    return this.detectAddressType(address) === 'p2sh'
   }
 
   /**
@@ -582,7 +655,7 @@ class Address {
    *  // legacy
    */
   // Detect address format.
-  detectAddressFormat(address) {
+  detectAddressFormat (address) {
     const decoded = this._decode(address)
 
     return decoded.format
@@ -620,19 +693,19 @@ class Address {
    *  // testnet
    */
   // Detect address network.
-  detectAddressNetwork(address) {
-    if (address[0] === "x") return "mainnet"
-    else if (address[0] === "t") return "testnet"
+  detectAddressNetwork (address) {
+    if (address[0] === 'x') return 'mainnet'
+    else if (address[0] === 't') return 'testnet'
 
     const decoded = this._decode(address)
 
     switch (decoded.prefix) {
-      case "bitcoincash":
-        return "mainnet"
-      case "bchtest":
-        return "testnet"
-      case "bchreg":
-        return "regtest"
+      case 'bitcoincash':
+        return 'mainnet'
+      case 'bchtest':
+        return 'testnet'
+      case 'bchreg':
+        return 'regtest'
       default:
         throw new Error(`Invalid prefix : ${decoded.prefix}`)
     }
@@ -670,7 +743,7 @@ class Address {
    *  // p2pkh
    */
   // Detect address type.
-  detectAddressType(address) {
+  detectAddressType (address) {
     const decoded = this._decode(address)
 
     return decoded.type.toLowerCase()
@@ -705,7 +778,7 @@ class Address {
    *  // bchtest:qzd7dvlnfukggjqsf5ju0qqwwltakfumjsck33js6m
    *  // bchtest:qq322ataqeas4n0pdn4gz2sdereh5ae43ylk4qdvus
    */
-  fromXPub(xpub, path = "0/0") {
+  fromXPub (xpub, path = '0/0') {
     const HDNode = Bitcoin.HDNode.fromBase58(
       xpub,
       Bitcoin.networks[this.detectAddressNetwork(xpub)]
@@ -738,12 +811,13 @@ class Address {
    *  bchjs.Address.fromOutputScript(scriptPubKey, 'testnet');
    *  // bchtest:pz0qcslrqn7hr44hsszwl4lw5r6udkg6zqh2hmtpyr
    */
-  fromOutputScript(scriptPubKey, network = "mainnet") {
+  fromOutputScript (scriptPubKey, network = 'mainnet') {
     let netParam
-    if (network !== "bitcoincash" && network !== "mainnet")
+    if (network !== 'bitcoincash' && network !== 'mainnet') {
       netParam = Bitcoin.networks.testnet
+    }
 
-    const regtest = network === "bchreg"
+    const regtest = network === 'bchreg'
 
     return this.toCashAddress(
       Bitcoin.address.fromOutputScript(scriptPubKey, netParam),

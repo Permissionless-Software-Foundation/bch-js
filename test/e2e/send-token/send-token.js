@@ -8,7 +8,7 @@
 */
 
 // Inspect utility used for debugging.
-const util = require("util")
+const util = require('util')
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,
@@ -18,22 +18,22 @@ util.inspect.defaultOptions = {
 // const SLPSDK = require("../../../lib/SLP")
 // const slpsdk = new SLPSDK()
 
-const WALLET1 = `../wallet1.json`
-const WALLET2 = `../wallet2.json`
+const WALLET1 = '../wallet1.json'
+const WALLET2 = '../wallet2.json'
 
-const lib = require("../util/e2e-util")
+const lib = require('../util/e2e-util')
 
 // The main test function.
 // Sends a token and reports on how long it takes to show up in SLPDB production.
-async function sendTokenTest() {
+async function sendTokenTest () {
   try {
     // Open the sending wallet.
     const sendWallet = await lib.openWallet(WALLET1)
-    //console.log(`sendWallet: ${JSON.stringify(walletInfo, null, 2)}`)
+    // console.log(`sendWallet: ${JSON.stringify(walletInfo, null, 2)}`)
 
     // Open the recieving wallet.
     const recvWallet = await lib.openWallet(WALLET2)
-    //console.log(`recvWallet: ${JSON.stringify(walletInfo, null, 2)}`)
+    // console.log(`recvWallet: ${JSON.stringify(walletInfo, null, 2)}`)
 
     // Get the balance of the recieving wallet.
     // const testTokens = recvWallet.tokenBalance.filter(
@@ -46,7 +46,7 @@ async function sendTokenTest() {
 
     // Send a token to the recieving wallet.
     await lib.sendToken(sendWallet, recvWallet)
-    console.log(`Sent test token.`)
+    console.log('Sent test token.')
 
     // Track the time until the balance for the recieving wallet has been updated.
     const startTime = new Date()
@@ -56,7 +56,7 @@ async function sendTokenTest() {
     for (let i = 0; i < 50; i++) {
       await sleep(waitTime) // Wait for a while before checking
 
-      console.log(`Checking token balance...`)
+      console.log('Checking token balance...')
       newBalance = await lib.getTestTokenBalance(recvWallet)
 
       // Break out of the loop once a new balance is detected.
@@ -65,12 +65,12 @@ async function sendTokenTest() {
       // Provide high-level warnings.
       const secondsPassed = (i * waitTime) / 1000
       if (secondsPassed > 60 * 10) {
-        console.log(`More than 10 minutes passed.`)
+        console.log('More than 10 minutes passed.')
         return false // Fail the test.
       } else if (secondsPassed > 60 * 5) {
-        console.log(`More than 5 minutes passed.`)
+        console.log('More than 5 minutes passed.')
       } else if (secondsPassed > 60) {
-        console.log(`More than 1 minute passed.`)
+        console.log('More than 1 minute passed.')
       }
     }
 
@@ -85,13 +85,13 @@ async function sendTokenTest() {
 
     return deltaTime // Return the time in minutes it took for SLPDB to update.
   } catch (err) {
-    console.log(`Error in e2e/send-token.js/sendTokenTest(): `, err)
+    console.log('Error in e2e/send-token.js/sendTokenTest(): ', err)
     return false
   }
 }
 
 // Promise based sleep function.
-function sleep(ms) {
+function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 

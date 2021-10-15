@@ -3,12 +3,12 @@
   Bitcoin.com
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
-let _this
+// let _this
 
 class Ninsight {
-  constructor(config) {
+  constructor (config) {
     // this.restURL = config.restURL
     // this.apiToken = config.apiToken
 
@@ -16,7 +16,7 @@ class Ninsight {
     if (config) {
       this.ninsightURL = config.ninsightURL
         ? config.ninsightURL
-        : `https://rest.bitcoin.com/v2`
+        : 'https://rest.bitcoin.com/v2'
     }
 
     // Add JWT token to the authorization header.
@@ -27,7 +27,7 @@ class Ninsight {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -66,16 +66,16 @@ class Ninsight {
    *  // ]
    *
    */
-  async utxo(address) {
+  async utxo (address) {
     try {
       // Handle single address.
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.post(
           `${this.ninsightURL}/address/utxo`,
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -86,13 +86,13 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -135,15 +135,15 @@ class Ninsight {
    *  // ]
    *
    */
-  async unconfirmed(address) {
+  async unconfirmed (address) {
     try {
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.post(
           `${this.ninsightURL}/address/unconfirmed`,
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -153,13 +153,13 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -211,15 +211,15 @@ class Ninsight {
    *  //
    *
    */
-  async transactions(address) {
+  async transactions (address) {
     try {
-      if (typeof address === "string") {
+      if (typeof address === 'string') {
         const response = await axios.post(
           `${this.ninsightURL}/address/transactions`,
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -229,13 +229,13 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input address must be a string or array of strings.`)
+      throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -284,15 +284,15 @@ class Ninsight {
    *  // ]
    *
    */
-  async txDetails(txid) {
+  async txDetails (txid) {
     try {
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         const response = await axios.post(
           `${this.ninsightURL}/transaction/details`,
           {
             txids: [txid]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -302,13 +302,13 @@ class Ninsight {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Transaction ID must be a string or array of strings.`)
+      throw new Error('Transaction ID must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error

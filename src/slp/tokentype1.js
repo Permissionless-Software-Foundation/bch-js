@@ -1,21 +1,25 @@
-//const BCHJS = require("../bch-js")
-//const bchjs = new BCHJS()
+/*
+  This library handles the OP_RETURN of SLP TokenType1 transactions.
+*/
 
-const Address = require("./address")
-const Script = require("../script")
+// const BCHJS = require("../bch-js")
+// const bchjs = new BCHJS()
 
-const BigNumber = require("bignumber.js")
-const slpMdm = require("slp-mdm")
-const axios = require("axios")
+const Address = require('./address')
+const Script = require('../script')
+
+const BigNumber = require('bignumber.js')
+const slpMdm = require('slp-mdm')
+const axios = require('axios')
 
 // const addy = new Address()
 let addy
-const TransactionBuilder = require("../transaction-builder")
+const TransactionBuilder = require('../transaction-builder')
 
 let _this // local global
 
 class TokenType1 {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -88,17 +92,21 @@ class TokenType1 {
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/send-token/send-token.js
    */
-  generateSendOpReturn(tokenUtxos, sendQty) {
+  generateSendOpReturn (tokenUtxos, sendQty) {
     try {
       const tokenId = tokenUtxos[0].tokenId
       const decimals = tokenUtxos[0].decimals
 
-      // Calculate the total amount of tokens owned by the wallet.
-      let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
-        totalTokens += tokenUtxos[i].tokenQty
+      const sendQtyBig = new BigNumber(sendQty).times(10 ** decimals)
 
-      const change = totalTokens - sendQty
+      // Calculate the total amount of tokens owned by the wallet.
+      const totalTokens = tokenUtxos.reduce(
+        (tot, txo) =>
+          tot.plus(new BigNumber(txo.tokenQty).times(10 ** decimals)),
+        new BigNumber(0)
+      )
+
+      const change = totalTokens.minus(sendQtyBig)
       // console.log(`change: ${change}`)
 
       let script
@@ -109,18 +117,22 @@ class TokenType1 {
         outputs = 2
 
         // Convert the send quantity to the format expected by slp-mdm.
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
-        // console.log(`baseQty: `, baseQty)
+        const baseQty = sendQtyBig.toString()
+        // console.log('baseQty: ', baseQty)
 
         // Convert the change quantity to the format expected by slp-mdm.
-        let baseChange = new BigNumber(change).times(10 ** decimals)
-        baseChange = baseChange.absoluteValue()
-        baseChange = Math.floor(baseChange)
-        baseChange = baseChange.toString()
-        // console.log(`baseChange: `, baseChange)
+        const baseChange = change.toString()
+        // console.log('baseChange: ', baseChange)
+
+        // Check for potential burns
+        const outputQty = new BigNumber(baseChange).plus(new BigNumber(baseQty))
+        const inputQty = new BigNumber(totalTokens)
+        const tokenOutputDelta = outputQty.minus(inputQty).toString() !== '0'
+        if (tokenOutputDelta) {
+          throw new Error(
+            'Token transaction inputs do not match outputs, cannot send transaction'
+          )
+        }
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [
@@ -131,13 +143,19 @@ class TokenType1 {
 
         // Corner case, when there is no token change to send back.
       } else {
-        let baseQty = new BigNumber(sendQty).times(10 ** decimals)
-        baseQty = baseQty.absoluteValue()
-        baseQty = Math.floor(baseQty)
-        baseQty = baseQty.toString()
+        const baseQty = sendQtyBig.toString()
         // console.log(`baseQty: `, baseQty)
 
-        // console.log(`baseQty: ${baseQty.toString()}`)
+        // Check for potential burns
+        const noChangeOutputQty = new BigNumber(baseQty)
+        const noChangeInputQty = new BigNumber(totalTokens)
+        const tokenSingleOutputError =
+          noChangeOutputQty.minus(noChangeInputQty).toString() !== '0'
+        if (tokenSingleOutputError) {
+          throw new Error(
+            'Token transaction inputs do not match outputs, cannot send transaction'
+          )
+        }
 
         // Generate the OP_RETURN as a Buffer.
         script = slpMdm.TokenType1.send(tokenId, [new slpMdm.BN(baseQty)])
@@ -145,7 +163,7 @@ class TokenType1 {
 
       return { script, outputs }
     } catch (err) {
-      console.log(`Error in generateSendOpReturn()`)
+      console.log('Error in generateSendOpReturn()')
       throw err
     }
   }
@@ -196,15 +214,21 @@ class TokenType1 {
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/burn-tokens/burn-tokens.js
    *
    */
-  generateBurnOpReturn(tokenUtxos, burnQty) {
+  generateBurnOpReturn (tokenUtxos, burnQty) {
     try {
       const tokenId = tokenUtxos[0].tokenId
       const decimals = tokenUtxos[0].decimals
 
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
-        totalTokens += tokenUtxos[i].tokenQty
+      for (let i = 0; i < tokenUtxos.length; i++) {
+        totalTokens += parseFloat(tokenUtxos[i].tokenQty)
+      }
+
+      // Make sure burn quantity isn't bigger than the total amount in tokens
+      if (burnQty > totalTokens) {
+        burnQty = totalTokens
+      }
 
       const remainder = totalTokens - burnQty
 
@@ -220,7 +244,7 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      console.log(`Error in generateBurnOpReturn()`)
+      console.log('Error in generateBurnOpReturn()')
       throw err
     }
   }
@@ -259,19 +283,25 @@ class TokenType1 {
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/create-token/create-token.js
    *
    */
-  generateGenesisOpReturn(configObj) {
+  generateGenesisOpReturn (configObj) {
     try {
       // TODO: Add input validation.
 
-      let baseQty = new BigNumber(configObj.initialQty).times(
-        10 ** configObj.decimals
-      )
+      let baseQty
+      if (configObj.decimals !== 0) {
+        baseQty = new BigNumber(configObj.initialQty).times(
+          10 ** configObj.decimals
+        )
+      } else {
+        baseQty = new BigNumber(configObj.initialQty)
+      }
+
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
       baseQty = baseQty.toString()
 
       // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = ""
+      if (!configObj.documentHash) configObj.documentHash = ''
 
       // If mint baton is not specified, then replace it with null.
       if (!configObj.mintBatonVout) configObj.mintBatonVout = null
@@ -288,7 +318,7 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      console.log(`Error in generateGenesisOpReturn()`)
+      console.log('Error in generateGenesisOpReturn()')
       throw err
     }
   }
@@ -339,30 +369,35 @@ class TokenType1 {
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/blob/master/applications/slp/mint-token/mint-token.js
    */
-  generateMintOpReturn(tokenUtxos, mintQty, destroyBaton = false) {
+  generateMintOpReturn (tokenUtxos, mintQty, destroyBaton = false) {
     try {
       // Throw error if input is not an array.
-      if (!Array.isArray(tokenUtxos))
-        throw new Error(`tokenUtxos must be an array.`)
+      if (!Array.isArray(tokenUtxos)) {
+        throw new Error('tokenUtxos must be an array.')
+      }
 
       // Loop through the tokenUtxos array and find the minting baton.
       let mintBatonUtxo
       for (let i = 0; i < tokenUtxos.length; i++) {
-        if (tokenUtxos[i].utxoType === "minting-baton")
+        if (tokenUtxos[i].utxoType === 'minting-baton') {
           mintBatonUtxo = tokenUtxos[i]
+        }
       }
 
       // Throw an error if the minting baton could not be found.
-      if (!mintBatonUtxo)
-        throw new Error(`Minting baton could not be found in tokenUtxos array.`)
+      if (!mintBatonUtxo) {
+        throw new Error('Minting baton could not be found in tokenUtxos array.')
+      }
 
       const tokenId = mintBatonUtxo.tokenId
       const decimals = mintBatonUtxo.decimals
 
-      if (!tokenId)
-        throw new Error(`tokenId property not found in mint-baton UTXO.`)
-      if (!decimals)
-        throw new Error(`decimals property not found in mint-baton UTXO.`)
+      if (!tokenId) {
+        throw new Error('tokenId property not found in mint-baton UTXO.')
+      }
+      if (!decimals) {
+        throw new Error('decimals property not found in mint-baton UTXO.')
+      }
 
       let baseQty = new BigNumber(mintQty).times(10 ** decimals)
       baseQty = baseQty.absoluteValue()
@@ -381,7 +416,7 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      // console.log(`Error in generateMintOpReturn()`)
+      console.log('Error in generateMintOpReturn()')
       throw err
     }
   }
@@ -413,7 +448,7 @@ class TokenType1 {
    *    "outputs": 2
    *  }
    */
-  async getHexOpReturn(tokenUtxos, sendQty) {
+  async getHexOpReturn (tokenUtxos, sendQty) {
     try {
       // TODO: Add input filtering.
 
@@ -425,7 +460,7 @@ class TokenType1 {
       const result = await _this.axios.post(
         `${this.restURL}slp/generatesendopreturn`,
         data,
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       const slpSendObj = result.data
@@ -437,7 +472,7 @@ class TokenType1 {
 
       return slpSendObj
     } catch (err) {
-      // console.log(err)
+      console.log('Error in getHexOpReturn()')
       throw err
     }
   }

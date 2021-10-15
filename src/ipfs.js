@@ -3,19 +3,19 @@
   and downloading data from the IPFS network.
 */
 
-const axios = require("axios")
-const Uppy = require("@uppy/core")
-const Tus = require("@uppy/tus")
-const fs = require("fs")
+const axios = require('axios')
+const Uppy = require('@uppy/core')
+const Tus = require('@uppy/tus')
+const fs = require('fs')
 
 let _this
 
 class IPFS {
-  constructor(config) {
+  constructor (config) {
     this.IPFS_API = process.env.IPFS_API
       ? process.env.IPFS_API
-      : // : `http://localhost:5001`
-        `https://ipfs-api.fullstack.cash`
+      : 'https://ipfs-file-upload.fullstackcash.nl'
+    // : `http://localhost:5001`
 
     // Default options when calling axios.
     this.axiosOptions = {
@@ -35,16 +35,16 @@ class IPFS {
   }
 
   // Initializes Uppy, which is used for file uploads.
-  initUppy() {
+  initUppy () {
     const uppy = Uppy({
       allowMultipleUploads: false,
-      meta: { test: "avatar" },
+      meta: { test: 'avatar' },
       debug: false,
       restrictions: {
         maxFileSize: null,
         maxNumberOfFiles: 1,
         minNumberOfFiles: 1,
-        allowedFileTypes: null //type of files allowed to load
+        allowedFileTypes: null // type of files allowed to load
       }
     })
     uppy.use(Tus, { endpoint: `${_this.IPFS_API}/uppy-files` })
@@ -90,11 +90,12 @@ class IPFS {
    *   "__v": 0
    * }
    */
-  async createFileModelServer(path) {
+  async createFileModelServer (path) {
     try {
       // Ensure the file exists.
-      if (!_this.fs.existsSync(path))
+      if (!_this.fs.existsSync(path)) {
         throw new Error(`Could not find this file: ${path}`)
+      }
 
       // Read in the file.
       const fileBuf = _this.fs.readFileSync(path)
@@ -103,11 +104,11 @@ class IPFS {
       // console.log(`Buffer length: ${fileBuf.length}`)
 
       // Get the file name from the path.
-      const splitPath = path.split("/")
+      const splitPath = path.split('/')
       const fileName = splitPath[splitPath.length - 1]
 
       // Get the file extension.
-      const splitExt = fileName.split(".")
+      const splitExt = fileName.split('.')
       const fileExt = splitExt[splitExt.length - 1]
 
       const fileObj = {
@@ -125,7 +126,7 @@ class IPFS {
 
       return fileData.data
     } catch (err) {
-      console.error(`Error in createFileModel()`)
+      console.error('Error in createFileModel()')
       throw err
     }
   }
@@ -157,15 +158,16 @@ class IPFS {
    *   "fileExtension": "js"
    * }
    */
-  async uploadFileServer(path, modelId) {
+  async uploadFileServer (path, modelId) {
     try {
       // Ensure the file exists.
-      if (!_this.fs.existsSync(path))
+      if (!_this.fs.existsSync(path)) {
         throw new Error(`Could not find this file: ${path}`)
+      }
 
       if (!modelId) {
         throw new Error(
-          `Must include a file model ID in order to upload a file.`
+          'Must include a file model ID in order to upload a file.'
         )
       }
 
@@ -173,14 +175,14 @@ class IPFS {
       const fileBuf = _this.fs.readFileSync(path)
 
       // Get the file name from the path.
-      const splitPath = path.split("/")
+      const splitPath = path.split('/')
       const fileName = splitPath[splitPath.length - 1]
 
       // Prepare the upload object. Get a file ID from Uppy.
       const id = _this.uppy.addFile({
         name: fileName,
         data: fileBuf,
-        source: "Local",
+        source: 'Local',
         isRemote: false
       })
       // console.log(`id: ${JSON.stringify(id, null, 2)}`)
@@ -191,8 +193,9 @@ class IPFS {
       // Upload the file to the server.
       const upData = await _this.uppy.upload()
 
-      if (upData.failed.length)
-        throw new Error("The file could not be uploaded")
+      if (upData.failed.length) {
+        throw new Error('The file could not be uploaded')
+      }
 
       if (upData.successful.length) {
         delete upData.successful[0].data
@@ -213,7 +216,7 @@ class IPFS {
 
       return false
     } catch (err) {
-      console.error(`Error in bch-js/src/ipfs.js/upload(): `)
+      console.error('Error in bch-js/src/ipfs.js/upload(): ')
       throw err
     }
   }
@@ -246,9 +249,9 @@ class IPFS {
    *    "fileName": "ipfs-e2e.js"
    * }
    */
-  async getStatus(modelId) {
+  async getStatus (modelId) {
     try {
-      if (!modelId) throw new Error(`Must include a file model ID.`)
+      if (!modelId) throw new Error('Must include a file model ID.')
 
       const fileData = await _this.axios.get(
         `${this.IPFS_API}/files/${modelId}`
@@ -266,10 +269,11 @@ class IPFS {
 
       return fileObj
     } catch (err) {
-      console.error(`Error in getStatus()`)
+      console.error('Error in getStatus()')
       throw err
     }
   }
+
   /**
    * @api IPFS.createFileModelWeb()  createFileModelWeb()
    * @apiName createFileModelWeb()
@@ -311,20 +315,22 @@ class IPFS {
    *   "__v": 0
    * }
    */
-  async createFileModelWeb(file) {
+  async createFileModelWeb (file) {
     try {
-      if (!file) throw new Error(`File is required`)
+      if (!file) throw new Error('File is required')
 
       const { name, size } = file
 
-      if (!name || typeof name !== "string")
-        throw new Error(`File should have the property 'name' of string type`)
+      if (!name || typeof name !== 'string') {
+        throw new Error("File should have the property 'name' of string type")
+      }
 
-      if (!size || typeof size !== "number")
-        throw new Error(`File should have the property 'size' of number type`)
+      if (!size || typeof size !== 'number') {
+        throw new Error("File should have the property 'size' of number type")
+      }
 
       // Get the file extension.
-      const splitExt = name.split(".")
+      const splitExt = name.split('.')
       const fileExt = splitExt[splitExt.length - 1]
 
       const fileObj = {
@@ -342,7 +348,7 @@ class IPFS {
 
       return fileData.data
     } catch (err) {
-      console.error(`Error in createFileModelWeb()`)
+      console.error('Error in createFileModelWeb()')
       throw err
     }
   }
@@ -377,24 +383,27 @@ class IPFS {
    *   "fileExtension": "js"
    * }
    */
-  async uploadFileWeb(file, modelId) {
+  async uploadFileWeb (file, modelId) {
     try {
-      if (!file) throw new Error(`File is required`)
+      if (!file) throw new Error('File is required')
 
       const { name, type, size } = file
 
-      if (!name || typeof name !== "string")
-        throw new Error(`File should have the property 'name' of string type`)
+      if (!name || typeof name !== 'string') {
+        throw new Error("File should have the property 'name' of string type")
+      }
 
-      if (!type || typeof type !== "string")
-        throw new Error(`File should have the property 'type' of string type`)
+      if (!type || typeof type !== 'string') {
+        throw new Error("File should have the property 'type' of string type")
+      }
 
-      if (!size || typeof size !== "number")
-        throw new Error(`File should have the property 'size' of number type`)
+      if (!size || typeof size !== 'number') {
+        throw new Error("File should have the property 'size' of number type")
+      }
 
       if (!modelId) {
         throw new Error(
-          `Must include a file model ID in order to upload a file.`
+          'Must include a file model ID in order to upload a file.'
         )
       }
 
@@ -402,7 +411,7 @@ class IPFS {
       const id = _this.uppy.addFile({
         name: name,
         data: file,
-        source: "Local",
+        source: 'Local',
         isRemote: false
       })
       // console.log(`id: ${JSON.stringify(id, null, 2)}`)
@@ -413,8 +422,9 @@ class IPFS {
       // Upload the file to the server.
       const upData = await _this.uppy.upload()
 
-      if (upData.failed.length)
-        throw new Error("The file could not be uploaded")
+      if (upData.failed.length) {
+        throw new Error('The file could not be uploaded')
+      }
 
       if (upData.successful.length) {
         delete upData.successful[0].data
@@ -435,7 +445,7 @@ class IPFS {
 
       return false
     } catch (err) {
-      console.error(`Error in bch-js/src/ipfs.js/uploadFileWeb(): `)
+      console.error('Error in bch-js/src/ipfs.js/uploadFileWeb(): ')
       throw err
     }
   }

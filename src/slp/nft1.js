@@ -8,23 +8,30 @@
   (Parent) token.
 */
 
-const Address = require("./address")
+// Public npm libraries
+const axios = require('axios')
 
-const BigNumber = require("bignumber.js")
-const slpMdm = require("slp-mdm")
+// Local libraries.
+const Address = require('./address')
 
+// const BigNumber = require('bignumber.js')
+const slpMdm = require('slp-mdm')
+
+// let _this
 // const addy = new Address()
 let addy
-const TransactionBuilder = require("../transaction-builder")
+const TransactionBuilder = require('../transaction-builder')
 
-class TokenType1 {
-  constructor(config) {
+class Nft1 {
+  constructor (config) {
     this.restURL = config.restURL
 
     addy = new Address(config)
 
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
+
+    // _this = this
   }
 
   /**
@@ -59,12 +66,12 @@ class TokenType1 {
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/tree/master/applications/slp/nft
    *
    */
-  newNFTGroupOpReturn(configObj) {
+  newNFTGroupOpReturn (configObj) {
     try {
       // TODO: Add input validation.
 
       // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = ""
+      if (!configObj.documentHash) configObj.documentHash = ''
 
       // If mint baton is not specified, then replace it with null.
       if (!configObj.mintBatonVout) configObj.mintBatonVout = null
@@ -81,7 +88,7 @@ class TokenType1 {
 
       return script
     } catch (err) {
-      console.log(`Error in generateNFTParentOpReturn()`)
+      console.log('Error in generateNFTParentOpReturn()')
       throw err
     }
   }
@@ -130,43 +137,47 @@ class TokenType1 {
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/tree/master/applications/slp/nft
    */
-  mintNFTGroupOpReturn(tokenUtxos, mintQty, destroyBaton = false) {
-    try {
-      // Throw error if input is not an array.
-      if (!Array.isArray(tokenUtxos))
-        throw new Error(`tokenUtxos must be an array.`)
-
-      // Loop through the tokenUtxos array and find the minting baton.
-      let mintBatonUtxo
-      for (let i = 0; i < tokenUtxos.length; i++) {
-        if (tokenUtxos[i].utxoType === "minting-baton")
-          mintBatonUtxo = tokenUtxos[i]
-      }
-
-      // Throw an error if the minting baton could not be found.
-      if (!mintBatonUtxo)
-        throw new Error(`Minting baton could not be found in tokenUtxos array.`)
-
-      const tokenId = mintBatonUtxo.tokenId
-
-      if (!tokenId)
-        throw new Error(`tokenId property not found in mint-baton UTXO.`)
-
-      // Signal that the baton should be passed or detroyed.
-      let batonVout = 2
-      if (destroyBaton) batonVout = null
-
-      const script = slpMdm.NFT1.Group.mint(
-        tokenId,
-        batonVout,
-        new slpMdm.BN(mintQty)
-      )
-
-      return script
-    } catch (err) {
-      // console.log(`Error in generateMintOpReturn()`)
-      throw err
+  mintNFTGroupOpReturn (tokenUtxos, mintQty, destroyBaton = false) {
+    // try {
+    // Throw error if input is not an array.
+    if (!Array.isArray(tokenUtxos)) {
+      throw new Error('tokenUtxos must be an array.')
     }
+
+    // Loop through the tokenUtxos array and find the minting baton.
+    let mintBatonUtxo
+    for (let i = 0; i < tokenUtxos.length; i++) {
+      if (tokenUtxos[i].utxoType === 'minting-baton') {
+        mintBatonUtxo = tokenUtxos[i]
+      }
+    }
+
+    // Throw an error if the minting baton could not be found.
+    if (!mintBatonUtxo) {
+      throw new Error('Minting baton could not be found in tokenUtxos array.')
+    }
+
+    const tokenId = mintBatonUtxo.tokenId
+
+    if (!tokenId) {
+      throw new Error('tokenId property not found in mint-baton UTXO.')
+    }
+
+    // Signal that the baton should be passed or detroyed.
+    let batonVout = 2
+    if (destroyBaton) batonVout = null
+
+    const script = slpMdm.NFT1.Group.mint(
+      tokenId,
+      batonVout,
+      new slpMdm.BN(mintQty)
+    )
+
+    return script
+    // } catch (err) {
+    //   // console.log(`Error in generateMintOpReturn()`)
+    //   throw err
+    // }
   }
 
   /**
@@ -200,12 +211,12 @@ class TokenType1 {
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/tree/master/applications/slp/nft
    *
    */
-  generateNFTChildGenesisOpReturn(configObj) {
+  generateNFTChildGenesisOpReturn (configObj) {
     try {
       // TODO: Add input validation.
 
       // Prevent error if user fails to add the document hash.
-      if (!configObj.documentHash) configObj.documentHash = ""
+      if (!configObj.documentHash) configObj.documentHash = ''
 
       // If mint baton is not specified, then replace it with null.
       if (!configObj.mintBatonVout) configObj.mintBatonVout = null
@@ -217,12 +228,12 @@ class TokenType1 {
         configObj.documentHash,
         0,
         configObj.mintBatonVout,
-        new slpMdm.BN("1")
+        new slpMdm.BN('1')
       )
 
       return script
     } catch (err) {
-      console.log(`Error in generateNFTChildGenesisOpReturn()`)
+      console.log('Error in generateNFTChildGenesisOpReturn()')
       throw err
     }
   }
@@ -270,7 +281,7 @@ class TokenType1 {
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/tree/master/applications/slp/nft
    */
-  generateNFTChildSendOpReturn(tokenUtxos, sendQty) {
+  generateNFTChildSendOpReturn (tokenUtxos, sendQty) {
     try {
       // TODO: Add input validation.
 
@@ -278,8 +289,9 @@ class TokenType1 {
 
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
+      for (let i = 0; i < tokenUtxos.length; i++) {
         totalTokens += tokenUtxos[i].tokenQty
+      }
 
       const change = totalTokens - sendQty
 
@@ -312,7 +324,7 @@ class TokenType1 {
 
       return { script, outputs }
     } catch (err) {
-      console.log(`Error in generateNFTChildSendOpReturn()`)
+      console.log('Error in generateNFTChildSendOpReturn()')
       throw err
     }
   }
@@ -360,7 +372,7 @@ class TokenType1 {
    *  // See additional code here:
    *  // https://github.com/Permissionless-Software-Foundation/bch-js-examples/tree/master/applications/slp/nft
    */
-  generateNFTGroupSendOpReturn(tokenUtxos, sendQty) {
+  generateNFTGroupSendOpReturn (tokenUtxos, sendQty) {
     try {
       // TODO: Add input validation.
 
@@ -368,8 +380,9 @@ class TokenType1 {
 
       // Calculate the total amount of tokens owned by the wallet.
       let totalTokens = 0
-      for (let i = 0; i < tokenUtxos.length; i++)
+      for (let i = 0; i < tokenUtxos.length; i++) {
         totalTokens += tokenUtxos[i].tokenQty
+      }
 
       const change = totalTokens - sendQty
 
@@ -402,10 +415,101 @@ class TokenType1 {
 
       return { script, outputs }
     } catch (err) {
-      console.log(`Error in generateNFTGroupSendOpReturn()`)
+      console.log('Error in generateNFTGroupSendOpReturn()')
       throw err
+    }
+  }
+
+  /**
+   * @api SLP.NFT1.listNFTGroupChildren() listNFTGroupChildren()
+   * @apiName listNFTGroupChildren
+   * @apiGroup SLP NFT1
+   * @apiDescription Return list of NFT children tokens in a NFT Group.
+   * It's assumed provided groupId parameter is for an NFT Group token (type=129)
+   *
+   * Returns an Array with GENESIS transaction IDs of the children tokens.
+   *
+   * @apiExample Example usage:
+   *
+   * const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
+   * const children = await bchjs.SLP.Nft1.listNFTGroupChildren(groupId)
+   *
+   * children = {
+   *  "nftChildren": [
+   *    "45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9",
+   *    "928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55"
+   *  ]
+   * }
+   */
+  async listNFTGroupChildren (groupId) {
+    try {
+      if (typeof groupId === 'string') {
+        const response = await axios.get(
+          `${this.restURL}slp/nftChildren/${groupId}`,
+          this.axiosOptions
+        )
+        return response.data
+      }
+
+      throw new Error('groupId must be a string.')
+    } catch (error) {
+      // console.log('Error in listNFTGroupChildren()')
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
+
+  /**
+   * @api SLP.NFT1.parentNFTGroup() parentNFTGroup()
+   * @apiName parentNFTGroup
+   * @apiGroup SLP NFT1
+   * @apiDescription Return parent NFT Group information for a given NFT child token.
+   * It's assumed provided groupId parameter is for an NFT Child token (type=65)
+   *
+   * Returns a JSON with NFT group information.
+   *
+   * @apiExample Example usage:
+   *
+   * const tokenId = '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9'
+   * const group = await bchjs.SLP.Nft1.parentNFTGroup(tokenId)
+   *
+   * group = {
+   *   "nftGroup": {
+   *     "decimals": 0,
+   *     "timestamp": "2021-05-03 10:36:01",
+   *     "timestamp_unix": 1620038161,
+   *     "versionType": 129,
+   *     "documentUri": "psfoundation.cash",
+   *     "symbol": "PSF.TEST.GROUP",
+   *     "name": "PSF Test NFT Group",
+   *     "containsBaton": true,
+   *     "id": "68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a",
+   *     "documentHash": null,
+   *     "initialTokenQty": 1000000,
+   *     "blockCreated": 686117,
+   *     "totalMinted": null,
+   *     "totalBurned": null,
+   *     "circulatingSupply": null
+   *   }
+   * }
+   */
+  async parentNFTGroup (tokenId) {
+    try {
+      if (typeof tokenId === 'string') {
+        const response = await axios.get(
+          `${this.restURL}slp/nftGroup/${tokenId}`,
+          this.axiosOptions
+        )
+        return response.data
+      }
+
+      throw new Error('tokenId must be a string.')
+    } catch (error) {
+      // console.log('Error in parentNFTGroup()')
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
     }
   }
 }
 
-module.exports = TokenType1
+module.exports = Nft1

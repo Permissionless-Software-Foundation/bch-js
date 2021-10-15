@@ -1,5 +1,5 @@
-const randomBytes = require("randombytes")
-const Bitcoin = require("bitcoincashjs-lib")
+const randomBytes = require('randombytes')
+const Bitcoin = require('@psf/bitcoincashjs-lib')
 
 class Crypto {
   /**
@@ -26,7 +26,7 @@ class Crypto {
    *
    * */
   // Translate address from any address format into a specific format.
-  static sha256(buffer) {
+  static sha256 (buffer) {
     return Bitcoin.crypto.sha256(buffer)
   }
 
@@ -52,7 +52,7 @@ class Crypto {
    * bchjs.Crypto.ripemd160(buffer)
    * // <Buffer 5f 95 6a 88 86 30 51 ea 52 15 d8 97 0c ed 8e 21 8e b6 15 cf>
    * */
-  static ripemd160(buffer) {
+  static ripemd160 (buffer) {
     return Bitcoin.crypto.ripemd160(buffer)
   }
 
@@ -78,7 +78,7 @@ class Crypto {
    *  bchjs.Crypto.hash256(buffer)
    *  // <Buffer 68 8f 1d 02 9e d5 4c 34 d0 32 0b 83 8b f6 fc 64 f6 2f 38 a6 e9 30 a0 af 5b db 4e 27 d1 a6 84 cd>
    * */
-  static hash256(buffer) {
+  static hash256 (buffer) {
     return Bitcoin.crypto.hash256(buffer)
   }
 
@@ -104,7 +104,7 @@ class Crypto {
    *  bchjs.Crypto.hash160(buffer)
    *
    * */
-  static hash160(buffer) {
+  static hash160 (buffer) {
     return Bitcoin.crypto.hash160(buffer)
   }
 
@@ -130,7 +130,7 @@ class Crypto {
    * bchjs.Crypto.randomBytes(32)
    * // <Buffer ec 44 73 72 ea 48 3e 08 a5 0a 62 b8 40 0f 69 64 a7 75 35 af 20 3d e1 6d ce 3b f9 37 11 19 2b c6>
    * */
-  static randomBytes(size = 16) {
+  static randomBytes (size = 16) {
     return randomBytes(size)
   }
 }

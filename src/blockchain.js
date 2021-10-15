@@ -3,12 +3,12 @@
   - Add blockhash functionality back into getTxOutProof
 */
 
-const axios = require("axios")
+const axios = require('axios')
 
-let _this
+// let _this
 
 class Blockchain {
-  constructor(config) {
+  constructor (config) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -29,7 +29,7 @@ class Blockchain {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -50,11 +50,11 @@ class Blockchain {
    * })()
    * // 241decef88889efac8e6ce428a8ac696fdde5972eceed97e1fb58d6106af31d5
    */
-  async getBestBlockHash() {
+  async getBestBlockHash () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBestBlockHash`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -68,8 +68,8 @@ class Blockchain {
    * @apiName getBlock
    * @apiGroup Blockchain
    * @apiDescription
-   * If verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is true, returns an Object with information about block hash.
-   *
+   * If verbose is 0, returns a string that is serialized, hex-encoded data for block 'hash'. If verbose is 1, returns an Object with information about block hash.
+   * If verbose is 2, returns an Object with information about block hash and information about tx.
    * @apiExample Example usage:
    * (async () => {
    * try {
@@ -80,29 +80,39 @@ class Blockchain {
    * }
    * })()
    *
-   * // { hash: '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09',
-   * // confirmations: 528236,
-   * // size: 216,
-   * // height: 1000,
-   * // version: 1,
-   * // versionHex: '00000001',
-   * // merkleroot: 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33',
-   * // tx:
-   * //  [ 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33' ],
-   * // time: 1232346882,
-   * // mediantime: 1232344831,
-   * // nonce: 2595206198,
-   * // bits: '1d00ffff',
-   * // difficulty: 1,
-   * // chainwork: '000000000000000000000000000000000000000000000000000003e903e903e9',
-   * // previousblockhash: '0000000008e647742775a230787d66fdf92c46a48c896bfbc85cdc8acc67e87d',
-   * // nextblockhash: '00000000a2887344f8db859e372e7e4bc26b23b9de340f725afbf2edb265b4c6' }
+   * // {
+   * //  hash: '00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09',
+   * //  confirmations: 528236,
+   * //  size: 216,
+   * //  height: 1000,
+   * //  version: 1,
+   * //  versionHex: '00000001',
+   * //  merkleroot: 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33',
+   * //  tx:
+   * //   [ 'fe28050b93faea61fa88c4c630f0e1f0a1c24d0082dd0e10d369e13212128f33' ],
+   * //  time: 1232346882,
+   * //  mediantime: 1232344831,
+   * //  nonce: 2595206198,
+   * //  bits: '1d00ffff',
+   * //  difficulty: 1,
+   * //  chainwork: '000000000000000000000000000000000000000000000000000003e903e903e9',
+   * //  previousblockhash: '0000000008e647742775a230787d66fdf92c46a48c896bfbc85cdc8acc67e87d',
+   * //  nextblockhash: '00000000a2887344f8db859e372e7e4bc26b23b9de340f725afbf2edb265b4c6'
+   * // }
    */
-  async getBlock(blockhash, verbose = true) {
+  async getBlock (blockhash, verbosity = 1) {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBlock/${blockhash}?verbose=${verbose}`,
-        _this.axiosOptions
+      // Input validation
+      if (!blockhash || typeof blockhash !== 'string') {
+        throw new Error('blockhash must be a string')
+      }
+      const response = await axios.post(
+        `${this.restURL}blockchain/getblock`,
+        {
+          blockhash,
+          verbosity
+        },
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -148,11 +158,11 @@ class Blockchain {
    * //       timeout: 1493596800,
    * //       since: 419328 } } }
    */
-  async getBlockchainInfo() {
+  async getBlockchainInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockchainInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -179,11 +189,11 @@ class Blockchain {
    * })()
    * // 529235
    */
-  async getBlockCount() {
+  async getBlockCount () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockCount`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -210,13 +220,13 @@ class Blockchain {
    * })()
    * // [ '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f' ]
    */
-  async getBlockHash(height = 1) {
-    if (typeof height !== "string") height = JSON.stringify(height)
+  async getBlockHash (height = 1) {
+    if (typeof height !== 'string') height = JSON.stringify(height)
 
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getBlockHash/${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -257,13 +267,13 @@ class Blockchain {
    * // previousblockhash: '0000000008e647742775a230787d66fdf92c46a48c896bfbc85cdc8acc67e87d',
    * // nextblockhash: '00000000a2887344f8db859e372e7e4bc26b23b9de340f725afbf2edb265b4c6' }]
    */
-  async getBlockHeader(hash, verbose = true) {
+  async getBlockHeader (hash, verbose = true) {
     try {
       // Handle single hash.
-      if (typeof hash === "string") {
+      if (typeof hash === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/getBlockHeader/${hash}?verbose=${verbose}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -277,13 +287,13 @@ class Blockchain {
             hashes: hash,
             verbose: verbose
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input hash must be a string or array of strings.`)
+      throw new Error('Input hash must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -320,11 +330,11 @@ class Blockchain {
    * //   branchlen: 1,
    * //   status: 'valid-headers' } ]
    */
-  async getChainTips() {
+  async getChainTips () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getChainTips`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -352,11 +362,11 @@ class Blockchain {
    *
    * // 702784497476.8376
    */
-  async getDifficulty() {
+  async getDifficulty () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getDifficulty`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -366,13 +376,13 @@ class Blockchain {
   }
 
   // getMempoolAncestors
-  async getMempoolAncestors(txid, verbose = false) {
-    if (typeof txid !== "string") txid = JSON.stringify(txid)
+  async getMempoolAncestors (txid, verbose = false) {
+    if (typeof txid !== 'string') txid = JSON.stringify(txid)
 
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolAncestors/${txid}?verbose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -381,13 +391,13 @@ class Blockchain {
     }
   }
 
-  async getMempoolDescendants(txid, verbose = false) {
-    if (typeof txid !== "string") txid = JSON.stringify(txid)
+  async getMempoolDescendants (txid, verbose = false) {
+    if (typeof txid !== 'string') txid = JSON.stringify(txid)
 
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolDescendants/${txid}?verbose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -477,14 +487,14 @@ class Blockchain {
    * //   }
    * // ]
    */
-  async getMempoolEntry(txid) {
-    //if (typeof txid !== "string") txid = JSON.stringify(txid)
+  async getMempoolEntry (txid) {
+    // if (typeof txid !== "string") txid = JSON.stringify(txid)
 
     try {
-      if (typeof txid === "string") {
+      if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/getMempoolEntry/${txid}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -495,13 +505,13 @@ class Blockchain {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
@@ -531,11 +541,11 @@ class Blockchain {
    * // maxmempool: 300000000,
    * // mempoolminfee: 0 }
    */
-  async getMempoolInfo() {
+  async getMempoolInfo () {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getMempoolInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -578,11 +588,11 @@ class Blockchain {
    * //    depends:
    * //     [ 'e25682caafc7000645d59f4c11d8d594b2943979b9d8fafb9f946e2b35c21b7e' ] },]
    */
-  async getRawMempool(verbose = false) {
+  async getRawMempool (verbose = false) {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/getRawMempool?vebose=${verbose}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -610,30 +620,32 @@ class Blockchain {
    *
    * // null
    */
-  async getTxOut(txid, n, include_mempool = true) {
+  async getTxOut (txid, n, includeMempool = true) {
     try {
       // Input validation
-      if (typeof txid !== "string" || txid.length !== 64)
-        throw new Error(`txid needs to be a proper transaction ID`)
+      if (typeof txid !== 'string' || txid.length !== 64) {
+        throw new Error('txid needs to be a proper transaction ID')
+      }
 
-      if (isNaN(n)) throw new Error(`n must be an integer`)
+      if (isNaN(n)) throw new Error('n must be an integer')
 
-      if (typeof include_mempool !== "boolean")
-        throw new Error(`include_mempool input must be of type boolean`)
+      if (typeof includeMempool !== 'boolean') {
+        throw new Error('includeMempool input must be of type boolean')
+      }
 
       // Send the request to the REST API.
       // const response = await axios.get(
-      //   `${this.restURL}blockchain/getTxOut/${txid}/${n}?include_mempool=${include_mempool}`,
-      //   _this.axiosOptions
+      //   `${this.restURL}blockchain/getTxOut/${txid}/${n}?includeMempool=${includeMempool}`,
+      //   this.axiosOptions
       // )
       const response = await axios.post(
         `${this.restURL}blockchain/getTxOut`,
         {
           txid: txid,
           vout: n,
-          mempool: include_mempool
+          mempool: includeMempool
         },
-        _this.axiosOptions
+        this.axiosOptions
       )
 
       return response.data
@@ -679,14 +691,14 @@ class Blockchain {
    * //   "010000007de867cc8adc5cc8fb6b898ca4462cf9fd667d7830a275277447e60800000000338f121232e169d3100edd82004dc2a1f0e1f030c6c488fa61eafa930b0528fe021f7449ffff001d36b4af9a0100000001338f121232e169d3100edd82004dc2a1f0e1f030c6c488fa61eafa930b0528fe0101"
    * // ]
    */
-  async getTxOutProof(txids) {
+  async getTxOutProof (txids) {
     try {
       // Single txid.
-      if (typeof txids === "string") {
+      if (typeof txids === 'string') {
         const path = `${this.restURL}blockchain/getTxOutProof/${txids}`
-        //if (blockhash) path = `${path}?blockhash=${blockhash}`
+        // if (blockhash) path = `${path}?blockhash=${blockhash}`
 
-        const response = await axios.get(path, _this.axiosOptions)
+        const response = await axios.get(path, this.axiosOptions)
         return response.data
 
         // Array of txids.
@@ -697,24 +709,24 @@ class Blockchain {
           {
             txids: txids
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
 
-  async preciousBlock(blockhash) {
+  async preciousBlock (blockhash) {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/preciousBlock/${blockhash}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -723,11 +735,11 @@ class Blockchain {
     }
   }
 
-  async pruneBlockchain(height) {
+  async pruneBlockchain (height) {
     try {
       const response = await axios.post(
         `${this.restURL}blockchain/pruneBlockchain/${height}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -736,11 +748,11 @@ class Blockchain {
     }
   }
 
-  async verifyChain(checklevel = 3, nblocks = 6) {
+  async verifyChain (checklevel = 3, nblocks = 6) {
     try {
       const response = await axios.get(
         `${this.restURL}blockchain/verifyChain?checklevel=${checklevel}&nblocks=${nblocks}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -786,13 +798,13 @@ class Blockchain {
    * //   "03f69502ca32e7927fd4f38c1d3f950bff650c1eea3d09a70e9df5a9d7f989f7"
    * // ]
    */
-  async verifyTxOutProof(proof) {
+  async verifyTxOutProof (proof) {
     try {
       // Single block
-      if (typeof proof === "string") {
+      if (typeof proof === 'string') {
         const response = await axios.get(
           `${this.restURL}blockchain/verifyTxOutProof/${proof}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -804,13 +816,13 @@ class Blockchain {
           {
             proofs: proof
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
       }
 
-      throw new Error(`Input must be a string or array of strings.`)
+      throw new Error('Input must be a string or array of strings.')
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
       else throw error
