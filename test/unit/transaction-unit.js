@@ -213,5 +213,56 @@ describe('#TransactionLib', () => {
       assert.equal(result.vin[1].tokenQty, 2.34123)
       assert.equal(result.vin[2].tokenQty, null)
     })
+
+    // This test case was generated from the problematic transaction that
+    // used inputs in a 'non-standard' way.
+    it('should correctly assign quantities to mixed mint inputs', async () => {
+      // Mock dependencies
+      sandbox
+        .stub(bchjs.Transaction.rawTransaction, 'getTxData')
+        .resolves(mockData.sendTestInputTx01)
+      sandbox
+        .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
+        .onCall(0)
+        .resolves(mockData.sendTestOpReturnData01)
+        .onCall(1)
+        .resolves(mockData.sendTestOpReturnData02)
+        .onCall(2)
+        .resolves(mockData.sendTestOpReturnData03)
+        .onCall(3)
+        .resolves(mockData.sendTestOpReturnData03)
+        .onCall(4)
+        .resolves(mockData.sendTestOpReturnData04)
+      sandbox
+        .stub(bchjs.Transaction.slpUtils, 'waterfallValidateTxid')
+        .resolves(true)
+
+      const txid =
+        '6bc111fbf5b118021d68355ca19a0e77fa358dd931f284b2550f79a51ab4792a'
+
+      const result = await bchjs.Transaction.get(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert that there are stanardized properties.
+      assert.property(result, 'txid')
+      assert.property(result, 'vin')
+      assert.property(result, 'vout')
+      assert.property(result.vout[0], 'value')
+      assert.property(result.vout[1].scriptPubKey, 'addresses')
+
+      // Assert that added properties exist.
+      assert.property(result.vout[0], 'tokenQty')
+      assert.equal(result.vout[0].tokenQty, null)
+      assert.property(result.vin[0], 'address')
+      assert.property(result.vin[0], 'value')
+      assert.property(result.vin[0], 'tokenQty')
+      assert.property(result, 'isValidSLPTx')
+      assert.equal(result.isValidSLPTx, true)
+
+      // Assert inputs values unique to a Mint input have the proper values.
+      assert.equal(result.vin[0].tokenQty, 100000000)
+      assert.equal(result.vin[1].tokenQty, null)
+      assert.equal(result.vin[2].tokenQty, 99000000)
+    })
   })
 })

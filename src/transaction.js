@@ -129,7 +129,7 @@ class Transaction {
               }
             } else if (inTokenData.txType === 'MINT') {
               // vout=1 (second output) recieves the newly minted tokens.
-              if (i === 1) {
+              if (thisVin.vout === 1) {
                 tokenQty = inTokenData.qty
               } else {
                 tokenQty = null
