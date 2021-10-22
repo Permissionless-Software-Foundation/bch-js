@@ -209,7 +209,9 @@ describe('#TransactionLib', () => {
       assert.equal(result.isValidSLPTx, true)
 
       // Assert inputs values unique to a Mint input have the proper values.
-      assert.equal(result.vin[2].tokenQty, 2.34123)
+      assert.equal(result.vin[0].tokenQty, 43545.34534)
+      assert.equal(result.vin[1].tokenQty, 2.34123)
+      assert.equal(result.vin[2].tokenQty, null)
     })
   })
 })
