@@ -127,11 +127,14 @@ class Transaction {
                 tokenQty = inTokenData.qty
                 // console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
               }
+            } else if (inTokenData.txType === 'MINT') {
+              // vout=1 (second output) recieves the newly minted tokens.
+              tokenQty = inTokenData.qty
 
               //
             } else {
               console.log(
-                'Unexpected code path in Transaction.get(). Is this a MINT transaction?'
+                'Unexpected code path in Transaction.get(). What is the txType?'
               )
               console.log(inTokenData)
               throw new Error('Unexpected code path')
