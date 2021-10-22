@@ -145,7 +145,7 @@ class Address {
    * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
    *
    */
-   toEcashAddress (address, prefix = true) {
+  toEcashAddress (address, prefix = true) {
     const decoded = this._decode(address)
 
     const ecashAddress = cashaddr.encode(
@@ -173,7 +173,7 @@ class Address {
    * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da', false)
    * // qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
    */
-   ecashtoCashAddress (address, prefix = true) {
+  ecashtoCashAddress (address, prefix = true) {
     const decoded = this._decodeEcashAddress(address)
 
     const cashAddress = cashaddr.encode(
