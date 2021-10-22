@@ -112,7 +112,16 @@ class Transaction {
             // )
 
             let tokenQty = 0
-            if (inTokenData.txType === 'SEND') {
+
+            // Validate the input. Mark qty as null if not valid.
+            const vinIsValid = await this.slpUtils.waterfallValidateTxid(
+              thisVin.txid
+            )
+
+            if (!vinIsValid) {
+              // If the input is not a valid, then set qty as null.
+              tokenQty = null
+            } else if (inTokenData.txType === 'SEND') {
               // Get the appropriate vout token amount. This may throw an error,
               // which means this Vin is not actually a token UTXO, it was just
               // associated with a previous token TX.
