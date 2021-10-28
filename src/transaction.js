@@ -102,6 +102,7 @@ class Transaction {
         // Loop through each input and retrieve the token data.
         for (let i = 0; i < txDetails.vin.length; i++) {
           const thisVin = txDetails.vin[i]
+          // console.log(`thisVin: ${JSON.stringify(thisVin, null, 2)}`)
 
           try {
             // If decodeOpReturn() throws an error, then this input is not
@@ -168,6 +169,9 @@ class Transaction {
               thisVin.tokenQtyStr = realQty
               thisVin.tokenQty = parseFloat(realQty)
               // txDetails.vin[i].tokenQty = tokenQty
+
+              // Add token ID to input
+              thisVin.tokenId = inTokenData.tokenId
             } else {
               thisVin.tokenQty = null
             }
@@ -183,6 +187,9 @@ class Transaction {
         // Finally, validate the SLP TX.
         // this.slpUtils.waterfallValidateTxid(txid, usrObj)
         txDetails.isValidSLPTx = await this.slpUtils.waterfallValidateTxid(txid)
+
+        // TODO: Convert the block hash to a block height. Add block height
+        // value to the transaction.
       } catch (err) {
         // console.log('Error: ', err)
 
