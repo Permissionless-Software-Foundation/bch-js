@@ -102,6 +102,7 @@ class Transaction {
         // Loop through each input and retrieve the token data.
         for (let i = 0; i < txDetails.vin.length; i++) {
           const thisVin = txDetails.vin[i]
+          // console.log(`thisVin: ${JSON.stringify(thisVin, null, 2)}`)
 
           try {
             // If decodeOpReturn() throws an error, then this input is not
@@ -112,7 +113,16 @@ class Transaction {
             // )
 
             let tokenQty = 0
-            if (inTokenData.txType === 'SEND') {
+
+            // Validate the input. Mark qty as null if not valid.
+            const vinIsValid = await this.slpUtils.waterfallValidateTxid(
+              thisVin.txid
+            )
+
+            if (!vinIsValid) {
+              // If the input is not a valid, then set qty as null.
+              tokenQty = null
+            } else if (inTokenData.txType === 'SEND') {
               // Get the appropriate vout token amount. This may throw an error,
               // which means this Vin is not actually a token UTXO, it was just
               // associated with a previous token TX.
@@ -127,11 +137,18 @@ class Transaction {
                 tokenQty = inTokenData.qty
                 // console.log(`tokenQty: ${JSON.stringify(tokenQty, null, 2)}`)
               }
+            } else if (inTokenData.txType === 'MINT') {
+              // vout=1 (second output) recieves the newly minted tokens.
+              if (thisVin.vout === 1) {
+                tokenQty = inTokenData.qty
+              } else {
+                tokenQty = null
+              }
 
               //
             } else {
               console.log(
-                'Unexpected code path in Transaction.get(). Is this a MINT transaction?'
+                'Unexpected code path in Transaction.get(). What is the txType?'
               )
               console.log(inTokenData)
               throw new Error('Unexpected code path')
@@ -152,6 +169,9 @@ class Transaction {
               thisVin.tokenQtyStr = realQty
               thisVin.tokenQty = parseFloat(realQty)
               // txDetails.vin[i].tokenQty = tokenQty
+
+              // Add token ID to input
+              thisVin.tokenId = inTokenData.tokenId
             } else {
               thisVin.tokenQty = null
             }
@@ -167,6 +187,9 @@ class Transaction {
         // Finally, validate the SLP TX.
         // this.slpUtils.waterfallValidateTxid(txid, usrObj)
         txDetails.isValidSLPTx = await this.slpUtils.waterfallValidateTxid(txid)
+
+        // TODO: Convert the block hash to a block height. Add block height
+        // value to the transaction.
       } catch (err) {
         // console.log('Error: ', err)
 

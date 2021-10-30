@@ -287,9 +287,15 @@ class TokenType1 {
     try {
       // TODO: Add input validation.
 
-      let baseQty = new BigNumber(configObj.initialQty).times(
-        10 ** configObj.decimals
-      )
+      let baseQty
+      if (configObj.decimals !== 0) {
+        baseQty = new BigNumber(configObj.initialQty).times(
+          10 ** configObj.decimals
+        )
+      } else {
+        baseQty = new BigNumber(configObj.initialQty)
+      }
+
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
       baseQty = baseQty.toString()

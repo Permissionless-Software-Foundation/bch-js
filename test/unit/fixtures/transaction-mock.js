@@ -266,14 +266,117 @@ const genesisTestInputTx = {
   blocktime: 1534271330
 }
 
-genesisTestOpReturnData01 = {
+const mintTestInputTx = {
+  txid: '4640a734063ea79fa587a3cac38a70a2f6f3db0011e23514024185982110d0fa',
+  hash: '4640a734063ea79fa587a3cac38a70a2f6f3db0011e23514024185982110d0fa',
+  version: 1,
+  size: 585,
+  locktime: 543613,
+  vin: [
+    {
+      txid: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+      vout: 1,
+      scriptSig: {
+        asm: '3045022100e3d5f9a48f9aa1cf7e9ed1992e0281e7300b734ba0e4bd5bb9265b2be60bd71002200ccde53ce7ea9da9df3e834f234f3bea65c2e58c96f8436f93333fd8946a1db2[ALL|FORKID] 02056220984cc2cf5261a27d4f66d31c9ef601a688ca1a5ab81e55b6f0d311be74',
+        hex: '483045022100e3d5f9a48f9aa1cf7e9ed1992e0281e7300b734ba0e4bd5bb9265b2be60bd71002200ccde53ce7ea9da9df3e834f234f3bea65c2e58c96f8436f93333fd8946a1db2412102056220984cc2cf5261a27d4f66d31c9ef601a688ca1a5ab81e55b6f0d311be74'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qpaf9wltgmpjlg2vxwwu7zdw5y4z7m277ckxn8cufl',
+      value: 0.00000546,
+      tokenQtyStr: '43545.34534',
+      tokenQty: 43545.34534
+    },
+    {
+      txid: 'ee9d3cf5153599c134147e3fac9844c68e216843f4452a1ce15a29452af6db34',
+      vout: 1,
+      scriptSig: {
+        asm: '3045022100bb90d52be9b568f643fdb1a302e9f063be27a9f914e2a6b192cbabf2cbdeaf9302203c275fc8d1b82390bc1726390d361c5266056bddd54dec23efa207c79eacea4a[ALL|FORKID] 024146cfcd0c02e99d6451dc48ad0f97114aeda18fe55c52a10bfc0490f314e6a2',
+        hex: '483045022100bb90d52be9b568f643fdb1a302e9f063be27a9f914e2a6b192cbabf2cbdeaf9302203c275fc8d1b82390bc1726390d361c5266056bddd54dec23efa207c79eacea4a4121024146cfcd0c02e99d6451dc48ad0f97114aeda18fe55c52a10bfc0490f314e6a2'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qqf89zzwd0fqc3npkks997r5l7dpfjf9kgx2rqu500',
+      value: 0.00000546,
+      tokenQtyStr: '2.34123',
+      tokenQty: 2.34123
+    },
+    {
+      txid: 'ee9d3cf5153599c134147e3fac9844c68e216843f4452a1ce15a29452af6db34',
+      vout: 3,
+      scriptSig: {
+        asm: '3044022029ab770c249f467b40bb90410429f6d657f9be299baa19a6838d04d972436b450220143660297e8e836bc16d317649fad8c310bdadb4fb61d4e9f6ba11203abe5dae[ALL|FORKID] 02eed4ac9dda3405d9b1ccbbf09f8056f3e7c615924274bd5643238b543d0a1d56',
+        hex: '473044022029ab770c249f467b40bb90410429f6d657f9be299baa19a6838d04d972436b450220143660297e8e836bc16d317649fad8c310bdadb4fb61d4e9f6ba11203abe5dae412102eed4ac9dda3405d9b1ccbbf09f8056f3e7c615924274bd5643238b543d0a1d56'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qqt30r33k0jx3sxe34tmupaujpaljnglmvqgrrfp2x',
+      value: 0.00054848,
+      tokenQtyStr: '2.34123',
+      tokenQty: 2.34123
+    }
+  ],
+  vout: [
+    {
+      value: 0,
+      n: 0,
+      scriptPubKey: {
+        asm: 'OP_RETURN 5262419 1 1145980243 938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8 0000000103907f11',
+        hex: '6a04534c500001010453454e4420938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8080000000103907f11',
+        type: 'nulldata'
+      },
+      tokenQty: null
+    },
+    {
+      value: 0.00000546,
+      n: 1,
+      scriptPubKey: {
+        asm: 'OP_DUP OP_HASH160 059775ff94f65c04e8a6847e74eb9809d8cd779b OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a914059775ff94f65c04e8a6847e74eb9809d8cd779b88ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: [
+          'bitcoincash:qqzewa0ljnm9cp8g56z8ua8tnqya3nthnvhv5hpu8y'
+        ]
+      },
+      tokenQtyStr: '43547.68657',
+      tokenQty: 43547.68657
+    },
+    {
+      value: 0.00054808,
+      n: 2,
+      scriptPubKey: {
+        asm: 'OP_DUP OP_HASH160 0e330dc9009e1e07831f5a22d4ade8977ab674c8 OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a9140e330dc9009e1e07831f5a22d4ade8977ab674c888ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: [
+          'bitcoincash:qq8rxrwfqz0pupurradz949dazth4dn5eqs3mhrucv'
+        ]
+      },
+      tokenQty: null
+    }
+  ],
+  hex: '0100000003f8cda53b43b0ea49991a9bc6c74eb901d2a8b964bc7b8987d76789618ec18c93010000006b483045022100e3d5f9a48f9aa1cf7e9ed1992e0281e7300b734ba0e4bd5bb9265b2be60bd71002200ccde53ce7ea9da9df3e834f234f3bea65c2e58c96f8436f93333fd8946a1db2412102056220984cc2cf5261a27d4f66d31c9ef601a688ca1a5ab81e55b6f0d311be74feffffff34dbf62a45295ae11c2a45f44368218ec64498ac3f7e1434c1993515f53c9dee010000006b483045022100bb90d52be9b568f643fdb1a302e9f063be27a9f914e2a6b192cbabf2cbdeaf9302203c275fc8d1b82390bc1726390d361c5266056bddd54dec23efa207c79eacea4a4121024146cfcd0c02e99d6451dc48ad0f97114aeda18fe55c52a10bfc0490f314e6a2feffffff34dbf62a45295ae11c2a45f44368218ec64498ac3f7e1434c1993515f53c9dee030000006a473044022029ab770c249f467b40bb90410429f6d657f9be299baa19a6838d04d972436b450220143660297e8e836bc16d317649fad8c310bdadb4fb61d4e9f6ba11203abe5dae412102eed4ac9dda3405d9b1ccbbf09f8056f3e7c615924274bd5643238b543d0a1d56feffffff030000000000000000376a04534c500001010453454e4420938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8080000000103907f1122020000000000001976a914059775ff94f65c04e8a6847e74eb9809d8cd779b88ac18d60000000000001976a9140e330dc9009e1e07831f5a22d4ade8977ab674c888ac7d4b0800',
+  blockhash: '00000000000000000140f0d813052da59c811a936494a8d8b2d60b215d19e3dc',
+  confirmations: 167007,
+  time: 1534391953,
+  blocktime: 1534391953,
+  isValidSLPTx: true,
+  tokenTxType: 'SEND',
+  tokenId: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+  tokenTicker: 'Bubb2',
+  tokenName: 'the new bubbles!',
+  tokenDecimals: 5,
+  tokenUri: '',
+  tokenDocHash: ''
+}
+
+const genesisTestOpReturnData01 = {
   tokenType: 1,
   txType: 'SEND',
   tokenId: '323a1e35ae0b356316093d20f2d9fbc995d19314b5c0148b78dc8d9c0dab9d35',
   amounts: ['5000000', '5000000']
 }
 
-genesisTestOpReturnData02 = {
+const genesisTestOpReturnData02 = {
   tokenType: 1,
   txType: 'GENESIS',
   ticker: '',
@@ -286,6 +389,175 @@ genesisTestOpReturnData02 = {
   qty: '10000000'
 }
 
+const mintTestOpReturnData01 = {
+  tokenType: 1,
+  txType: 'SEND',
+  tokenId: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+  amounts: [
+    '4354768657'
+  ]
+}
+
+const mintTestOpReturnData02 = {
+  tokenType: 1,
+  txType: 'GENESIS',
+  ticker: 'Bubb2',
+  name: 'the new bubbles!',
+  tokenId: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+  documentUri: '',
+  documentHash: '',
+  decimals: 5,
+  mintBatonVout: 2,
+  qty: '4354534534'
+}
+
+const mintTestOpReturnData03 = {
+  tokenType: 1,
+  txType: 'MINT',
+  tokenId: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+  mintBatonVout: 2,
+  qty: '234123'
+}
+
+const sendTestInputTx01 = {
+  txid: '6bc111fbf5b118021d68355ca19a0e77fa358dd931f284b2550f79a51ab4792a',
+  hash: '6bc111fbf5b118021d68355ca19a0e77fa358dd931f284b2550f79a51ab4792a',
+  version: 1,
+  size: 627,
+  locktime: 543956,
+  vin: [
+    {
+      txid: 'b36b0c7485ad569b98cc9b9614dc68a5208495f22ec3b00effcf963b135a5215',
+      vout: 1,
+      scriptSig: {
+        asm: '3045022100934ca9732bf6c1b146f09e6198142a79a80788b576c6b94e2052df5bcdc86ad902205ef6205192200ea93f6c97f966b838ee785529b694eb61e576e3452470613847[ALL|FORKID] 02b23484341cf36ec00184e045d54e6ffca97da7a8f8a6fd719cead192132306b1',
+        hex: '483045022100934ca9732bf6c1b146f09e6198142a79a80788b576c6b94e2052df5bcdc86ad902205ef6205192200ea93f6c97f966b838ee785529b694eb61e576e3452470613847412102b23484341cf36ec00184e045d54e6ffca97da7a8f8a6fd719cead192132306b1'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qqxj7p2jatt8h3tcpadyxw8a2mr7myqk2qm57u4rdf',
+      value: 0.00000546
+    },
+    {
+      txid: 'b36b0c7485ad569b98cc9b9614dc68a5208495f22ec3b00effcf963b135a5215',
+      vout: 3,
+      scriptSig: {
+        asm: '3044022004d4a95658ef140561ae3a936fb01511778a5376a499bcd6f47b64074a6ca4430220273a4bf553ca17c7e10f393582f980e17a6a98ada867633faad9dbcc595dfd23[ALL|FORKID] 0324fe3b895cfa09523e8ec529eb15c681e3a20f96df85175c54a952b68ac018df',
+        hex: '473044022004d4a95658ef140561ae3a936fb01511778a5376a499bcd6f47b64074a6ca4430220273a4bf553ca17c7e10f393582f980e17a6a98ada867633faad9dbcc595dfd2341210324fe3b895cfa09523e8ec529eb15c681e3a20f96df85175c54a952b68ac018df'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qrcdncgpnv3s8lekcamv4yekp8sghnk37qtsxdyzla',
+      value: 0.00153976
+    },
+    {
+      txid: '95d460512143b636bbc5780d8b27b04fca3bfd2f22003ab48da594e2bab9cfc1',
+      vout: 2,
+      scriptSig: {
+        asm: '3044022079f239216f8d806a084221e841227e55d23a1b90aaf5b5ab54d6f865fbeacf8b022053568f10afc00459af083e4c77d0b85229eb8973a1de406aaa699557f05c7fed[ALL|FORKID] 02035f98ff79d6f3a8ec5a2738c103bbb7796e94fcaffdfaae8f5b7a7fae5d93e3',
+        hex: '473044022079f239216f8d806a084221e841227e55d23a1b90aaf5b5ab54d6f865fbeacf8b022053568f10afc00459af083e4c77d0b85229eb8973a1de406aaa699557f05c7fed412102035f98ff79d6f3a8ec5a2738c103bbb7796e94fcaffdfaae8f5b7a7fae5d93e3'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qrcukahsm53lsywcdarehh73vqazpdu8zv547nym9g',
+      value: 0.00000546
+    }
+  ],
+  vout: [
+    {
+      value: 0,
+      n: 0,
+      scriptPubKey: {
+        asm: 'OP_RETURN 5262419 1 1145980243 550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35 00005af3107a4000 004657febe8d8000',
+        hex: '6a04534c500001010453454e4420550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b350800005af3107a400008004657febe8d8000',
+        type: 'nulldata'
+      }
+    },
+    {
+      value: 0.00000546,
+      n: 1,
+      scriptPubKey: {
+        asm: 'OP_DUP OP_HASH160 268dadd7c7becc11782ad3d956342442d8eae92a OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a914268dadd7c7becc11782ad3d956342442d8eae92a88ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: [
+          'bitcoincash:qqngmtwhc7lvcytc9tfaj435y3pd36hf9gtdq8nsuu'
+        ]
+      }
+    },
+    {
+      value: 0.00000546,
+      n: 2,
+      scriptPubKey: {
+        asm: 'OP_DUP OP_HASH160 9fb45b370f9ff38a775ee95cabcad7615817924e OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a9149fb45b370f9ff38a775ee95cabcad7615817924e88ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: [
+          'bitcoincash:qz0mgkehp70l8znhtm54e2726as4s9ujfc9s2szctr'
+        ]
+      }
+    },
+    {
+      value: 0.00153347,
+      n: 3,
+      scriptPubKey: {
+        asm: 'OP_DUP OP_HASH160 9fb45b370f9ff38a775ee95cabcad7615817924e OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a9149fb45b370f9ff38a775ee95cabcad7615817924e88ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: [
+          'bitcoincash:qz0mgkehp70l8znhtm54e2726as4s9ujfc9s2szctr'
+        ]
+      }
+    }
+  ],
+  hex: '010000000315525a133b96cfff0eb0c32ef2958420a568dc14969bcc989b56ad85740c6bb3010000006b483045022100934ca9732bf6c1b146f09e6198142a79a80788b576c6b94e2052df5bcdc86ad902205ef6205192200ea93f6c97f966b838ee785529b694eb61e576e3452470613847412102b23484341cf36ec00184e045d54e6ffca97da7a8f8a6fd719cead192132306b1feffffff15525a133b96cfff0eb0c32ef2958420a568dc14969bcc989b56ad85740c6bb3030000006a473044022004d4a95658ef140561ae3a936fb01511778a5376a499bcd6f47b64074a6ca4430220273a4bf553ca17c7e10f393582f980e17a6a98ada867633faad9dbcc595dfd2341210324fe3b895cfa09523e8ec529eb15c681e3a20f96df85175c54a952b68ac018dffeffffffc1cfb9bae294a58db43a00222ffd3bca4fb0278b0d78c5bb36b643215160d495020000006a473044022079f239216f8d806a084221e841227e55d23a1b90aaf5b5ab54d6f865fbeacf8b022053568f10afc00459af083e4c77d0b85229eb8973a1de406aaa699557f05c7fed412102035f98ff79d6f3a8ec5a2738c103bbb7796e94fcaffdfaae8f5b7a7fae5d93e3feffffff040000000000000000406a04534c500001010453454e4420550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b350800005af3107a400008004657febe8d800022020000000000001976a914268dadd7c7becc11782ad3d956342442d8eae92a88ac22020000000000001976a9149fb45b370f9ff38a775ee95cabcad7615817924e88ac03570200000000001976a9149fb45b370f9ff38a775ee95cabcad7615817924e88acd44c0800',
+  blockhash: '000000000000000001882548bbd9a41bc53a039634f2afa4a12d653434347d04',
+  confirmations: 166670,
+  time: 1534593905,
+  blocktime: 1534593905
+}
+
+const sendTestOpReturnData01 = {
+  tokenType: 1,
+  txType: 'SEND',
+  tokenId: '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35',
+  amounts: [
+    '100000000000000',
+    '19800000000000000'
+  ]
+}
+
+const sendTestOpReturnData02 = {
+  tokenType: 1,
+  txType: 'GENESIS',
+  ticker: 'USDT',
+  name: 'Tether Ltd. US dollar backed tokens',
+  tokenId: '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35',
+  documentUri: 'https://tether.to/wp-content/uploads/2016/06/TetherWhitePaper.pdf',
+  documentHash: '�DQ�\u001e�3�\u0006p���pM�\u0001\u0017�pW(;\u0003,��wy19\u0016',
+  decimals: 8,
+  mintBatonVout: 2,
+  qty: '10000000000000000'
+}
+
+const sendTestOpReturnData03 = {
+  tokenType: 1,
+  txType: 'MINT',
+  tokenId: '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35',
+  mintBatonVout: 2,
+  qty: '10000000000000000'
+}
+
+const sendTestOpReturnData04 = {
+  tokenType: 1,
+  txType: 'SEND',
+  tokenId: '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35',
+  amounts: [
+    '100000000000000',
+    '9900000000000000'
+  ]
+}
+
 module.exports = {
   nonSlpTxDetails,
   slpTxDetails,
@@ -293,6 +565,15 @@ module.exports = {
   mockOpReturnData02,
   mockOpReturnData03,
   genesisTestInputTx,
+  mintTestInputTx,
   genesisTestOpReturnData01,
-  genesisTestOpReturnData02
+  genesisTestOpReturnData02,
+  mintTestOpReturnData01,
+  mintTestOpReturnData02,
+  mintTestOpReturnData03,
+  sendTestInputTx01,
+  sendTestOpReturnData01,
+  sendTestOpReturnData02,
+  sendTestOpReturnData03,
+  sendTestOpReturnData04
 }
