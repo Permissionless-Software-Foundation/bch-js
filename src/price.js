@@ -58,7 +58,7 @@ class Price {
    *    let current = await bchjs.Price.getUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -94,7 +94,7 @@ class Price {
    *    let current = await bchjs.Price.rates();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -128,7 +128,7 @@ class Price {
    * @apiGroup Price
    * @apiDescription Return current price of BCHA in USD.
    * This endpoint gets the USD price of XEC from the Coinex API. The price
-   * denominated in BCHA comes from bch-api, so it has a better chance of 
+   * denominated in BCHA comes from bch-api, so it has a better chance of
    * working in Tor.
    *
    * @apiExample Example usage:
@@ -137,7 +137,7 @@ class Price {
    *    let current = await bchjs.Price.getBchaUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -150,7 +150,7 @@ class Price {
         this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
-      
+
       const bchaPrice = response.data.usd * 1000000
       // Convert XEC denomination to BCHA denomination
 
@@ -161,7 +161,7 @@ class Price {
     }
   }
 
-    /**
+  /**
    * @api price.getXecUsd() getXecUsd()
    * @apiName Price getXecUsd()
    * @apiGroup Price
@@ -175,13 +175,13 @@ class Price {
    *    let current = await bchjs.Price.getXecUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
-   * // 0.00021234 
+   * // 0.00021234
    */
-   async getXecUsd () {
+  async getXecUsd () {
     try {
       const response = await this.axios.get(
         `${this.restURL}price/bchausd`,
@@ -210,7 +210,7 @@ class Price {
    *    let current = await bchjs.Price.getBchUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
