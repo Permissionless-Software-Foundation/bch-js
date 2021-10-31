@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@psf/bip21": "^2.0.1",
-    "@psf/bip32-utils": "^1.0.0",
+    "@psf/bip32-utils": "^1.0.1",
     "@psf/bitcoincash-ops": "^2.0.0",
     "@psf/bitcoincashjs-lib": "^4.0.2",
     "@psf/coininfo": "^4.0.0",
@@ -68,7 +68,7 @@
     "assert": "^2.0.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.2",
-    "eslint": "5.16.0",
+    "eslint": "^8.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-node": "^9.1.0",
