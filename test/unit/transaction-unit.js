@@ -288,6 +288,9 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.nonSlpTxDetails)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 602405 })
 
       const result = await bchjs.Transaction.get2(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -304,6 +307,9 @@ describe('#TransactionLib', () => {
       assert.property(result.vin[0], 'value')
       assert.property(result, 'isValidSLPTx')
       assert.equal(result.isValidSLPTx, false)
+
+      // Assert blockheight is added
+      assert.equal(result.blockheight, 602405)
     })
 
     it('should get details about a SLP transaction', async () => {
@@ -311,6 +317,9 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.slpTxDetails)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 603424 })
       sandbox
         .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
         .onCall(0)
@@ -321,9 +330,6 @@ describe('#TransactionLib', () => {
         .resolves(mockData.mockOpReturnData03)
         .onCall(3)
         .rejects(new Error('No OP_RETURN'))
-      // sandbox
-      //   .stub(bchjs.Transaction.slpUtils, 'waterfallValidateTxid')
-      //   .resolves(true)
 
       const txid =
         '266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1'
@@ -344,6 +350,9 @@ describe('#TransactionLib', () => {
       assert.property(result.vin[0], 'address')
       assert.property(result.vin[0], 'value')
       assert.property(result.vin[0], 'tokenQty')
+
+      // Assert blockheight is added
+      assert.equal(result.blockheight, 603424)
     })
 
     it('should catch and throw error on network error', async () => {
@@ -372,6 +381,9 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.genesisTestInputTx)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 543409 })
       sandbox
         .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
         .onCall(0)
@@ -406,6 +418,9 @@ describe('#TransactionLib', () => {
       // Assert inputs values unique to a Genesis input have the proper values.
       assert.equal(result.vin[0].tokenQty, 10000000)
       assert.equal(result.vin[1].tokenQty, null)
+
+      // Assert blockheight is added
+      assert.equal(result.blockheight, 543409)
     })
 
     it('should get input details when input is a mint tx', async () => {
@@ -413,6 +428,9 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.mintTestInputTx)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 543614 })
       sandbox
         .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
         .onCall(0)
@@ -450,6 +468,9 @@ describe('#TransactionLib', () => {
       assert.equal(result.vin[0].tokenQty, 43545.34534)
       assert.equal(result.vin[1].tokenQty, 2.34123)
       assert.equal(result.vin[2].tokenQty, null)
+
+      // Assert blockheight is added
+      assert.equal(result.blockheight, 543614)
     })
 
     // This test case was generated from the problematic transaction that
@@ -459,6 +480,9 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.sendTestInputTx01)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 543957 })
       sandbox
         .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
         .onCall(0)
@@ -496,6 +520,9 @@ describe('#TransactionLib', () => {
       assert.equal(result.vin[0].tokenQty, 100000000)
       assert.equal(result.vin[1].tokenQty, null)
       assert.equal(result.vin[2].tokenQty, 99000000)
+
+      // Assert blockheight is added
+      assert.equal(result.blockheight, 543957)
     })
   })
 })

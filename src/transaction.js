@@ -2,15 +2,18 @@
   High-level functions for working with Transactions
 */
 
+const BigNumber = require('bignumber.js')
+
 const RawTransaction = require('./raw-transactions')
 const SlpUtils = require('./slp/utils')
-const BigNumber = require('bignumber.js')
+const Blockchain = require('./blockchain')
 
 class Transaction {
   constructor (config) {
     // Encapsulate dependencies
     this.slpUtils = new SlpUtils(config)
     this.rawTransaction = new RawTransaction(config)
+    this.blockchain = new Blockchain(config)
   }
 
   /**
@@ -256,6 +259,12 @@ class Transaction {
       const txDetails = await this.rawTransaction.getTxData(txid)
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
+      // Get the block height the transaction was mined in.
+      const blockHeader = await this.blockchain.getBlockHeader(
+        txDetails.blockhash
+      )
+      txDetails.blockheight = blockHeader.height
+
       // First get the token information for the output. If that fails, then
       // this is not an SLP transaction, and this method can return false.
       let outTokenData
@@ -379,9 +388,6 @@ class Transaction {
             continue
           }
         }
-
-        // TODO: Convert the block hash to a block height. Add block height
-        // value to the transaction.
       } catch (err) {
         // console.log('Error: ', err)
 
