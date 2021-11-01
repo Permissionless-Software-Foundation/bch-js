@@ -270,7 +270,7 @@ class Transaction {
       let outTokenData
       try {
         outTokenData = await this.slpUtils.decodeOpReturn(txid)
-        // console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
+        console.log(`outTokenData: ${JSON.stringify(outTokenData, null, 2)}`)
 
         // Get Genesis data for this token.
         const genesisData = await this.slpUtils.decodeOpReturn(
@@ -278,7 +278,7 @@ class Transaction {
           // decodeOpReturnCache
           // usrObj // pass user data when making an internal call.
         )
-        // console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
+        console.log(`genesisData: ${JSON.stringify(genesisData, null, 2)}`)
 
         // Add token information to the tx details object.
         txDetails.tokenTxType = outTokenData.txType
@@ -289,9 +289,20 @@ class Transaction {
         txDetails.tokenUri = genesisData.documentUri
         txDetails.tokenDocHash = genesisData.documentHash
 
+        let numOutputs = 1
+        if (outTokenData.txType === 'SEND') {
+          numOutputs = outTokenData.amounts.length
+        }
+
         // Add the token quantity to each output.
-        for (let i = 0; i < outTokenData.amounts.length; i++) {
-          const rawQty = outTokenData.amounts[i]
+        for (let i = 0; i < numOutputs; i++) {
+          let rawQty = 0
+          if (outTokenData.txType === 'SEND') {
+            rawQty = outTokenData.amounts[i]
+          } else {
+            rawQty = outTokenData.qty
+          }
+
           // const realQty = Number(rawQty) / Math.pow(10, txDetails.tokenDecimals)
 
           // Calculate the real quantity using a BigNumber, then convert it to a
@@ -304,6 +315,9 @@ class Transaction {
 
           txDetails.vout[i + 1].tokenQtyStr = realQty
           txDetails.vout[i + 1].tokenQty = parseFloat(realQty)
+          console.log(
+            `thisVout ${i}: ${JSON.stringify(txDetails.vout[i + 1], null, 2)}`
+          )
         }
 
         // Add tokenQty = null to any outputs that don't have a value.
@@ -324,9 +338,9 @@ class Transaction {
             // If decodeOpReturn() throws an error, then this input is not
             // from an SLP transaction and can be ignored.
             const inTokenData = await this.slpUtils.decodeOpReturn(thisVin.txid)
-            // console.log(
-            //   `vin[${i}] tokenData: ${JSON.stringify(inTokenData, null, 2)}`
-            // )
+            console.log(
+              `vin[${i}] tokenData: ${JSON.stringify(inTokenData, null, 2)}`
+            )
 
             let tokenQty = 0
 
@@ -349,6 +363,11 @@ class Transaction {
               // vout=1 (second output) recieves the newly minted tokens.
               if (thisVin.vout === 1) {
                 tokenQty = inTokenData.qty
+              } else if (thisVin.vout === inTokenData.mintBatonVout) {
+                // Vin is a Mint baton
+                thisVin.tokenQty = new BigNumber(0)
+                thisVin.tokenQtyStr = '0'
+                thisVin.tokenId = inTokenData.tokenId
               } else {
                 tokenQty = null
               }

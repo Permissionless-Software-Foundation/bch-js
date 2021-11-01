@@ -534,5 +534,33 @@ describe('#TransactionLib', () => {
       // Assert blockheight is added
       assert.equal(result.blockheight, 543957)
     })
+
+    it('should hydrate problematic tx', async () => {
+      // Mock dependencies
+      sandbox
+        .stub(bchjs.Transaction.rawTransaction, 'getTxData')
+        .resolves(mockData.mintTestInputTx02)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 543614 })
+      // sandbox
+      //   .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
+      //   .onCall(0)
+      //   .resolves(mockData.sendTestOpReturnData01)
+      //   .onCall(1)
+      //   .resolves(mockData.sendTestOpReturnData02)
+      //   .onCall(2)
+      //   .resolves(mockData.sendTestOpReturnData03)
+      //   .onCall(3)
+      //   .resolves(mockData.sendTestOpReturnData03)
+      //   .onCall(4)
+      //   .resolves(mockData.sendTestOpReturnData04)
+
+      const txid =
+        'ee9d3cf5153599c134147e3fac9844c68e216843f4452a1ce15a29452af6db34'
+
+      const result = await bchjs.Transaction.get2(txid)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+    })
   })
 })
