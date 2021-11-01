@@ -351,6 +351,10 @@ describe('#TransactionLib', () => {
       assert.property(result.vin[0], 'value')
       assert.property(result.vin[0], 'tokenQty')
 
+      // Assert that tokenIds and tokenQty are included in inputs.
+      assert.property(result.vin[0], 'tokenId')
+      assert.equal(result.vin[0].tokenQtyStr, '998834')
+
       // Assert blockheight is added
       assert.equal(result.blockheight, 603424)
     })
@@ -418,6 +422,12 @@ describe('#TransactionLib', () => {
       // Assert inputs values unique to a Genesis input have the proper values.
       assert.equal(result.vin[0].tokenQty, 10000000)
       assert.equal(result.vin[1].tokenQty, null)
+
+      // Assert that tokenIds and tokenQty are included in inputs.
+      assert.property(result.vin[0], 'tokenId')
+      assert.equal(result.vin[0].tokenQtyStr, '10000000')
+      assert.equal(result.vin[1].tokenQty, null)
+      assert.equal(result.vin[1].tokenQtyStr, null)
 
       // Assert blockheight is added
       assert.equal(result.blockheight, 543409)

@@ -379,12 +379,14 @@ class Transaction {
               thisVin.tokenId = inTokenData.tokenId
             } else {
               thisVin.tokenQty = null
+              thisVin.tokenQtyStr = null
             }
           } catch (err) {
             // If decodeOpReturn() throws an error, then this input is not
             // from an SLP transaction and can be ignored.
             // thisVin.tokenQty = null
             thisVin.tokenQty = null
+            thisVin.tokenQtyStr = null
             continue
           }
         }
