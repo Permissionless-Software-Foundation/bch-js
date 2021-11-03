@@ -297,7 +297,7 @@ describe('#TransactionLib', () => {
       sandbox
         .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
         .resolves({ height: 602405 })
-      sandbox.stub(bchjs.Transaction,'getTokenInfo').resolves(false)
+      sandbox.stub(bchjs.Transaction, 'getTokenInfo').resolves(false)
 
       const result = await bchjs.Transaction.get3(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -354,17 +354,17 @@ describe('#TransactionLib', () => {
       assert.equal(result.vout[0].tokenQty, null)
       assert.equal(result.vout[0].tokenQtyStr, null)
       assert.equal(result.vout[1].tokenQty, 1)
-      assert.equal(result.vout[1].tokenQtyStr, "1")
+      assert.equal(result.vout[1].tokenQtyStr, '1')
       assert.equal(result.vout[2].tokenQty, 998833)
-      assert.equal(result.vout[2].tokenQtyStr, "998833")
+      assert.equal(result.vout[2].tokenQtyStr, '998833')
       assert.equal(result.vout[3].tokenQty, null)
       assert.equal(result.vout[3].tokenQtyStr, null)
 
       // Assert that inputs have expected properties
-      assert.equal(result.vin[0].tokenQtyStr, "998834")
+      assert.equal(result.vin[0].tokenQtyStr, '998834')
       assert.equal(result.vin[0].tokenQty, 998834)
-      assert.equal(result.vin[0].tokenId, "497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7")
-      assert.equal(result.vin[1].tokenQtyStr, "0")
+      assert.equal(result.vin[0].tokenId, '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7')
+      assert.equal(result.vin[1].tokenQtyStr, '0')
       assert.equal(result.vin[1].tokenQty, 0)
       assert.equal(result.vin[1].tokenId, null)
 
@@ -430,18 +430,18 @@ describe('#TransactionLib', () => {
       assert.equal(result.vout[0].tokenQty, null)
       assert.equal(result.vout[0].tokenQtyStr, null)
       assert.equal(result.vout[1].tokenQty, 5000000)
-      assert.equal(result.vout[1].tokenQtyStr, "5000000")
+      assert.equal(result.vout[1].tokenQtyStr, '5000000')
       assert.equal(result.vout[2].tokenQty, 5000000)
-      assert.equal(result.vout[2].tokenQtyStr, "5000000")
+      assert.equal(result.vout[2].tokenQtyStr, '5000000')
       assert.equal(result.vout[3].tokenQty, null)
       assert.equal(result.vout[3].tokenQtyStr, null)
 
       // Assert inputs have expected properties and values
       assert.equal(result.vin[0].tokenQty, 10000000)
-      assert.equal(result.vin[0].tokenQtyStr, "10000000")
-      assert.equal(result.vin[0].tokenId, "323a1e35ae0b356316093d20f2d9fbc995d19314b5c0148b78dc8d9c0dab9d35")
+      assert.equal(result.vin[0].tokenQtyStr, '10000000')
+      assert.equal(result.vin[0].tokenId, '323a1e35ae0b356316093d20f2d9fbc995d19314b5c0148b78dc8d9c0dab9d35')
       assert.equal(result.vin[1].tokenQty, 0)
-      assert.equal(result.vin[1].tokenQtyStr, "0")
+      assert.equal(result.vin[1].tokenQtyStr, '0')
       assert.equal(result.vin[1].tokenId, null)
 
       // Assert blockheight is added
@@ -486,18 +486,18 @@ describe('#TransactionLib', () => {
       // Assert expected output properties and values exist.
       assert.equal(result.vout[0].tokenQty, null)
       assert.equal(result.vout[1].tokenQty, 43547.68657)
-      assert.equal(result.vout[1].tokenQtyStr, "43547.68657")
+      assert.equal(result.vout[1].tokenQtyStr, '43547.68657')
       assert.equal(result.vout[2].tokenQty, null)
 
       // Assert expected input properties and values exist.
       assert.equal(result.vin[0].tokenQty, 43545.34534)
-      assert.equal(result.vin[0].tokenQtyStr, "43545.34534")
-      assert.equal(result.vin[0].tokenId, "938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8")
+      assert.equal(result.vin[0].tokenQtyStr, '43545.34534')
+      assert.equal(result.vin[0].tokenId, '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8')
       assert.equal(result.vin[1].tokenQty, 2.34123)
-      assert.equal(result.vin[1].tokenQtyStr, "2.34123")
-      assert.equal(result.vin[1].tokenId, "938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8")
+      assert.equal(result.vin[1].tokenQtyStr, '2.34123')
+      assert.equal(result.vin[1].tokenId, '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8')
       assert.equal(result.vin[2].tokenQty, 0)
-      assert.equal(result.vin[2].tokenQtyStr, "0")
+      assert.equal(result.vin[2].tokenQtyStr, '0')
       assert.equal(result.vin[2].tokenId, null)
 
       // Assert blockheight is added
@@ -544,21 +544,21 @@ describe('#TransactionLib', () => {
       // Assert the outputs have expected properties and values.
       assert.equal(result.vout[0].tokenQty, null)
       assert.equal(result.vout[1].tokenQty, 1000000)
-      assert.equal(result.vout[1].tokenQtyStr, "1000000")
+      assert.equal(result.vout[1].tokenQtyStr, '1000000')
       assert.equal(result.vout[2].tokenQty, 198000000)
-      assert.equal(result.vout[2].tokenQtyStr, "198000000")
+      assert.equal(result.vout[2].tokenQtyStr, '198000000')
       assert.equal(result.vout[3].tokenQty, null)
 
       // Assert the inputs have expected properties and values.
       assert.equal(result.vin[0].tokenQty, 100000000)
-      assert.equal(result.vin[0].tokenQtyStr, "100000000")
-      assert.equal(result.vin[0].tokenId, "550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35")
+      assert.equal(result.vin[0].tokenQtyStr, '100000000')
+      assert.equal(result.vin[0].tokenId, '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35')
       assert.equal(result.vin[1].tokenQty, 0)
       assert.equal(result.vin[1].tokenQtyStr, 0)
       assert.equal(result.vin[1].tokenId, null)
       assert.equal(result.vin[2].tokenQty, 99000000)
-      assert.equal(result.vin[2].tokenQtyStr, "99000000")
-      assert.equal(result.vin[2].tokenId, "550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35")
+      assert.equal(result.vin[2].tokenQtyStr, '99000000')
+      assert.equal(result.vin[2].tokenId, '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35')
 
       // Assert blockheight is added
       assert.equal(result.blockheight, 543957)

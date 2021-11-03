@@ -437,7 +437,7 @@ class Transaction {
   }
 
   // Refactoring code in a more structured way
-  async get3(txid) {
+  async get3 (txid) {
     try {
       if (typeof txid !== 'string') {
         throw new Error(
@@ -463,7 +463,7 @@ class Transaction {
       console.log(`txTokenData: ${JSON.stringify(txTokenData, null, 2)}`)
 
       // If not a token, return the tx data. Processing is complete.
-      if(!txTokenData) return txDetails
+      if (!txTokenData) return txDetails
 
       // Mark TX as an SLP tx. This does not mean it's valid, it just means
       // the OP_RETURN passes a basic check.
@@ -492,20 +492,20 @@ class Transaction {
           console.log(`txTokenData: ${JSON.stringify(txTokenData, null, 2)}`)
 
           // First output is OP_RETURN, so tokenQty is null.
-          if(i === 0) {
+          if (i === 0) {
             thisVout.tokenQty = null
             thisVout.tokenQtyStr = null
             continue
           }
 
           // Non SLP outputs.
-          if(i > txTokenData.amounts.length) {
+          if (i > txTokenData.amounts.length) {
             thisVout.tokenQty = null
             thisVout.tokenQtyStr = null
             continue
           }
 
-          const rawQty = txTokenData.amounts[i-1]
+          const rawQty = txTokenData.amounts[i - 1]
 
           // Calculate the real quantity using a BigNumber, then convert it to a
           // floating point number.
@@ -521,7 +521,7 @@ class Transaction {
           console.log(
             `thisVout ${i}: ${JSON.stringify(txDetails.vout[i], null, 2)}`
           )
-        } else if(txTokenData.txType === 'GENESIS' || txTokenData.txType === 'MINT') {
+        } else if (txTokenData.txType === 'GENESIS' || txTokenData.txType === 'MINT') {
           console.log(`txTokenData: ${JSON.stringify(txTokenData, null, 2)}`)
 
           let tokenQty = 0 // Default value
@@ -543,13 +543,13 @@ class Transaction {
             thisVout.tokenQtyStr = realQty
             thisVout.tokenQty = parseFloat(realQty)
             console.log(`thisVout[${i}]: ${JSON.stringify(thisVout, null, 2)}`)
-          } else if(i === txTokenData.mintBatonVout) {
+          } else if (i === txTokenData.mintBatonVout) {
             // Optional Mint baton
-            thisVout.tokenQtyStr = "0"
+            thisVout.tokenQtyStr = '0'
             thisVout.tokenQty = 0
             thisVout.isMintBaton = true
           } else {
-            thisVout.tokenQtyStr = "0"
+            thisVout.tokenQtyStr = '0'
             thisVout.tokenQty = 0
           }
         } else {
@@ -558,7 +558,7 @@ class Transaction {
       }
 
       // Process TX inputs
-      for(let i=0; i < txDetails.vin.length; i++) {
+      for (let i = 0; i < txDetails.vin.length; i++) {
         const thisVin = txDetails.vin[i]
 
         const vinTokenData = await this.getTokenInfo(thisVin.txid)
@@ -569,14 +569,14 @@ class Transaction {
 
         // If the input is not a token input, or if the tokenID is not the same,
         // then mark the token output as null.
-        if(!vinTokenData || !vinTokenIdIsTheSame) {
+        if (!vinTokenData || !vinTokenIdIsTheSame) {
           thisVin.tokenQty = 0
-          thisVin.tokenQtyStr = "0"
+          thisVin.tokenQtyStr = '0'
           thisVin.tokenId = null
           continue
         }
 
-        if(vinTokenData.txType === 'SEND') {
+        if (vinTokenData.txType === 'SEND') {
           console.log(`vinTokenData: ${JSON.stringify(vinTokenData, null, 2)}`)
 
           const tokenQty = vinTokenData.amounts[thisVin.vout - 1]
@@ -593,7 +593,7 @@ class Transaction {
           thisVin.tokenQtyStr = realQty
           thisVin.tokenQty = parseFloat(realQty)
           thisVin.tokenId = vinTokenData.tokenId
-        } else if(vinTokenData.txType === 'GENESIS' || vinTokenData.txType === 'MINT') {
+        } else if (vinTokenData.txType === 'GENESIS' || vinTokenData.txType === 'MINT') {
           console.log(`vinTokenData: ${JSON.stringify(vinTokenData, null, 2)}`)
 
           let tokenQty = 0 // Default value
@@ -615,14 +615,14 @@ class Transaction {
             thisVin.tokenQtyStr = realQty
             thisVin.tokenQty = parseFloat(realQty)
             thisVin.tokenId = vinTokenData.tokenId
-          } else if(thisVin.vout === vinTokenData.mintBatonVout) {
+          } else if (thisVin.vout === vinTokenData.mintBatonVout) {
             // Optional Mint baton
-            thisVin.tokenQtyStr = "0"
+            thisVin.tokenQtyStr = '0'
             thisVin.tokenQty = 0
             thisVin.tokenId = vinTokenData.tokenId
             thisVin.isMintBaton = true
           } else {
-            thisVin.tokenQtyStr = "0"
+            thisVin.tokenQtyStr = '0'
             thisVin.tokenQty = 0
             thisVin.tokenId = null
           }
@@ -643,7 +643,7 @@ class Transaction {
       //   if MINT
 
       return txDetails
-    } catch(err) {
+    } catch (err) {
       console.error('Error in get3()')
 
       // This case handles rate limit errors.
@@ -662,7 +662,7 @@ class Transaction {
     try {
       const tokenData = await this.slpUtils.decodeOpReturn(txid)
       return tokenData
-    } catch(err) {
+    } catch (err) {
       return false
     }
   }
