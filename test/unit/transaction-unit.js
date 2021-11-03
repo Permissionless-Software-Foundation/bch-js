@@ -363,7 +363,10 @@ describe('#TransactionLib', () => {
       // Assert that inputs have expected properties
       assert.equal(result.vin[0].tokenQtyStr, '998834')
       assert.equal(result.vin[0].tokenQty, 998834)
-      assert.equal(result.vin[0].tokenId, '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7')
+      assert.equal(
+        result.vin[0].tokenId,
+        '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7'
+      )
       assert.equal(result.vin[1].tokenQtyStr, '0')
       assert.equal(result.vin[1].tokenQty, 0)
       assert.equal(result.vin[1].tokenId, null)
@@ -439,7 +442,10 @@ describe('#TransactionLib', () => {
       // Assert inputs have expected properties and values
       assert.equal(result.vin[0].tokenQty, 10000000)
       assert.equal(result.vin[0].tokenQtyStr, '10000000')
-      assert.equal(result.vin[0].tokenId, '323a1e35ae0b356316093d20f2d9fbc995d19314b5c0148b78dc8d9c0dab9d35')
+      assert.equal(
+        result.vin[0].tokenId,
+        '323a1e35ae0b356316093d20f2d9fbc995d19314b5c0148b78dc8d9c0dab9d35'
+      )
       assert.equal(result.vin[1].tokenQty, 0)
       assert.equal(result.vin[1].tokenQtyStr, '0')
       assert.equal(result.vin[1].tokenId, null)
@@ -492,10 +498,16 @@ describe('#TransactionLib', () => {
       // Assert expected input properties and values exist.
       assert.equal(result.vin[0].tokenQty, 43545.34534)
       assert.equal(result.vin[0].tokenQtyStr, '43545.34534')
-      assert.equal(result.vin[0].tokenId, '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8')
+      assert.equal(
+        result.vin[0].tokenId,
+        '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8'
+      )
       assert.equal(result.vin[1].tokenQty, 2.34123)
       assert.equal(result.vin[1].tokenQtyStr, '2.34123')
-      assert.equal(result.vin[1].tokenId, '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8')
+      assert.equal(
+        result.vin[1].tokenId,
+        '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8'
+      )
       assert.equal(result.vin[2].tokenQty, 0)
       assert.equal(result.vin[2].tokenQtyStr, '0')
       assert.equal(result.vin[2].tokenId, null)
@@ -552,13 +564,19 @@ describe('#TransactionLib', () => {
       // Assert the inputs have expected properties and values.
       assert.equal(result.vin[0].tokenQty, 100000000)
       assert.equal(result.vin[0].tokenQtyStr, '100000000')
-      assert.equal(result.vin[0].tokenId, '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35')
+      assert.equal(
+        result.vin[0].tokenId,
+        '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35'
+      )
       assert.equal(result.vin[1].tokenQty, 0)
       assert.equal(result.vin[1].tokenQtyStr, 0)
       assert.equal(result.vin[1].tokenId, null)
       assert.equal(result.vin[2].tokenQty, 99000000)
       assert.equal(result.vin[2].tokenQtyStr, '99000000')
-      assert.equal(result.vin[2].tokenId, '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35')
+      assert.equal(
+        result.vin[2].tokenId,
+        '550d19eb820e616a54b8a73372c4420b5a0567d8dc00f613b71c5234dc884b35'
+      )
 
       // Assert blockheight is added
       assert.equal(result.blockheight, 543957)
@@ -578,22 +596,113 @@ describe('#TransactionLib', () => {
         .stub(bchjs.Transaction.slpUtils, 'decodeOpReturn')
         .onCall(0)
         .resolves(mockData.mintTestOpReturnData04)
-      //   .onCall(1)
-      //   .resolves(mockData.sendTestOpReturnData02)
-      //   .onCall(2)
-      //   .resolves(mockData.sendTestOpReturnData03)
-      //   .onCall(3)
-      //   .resolves(mockData.sendTestOpReturnData03)
-      //   .onCall(4)
-      //   .resolves(mockData.sendTestOpReturnData04)
+        .onCall(1)
+        .resolves(mockData.mintTestOpReturnData05)
+        .onCall(2)
+        .resolves(mockData.mintTestOpReturnData05)
+        .onCall(3)
+        .resolves(mockData.mintTestOpReturnData05)
+        .onCall(4)
+        .resolves(mockData.mintTestOpReturnData05)
+        .onCall(5)
+        .resolves(mockData.mintTestOpReturnData05)
 
       const txid =
         'ee9d3cf5153599c134147e3fac9844c68e216843f4452a1ce15a29452af6db34'
 
       const result = await bchjs.Transaction.get3(txid)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert that there are stanardized properties.
+      assert.property(result, 'txid')
+      assert.property(result, 'vin')
+      assert.property(result, 'vout')
+      assert.property(result.vout[0], 'value')
+      assert.property(result.vout[1].scriptPubKey, 'addresses')
+
+      // Assert outputs have expected properties and values
+      assert.equal(result.vout[0].tokenQty, 0)
+      assert.equal(result.vout[0].tokenQty, '0')
+      assert.equal(result.vout[1].tokenQty, 2.34123)
+      assert.equal(result.vout[1].tokenQty, '2.34123')
+      assert.equal(result.vout[2].tokenQty, 0)
+      assert.equal(result.vout[2].tokenQty, '0')
+      assert.equal(result.vout[2].isMintBaton, true)
+      assert.equal(result.vout[3].tokenQty, 0)
+      assert.equal(result.vout[3].tokenQty, '0')
+
+      // Assert inputs have expected properties and values
+      assert.equal(result.vin[0].tokenQty, 0)
+      assert.equal(result.vin[0].tokenQtyStr, '0')
+      assert.equal(result.vin[0].tokenId, null)
+      assert.equal(result.vin[1].tokenQty, 0)
+      assert.equal(result.vin[1].tokenQtyStr, '0')
+      assert.equal(
+        result.vin[1].tokenId,
+        '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8'
+      )
+      assert.equal(result.vin[1].isMintBaton, true)
+
+      // Assert added TX data exists.
+      assert.equal(result.blockheight, 543614)
+      assert.equal(result.isSlpTx, true)
     })
 
     // It should process a GENESIS tx
+    it('should process a GENESIS tx', async () => {
+      // Mock dependencies
+      sandbox
+        .stub(bchjs.Transaction.rawTransaction, 'getTxData')
+        .resolves(mockData.genesisTestInputTx02)
+      sandbox
+        .stub(bchjs.Transaction.blockchain, 'getBlockHeader')
+        .resolves({ height: 571212 })
+      sandbox
+        .stub(bchjs.Transaction, 'getTokenInfo')
+        .onCall(0)
+        .resolves(mockData.genesisTestOpReturn03)
+        .onCall(1)
+        .resolves(mockData.genesisTestOpReturn03)
+        .onCall(2)
+        .resolves(false)
+        .onCall(3)
+        .resolves(false)
+        .onCall(4)
+        .resolves(false)
+
+      const txid =
+        '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf'
+
+      const result = await bchjs.Transaction.get3(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert that there are stanardized properties.
+      assert.property(result, 'txid')
+      assert.property(result, 'vin')
+      assert.property(result, 'vout')
+      assert.property(result.vout[0], 'value')
+      assert.property(result.vout[1].scriptPubKey, 'addresses')
+
+      // Assert output have expected properties and values
+      assert.equal(result.vout[0].tokenQty, 0)
+      assert.equal(result.vout[0].tokenQtyStr, '0')
+      assert.equal(result.vout[0].isMintBaton, true)
+      assert.equal(result.vout[1].tokenQty, 1000000000)
+      assert.equal(result.vout[1].tokenQtyStr, '1000000000')
+      assert.equal(result.vout[2].tokenQty, 0)
+      assert.equal(result.vout[2].tokenQtyStr, '0')
+
+      // Assert input have expected properties and values
+      assert.equal(result.vin[0].tokenQty, 0)
+      assert.equal(result.vin[0].tokenQtyStr, '0')
+      assert.equal(result.vin[0].tokenId, null)
+      assert.equal(result.vin[1].tokenQty, 0)
+      assert.equal(result.vin[1].tokenQtyStr, '0')
+      assert.equal(result.vin[1].tokenId, null)
+
+      // Assert added TX data exists.
+      assert.equal(result.blockheight, 571212)
+      assert.equal(result.isSlpTx, true)
+    })
   })
 })

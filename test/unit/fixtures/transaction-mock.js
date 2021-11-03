@@ -664,6 +664,111 @@ const mintTestOpReturnData04 = {
   qty: '234123'
 }
 
+const mintTestOpReturnData05 = {
+  tokenType: 1,
+  txType: 'GENESIS',
+  ticker: 'Bubb2',
+  name: 'the new bubbles!',
+  tokenId: '938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8',
+  documentUri: '',
+  documentHash: '',
+  decimals: 5,
+  mintBatonVout: 2,
+  qty: '4354534534'
+}
+
+const genesisTestInputTx02 = {
+  txid: '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf',
+  hash: '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf',
+  version: 1,
+  size: 444,
+  locktime: 571211,
+  vin: [
+    {
+      txid: 'f3e056874846b6f491a1ccac3da81a3411c61d8466835446a52efa68c0d11804',
+      vout: 0,
+      scriptSig: {
+        asm:
+          '3044022022fb67bd9b35810db3fa04da4014cc93063c5ed15e8febeca09d32c03397068502206fbb86498919ca8a9be6940c904c944cd923691391a4a7d92e0c841605d46b2e[ALL|FORKID] 03fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bf',
+        hex:
+          '473044022022fb67bd9b35810db3fa04da4014cc93063c5ed15e8febeca09d32c03397068502206fbb86498919ca8a9be6940c904c944cd923691391a4a7d92e0c841605d46b2e412103fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bf'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qz6rcxjw34yuy5fngu7fngnyy55t0v802cmsmjvsp2',
+      value: 0.00001111
+    },
+    {
+      txid: '87bf0efc1630f5179b73496f9f885b141cb4c8366432a91ba678298432b197ea',
+      vout: 0,
+      scriptSig: {
+        asm:
+          '3045022100d5fbab461c19c7b56245287eb15510c86872ceb405ede7322f5266efa6cc32ea022074b557bcef9a129fb31cb2e7c2ada9fe51d5cf924ae55d1d2a29368ca1f15ef2[ALL|FORKID] 03fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bf',
+        hex:
+          '483045022100d5fbab461c19c7b56245287eb15510c86872ceb405ede7322f5266efa6cc32ea022074b557bcef9a129fb31cb2e7c2ada9fe51d5cf924ae55d1d2a29368ca1f15ef2412103fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bf'
+      },
+      sequence: 4294967294,
+      address: 'bitcoincash:qz6rcxjw34yuy5fngu7fngnyy55t0v802cmsmjvsp2',
+      value: 0.007
+    }
+  ],
+  vout: [
+    {
+      value: 0,
+      n: 0,
+      scriptPubKey: {
+        asm:
+          'OP_RETURN 5262419 1 47454e45534953 5350494345 5370696365 7370696365736c7040676d61696c2e636f6d 0 8 0 016345785d8a0000',
+        hex:
+          '6a04534c500001010747454e45534953055350494345055370696365127370696365736c7040676d61696c2e636f6d4c0001084c0008016345785d8a0000',
+        type: 'nulldata'
+      }
+    },
+    {
+      value: 0.00000546,
+      n: 1,
+      scriptPubKey: {
+        asm:
+          'OP_DUP OP_HASH160 70e5c384ae563b4fd6cfc5f7f8df43ea427d9e10 OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a91470e5c384ae563b4fd6cfc5f7f8df43ea427d9e1088ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: ['bitcoincash:qpcwtsuy4etrkn7kelzl07xlg04yylv7zqru2cqwvm']
+      }
+    },
+    {
+      value: 0.0070012,
+      n: 2,
+      scriptPubKey: {
+        asm:
+          'OP_DUP OP_HASH160 df305a87d98cd64e1bee825d2167a16445ecdfdd OP_EQUALVERIFY OP_CHECKSIG',
+        hex: '76a914df305a87d98cd64e1bee825d2167a16445ecdfdd88ac',
+        reqSigs: 1,
+        type: 'pubkeyhash',
+        addresses: ['bitcoincash:qr0nqk58mxxdvnsma6p96gt859jytmxlm5t0v7de4q']
+      }
+    }
+  ],
+  hex:
+    '01000000020418d1c068fa2ea546548366841dc611341aa83daccca191f4b646488756e0f3000000006a473044022022fb67bd9b35810db3fa04da4014cc93063c5ed15e8febeca09d32c03397068502206fbb86498919ca8a9be6940c904c944cd923691391a4a7d92e0c841605d46b2e412103fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bffeffffffea97b132842978a61ba9326436c8b41c145b889f6f49739b17f53016fc0ebf87000000006b483045022100d5fbab461c19c7b56245287eb15510c86872ceb405ede7322f5266efa6cc32ea022074b557bcef9a129fb31cb2e7c2ada9fe51d5cf924ae55d1d2a29368ca1f15ef2412103fbe2c56094dc336f6244eac2e45d3d25a8e97059f2cc7de31cbf179e73dcc9bffeffffff0300000000000000003e6a04534c500001010747454e45534953055350494345055370696365127370696365736c7040676d61696c2e636f6d4c0001084c0008016345785d8a000022020000000000001976a91470e5c384ae563b4fd6cfc5f7f8df43ea427d9e1088acd8ae0a00000000001976a914df305a87d98cd64e1bee825d2167a16445ecdfdd88ac4bb70800',
+  blockhash: '000000000000000002278c188c52b536d4ed84a1970d8ff59043e082cef7748a',
+  confirmations: 141226,
+  time: 1551042875,
+  blocktime: 1551042875
+}
+
+const genesisTestOpReturn03 = {
+  tokenType: 1,
+  txType: 'GENESIS',
+  ticker: 'SPICE',
+  name: 'Spice',
+  tokenId: '4de69e374a8ed21cbddd47f2338cc0f479dc58daa2bbe11cd604ca488eca0ddf',
+  documentUri: 'spiceslp@gmail.com',
+  documentHash: '',
+  decimals: 8,
+  mintBatonVout: 0,
+  qty: '100000000000000000'
+}
+
 module.exports = {
   nonSlpTxDetails,
   slpTxDetails,
@@ -683,5 +788,8 @@ module.exports = {
   sendTestOpReturnData03,
   sendTestOpReturnData04,
   mintTestInputTx02,
-  mintTestOpReturnData04
+  mintTestOpReturnData04,
+  mintTestOpReturnData05,
+  genesisTestInputTx02,
+  genesisTestOpReturn03
 }
