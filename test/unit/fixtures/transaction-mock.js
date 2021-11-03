@@ -656,6 +656,14 @@ const mintTestInputTx02 = {
   blocktime: 1534391953
 }
 
+const mintTestOpReturnData04 = {
+  "tokenType": 1,
+  "txType": "MINT",
+  "tokenId": "938cc18e618967d787897bbc64b9a8d201b94ec7c69b1a9949eab0433ba5cdf8",
+  "mintBatonVout": 2,
+  "qty": "234123"
+}
+
 module.exports = {
   nonSlpTxDetails,
   slpTxDetails,
@@ -674,5 +682,6 @@ module.exports = {
   sendTestOpReturnData02,
   sendTestOpReturnData03,
   sendTestOpReturnData04,
-  mintTestInputTx02
+  mintTestInputTx02,
+  mintTestOpReturnData04
 }
