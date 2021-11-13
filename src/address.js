@@ -223,7 +223,7 @@ class Address {
    * @api Address.hash160ToCash() hash160ToCash()
    * @apiName hash160ToCash
    * @apiGroup Address
-   * @apiDescription Convert hash160 to cash address.
+   * @apiDescription Convert hash160 to cash address. Accepts either hexadecimal or buffer.
    *
    * @apiExample Example usage:
    * bchjs.Address.hash160ToCash("573d93b475be4f1925f3b74ed951201b0147eac1")
@@ -794,13 +794,13 @@ class Address {
    * @apiDescription Detect an addess from an OutputScript..
    *
    * @apiExample Example usage:
-   *  const script = bchjs.Script.encode([
+   *  const scriptBuffer = bchjs.Script.encode([
    *    Buffer.from("BOX", "ascii"),
    *    bchjs.Script.opcodes.OP_CAT,
    *    Buffer.from("BITBOX", "ascii"),
    *    bchjs.Script.opcodes.OP_EQUAL
    *  ]);
-   *  const p2sh_hash160 = bchjs.Crypto.hash160(script);
+   *  const p2sh_hash160 = bchjs.Crypto.hash160(scriptBuffer);
    *  const scriptPubKey = bchjs.Script.scriptHash.output.encode(p2sh_hash160);
    *
    *  // mainnet address from output script
