@@ -17,7 +17,7 @@ const Address = require('./address')
 // const BigNumber = require('bignumber.js')
 const slpMdm = require('slp-mdm')
 
-let _this
+// let _this
 // const addy = new Address()
 let addy
 const TransactionBuilder = require('../transaction-builder')
@@ -31,7 +31,7 @@ class Nft1 {
     // Instantiate the transaction builder.
     TransactionBuilder.setAddress(addy)
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -446,7 +446,7 @@ class Nft1 {
       if (typeof groupId === 'string') {
         const response = await axios.get(
           `${this.restURL}slp/nftChildren/${groupId}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
       }
@@ -498,7 +498,7 @@ class Nft1 {
       if (typeof tokenId === 'string') {
         const response = await axios.get(
           `${this.restURL}slp/nftGroup/${tokenId}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
       }

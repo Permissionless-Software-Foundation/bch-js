@@ -18,9 +18,9 @@ const JWT_TOKEN =
 
 const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS({
-  // restURL: `https://bchn.fullstack.cash/v4/`,
-  restURL: 'https:/abc.fullstack.cash/v4/',
-  // restURL: `http://localhost:3000/v4/`,
+  // restURL: `https://bchn.fullstack.cash/v5/`,
+  restURL: 'https:/abc.fullstack.cash/v5/',
+  // restURL: `http://localhost:3000/v5/`,
   apiToken: JWT_TOKEN
 })
 
@@ -65,7 +65,7 @@ describe('#full node rate limits', () => {
 
   it('should throw error for more than 100 RPM to fullnode', async () => {
     try {
-      console.log('This test usually doesn\'t pass, because of latency.')
+      console.log("This test usually doesn't pass, because of latency.")
       for (let i = 0; i < 100; i++) await bchjs.Control.getNetworkInfo()
     } catch (err) {
       // console.log(`validating after 10th call`)

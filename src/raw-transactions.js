@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class RawTransactions {
   constructor (config) {
@@ -27,7 +27,7 @@ class RawTransactions {
     // Encapsulate dependencies
     this.axios = axios
 
-    _this = this
+    // this = this
   }
 
   /**
@@ -98,7 +98,7 @@ class RawTransactions {
       if (typeof hex === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -111,7 +111,7 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -120,7 +120,8 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -165,7 +166,7 @@ class RawTransactions {
       if (typeof script === 'string') {
         const response = await axios.get(
           `${this.restURL}rawtransactions/decodeScript/${script}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -176,7 +177,7 @@ class RawTransactions {
           data: {
             hexes: script
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -185,7 +186,8 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }
@@ -257,9 +259,13 @@ class RawTransactions {
   async getRawTransaction (txid, verbose = false, usrObj = null) {
     try {
       if (typeof txid === 'string') {
+        // console.log(
+        //   'getRawTransaction() this.axiosOptions: ',
+        //   this.axiosOptions
+        // )
         const response = await axios.get(
           `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -272,7 +278,7 @@ class RawTransactions {
             verbose: verbose,
             usrObj // pass user data when making an internal call.
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
         const response = await axios(options)
 
@@ -281,8 +287,14 @@ class RawTransactions {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -307,6 +319,9 @@ class RawTransactions {
         const inputTxid = vin.txid
         const inputVout = vin.vout
 
+        // TODO: Coinbase TXs have no input transaction. Figure out how to
+        // handle this corner case.
+
         // Get the TX details for the input, in order to retrieve the address of
         // the sender.
         const txDetailsParent = await this.getRawTransaction(inputTxid, true)
@@ -326,8 +341,14 @@ class RawTransactions {
 
       return retArray
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -361,7 +382,9 @@ class RawTransactions {
   async getTxData (txid) {
     try {
       if (typeof txid !== 'string') {
-        throw new Error('Input must be a string or array of strings.')
+        throw new Error(
+          'Input to raw-transaction.js/getTxData() must be a string containg a TXID.'
+        )
       }
 
       // Get the TX details for the transaction under consideration.
@@ -379,8 +402,14 @@ class RawTransactions {
 
       return txDetails
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.error) throw new Error(error.error)
+
+      // This case handles rate limit errors.
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else if (error.response && error.response.data) {
+        throw error.response.data
+      } else throw error
     }
   }
 
@@ -422,7 +451,7 @@ class RawTransactions {
       if (typeof hex === 'string') {
         const response = await this.axios.get(
           `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         if (response.data === '66: insufficient priority') {
@@ -443,16 +472,17 @@ class RawTransactions {
           data: {
             hexes: hex
           },
-          headers: _this.axiosOptions.headers
+          headers: this.axiosOptions.headers
         }
-        const response = await _this.axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }
 
       throw new Error('Input hex must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.error) throw new Error(error.error)
+      else if (error.response && error.response.data) throw error.response.data
       else throw error
     }
   }

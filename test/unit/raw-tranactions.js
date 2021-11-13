@@ -171,10 +171,15 @@ describe('#RawTransactions', () => {
   describe('#getTxData', () => {
     it('should return tx data with input addresses', async () => {
       // Mock dependencies
-      sandbox.stub(bchjs.RawTransactions, 'getRawTransaction').resolves(mockData.mockTx)
-      sandbox.stub(bchjs.RawTransactions, '_getInputAddrs').resolves(mockData.mockGetInputAddrsOutput)
+      sandbox
+        .stub(bchjs.RawTransactions, 'getRawTransaction')
+        .resolves(mockData.mockTx)
+      sandbox
+        .stub(bchjs.RawTransactions, '_getInputAddrs')
+        .resolves(mockData.mockGetInputAddrsOutput)
 
-      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+      const txid =
+        '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
       const result = await bchjs.RawTransactions.getTxData(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -190,7 +195,10 @@ describe('#RawTransactions', () => {
       } catch (err) {
         // console.log(err)
 
-        assert2.include(err.message, 'Input must be a string or array of strings')
+        assert2.include(
+          err.message,
+          'Input to raw-transaction.js/getTxData() must be a string containg a TXID.'
+        )
       }
     })
 
@@ -201,7 +209,8 @@ describe('#RawTransactions', () => {
           .stub(bchjs.RawTransactions, 'getRawTransaction')
           .rejects(new Error('test error'))
 
-        const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+        const txid =
+          '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
         await bchjs.RawTransactions.getTxData(txid)
 

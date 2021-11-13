@@ -5,7 +5,7 @@
 
 const chai = require('chai')
 const assert = chai.assert
-const BCHJS = require('../../src/bch-js')
+const BCHJS = require('../../../../src/bch-js')
 const bchjs = new BCHJS()
 
 // Inspect utility used for debugging.
@@ -18,7 +18,7 @@ util.inspect.defaultOptions = {
 
 describe('#util', () => {
   beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
   describe('#validateAddress', () => {
@@ -81,7 +81,8 @@ describe('#util', () => {
 
     it('should throw error on array size rate limit', async () => {
       try {
-        const dataMock = 'bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z'
+        const dataMock =
+          'bitcoincash:qp4k8fjtgunhdr7yq30ha4peuwupzan2vcnwrmpy0z'
         const data = []
         for (let i = 0; i < 25; i++) data.push(dataMock)
 

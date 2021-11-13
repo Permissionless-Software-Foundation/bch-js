@@ -11,7 +11,7 @@ describe('#ElectrumX', () => {
   beforeEach(async () => {
     sandbox = sinon.createSandbox()
 
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
   afterEach(() => sandbox.restore())
@@ -359,10 +359,12 @@ describe('#ElectrumX', () => {
       try {
         await bchjs.Electrumx.broadcast(txHex)
       } catch (err) {
+        // console.log('err: ', err)
+
         assert.property(err, 'success')
         assert.equal(err.success, false)
         assert.include(
-          err.error,
+          err.error.error,
           'the transaction was rejected by network rules'
         )
       }

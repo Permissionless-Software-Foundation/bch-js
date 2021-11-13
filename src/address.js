@@ -1,12 +1,12 @@
 // const axios = require("axios")
 const Bitcoin = require('@psf/bitcoincashjs-lib')
-const cashaddr = require('cashaddrjs')
+const cashaddr = require('ecashaddrjs')
 const coininfo = require('@psf/coininfo')
 
 class Address {
   constructor (config) {
     const tmp = {}
-    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v4/'
+    if (!config || !config.restURL) tmp.restURL = 'https://api.bchjs.cash/v5/'
     else tmp.restURL = config.restURL
 
     this.restURL = tmp.restURL
@@ -129,6 +129,63 @@ class Address {
     return cashAddress.split(':')[1]
   }
 
+  /**
+   * @api Address.toEcashAddress() toEcashAddress()
+   * @apiName toEcashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
+   * // ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   * // mainnet no prefix
+   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   */
+  toEcashAddress (address, prefix = true) {
+    const decoded = this._decode(address)
+
+    const ecashAddress = cashaddr.encode(
+      'ecash',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return ecashAddress
+    return ecashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.ecashtoCashAddress() ecashtoCashAddress()
+   * @apiName ecashtoCashAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to cashAddress format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da')
+   * // bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   *
+   * // mainnet no prefix
+   * bchjs.Address.ecashtoCashAddress('ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2
+   */
+  ecashtoCashAddress (address, prefix = true) {
+    const decoded = this._decodeEcashAddress(address)
+
+    const cashAddress = cashaddr.encode(
+      'bitcoincash',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return cashAddress
+    return cashAddress.split(':')[1]
+  }
+
   // Converts any address format to hash160
   toHash160 (address) {
     const legacyAddress = this.toLegacyAddress(address)
@@ -166,7 +223,7 @@ class Address {
    * @api Address.hash160ToCash() hash160ToCash()
    * @apiName hash160ToCash
    * @apiGroup Address
-   * @apiDescription Convert hash160 to cash address.
+   * @apiDescription Convert hash160 to cash address. Accepts either hexadecimal or buffer.
    *
    * @apiExample Example usage:
    * bchjs.Address.hash160ToCash("573d93b475be4f1925f3b74ed951201b0147eac1")
@@ -266,6 +323,22 @@ class Address {
         cashAddress: this.hash160ToCash(address),
         format: 'hash160'
       }
+    } catch (error) {}
+
+    throw new Error(`Invalid format : ${address}`)
+  }
+
+  _decodeEcashAddress (address) {
+    if (address.indexOf(':') !== -1) {
+      const decoded = cashaddr.decode(address)
+      decoded.format = 'cashaddr'
+      return decoded
+    }
+
+    try {
+      const decoded = cashaddr.decode(`ecash:${address}`)
+      decoded.format = 'cashaddr'
+      return decoded
     } catch (error) {}
 
     throw new Error(`Invalid format : ${address}`)
@@ -721,13 +794,13 @@ class Address {
    * @apiDescription Detect an addess from an OutputScript..
    *
    * @apiExample Example usage:
-   *  const script = bchjs.Script.encode([
+   *  const scriptBuffer = bchjs.Script.encode([
    *    Buffer.from("BOX", "ascii"),
    *    bchjs.Script.opcodes.OP_CAT,
    *    Buffer.from("BITBOX", "ascii"),
    *    bchjs.Script.opcodes.OP_EQUAL
    *  ]);
-   *  const p2sh_hash160 = bchjs.Crypto.hash160(script);
+   *  const p2sh_hash160 = bchjs.Crypto.hash160(scriptBuffer);
    *  const scriptPubKey = bchjs.Script.scriptHash.output.encode(p2sh_hash160);
    *
    *  // mainnet address from output script

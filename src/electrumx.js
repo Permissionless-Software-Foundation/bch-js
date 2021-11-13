@@ -8,7 +8,7 @@ const axios = require('axios')
 // Local libraries.
 const Blockchain = require('./blockchain')
 
-let _this
+// let _this
 
 class ElectrumX {
   constructor (config) {
@@ -34,7 +34,7 @@ class ElectrumX {
 
     this.blockchain = new Blockchain(config)
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -108,7 +108,7 @@ class ElectrumX {
       if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/utxos/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -119,7 +119,7 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -142,7 +142,7 @@ class ElectrumX {
    * (async () => {
    *   try {
    *     let balance = await bchjs.Electrumx.balance('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf');
-   *     console.log(utxo);
+   *     console.log(balance);
    *   } catch(error) {
    *    console.error(error)
    *   }
@@ -159,7 +159,7 @@ class ElectrumX {
    * (async () => {
    *   try {
    *     let balance = await bchjs.Electrumx.balance(['bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf', 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v']);
-   *     console.log(utxo);
+   *     console.log(balance);
    *   } catch(error) {
    *    console.error(error)
    *   }
@@ -192,7 +192,7 @@ class ElectrumX {
       if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/balance/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -203,7 +203,7 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -290,7 +290,7 @@ class ElectrumX {
       if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/transactions/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -302,7 +302,7 @@ class ElectrumX {
             addresses: address,
             usrObj // pass user data when making an internal call.
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -383,7 +383,7 @@ class ElectrumX {
       if (typeof address === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/unconfirmed/${address}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -394,7 +394,7 @@ class ElectrumX {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -452,7 +452,7 @@ class ElectrumX {
     try {
       const response = await axios.get(
         `${this.restURL}electrumx/block/headers/${height}?count=${count}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -543,7 +543,7 @@ class ElectrumX {
       if (typeof txid === 'string') {
         const response = await axios.get(
           `${this.restURL}electrumx/tx/data/${txid}`,
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
       } else if (Array.isArray(txid)) {
@@ -552,7 +552,7 @@ class ElectrumX {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -592,7 +592,7 @@ class ElectrumX {
         const response = await axios.post(
           `${this.restURL}electrumx/tx/broadcast`,
           { txHex },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
