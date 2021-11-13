@@ -142,7 +142,7 @@ class ElectrumX {
    * (async () => {
    *   try {
    *     let balance = await bchjs.Electrumx.balance('bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf');
-   *     console.log(utxo);
+   *     console.log(balance);
    *   } catch(error) {
    *    console.error(error)
    *   }
@@ -159,7 +159,7 @@ class ElectrumX {
    * (async () => {
    *   try {
    *     let balance = await bchjs.Electrumx.balance(['bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf', 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v']);
-   *     console.log(utxo);
+   *     console.log(balance);
    *   } catch(error) {
    *    console.error(error)
    *   }
