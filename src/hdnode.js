@@ -1,6 +1,6 @@
 const Bitcoin = require('@psf/bitcoincashjs-lib')
 const coininfo = require('@psf/coininfo')
-const bip32utils = require('@psf/bip32-utils')
+const bip32utils = require('@chris.troutner/bip32-utils')
 const bchaddrjs = require('bchaddrjs-slp')
 
 class HDNode {
@@ -34,7 +34,9 @@ class HDNode {
    */
   fromSeed (rootSeedBuffer, network = 'mainnet') {
     let bitcoincash
-    if (network === 'bitcoincash' || network === 'mainnet') { bitcoincash = coininfo.bitcoincash.main } else bitcoincash = coininfo.bitcoincash.test
+    if (network === 'bitcoincash' || network === 'mainnet') {
+      bitcoincash = coininfo.bitcoincash.main
+    } else bitcoincash = coininfo.bitcoincash.test
 
     const bitcoincashBitcoinJSLib = bitcoincash.toBitcoinJS()
     return Bitcoin.HDNode.fromSeedBuffer(

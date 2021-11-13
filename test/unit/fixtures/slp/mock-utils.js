@@ -119,6 +119,33 @@ const mockTokens = [
   }
 ]
 
+const mockNftChildrenList = {
+  nftChildren: [
+    '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9',
+    '928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55'
+  ]
+}
+
+const mockNftGroup = {
+  nftGroup: {
+    decimals: 0,
+    timestamp: '2021-05-03 10:36:01',
+    timestamp_unix: 1620038161,
+    versionType: 129,
+    documentUri: 'psfoundation.cash',
+    symbol: 'PSF.TEST.GROUP',
+    name: 'PSF Test NFT Group',
+    containsBaton: true,
+    id: '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a',
+    documentHash: null,
+    initialTokenQty: 1000000,
+    blockCreated: 686117,
+    totalMinted: null,
+    totalBurned: null,
+    circulatingSupply: null
+  }
+}
+
 const balancesForAddress = [
   {
     tokenId: 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
@@ -1388,6 +1415,8 @@ module.exports = {
   mockList,
   mockToken,
   mockTokens,
+  mockNftChildrenList,
+  mockNftGroup,
   balancesForAddress,
   balancesForAddresses,
   mockRawTx,

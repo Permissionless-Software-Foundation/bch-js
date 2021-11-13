@@ -211,13 +211,14 @@ describe('#SLP', () => {
         assert.equal(result[2].txid, txids[2])
         assert.equal(result[2].valid, true)
 
-        // True in validateTxid() but null in validateTxid3()
+        // True in validateTxid() (no whitelist SLPDB) but null in validateTxid3()
         assert.equal(result[3].txid, txids[3])
-        assert.equal(result[3].valid, null)
+        assert.equal(result[3].valid, true)
 
         // Note: This should change from null to true once SLPDB finishes indexing.
         assert.equal(result[4].txid, txids[4])
-        assert.equal(result[4].valid, null)
+        // True when no whitelist SLPDB is used.
+        assert.equal(result[4].valid, true)
       })
     })
 
@@ -261,31 +262,6 @@ describe('#SLP', () => {
 
         assert.equal(result[5].txid, txids[5])
         assert.equal(result[5].valid, null)
-      })
-    })
-  })
-  describe('#nft1', () => {
-    describe('#listNFTGroupChildren', () => {
-      it('should return array of children GENESIS transactions IDs', async () => {
-        const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
-        const result = await bchjs.SLP.NFT1.listNFTGroupChildren(groupId)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-        assert.property(result, 'nftChildren')
-        assert.isArray(result.nftChildren)
-      })
-    })
-    describe('#parentNFTGroup', () => {
-      it('should return parent NFT group information', async () => {
-        const tokenId = '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9'
-        const result = await bchjs.SLP.NFT1.parentNFTGroup(tokenId)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-        assert.property(result, 'nftGroup')
-        assert.property(result.nftGroup, 'id')
-        assert.property(result.nftGroup, 'name')
-        assert.property(result.nftGroup, 'symbol')
-        assert.property(result.nftGroup, 'documentUri')
-        assert.property(result.nftGroup, 'versionType')
-        assert.property(result.nftGroup, 'initialTokenQty')
       })
     })
   })

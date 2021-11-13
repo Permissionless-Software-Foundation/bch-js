@@ -10,7 +10,7 @@ let uut
 
 const REST_URL = process.env.RESTURL
   ? process.env.RESTURL
-  : 'https://bchn.fullstack.cash/v4/'
+  : 'https://bchn.fullstack.cash/v5/'
 
 // Mock data used for unit tests
 const mockDataLib = require('./fixtures/slp/mock-utils')
@@ -2281,23 +2281,25 @@ describe('#SLP Utils', () => {
       assert.equal(result, true)
     })
 
-    it('catches and throws an error', async () => {
-      try {
-        const txid = 'fakeTxid'
-
-        // Force an error
-        sandbox
-          .stub(uut.Utils, 'validateTxid3')
-          .rejects(new Error('fake error'))
-
-        await await uut.Utils.waterfallValidateTxid(txid)
-
-        assert.fail('Unexpected result')
-      } catch (err) {
-        // console.log(`err.message: ${err.message}`)
-        assert.include(err.message, 'fake error')
-      }
-    })
+    // CT 08-09-21 Changed behavior. validateTxid3() is now wrapped in a
+    // try/catch statement that exits quietly if there is an error.
+    // it('catches and throws an error', async () => {
+    //   try {
+    //     const txid = 'fakeTxid'
+    //
+    //     // Force an error
+    //     sandbox
+    //       .stub(uut.Utils, 'validateTxid3')
+    //       .rejects(new Error('fake error'))
+    //
+    //     await await uut.Utils.waterfallValidateTxid(txid)
+    //
+    //     assert.fail('Unexpected result')
+    //   } catch (err) {
+    //     // console.log(`err.message: ${err.message}`)
+    //     assert.include(err.message, 'fake error')
+    //   }
+    // })
   })
 
   describe('#getWhitelist', () => {

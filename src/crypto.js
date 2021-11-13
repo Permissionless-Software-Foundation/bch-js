@@ -60,7 +60,7 @@ class Crypto {
    * @api Crypto.hash256() hash256()
    * @apiName hash256
    * @apiGroup Crypto
-   * @apiDescription Utility for creating double sha256 hash digests of data.
+   * @apiDescription Utility for creating double sha256 hash digests of buffer encoded data.
    *
    * @apiExample Example usage:
    *   // buffer from hex
@@ -86,7 +86,7 @@ class Crypto {
    * @api Crypto.hash160() hash160()
    * @apiName hash160
    * @apiGroup Crypto
-   * @apiDescription Utility for creating ripemd160(sha256()) hash digests of data.
+   * @apiDescription Utility for creating ripemd160(sha256()) hash digests of buffer encoded data.
    *
    * @apiExample Example usage:
    *  // buffer from hex

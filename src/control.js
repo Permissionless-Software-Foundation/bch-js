@@ -4,7 +4,7 @@
 
 const axios = require('axios')
 
-let _this // Global reference to the instance of this class.
+// let _this // Global reference to the instance of this class.
 
 class Control {
   constructor (config) {
@@ -28,7 +28,7 @@ class Control {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -81,7 +81,7 @@ class Control {
     try {
       const response = await axios.get(
         `${this.restURL}control/getNetworkInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {
@@ -94,7 +94,7 @@ class Control {
     try {
       const response = await axios.get(
         `${this.restURL}control/getMemoryInfo`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {

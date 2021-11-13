@@ -19,7 +19,7 @@ util.inspect.defaultOptions = {
 
 describe('#rawtransaction', () => {
   beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1000)
+    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
   describe('#decodeRawTransaction', () => {
@@ -191,8 +191,7 @@ describe('#rawtransaction', () => {
         console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -251,9 +250,13 @@ describe('#rawtransaction', () => {
   describe('#_getInputAddrs', () => {
     it('should return an array of input addresses', async () => {
       // const txid = '32233db13f2ae6d82b6262f335643dccf09fc0bcfcef4bc3fbe023355f02e112'
-      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+      const txid =
+        '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
-      const txDetails = await bchjs.RawTransactions.getRawTransaction(txid, true)
+      const txDetails = await bchjs.RawTransactions.getRawTransaction(
+        txid,
+        true
+      )
 
       const result = await bchjs.RawTransactions._getInputAddrs(txDetails)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -268,7 +271,8 @@ describe('#rawtransaction', () => {
 
   describe('#getTxData', () => {
     it('should return tx data with input addresses', async () => {
-      const txid = '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
+      const txid =
+        '05f7d4a4e25f53d63a360434eb54f221abf159112b7fffc91da1072a079cded3'
 
       const result = await bchjs.RawTransactions.getTxData(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)

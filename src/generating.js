@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Generating {
   constructor (config) {
@@ -24,14 +24,14 @@ class Generating {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   async generateToAddress (blocks, address, maxtries = 1000000) {
     try {
       const response = await axios.post(
         `${this.restURL}generating/generateToAddress/${blocks}/${address}?maxtries=${maxtries}`,
-        _this.axiosOptions
+        this.axiosOptions
       )
       return response.data
     } catch (error) {

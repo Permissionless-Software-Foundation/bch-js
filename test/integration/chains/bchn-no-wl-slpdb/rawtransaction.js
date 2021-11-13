@@ -8,7 +8,7 @@
 const chai = require('chai')
 const assert = chai.assert
 const BCHJS = require('../../../../src/bch-js')
-const bchjs = new BCHJS({ restURL: process.env.RESTURL })
+const bchjs = new BCHJS()
 
 // Inspect utility used for debugging.
 const util = require('util')
@@ -20,7 +20,7 @@ util.inspect.defaultOptions = {
 
 describe('#rawtransaction', () => {
   beforeEach(async () => {
-    if (process.env.IS_USING_FREE_TIER) await sleep(1500)
+    if (process.env.IS_USING_FREE_TIER) await sleep(3000)
   })
 
   /*
@@ -43,8 +43,7 @@ describe('#rawtransaction', () => {
         // console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ['error'])
-        assert.include(err.error, 'bad-txns-inputs-missingorspent')
-        // assert.include(err.error, 'Missing inputs')
+        assert.include(err.error, 'Missing inputs')
       }
     })
 
@@ -61,8 +60,7 @@ describe('#rawtransaction', () => {
         // console.log(`err: ${util.inspect(err)}`)
 
         assert.hasAllKeys(err, ['error'])
-        assert.include(err.error, 'bad-txns-inputs-missingorspent')
-        // assert.include(err.error, 'Missing inputs')
+        assert.include(err.error, 'Missing inputs')
       }
     })
   })

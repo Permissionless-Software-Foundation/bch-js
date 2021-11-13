@@ -5,7 +5,7 @@
 
 const axios = require('axios')
 
-let _this
+// let _this
 
 class Ninsight {
   constructor (config) {
@@ -27,7 +27,7 @@ class Ninsight {
       }
     }
 
-    _this = this
+    // _this = this
   }
 
   /**
@@ -75,7 +75,7 @@ class Ninsight {
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
         return response.data
 
@@ -86,7 +86,7 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -143,7 +143,7 @@ class Ninsight {
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -153,7 +153,7 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -219,7 +219,7 @@ class Ninsight {
           {
             addresses: [address]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -229,7 +229,7 @@ class Ninsight {
           {
             addresses: address
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -292,7 +292,7 @@ class Ninsight {
           {
             txids: [txid]
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
@@ -302,7 +302,7 @@ class Ninsight {
           {
             txids: txid
           },
-          _this.axiosOptions
+          this.axiosOptions
         )
 
         return response.data
