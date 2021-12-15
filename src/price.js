@@ -58,7 +58,7 @@ class Price {
    *    let current = await bchjs.Price.getUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -94,7 +94,7 @@ class Price {
    *    let current = await bchjs.Price.rates();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -137,7 +137,7 @@ class Price {
    *    let current = await bchjs.Price.getBchaUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -175,7 +175,7 @@ class Price {
    *    let current = await bchjs.Price.getXecUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *
@@ -210,7 +210,7 @@ class Price {
    *    let current = await bchjs.Price.getBchUsd();
    *    console.log(current);
    *  } catch(err) {
-   *   console.err(err)
+   *   console.error(err)
    *  }
    *})()
    *

@@ -22,7 +22,7 @@ class Crypto {
    *  // buffer from hex
    *  let buffer = Buffer.from('03123464075c7a5fa6b8680afa2c962a02e7bf071c6b2395b0ac711d462cac9354', 'hex')
    *  bchjs.Crypto.sha256(buffer)
-   *  // <Buffer 26 b0 78 0a 68 3a 1e 09 8e 9c b8 cf a1 b0 92 42 28 25 00 97>
+   *  // <Buffer 97 8c 09 dd 46 09 1d 19 22 fa 01 e9 f4 a9 75 b9 1a 37 1f 26 ba 83 99 de 27 d5 38 01 15 21 21 de>
    *
    * */
   // Translate address from any address format into a specific format.
@@ -60,7 +60,7 @@ class Crypto {
    * @api Crypto.hash256() hash256()
    * @apiName hash256
    * @apiGroup Crypto
-   * @apiDescription Utility for creating double sha256 hash digests of data.
+   * @apiDescription Utility for creating double sha256 hash digests of buffer encoded data.
    *
    * @apiExample Example usage:
    *   // buffer from hex
@@ -86,7 +86,7 @@ class Crypto {
    * @api Crypto.hash160() hash160()
    * @apiName hash160
    * @apiGroup Crypto
-   * @apiDescription Utility for creating ripemd160(sha256()) hash digests of data.
+   * @apiDescription Utility for creating ripemd160(sha256()) hash digests of buffer encoded data.
    *
    * @apiExample Example usage:
    *  // buffer from hex

@@ -183,6 +183,10 @@ class UTXO {
    */
   async get (address, useWhitelist = false) {
     try {
+      if (!address) {
+        throw new Error('Address must be an array or a string')
+      }
+
       // Convert address to an array if it is a string.
       if (typeof address === 'string') address = [address]
 
