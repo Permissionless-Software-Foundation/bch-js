@@ -186,6 +186,21 @@ class Address {
     return cashAddress.split(':')[1]
   }
 
+  /**
+   * @api Address.toHash160() toHash160()
+   * @apiName toHash160
+   * @apiGroup Address
+   * @apiDescription Converts any address format to hash160
+   *
+   * @apiExample Example usage:
+   * // cash address mainnet p2pkh
+   * bchjs.Address.toHash160("bitcoincash:qptnmya5wkly7xf97wm5ak23yqdsz3l2cyj7k9vyyh")
+   * // 573d93b475be4f1925f3b74ed951201b0147eac1
+   *
+   * // cash address mainnet p2sh
+   * bchjs.Address.toHash160("bitcoincash:pp7ushdxf5we8mcpaa3wqgsuqt639cu59ur5xu5fug")
+   * // 7dc85da64d1d93ef01ef62e0221c02f512e3942f
+   */
   // Converts any address format to hash160
   toHash160 (address) {
     const legacyAddress = this.toLegacyAddress(address)
