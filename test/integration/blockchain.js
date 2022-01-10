@@ -313,6 +313,14 @@ describe('#blockchain', () => {
       assert.isString(result)
     })
   })
+
+  describe('#getBlockchainInfo', () => {
+    it('should get info about the blockchain', async () => {
+      const result = await bchjs.Blockchain.getBlockchainInfo()
+
+      console.log(`blockchain info: ${JSON.stringify(result, null, 2)}`)
+    })
+  })
 })
 
 function sleep (ms) {
