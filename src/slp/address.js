@@ -36,7 +36,7 @@ class Address extends BCHJSAddress {
    *  bchjs.SLP.Address.toSLPAddress('qzm47qz5ue99y9yl4aca7jnz7dwgdenl85jkfx3znl')
    *  // simpleledger:qzm47qz5ue99y9yl4aca7jnz7dwgdenl857dzayzdp
    *
-   *  // tesnet legacy
+   *  // testnet legacy
    *  bchjs.SLP.Address.toSLPAddress('msDbtTj7kWXPpYaR7PQmMK84i66fJqQMLx')
    *  // slptest:qzq9je6pntpva3wf6scr7mlnycr54sjgeqauyclpwv
    *
