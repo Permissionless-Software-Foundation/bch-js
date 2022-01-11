@@ -33,6 +33,7 @@ const Encryption = require('./encryption')
 const Utxo = require('./utxo')
 const Transaction = require('./transaction')
 const DSProof = require('./dsproof')
+const Ecash = require('./ecash')
 
 // Indexers
 const Ninsight = require('./ninsight')
@@ -118,6 +119,7 @@ class BCHJS {
     this.Transaction = new Transaction(libConfig)
 
     this.DSProof = new DSProof(libConfig)
+    this.eCash = new Ecash()
   }
 }
 
