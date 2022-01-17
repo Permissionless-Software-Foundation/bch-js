@@ -35,10 +35,7 @@ describe('#PsfSlpIndexer', () => {
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.include(
-          err.message,
-          'test error'
-        )
+        assert.include(err.message, 'test error')
       }
     })
     it('should handle request error', async () => {
@@ -81,10 +78,7 @@ describe('#PsfSlpIndexer', () => {
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          'Input address must be a string.'
-        )
+        assert.include(err.message, 'Input address must be a string.')
       }
     })
     it('should handle axios error', async () => {
@@ -98,10 +92,7 @@ describe('#PsfSlpIndexer', () => {
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.include(
-          err.message,
-          'test error'
-        )
+        assert.include(err.message, 'test error')
       }
     })
     it('should handle request error', async () => {
@@ -127,7 +118,8 @@ describe('#PsfSlpIndexer', () => {
       // Stub the network call.
       sandbox.stub(axios, 'post').resolves({ data: mockData.tokenStats })
 
-      const tokenId = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+      const tokenId =
+        'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
       const result = await bchjs.PsfSlpIndexer.tokenStats(tokenId)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       assert.property(result, 'tokenData')
@@ -154,10 +146,7 @@ describe('#PsfSlpIndexer', () => {
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          'Input tokenId must be a string.'
-        )
+        assert.include(err.message, 'Input tokenId must be a string.')
       }
     })
     it('should handle axios error', async () => {
@@ -165,15 +154,13 @@ describe('#PsfSlpIndexer', () => {
         // Stub the network call.
         sandbox.stub(axios, 'post').throws(new Error('test error'))
 
-        const tokenId = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        const tokenId =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
         await bchjs.PsfSlpIndexer.tokenStats(tokenId)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.include(
-          err.message,
-          'test error'
-        )
+        assert.include(err.message, 'test error')
       }
     })
     it('should handle request error', async () => {
@@ -183,7 +170,8 @@ describe('#PsfSlpIndexer', () => {
         testErr.response = { data: { status: 422 } }
         sandbox.stub(axios, 'post').throws(testErr)
 
-        const tokenId = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        const tokenId =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
         await bchjs.PsfSlpIndexer.tokenStats(tokenId)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
@@ -192,13 +180,14 @@ describe('#PsfSlpIndexer', () => {
     })
   })
 
-  describe('#txId', () => {
+  describe('#tx', () => {
     it('should GET transaction data', async () => {
       // Stub the network call.
       sandbox.stub(axios, 'post').resolves({ data: mockData.txData })
 
-      const txid = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
-      const result = await bchjs.PsfSlpIndexer.txId(txid)
+      const txid =
+        'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+      const result = await bchjs.PsfSlpIndexer.tx(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
       assert.property(result, 'txData')
       assert.property(result.txData, 'txid')
@@ -229,14 +218,11 @@ describe('#PsfSlpIndexer', () => {
       try {
         const txid = 12345
 
-        await bchjs.PsfSlpIndexer.txId(txid)
+        await bchjs.PsfSlpIndexer.tx(txid)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         // console.log(`err: `, err)
-        assert.include(
-          err.message,
-          'Input txid must be a string.'
-        )
+        assert.include(err.message, 'Input txid must be a string.')
       }
     })
     it('should handle axios error', async () => {
@@ -244,15 +230,13 @@ describe('#PsfSlpIndexer', () => {
         // Stub the network call.
         sandbox.stub(axios, 'post').throws(new Error('test error'))
 
-        const txid = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
-        await bchjs.PsfSlpIndexer.txId(txid)
+        const txid =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        await bchjs.PsfSlpIndexer.tx(txid)
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.include(
-          err.message,
-          'test error'
-        )
+        assert.include(err.message, 'test error')
       }
     })
     it('should handle request error', async () => {
@@ -262,8 +246,9 @@ describe('#PsfSlpIndexer', () => {
         testErr.response = { data: { status: 422 } }
         sandbox.stub(axios, 'post').throws(testErr)
 
-        const txid = 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
-        await bchjs.PsfSlpIndexer.txId(txid)
+        const txid =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        await bchjs.PsfSlpIndexer.tx(txid)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         assert.equal(err.status, 422)
