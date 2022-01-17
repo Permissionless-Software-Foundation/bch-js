@@ -38,6 +38,7 @@ const Ecash = require('./ecash')
 // Indexers
 const Ninsight = require('./ninsight')
 const Electrumx = require('./electrumx')
+const PsfSlpIndexer = require('./psf-slp-indexer')
 
 class BCHJS {
   constructor (config) {
@@ -120,6 +121,8 @@ class BCHJS {
 
     this.DSProof = new DSProof(libConfig)
     this.eCash = new Ecash()
+
+    this.PsfSlpIndexer = new PsfSlpIndexer(libConfig)
   }
 }
 
