@@ -45,11 +45,25 @@ describe('#psf-slp-indexer', () => {
         '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0'
 
       const result = await bchjs.PsfSlpIndexer.tokenStats(tokenId)
-      console.log('result: ', result)
+      // console.log('result: ', result)
 
       assert.property(result.tokenData, 'documentUri')
       assert.property(result.tokenData, 'txs')
       assert.property(result.tokenData, 'totalBurned')
+    })
+  })
+
+  describe('#tx', () => {
+    it('should get hydrated tx data', async () => {
+      const txid =
+        '83361c34cac2ea7f9ca287fca57a96cc0763719f0cdf4850f9696c1e68eb635c'
+
+      const result = await bchjs.PsfSlpIndexer.tx(txid)
+      // console.log('result: ', result)
+
+      assert.property(result.txData, 'vin')
+      assert.property(result.txData, 'vout')
+      assert.property(result.txData, 'isValidSlp')
     })
   })
 })
