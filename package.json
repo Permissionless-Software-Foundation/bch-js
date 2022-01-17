@@ -14,7 +14,7 @@
     "test:integration:nft": "export RESTURL=https://bchn.fullstack.cash/v5/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 -g '#nft1' test/integration/chains/bchn/slp.js",
     "test:integration:abc": "export RESTURL=https://abc.fullstack.cash/v5/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/abc/",
     "test:integration:bchn": "export RESTURL=https://bchn.fullstack.cash/v5/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
-    "test:integration:testnet": "IS_USING_FREE_TIER=true mocha --timeout 30000 test/integration/chains/testnet/",
+    "test:integration:bchn:slpdb": "export TESTSLP=1 && export RESTURL=https://bchn.fullstack.cash/v5/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
     "test:integration:local:abc": "export RESTURL=http://localhost:3000/v5/ && mocha --timeout 30000 test/integration && mocha --timeout 30000 test/integration/chains/abc/",
     "test:integration:local:bchn": "export RESTURL=http://localhost:3000/v5/ && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v5/ mocha --timeout 30000 test/integration/chains/testnet",
