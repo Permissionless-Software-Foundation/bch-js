@@ -11,7 +11,7 @@ const Util = require('../util')
 let _this
 
 class Utils {
-  constructor (config) {
+  constructor (config = {}) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.slpParser = slpParser

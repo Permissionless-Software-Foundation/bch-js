@@ -11,11 +11,12 @@ const axios = require('axios')
 
 // Local libraries
 const RawTransaction = require('./raw-transactions')
+const SlpUtils = require('./slp/utils')
 
 // let _this
 
 class PsfSlpIndexer {
-  constructor (config) {
+  constructor (config = {}) {
     this.restURL = config.restURL
     this.apiToken = config.apiToken
     this.authToken = config.authToken
@@ -38,6 +39,7 @@ class PsfSlpIndexer {
 
     // Encapsulate dependencies
     this.rawTransaction = new RawTransaction(config)
+    this.slpUtils = new SlpUtils(config)
 
     // _this = this
   }
@@ -308,16 +310,18 @@ class PsfSlpIndexer {
         //   'TX not found in psf-slp-indexer. Retrieving from full node.'
         // )
 
+        // Check if this txid belongs to a blacklisted token.
+        const isInBlacklist = await this.checkBlacklist(txid)
+
         // Get the TX Details from the full node.
         const txDetails = await this.rawTransaction.getTxData(txid)
         // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
-        // TODO: Run the TX through decodeOpReturn() to see if it has a tokenID
-        // that is in the blacklist. If it is, then set isValidSlp = null to
-        // signal that it's state can not be determined.
-
-        // Assumption: transaction is not a valid SLP UTXO.
-        txDetails.isValidSlp = false
+        if (isInBlacklist) {
+          txDetails.isValidSlp = null
+        } else {
+          txDetails.isValidSlp = false
+        }
 
         const outObj = {
           txData: txDetails
@@ -325,6 +329,39 @@ class PsfSlpIndexer {
 
         return outObj
       } else throw error
+    }
+  }
+
+  // Check if the txid has an OP_RETURN containing a tokenID that is in the
+  // blacklist. In that case, the isValidSlp property should be marked as
+  // null, and not false.
+  async checkBlacklist (txid) {
+    try {
+      // TODO: Add endpoint to psf-slp-indexer to retrieve current blacklist.
+      // This should be done once at startup, and not each time this function
+      // is called.
+      const blacklist = [
+        'dd21be4532d93661e8ffe16db6535af0fb8ee1344d1fef81a193e2b4cfa9fbc9'
+      ]
+
+      const outTokenData = await this.slpUtils.decodeOpReturn(txid)
+      // console.log('outTokenData: ', outTokenData)
+
+      // Loop through each token in the blacklist.
+      for (let i = 0; i < blacklist.length; i++) {
+        // If a match is found, return true.
+        if (outTokenData.tokenId === blacklist[i]) {
+          return true
+        }
+      }
+
+      // By default, return false.
+      return false
+    } catch (err) {
+      // console.log(err)
+
+      // Exit quietly.
+      return false
     }
   }
 }

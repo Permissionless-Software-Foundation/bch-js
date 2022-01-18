@@ -56,7 +56,7 @@ describe('#psf-slp-indexer', () => {
   describe('#tx', () => {
     it('should get hydrated tx data for an SLP transaction', async () => {
       const txid =
-        '83361c34cac2ea7f9ca287fca57a96cc0763719f0cdf4850f9696c1e68eb635c'
+        '947ccb2a0d62ca287bc4b0993874ab0f9f6afd454193e631e2bf84dca66731fc'
 
       const result = await bchjs.PsfSlpIndexer.tx(txid)
       // console.log('result: ', result)
@@ -67,7 +67,7 @@ describe('#psf-slp-indexer', () => {
       assert.equal(result.txData.isValidSlp, true)
     })
 
-    it('should handle non-SLP transaction', async () => {
+    it('should mark non-SLP transaction as false', async () => {
       const txid =
         '03d6e6b63647ce7b02ecc73dc6d41b485be14a3e20eed4474b8a840358ddf14e'
 
@@ -84,7 +84,7 @@ describe('#psf-slp-indexer', () => {
     // Currently FlexUSD UTXOs are reported as invalid SLP UTXOs, which means
     // the wallet will burn them. There is a TODO in the code. This test will
     // need to be changed when it is done.
-    it('should handle a blacklisted token', async () => {
+    it('should mark blacklisted token as null', async () => {
       const txid =
         '302113c11b90edc5f36c073d2f8a75e1e0eaf59b56235491a843d3819cd6a85f'
 
@@ -94,7 +94,23 @@ describe('#psf-slp-indexer', () => {
       assert.property(result.txData, 'vin')
       assert.property(result.txData, 'vout')
       assert.property(result.txData, 'isValidSlp')
-      assert.equal(result.txData.isValidSlp, false)
+      assert.equal(result.txData.isValidSlp, null)
+    })
+
+    it('should throw error for non-existent txid', async () => {
+      try {
+        const txid =
+          '302113c11b90edc5f36c073d2f8a75e1e0eaf59b56235491a843d3819cd6a85e'
+
+        await bchjs.PsfSlpIndexer.tx(txid)
+        // console.log('result: ', result)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        // console.log(err)
+
+        assert.include(err.message, 'No such mempool or blockchain transaction')
+      }
     })
   })
 })
