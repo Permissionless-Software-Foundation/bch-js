@@ -1,6 +1,6 @@
 {
   "name": "@psf/bch-js",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "The FullStack.cash JavaScript library for Bitcoin Cash and SLP Tokens",
   "author": "Chris Troutner <chris.troutner@gmail.com>",
   "contributors": [
