@@ -280,10 +280,100 @@ const electrumxUtxos = {
   ]
 }
 
+const fulcrumUtxos01 = {
+  success: true,
+  utxos: [
+    {
+      height: 674512,
+      tx_hash:
+        'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+      tx_pos: 1,
+      value: 546
+    },
+    {
+      height: 674512,
+      tx_hash:
+        'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+      tx_pos: 2,
+      value: 546
+    },
+    {
+      height: 674512,
+      tx_hash:
+        'eeddccc4d716f04157ea132ac93a48040fea34a6b57f3d8f0cccb7d1a731ab2b',
+      tx_pos: 1,
+      value: 546
+    },
+    {
+      height: 674513,
+      tx_hash:
+        '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+      tx_pos: 1,
+      value: 546
+    },
+    {
+      height: 674513,
+      tx_hash:
+        '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+      tx_pos: 2,
+      value: 546
+    },
+    {
+      height: 674513,
+      tx_hash:
+        '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+      tx_pos: 3,
+      value: 38134
+    }
+  ]
+}
+
+const psfSlpIndexerUtxos01 = {
+  balance: {
+    utxos: [
+      {
+        txid:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        vout: 1,
+        type: 'token',
+        qty: '10000000000',
+        tokenId:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        address: 'bitcoincash:qrm0c67wwqh0w7wjxua2gdt2xggnm90xws00a3lezv'
+      },
+      {
+        txid:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        vout: 2,
+        type: 'baton',
+        tokenId:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        address: 'bitcoincash:qrm0c67wwqh0w7wjxua2gdt2xggnm90xws00a3lezv'
+      }
+    ],
+    txs: [
+      {
+        txid:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        height: 674512
+      }
+    ],
+    balances: [
+      {
+        tokenId:
+          'acbb0d3ceef55aa3e5fafc19335ae4bf2f8edba3c0567547dfd402391db32230',
+        qty: '10000000000'
+      }
+    ]
+  }
+}
+
 module.exports = {
   mockUtxoData,
   mockHydratedUtxos,
   mockTwoHydratedAddrs,
   mockEveryUtxoType,
-  electrumxUtxos
+  electrumxUtxos,
+  fulcrumUtxos01,
+  psfSlpIndexerUtxos01
 }

@@ -132,6 +132,7 @@ class PsfSlpIndexer {
    */
   async balance (address) {
     try {
+      console.log('balance() address: ', address)
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.post(

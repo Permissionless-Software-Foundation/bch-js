@@ -15,7 +15,7 @@ describe('#utxo', () => {
   beforeEach(() => (sandbox = sinon.createSandbox()))
   afterEach(() => sandbox.restore())
 
-  describe('#get', () => {
+  describe('#getOld', () => {
     it('should get hydrated and filtered UTXOs for an address', async () => {
       // Mock dependencies.
       sandbox.stub(bchjs.Utxo.electrumx, 'utxo').resolves(mockData.mockUtxoData)
@@ -25,7 +25,7 @@ describe('#utxo', () => {
 
       const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
 
-      const result = await bchjs.Utxo.get(addr)
+      const result = await bchjs.Utxo.getOld(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
@@ -46,7 +46,7 @@ describe('#utxo', () => {
 
         const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
 
-        await bchjs.Utxo.get(addr)
+        await bchjs.Utxo.getOld(addr)
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -66,7 +66,7 @@ describe('#utxo', () => {
         'bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9'
       ]
 
-      const result = await bchjs.Utxo.get(addr)
+      const result = await bchjs.Utxo.getOld(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
@@ -88,7 +88,7 @@ describe('#utxo', () => {
           addrs.push(addr)
         }
 
-        await bchjs.Utxo.get(addrs)
+        await bchjs.Utxo.getOld(addrs)
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -105,7 +105,7 @@ describe('#utxo', () => {
 
       const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
 
-      const result = await bchjs.Utxo.get(addr)
+      const result = await bchjs.Utxo.getOld(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
@@ -133,7 +133,7 @@ describe('#utxo', () => {
       const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
       const useWhitelist = true
 
-      const result = await bchjs.Utxo.get(addr, useWhitelist)
+      const result = await bchjs.Utxo.getOld(addr, useWhitelist)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.isArray(result)
@@ -186,6 +186,50 @@ describe('#utxo', () => {
 
       assert.property(result, 'satoshis')
       assert.equal(result.satoshis, 800)
+    })
+  })
+
+  describe('#get', () => {
+    it('should throw an error if input is not a string', async () => {
+      try {
+        const addr = 123
+
+        await bchjs.Utxo.get(addr)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'address input must be a string')
+      }
+    })
+
+    it('should return UTXO information', async () => {
+      // mock dependencies
+      sandbox
+        .stub(bchjs.Utxo.electrumx, 'utxo')
+        .resolves(mockData.fulcrumUtxos01)
+      sandbox
+        .stub(bchjs.Utxo.psfSlpIndexer, 'balance')
+        .resolves(mockData.psfSlpIndexerUtxos01)
+
+      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert expected properties exist
+      assert.property(result, 'address')
+      assert.property(result, 'bchUtxos')
+      assert.property(result, 'slpUtxos')
+      assert.property(result.slpUtxos, 'type1')
+      assert.property(result.slpUtxos.type1, 'tokens')
+      assert.property(result.slpUtxos.type1, 'mintBatons')
+      assert.property(result.slpUtxos, 'nft')
+      assert.property(result, 'nullUtxos')
+
+      assert.equal(result.bchUtxos.length, 4)
+      assert.equal(result.slpUtxos.type1.tokens.length, 1)
+      assert.equal(result.slpUtxos.type1.mintBatons.length, 1)
+      assert.equal(result.nullUtxos.length, 0)
     })
   })
 })
