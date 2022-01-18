@@ -2,18 +2,27 @@
   High-level functions for working with Transactions
 */
 
+// Global npm libraries
 const BigNumber = require('bignumber.js')
 
+// Local libraries
 const RawTransaction = require('./raw-transactions')
 const SlpUtils = require('./slp/utils')
 const Blockchain = require('./blockchain')
+const PsfSlpIndexer = require('./psf-slp-indexer')
 
 class Transaction {
-  constructor (config) {
+  constructor (config = {}) {
     // Encapsulate dependencies
     this.slpUtils = new SlpUtils(config)
     this.rawTransaction = new RawTransaction(config)
     this.blockchain = new Blockchain(config)
+    this.psfSlpIndexer = new PsfSlpIndexer(config)
+  }
+
+  // Proxy the call to the psf-slp-indexer.
+  async get (txid) {
+    return await this.psfSlpIndexer.tx(txid)
   }
 
   /**
@@ -42,7 +51,7 @@ class Transaction {
   // CT 10/31/21: TODO: this function should be refactored to use get2(), but
   // add waterfall validation of the TX and its inputs.
 
-  async get (txid) {
+  async getOld (txid) {
     try {
       if (typeof txid !== 'string') {
         throw new Error(

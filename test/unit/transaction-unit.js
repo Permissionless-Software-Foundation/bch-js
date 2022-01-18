@@ -22,10 +22,10 @@ describe('#TransactionLib', () => {
   })
   afterEach(() => sandbox.restore())
 
-  describe('#get', () => {
+  describe('#getOld', () => {
     it('should throw an error if txid is not specified', async () => {
       try {
-        await bchjs.Transaction.get()
+        await bchjs.Transaction.getOld()
 
         assert.fail('Unexpected code path!')
       } catch (err) {
@@ -45,7 +45,7 @@ describe('#TransactionLib', () => {
         .stub(bchjs.Transaction.rawTransaction, 'getTxData')
         .resolves(mockData.nonSlpTxDetails)
 
-      const result = await bchjs.Transaction.get(txid)
+      const result = await bchjs.Transaction.getOld(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
@@ -84,7 +84,7 @@ describe('#TransactionLib', () => {
       const txid =
         '266844d53e46bbd7dd37134688dffea6e54d944edff27a0add63dd0908839bc1'
 
-      const result = await bchjs.Transaction.get(txid)
+      const result = await bchjs.Transaction.getOld(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
@@ -114,7 +114,7 @@ describe('#TransactionLib', () => {
           .stub(bchjs.Transaction.rawTransaction, 'getTxData')
           .rejects(new Error('test error'))
 
-        await bchjs.Transaction.get(txid)
+        await bchjs.Transaction.getOld(txid)
 
         assert.fail('Unexpected code path')
       } catch (err) {
@@ -147,7 +147,7 @@ describe('#TransactionLib', () => {
       const txid =
         '874306bda204d3a5dd15e03ea5732cccdca4c33a52df35162cdd64e30ea7f04e'
 
-      const result = await bchjs.Transaction.get(txid)
+      const result = await bchjs.Transaction.getOld(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
@@ -195,7 +195,7 @@ describe('#TransactionLib', () => {
       const txid =
         '4640a734063ea79fa587a3cac38a70a2f6f3db0011e23514024185982110d0fa'
 
-      const result = await bchjs.Transaction.get(txid)
+      const result = await bchjs.Transaction.getOld(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
@@ -246,7 +246,7 @@ describe('#TransactionLib', () => {
       const txid =
         '6bc111fbf5b118021d68355ca19a0e77fa358dd931f284b2550f79a51ab4792a'
 
-      const result = await bchjs.Transaction.get(txid)
+      const result = await bchjs.Transaction.getOld(txid)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that there are stanardized properties.
@@ -703,6 +703,17 @@ describe('#TransactionLib', () => {
       // Assert added TX data exists.
       assert.equal(result.blockheight, 571212)
       assert.equal(result.isSlpTx, true)
+    })
+  })
+
+  describe('#get', () => {
+    it('should proxy psf-slp-indexer', async () => {
+      // console.log('bchjs.Transaction: ', bchjs.Transaction)
+      sandbox.stub(bchjs.Transaction.psfSlpIndexer, 'tx').resolves('test data')
+
+      const result = await bchjs.Transaction.get()
+
+      assert.equal(result, 'test data')
     })
   })
 })

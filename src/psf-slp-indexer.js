@@ -1,9 +1,16 @@
 /*
   This library interacts with the PSF slp indexer REST API endpoints operated
   by FullStack.cash
+
+  TODO:
+  - detect TXs from tokens in the blacklist.
 */
+
 // Public npm libraries
 const axios = require('axios')
+
+// Local libraries
+const RawTransaction = require('./raw-transactions')
 
 // let _this
 
@@ -28,6 +35,9 @@ class PsfSlpIndexer {
         }
       }
     }
+
+    // Encapsulate dependencies
+    this.rawTransaction = new RawTransaction(config)
 
     // _this = this
   }
@@ -283,8 +293,38 @@ class PsfSlpIndexer {
       }
       throw new Error('Input txid must be a string.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      // console.log('error: ', error)
+
+      // Case: txid is not stored in the psf-slp-indexer tx database.
+      // Response: If it's not in the database, then it can be assumed the TX
+      // is not a token TX?
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error &&
+        error.response.data.error.includes('Key not found in database')
+      ) {
+        // console.log(
+        //   'TX not found in psf-slp-indexer. Retrieving from full node.'
+        // )
+
+        // Get the TX Details from the full node.
+        const txDetails = await this.rawTransaction.getTxData(txid)
+        // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+        // TODO: Run the TX through decodeOpReturn() to see if it has a tokenID
+        // that is in the blacklist. If it is, then set isValidSlp = null to
+        // signal that it's state can not be determined.
+
+        // Assumption: transaction is not a valid SLP UTXO.
+        txDetails.isValidSlp = false
+
+        const outObj = {
+          txData: txDetails
+        }
+
+        return outObj
+      } else throw error
     }
   }
 }

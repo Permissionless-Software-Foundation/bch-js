@@ -38,6 +38,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'test error')
       }
     })
+
     it('should handle request error', async () => {
       try {
         // Stub the network call.
@@ -239,20 +240,25 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'test error')
       }
     })
-    it('should handle request error', async () => {
-      try {
-        // Stub the network call.
-        const testErr = new Error()
-        testErr.response = { data: { status: 422 } }
-        sandbox.stub(axios, 'post').throws(testErr)
 
-        const txid =
-          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
-        await bchjs.PsfSlpIndexer.tx(txid)
-        assert.equal(true, false, 'Unexpected result!')
-      } catch (err) {
-        assert.equal(err.status, 422)
+    it('should get tx from full node if not available from slp indexer', async () => {
+      // Stub the call to the SLP indexer.
+      const testErr = {
+        response: { data: { error: 'Key not found in database' } }
       }
+      sandbox.stub(axios, 'post').rejects(testErr)
+
+      // Stub the call to the full node
+      sandbox
+        .stub(bchjs.PsfSlpIndexer.rawTransaction, 'getTxData')
+        .resolves({ txid: 'fakeTxid' })
+
+      const txid =
+        'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+      const result = await bchjs.PsfSlpIndexer.tx(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result.txData.txid, 'fakeTxid')
     })
   })
 })
