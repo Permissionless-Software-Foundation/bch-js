@@ -71,6 +71,7 @@ describe('#PsfSlpIndexer', () => {
       assert.isArray(result.balance.txs)
       assert.isArray(result.balance.balances)
     })
+
     it('should throw an error for improper input', async () => {
       try {
         const addr = 12345
@@ -82,6 +83,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'Input address must be a string.')
       }
     })
+
     it('should handle axios error', async () => {
       try {
         // Stub the network call.
@@ -96,6 +98,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'test error')
       }
     })
+
     it('should handle request error', async () => {
       try {
         // Stub the network call.
@@ -139,6 +142,7 @@ describe('#PsfSlpIndexer', () => {
       assert.property(result.tokenData, 'totalMinted')
       assert.property(result.tokenData, 'txs')
     })
+
     it('should throw an error for improper input', async () => {
       try {
         const tokenId = 12345
@@ -150,6 +154,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'Input tokenId must be a string.')
       }
     })
+
     it('should handle axios error', async () => {
       try {
         // Stub the network call.
@@ -164,6 +169,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'test error')
       }
     })
+
     it('should handle request error', async () => {
       try {
         // Stub the network call.
@@ -215,6 +221,7 @@ describe('#PsfSlpIndexer', () => {
       assert.property(result.txData, 'tokenDocHash')
       assert.property(result.txData, 'isValidSlp')
     })
+
     it('should throw an error for improper input', async () => {
       try {
         const txid = 12345
@@ -226,6 +233,7 @@ describe('#PsfSlpIndexer', () => {
         assert.include(err.message, 'Input txid must be a string.')
       }
     })
+
     it('should handle axios error', async () => {
       try {
         // Stub the network call.
@@ -249,6 +257,7 @@ describe('#PsfSlpIndexer', () => {
       sandbox.stub(axios, 'post').rejects(testErr)
 
       // Stub the call to the full node
+      sandbox.stub(bchjs.PsfSlpIndexer, 'checkBlacklist').resolves(false)
       sandbox
         .stub(bchjs.PsfSlpIndexer.rawTransaction, 'getTxData')
         .resolves({ txid: 'fakeTxid' })
@@ -259,6 +268,72 @@ describe('#PsfSlpIndexer', () => {
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.equal(result.txData.txid, 'fakeTxid')
+      assert.equal(result.txData.isValidSlp, false)
+    })
+
+    it('should return isValidSlp=null for blacklisted token', async () => {
+      // Stub the call to the SLP indexer.
+      const testErr = {
+        response: { data: { error: 'Key not found in database' } }
+      }
+      sandbox.stub(axios, 'post').rejects(testErr)
+
+      // Stub the call to the full node
+      sandbox.stub(bchjs.PsfSlpIndexer, 'checkBlacklist').resolves(true)
+      sandbox
+        .stub(bchjs.PsfSlpIndexer.rawTransaction, 'getTxData')
+        .resolves({ txid: 'fakeTxid' })
+
+      const txid =
+        'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+      const result = await bchjs.PsfSlpIndexer.tx(txid)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result.txData.txid, 'fakeTxid')
+      assert.equal(result.txData.isValidSlp, null)
+    })
+  })
+
+  describe('#checkBlacklist', () => {
+    it('should return true if txid contains token in blacklist', async () => {
+      // Mock dependencies
+      sandbox
+        .stub(bchjs.PsfSlpIndexer.slpUtils, 'decodeOpReturn')
+        .resolves(mockData.tokenData01)
+
+      const txid =
+        '302113c11b90edc5f36c073d2f8a75e1e0eaf59b56235491a843d3819cd6a85f'
+
+      const result = await bchjs.PsfSlpIndexer.checkBlacklist(txid)
+      // console.log('result: ', result)
+
+      assert.equal(result, true)
+    })
+
+    it('should return false if there is an error', async () => {
+      // Force an error
+      sandbox
+        .stub(bchjs.PsfSlpIndexer.slpUtils, 'decodeOpReturn')
+        .rejects(new Error('test error'))
+
+      const result = await bchjs.PsfSlpIndexer.checkBlacklist()
+
+      assert.equal(result, false)
+    })
+
+    it('should return false if there is no tokenId match', async () => {
+      // Mock dependencies
+      mockData.tokenData01.tokenId = 'abc123'
+      sandbox
+        .stub(bchjs.PsfSlpIndexer.slpUtils, 'decodeOpReturn')
+        .resolves(mockData.tokenData01)
+
+      const txid =
+        '302113c11b90edc5f36c073d2f8a75e1e0eaf59b56235491a843d3819cd6a85f'
+
+      const result = await bchjs.PsfSlpIndexer.checkBlacklist(txid)
+
+      assert.equal(result, false)
     })
   })
 })

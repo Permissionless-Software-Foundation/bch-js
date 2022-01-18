@@ -13,7 +13,7 @@ describe('#UTXO', () => {
 
     if (process.env.IS_USING_FREE_TIER) await sleep(3000)
   })
-
+  /*
   describe('#get', () => {
     it('should get hydrated and filtered UTXOs for an address', async () => {
       // const addr = 'bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9'
@@ -90,7 +90,40 @@ describe('#UTXO', () => {
       assert.isAbove(result[0].nullUtxos.length, 1)
     })
   })
+*/
+  describe('#get', () => {
+    it('should hydrate address with BCH and SLP UTXOs', async () => {
+      const addr = 'simpleledger:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvyucjzqt9'
 
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert expected properties exist.
+      assert.property(result, 'address')
+      assert.property(result, 'bchUtxos')
+      assert.property(result, 'slpUtxos')
+      assert.property(result.slpUtxos, 'type1')
+      assert.property(result.slpUtxos, 'nft')
+      assert.property(result, 'nullUtxos')
+
+      assert.isAbove(result.bchUtxos.length, 0)
+      assert.isAbove(result.slpUtxos.type1.tokens.length, 0)
+      assert.equal(result.slpUtxos.type1.mintBatons.length, 0)
+    })
+
+    // TODO: NFTs are currently not identified as different than normal BCH UTXOs.
+    // The psf-slp-indexer needs to be updated to fix this issue.
+    it('should handle NFTs and minting batons', async () => {
+      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // Assert that minting batons are correctly identified.
+      assert.isAbove(result.slpUtxos.type1.mintBatons.length, 0)
+    })
+  })
+  /*
   describe('#findBiggestUtxo', () => {
     it('should sort UTXOs from Electrumx', async () => {
       const addr = 'bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z'
@@ -118,6 +151,7 @@ describe('#UTXO', () => {
       assert.equal(result.satoshis, 800)
     })
   })
+*/
 })
 
 function sleep (ms) {

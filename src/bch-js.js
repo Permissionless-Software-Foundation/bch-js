@@ -36,7 +36,6 @@ const DSProof = require('./dsproof')
 const Ecash = require('./ecash')
 
 // Indexers
-const Ninsight = require('./ninsight')
 const Electrumx = require('./electrumx')
 const PsfSlpIndexer = require('./psf-slp-indexer')
 
@@ -82,9 +81,6 @@ class BCHJS {
     }
 
     // console.log(`apiToken: ${this.apiToken}`)
-
-    // Bitcoin.com Ninsight indexer
-    this.Ninsight = new Ninsight(config)
 
     // ElectrumX indexer
     this.Electrumx = new Electrumx(libConfig)

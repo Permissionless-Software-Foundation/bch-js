@@ -8,19 +8,21 @@
 // Local libraries
 const Electrumx = require('./electrumx')
 const Slp = require('./slp/slp')
+const PsfSlpIndexer = require('./psf-slp-indexer')
 
 class UTXO {
-  constructor (config) {
+  constructor (config = {}) {
     // Encapsulate dependencies for easier mocking.
     this.electrumx = new Electrumx(config)
     this.slp = new Slp(config)
+    this.psfSlpIndexer = new PsfSlpIndexer(config)
   }
 
   /**
-   * @api Utxo.get() get()
-   * @apiName get
+   * @api Utxo.getOld() getOld()
+   * @apiName getOld
    * @apiGroup UTXO
-   * @apiDescription Get UTXOs for an address
+   * @apiDescription Get UTXOs for an address (from SLPDB)
    *
    * Given an address, this function will return an object with thre following
    * properties:
@@ -45,7 +47,7 @@ class UTXO {
    * @apiExample Example usage:
    * (async () => {
    *   try {
-   *     let utxos = await bchjs.Utxo.get('simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj');
+   *     let utxos = await bchjs.Utxo.getOld('simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj');
    *     console.log(utxos);
    *   } catch(error) {
    *    console.error(error)
@@ -181,7 +183,7 @@ class UTXO {
    *
    *
    */
-  async get (address, useWhitelist = false) {
+  async getOld (address, useWhitelist = false) {
     try {
       if (!address) {
         throw new Error('Address must be an array or a string')
@@ -280,6 +282,148 @@ class UTXO {
       return retAry
     } catch (err) {
       console.error('Error in bchjs.utxo.get()')
+
+      if (err.error) throw new Error(err.error)
+      throw err
+    }
+  }
+
+  /**
+   * @api Utxo.get() get()
+   * @apiName get
+   * @apiGroup UTXO
+   * @apiDescription Get UTXOs for an address (from psf-slp-indexer)
+   *
+   * Given an address, this function will return an object with thre following
+   * properties:
+   * - address: "" - the address these UTXOs are associated with
+   * - bchUtxos: [] - UTXOs confirmed to be spendable as normal BCH
+   * - nullUtxo: [] - UTXOs that did not pass SLP validation. Should be ignored and
+   *   not spent, to be safe.
+   * - slpUtxos: {} - UTXOs confirmed to be colored as valid SLP tokens
+   *   - type1: {}
+   *     - tokens: [] - SLP token Type 1 tokens.
+   *     - mintBatons: [] - SLP token Type 1 mint batons.
+   *   - nft: {}
+   *     - tokens: [] - NFT tokens
+   *     - groupTokens: [] - NFT Group tokens, used to create NFT tokens.
+   *     - groupMintBatons: [] - Minting baton to create more NFT Group tokens.
+   *
+   * Note: You can pass in an optional second Boolean argument. The default
+   * `false` will use the normal waterfall validation method. Set to `true`,
+   * SLP UTXOs will be validated with the whitelist filtered SLPDB. This will
+   * result is many more UTXOs in the `nullUtxos` array.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     let utxos = await bchjs.Utxo.get('simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj');
+   *     console.log(utxos);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   * [
+   *  {
+   *   "address": "bitcoincash:qrm0c67wwqh0w7wjxua2gdt2xggnm90xws00a3lezv",
+   *   "bchUtxos": [
+   *    {
+   *      "height": 674513,
+   *      "tx_hash": "705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04",
+   *      "tx_pos": 3,
+   *      "value": 38134,
+   *      "txid": "705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04",
+   *      "vout": 3,
+   *      "isValid": false
+   *    }
+   *   ],
+   */
+  // This version of get() uses the psf-slp-indexer. It will replace the older
+  // get() function that uses SLPDB.
+  // TODO: NFT UTXOs are identified as non-token UTXOs, which will cause a wallet
+  // to burn them. The psf-slp-indexer needs to be updated to mark these UTXOs.
+  async get (address) {
+    try {
+      // Convert address to an array if it is a string.
+      if (typeof address !== 'string') {
+        throw new Error('address input must be a string')
+      }
+
+      // Ensure the address is a BCH address.
+      const addr = this.slp.Address.toCashAddress(address)
+
+      // Get the UTXOs associated with the address.
+      const utxoData = await this.electrumx.utxo(addr)
+      // console.log(`utxoData: ${JSON.stringify(utxoData, null, 2)}`)
+      const utxos = utxoData.utxos
+
+      // Get SLP UTXOs from the psf-slp-indexer
+      const slpUtxoData = await this.psfSlpIndexer.balance(addr)
+      // console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
+      const slpUtxos = slpUtxoData.balance.utxos
+
+      // Loop through the Fulcrum UTXOs.
+      for (let i = 0; i < utxos.length; i++) {
+        const thisUtxo = utxos[i]
+
+        // Loop through the UTXOs from psf-slp-indexer.
+        for (let j = 0; j < slpUtxos.length; j++) {
+          const thisSlpUtxo = slpUtxos[j]
+
+          // If the non-hydrated UTXO matches the SLP UTXO, then combine the data
+          // and mark the UTXO as an SLP token.
+          if (
+            thisUtxo.tx_hash === thisSlpUtxo.txid &&
+            thisUtxo.tx_pos === thisSlpUtxo.vout
+          ) {
+            thisUtxo.txid = thisUtxo.tx_hash
+            thisUtxo.vout = thisUtxo.tx_pos
+            thisUtxo.isSlp = true
+            thisUtxo.type = thisSlpUtxo.type
+            thisUtxo.qty = thisSlpUtxo.qty
+            thisUtxo.tokenId = thisSlpUtxo.tokenId
+            thisUtxo.address = thisSlpUtxo.address
+
+            break
+          }
+        }
+
+        // If there was no match, then this is a normal BCH UTXO. Mark it as such.
+        if (!thisUtxo.isSlp) {
+          thisUtxo.txid = thisUtxo.tx_hash
+          thisUtxo.vout = thisUtxo.tx_pos
+          thisUtxo.isSlp = false
+          thisUtxo.address = addr
+        }
+      }
+
+      const bchUtxos = utxos.filter(x => x.isSlp === false)
+      const type1TokenUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'token'
+      )
+      const type1BatonUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'baton'
+      )
+      const nullUtxos = utxos.filter(x => x.isSlp === null)
+
+      const outObj = {
+        address: addr,
+        bchUtxos,
+        slpUtxos: {
+          type1: {
+            tokens: type1TokenUtxos,
+            mintBatons: type1BatonUtxos
+          },
+          nft: {} // Allocated for future support of NFT spec.
+        },
+        nullUtxos
+      }
+
+      return outObj
+    } catch (err) {
+      // console.error('Error in bchjs.utxo.get2(): ', err)
 
       if (err.error) throw new Error(err.error)
       throw err
