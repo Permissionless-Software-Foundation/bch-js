@@ -311,10 +311,6 @@ class UTXO {
    *     - groupTokens: [] - NFT Group tokens, used to create NFT tokens.
    *     - groupMintBatons: [] - Minting baton to create more NFT Group tokens.
    *
-   * Note: You can pass in an optional second Boolean argument. The default
-   * `false` will use the normal waterfall validation method. Set to `true`,
-   * SLP UTXOs will be validated with the whitelist filtered SLPDB. This will
-   * result is many more UTXOs in the `nullUtxos` array.
    *
    * @apiExample Example usage:
    * (async () => {
