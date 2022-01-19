@@ -189,6 +189,45 @@ describe('#utxo', () => {
     })
   })
 
+  describe('#hydrateTokenData', () => {
+    it('should hydrate token UTXOs', async () => {
+      // Mock dependencies
+      sandbox
+        .stub(bchjs.Utxo.psfSlpIndexer, 'tokenStats')
+        .onCall(0)
+        .resolves(mockData.genesisData01)
+        .onCall(1)
+        .resolves(mockData.genesisData02)
+        .onCall(2)
+        .resolves(mockData.genesisData03)
+
+      const result = await bchjs.Utxo.hydrateTokenData(mockData.tokenUtxos01)
+      // console.log('result: ', result)
+
+      assert.equal(result.length, 4)
+      assert.property(result[0], 'qtyStr')
+      assert.property(result[0], 'ticker')
+      assert.property(result[0], 'name')
+      assert.property(result[0], 'documentUri')
+      assert.property(result[0], 'documentHash')
+    })
+
+    it('should should catch and throw errors', async () => {
+      try {
+        // Force error
+        sandbox
+          .stub(bchjs.Utxo.psfSlpIndexer, 'tokenStats')
+          .rejects(new Error('test error'))
+
+        await bchjs.Utxo.hydrateTokenData(mockData.tokenUtxos01)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.equal(err.message, 'test error')
+      }
+    })
+  })
+
   describe('#get', () => {
     it('should throw an error if input is not a string', async () => {
       try {
@@ -210,6 +249,8 @@ describe('#utxo', () => {
       sandbox
         .stub(bchjs.Utxo.psfSlpIndexer, 'balance')
         .resolves(mockData.psfSlpIndexerUtxos01)
+      // Mock function to return the same input. Good enough for this test.
+      sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolves(x => x)
 
       const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
 
