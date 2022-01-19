@@ -9,6 +9,7 @@
 const Electrumx = require('./electrumx')
 const Slp = require('./slp/slp')
 const PsfSlpIndexer = require('./psf-slp-indexer')
+const BigNumber = require('bignumber.js')
 
 class UTXO {
   constructor (config = {}) {
@@ -16,6 +17,7 @@ class UTXO {
     this.electrumx = new Electrumx(config)
     this.slp = new Slp(config)
     this.psfSlpIndexer = new PsfSlpIndexer(config)
+    this.BigNumber = BigNumber
   }
 
   /**
@@ -399,10 +401,15 @@ class UTXO {
         }
       }
 
-      const bchUtxos = utxos.filter(x => x.isSlp === false)
-      const type1TokenUtxos = utxos.filter(
+      // Get token UTXOs
+      let type1TokenUtxos = utxos.filter(
         x => x.isSlp === true && x.type === 'token'
       )
+
+      // Hydrate the UTXOs with additional token data.
+      type1TokenUtxos = await this.hydrateTokenData(type1TokenUtxos)
+
+      const bchUtxos = utxos.filter(x => x.isSlp === false)
       const type1BatonUtxos = utxos.filter(
         x => x.isSlp === true && x.type === 'baton'
       )
@@ -426,6 +433,60 @@ class UTXO {
       // console.error('Error in bchjs.utxo.get2(): ', err)
 
       if (err.error) throw new Error(err.error)
+      throw err
+    }
+  }
+
+  // Hydrate an array of token UTXOs with token information.
+  // Returns an array of token UTXOs with additional data.
+  async hydrateTokenData (utxoAry) {
+    try {
+      // console.log('utxoAry: ', utxoAry)
+
+      // Create a list of token IDs without duplicates.
+      let tokenIds = utxoAry.map(x => x.tokenId)
+
+      // Remove duplicates. https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+      tokenIds = [...new Set(tokenIds)]
+      // console.log('tokenIds: ', tokenIds)
+
+      // Get Genesis data for each tokenId
+      const genesisData = []
+      for (let i = 0; i < tokenIds.length; i++) {
+        const thisTokenId = tokenIds[i]
+        const thisTokenData = await this.psfSlpIndexer.tokenStats(thisTokenId)
+        // console.log('thisTokenData: ', thisTokenData)
+
+        genesisData.push(thisTokenData)
+      }
+      // console.log('genesisData: ', genesisData)
+
+      // Hydrate each token UTXO with data from the genesis transaction.
+      for (let i = 0; i < utxoAry.length; i++) {
+        const thisUtxo = utxoAry[i]
+
+        // Get the genesis data for this token.
+        const genData = genesisData.filter(
+          x => x.tokenData.tokenId === thisUtxo.tokenId
+        )
+        // console.log('genData: ', genData)
+
+        thisUtxo.ticker = genData[0].tokenData.ticker
+        thisUtxo.name = genData[0].tokenData.name
+        thisUtxo.documentUri = genData[0].tokenData.documentUri
+        thisUtxo.documentHash = genData[0].tokenData.documentHash
+        thisUtxo.decimals = genData[0].tokenData.decimals
+
+        // Calculate the real token quantity
+        const qty = new BigNumber(thisUtxo.qty).dividedBy(
+          10 ** parseInt(thisUtxo.decimals)
+        )
+        thisUtxo.qtyStr = qty.toString()
+      }
+
+      return utxoAry
+    } catch (err) {
+      console.log('Error in hydrateTokenData()')
       throw err
     }
   }

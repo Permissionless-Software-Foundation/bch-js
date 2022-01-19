@@ -368,6 +368,95 @@ const psfSlpIndexerUtxos01 = {
   }
 }
 
+const tokenUtxos01 = [
+  {
+    txid: '384e1b8197e8de7d38f98317af2cf5f6bcb50007c46943b3498a6fab6e8aeb7c',
+    vout: 1,
+    type: 'token',
+    qty: '10000000',
+    tokenId: 'a436c8e1b6bee3d701c6044d190f76f774be83c36de8d34a988af4489e86dd37',
+    address: 'bitcoincash:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvg8nfhq4m'
+  },
+  {
+    txid: '4fc789405d58ec612c69eba29aa56cf0c7f228349801114138424eb68df4479d',
+    vout: 1,
+    type: 'token',
+    qty: '100000000',
+    tokenId: 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+    address: 'bitcoincash:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvg8nfhq4m'
+  },
+  {
+    txid: '42054bba4d69bfe7801ece0cffc754194b04239034fdfe9dbe321ef76c9a2d93',
+    vout: 5,
+    type: 'token',
+    qty: '4764',
+    tokenId: 'f05faf13a29c7f5e54ab921750aafb6afaa953db863bd2cf432e918661d4132f',
+    address: 'bitcoincash:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvg8nfhq4m'
+  },
+  {
+    txid: '06938d0a0d15aa76524ffe61fe111d6d2b2ea9dd8dcd4c7c7744614ced370861',
+    vout: 5,
+    type: 'token',
+    qty: '238',
+    tokenId: 'f05faf13a29c7f5e54ab921750aafb6afaa953db863bd2cf432e918661d4132f',
+    address: 'bitcoincash:qzv3zz2trz0xgp6a96lu4m6vp2nkwag0kvg8nfhq4m'
+  }
+]
+
+const genesisData01 = {
+  tokenData: {
+    type: 1,
+    ticker: 'sleven',
+    name: 'sleven',
+    tokenId: 'a436c8e1b6bee3d701c6044d190f76f774be83c36de8d34a988af4489e86dd37',
+    documentUri: 'sleven',
+    documentHash: '',
+    decimals: 7,
+    mintBatonIsActive: false,
+    tokensInCirculationBN: '770059999999',
+    tokensInCirculationStr: '770059999999',
+    blockCreated: 555483,
+    totalBurned: '7711234568',
+    totalMinted: '777771234567'
+  }
+}
+
+const genesisData02 = {
+  tokenData: {
+    type: 1,
+    ticker: 'NAKAMOTO',
+    name: 'NAKAMOTO',
+    tokenId: 'df808a41672a0a0ae6475b44f272a107bc9961b90f29dc918d71301f24fe92fb',
+    documentUri: '',
+    documentHash: '',
+    decimals: 8,
+    mintBatonIsActive: false,
+    tokensInCirculationBN: '2099260968799900',
+    tokensInCirculationStr: '2099260968799900',
+    blockCreated: 555671,
+    totalBurned: '739031200100',
+    totalMinted: '2100000000000000'
+  }
+}
+
+const genesisData03 = {
+  tokenData: {
+    type: 1,
+    ticker: 'AUDC',
+    name: 'AUD Coin',
+    tokenId: 'f05faf13a29c7f5e54ab921750aafb6afaa953db863bd2cf432e918661d4132f',
+    documentUri: 'audcoino@gmail.com',
+    documentHash: '',
+    decimals: 6,
+    mintBatonIsActive: false,
+    tokensInCirculationBN: '974791786216512742',
+    tokensInCirculationStr: '974791786216512742',
+    blockCreated: 603311,
+    totalBurned: '1025208213783487258',
+    totalMinted: '2000000000000000000'
+  }
+}
+
 module.exports = {
   mockUtxoData,
   mockHydratedUtxos,
@@ -375,5 +464,9 @@ module.exports = {
   mockEveryUtxoType,
   electrumxUtxos,
   fulcrumUtxos01,
-  psfSlpIndexerUtxos01
+  psfSlpIndexerUtxos01,
+  tokenUtxos01,
+  genesisData01,
+  genesisData02,
+  genesisData03
 }
