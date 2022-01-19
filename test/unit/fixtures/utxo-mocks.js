@@ -328,6 +328,19 @@ const fulcrumUtxos01 = {
   ]
 }
 
+const fulcrumUtxos02 = {
+  success: true,
+  utxos: [
+    {
+      height: 674513,
+      tx_hash:
+        '705bcc442e5a2770e560b528f52a47b1dcc9ce9ab6a8de9dfdefa55177f00d04',
+      tx_pos: 3,
+      value: 38134
+    }
+  ]
+}
+
 const psfSlpIndexerUtxos01 = {
   balance: {
     utxos: [
@@ -457,6 +470,12 @@ const genesisData03 = {
   }
 }
 
+const noUtxoErr = {
+  success: false,
+  error:
+    'Key not found in database [bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7]'
+}
+
 module.exports = {
   mockUtxoData,
   mockHydratedUtxos,
@@ -464,9 +483,11 @@ module.exports = {
   mockEveryUtxoType,
   electrumxUtxos,
   fulcrumUtxos01,
+  fulcrumUtxos02,
   psfSlpIndexerUtxos01,
   tokenUtxos01,
   genesisData01,
   genesisData02,
-  genesisData03
+  genesisData03,
+  noUtxoErr
 }
