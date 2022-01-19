@@ -357,10 +357,22 @@ class UTXO {
       // console.log(`utxoData: ${JSON.stringify(utxoData, null, 2)}`)
       const utxos = utxoData.utxos
 
+      let slpUtxos = []
+
       // Get SLP UTXOs from the psf-slp-indexer
-      const slpUtxoData = await this.psfSlpIndexer.balance(addr)
-      // console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
-      const slpUtxos = slpUtxoData.balance.utxos
+      try {
+        const slpUtxoData = await this.psfSlpIndexer.balance(addr)
+        // console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
+
+        slpUtxos = slpUtxoData.balance.utxos
+      } catch (err) {
+        // console.log('err: ', err)
+
+        // Exit quietly if address has no SLP UTXOs. Otherwise, throw the error.
+        if (err.error && !err.error.includes('Key not found in database')) {
+          throw err
+        }
+      }
 
       // Loop through the Fulcrum UTXOs.
       for (let i = 0; i < utxos.length; i++) {

@@ -208,6 +208,16 @@ describe('#UTXO', () => {
       // Assert that minting batons are correctly identified.
       assert.isAbove(result.slpUtxos.type1.mintBatons.length, 0)
     })
+
+    it('should return UTXOs for address with no SLP tokens', async () => {
+      const addr = 'bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result.bchUtxos.length, 0)
+      assert.equal(result.slpUtxos.type1.tokens.length, 0)
+    })
   })
 })
 

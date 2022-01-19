@@ -272,5 +272,30 @@ describe('#utxo', () => {
       assert.equal(result.slpUtxos.type1.mintBatons.length, 1)
       assert.equal(result.nullUtxos.length, 0)
     })
+
+    it('should handle an address with no SLP UTXOs', async () => {
+      // mock dependencies
+      sandbox
+        .stub(bchjs.Utxo.electrumx, 'utxo')
+        .resolves(mockData.fulcrumUtxos02)
+
+      // Force psf-slp-indexer to return no UTXOs
+      sandbox
+        .stub(bchjs.Utxo.psfSlpIndexer, 'balance')
+        .rejects(mockData.noUtxoErr)
+
+      // Mock function to return the same input. Good enough for this test.
+      sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolves(() => [])
+
+      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result.bchUtxos.length, 1)
+      assert.equal(result.slpUtxos.type1.tokens.length, 0)
+      assert.equal(result.slpUtxos.type1.mintBatons.length, 0)
+      assert.equal(result.nullUtxos.length, 0)
+    })
   })
 })
