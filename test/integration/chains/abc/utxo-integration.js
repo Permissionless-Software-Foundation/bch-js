@@ -2,10 +2,10 @@
   Integration tests for the utxo.js library.
 */
 
-const assert = require('chai').assert
+// const assert = require('chai').assert
 
-const BCHJS = require('../../../../src/bch-js')
-const bchjs = new BCHJS()
+// const BCHJS = require('../../../../src/bch-js')
+// const bchjs = new BCHJS()
 
 describe('#UTXO', () => {
   beforeEach(async () => {
@@ -14,6 +14,7 @@ describe('#UTXO', () => {
     if (process.env.IS_USING_FREE_TIER) await sleep(1500)
   })
 
+  /*
   describe('#get', () => {
     it('should get hydrated and filtered UTXOs for an address', async () => {
       // const addr = 'bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9'
@@ -31,6 +32,7 @@ describe('#UTXO', () => {
       assert.isArray(result[0].nullUtxos)
     })
   })
+  */
 })
 
 function sleep (ms) {
