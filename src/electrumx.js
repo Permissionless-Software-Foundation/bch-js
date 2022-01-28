@@ -638,13 +638,24 @@ class ElectrumX {
   // Sort confirmed Transactions by the block height
   sortConfTxs (txs, sortingOrder = 'DESCENDING') {
     try {
+      // console.log(`sortConfTxs txs: ${JSON.stringify(txs, null, 2)}`)
+
       // Filter out unconfirmed transactions, with a height of 0 or less.
       txs = txs.filter(elem => elem.height > 0)
 
       if (sortingOrder === 'DESCENDING') {
-        return txs.sort((a, b) => b.height - a.height)
+        // console.log('Sorting in descending order')
+        return txs.sort((a, b) => {
+          // console.log(`descending b.height: ${b.height}, a.height: ${a.height}`)
+          return b.height - a.height
+        })
       }
-      return txs.sort((a, b) => a.height - b.height)
+
+      // console.log('Sorting in ascending order')
+      return txs.sort((a, b) => {
+        // console.log(`ascending b.height: ${b.height}, a.height: ${a.height}`)
+        return a.height - b.height
+      })
     } catch (err) {
       console.log('Error in util.js/sortConfTxs()')
       throw err
@@ -685,6 +696,8 @@ class ElectrumX {
   // Substitute zero-conf txs with the current block-height + 1
   async sortAllTxs (txs, sortingOrder = 'DESCENDING') {
     try {
+      // console.log(`sortingOrder: ${sortingOrder}`)
+
       // Calculate the height of the next block
       const nextBlock = (await this.blockchain.getBlockCount()) + 1
 

@@ -151,6 +151,56 @@ class Util {
   }
 
   /**
+   * @api Util.chunk100() chunk100()
+   * @apiName chunk100
+   * @apiGroup Util
+   * @apiDescription chunk up an array into multiple arrays of 100 elements each.
+   * Input: arrayToSlice - a one-dimensional array of elements.
+   * Returns a two-dimensional array. An array of 100-element arrays.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *      const bigArray = [0,1,2,3,4,5,6,7,8,9,10,...,148, 149, 150]
+   *
+   *      const chunked = bchjs.Util.chunk20(bigArray)
+   *      console.log(chunked)
+   *   } catch(error) {
+   *      console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  [
+   *    [0,1,2,3,4,5,6,7,8,9,10,11,...,98,99],
+   *    [100,101,102,...,148,149,150]
+   *  ]
+   */
+  chunk100 (arrayToSlice) {
+    try {
+      // Validate inputs
+      if (!Array.isArray(arrayToSlice)) {
+        throw new Error('input must be an array')
+      }
+
+      let offset = 0
+      const result = []
+
+      // Loop over the array and slice off chunks of 100 elements.
+      while (offset < arrayToSlice.length) {
+        const chunk = arrayToSlice.slice(offset, offset + 100)
+        result.push(chunk)
+        offset = offset + 100
+      }
+
+      return result
+    } catch (err) {
+      console.error('Error in chunk100()')
+      throw err
+    }
+  }
+
+  /**
    * @api Util.sleep() sleep()
    * @apiName sleep
    * @apiGroup Util
