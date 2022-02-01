@@ -5,8 +5,8 @@
 const assert = require('chai').assert
 
 const BCHJS = require('../../../../src/bch-js')
-// const bchjs = new BCHJS()
-const bchjs = new BCHJS({ restURL: 'http://192.168.2.129:3000/v5/' })
+const bchjs = new BCHJS()
+// const bchjs = new BCHJS({ restURL: 'http://192.168.2.129:3000/v5/' })
 
 describe('#UTXO', () => {
   beforeEach(async () => {
