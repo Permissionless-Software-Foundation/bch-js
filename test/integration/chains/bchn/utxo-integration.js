@@ -5,7 +5,8 @@
 const assert = require('chai').assert
 
 const BCHJS = require('../../../../src/bch-js')
-const bchjs = new BCHJS()
+// const bchjs = new BCHJS()
+const bchjs = new BCHJS({ restURL: 'http://192.168.2.129:3000/v5/' })
 
 describe('#UTXO', () => {
   beforeEach(async () => {
@@ -199,7 +200,7 @@ describe('#UTXO', () => {
 
     // TODO: NFTs are currently not identified as different than normal BCH UTXOs.
     // The psf-slp-indexer needs to be updated to fix this issue.
-    it('should handle NFTs and minting batons', async () => {
+    it('should handle minting batons', async () => {
       const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
 
       const result = await bchjs.Utxo.get(addr)
@@ -217,6 +218,15 @@ describe('#UTXO', () => {
 
       assert.isAbove(result.bchUtxos.length, 0)
       assert.equal(result.slpUtxos.type1.tokens.length, 0)
+    })
+
+    it('should handle Group NFTs', async () => {
+      const addr = 'bitcoincash:qrnghwrfgccf3s5e9wnglzxegcnhje9rkcwv2eka33'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result.nullUtxos.length, 0)
     })
   })
 })

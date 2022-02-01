@@ -404,8 +404,18 @@ class UTXO {
         if (!thisUtxo.isSlp) {
           thisUtxo.txid = thisUtxo.tx_hash
           thisUtxo.vout = thisUtxo.tx_pos
-          thisUtxo.isSlp = false
           thisUtxo.address = addr
+
+          // Check the transaction to see if its a 'null' token, ignored by
+          // the indexer.
+          const txData = await this.psfSlpIndexer.tx(thisUtxo.tx_hash)
+          // console.log(`txData: ${JSON.stringify(txData, null, 2)}`)
+          if (txData.txData.isValidSlp === null) {
+            thisUtxo.isSlp = null
+          } else {
+            thisUtxo.isSlp = false
+          }
+          // console.log(`thisUtxo.isSlp: ${thisUtxo.isSlp}`)
         }
       }
 
@@ -438,7 +448,7 @@ class UTXO {
 
       return outObj
     } catch (err) {
-      // console.error('Error in bchjs.utxo.get2(): ', err)
+      console.error('Error in bchjs.Utxo.get(): ', err)
 
       if (err.error) throw new Error(err.error)
       throw err
