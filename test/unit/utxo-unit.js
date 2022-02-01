@@ -249,6 +249,10 @@ describe('#utxo', () => {
       sandbox
         .stub(bchjs.Utxo.psfSlpIndexer, 'balance')
         .resolves(mockData.psfSlpIndexerUtxos01)
+      sandbox
+        .stub(bchjs.Utxo.psfSlpIndexer, 'tx')
+        .resolves({ txData: { isValidSlp: false } })
+
       // Mock function to return the same input. Good enough for this test.
       sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolves(x => x)
 
@@ -278,6 +282,9 @@ describe('#utxo', () => {
       sandbox
         .stub(bchjs.Utxo.electrumx, 'utxo')
         .resolves(mockData.fulcrumUtxos02)
+      sandbox
+        .stub(bchjs.Utxo.psfSlpIndexer, 'tx')
+        .resolves({ txData: { isValidSlp: false } })
 
       // Force psf-slp-indexer to return no UTXOs
       sandbox
