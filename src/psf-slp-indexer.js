@@ -155,11 +155,13 @@ class PsfSlpIndexer {
    * @apiName Token Stats
    * @apiGroup PSF SLP
    * @apiDescription Return list stats for a single slp token.
+   * The second input is a Boolean, which determins the the transaction history
+   * of the token is included in the returned data. The default is false.
    *
    * @apiExample Example usage:
    * (async () => {
    *   try {
-   *     let tokenStats = await bchjs.PsfSlpIndexer.tokenStats('a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2');
+   *     let tokenStats = await bchjs.PsfSlpIndexer.tokenStats('a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2', true);
    *     console.log(tokenStats);
    *   } catch(error) {
    *    console.error(error)
@@ -194,13 +196,13 @@ class PsfSlpIndexer {
    *
    */
 
-  async tokenStats (tokenId) {
+  async tokenStats (tokenId, withTxHistory = false) {
     try {
       // Handle single address.
       if (typeof tokenId === 'string') {
         const response = await axios.post(
           `${this.restURL}psf/slp/token`,
-          { tokenId },
+          { tokenId, withTxHistory },
           this.axiosOptions
         )
         return response.data

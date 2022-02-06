@@ -40,11 +40,22 @@ describe('#psf-slp-indexer', () => {
   })
 
   describe('#tokenStats', () => {
-    it('should get stats on a token', async () => {
+    it('should get stats on a token, without tx history', async () => {
       const tokenId =
         '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0'
 
       const result = await bchjs.PsfSlpIndexer.tokenStats(tokenId)
+      // console.log('result: ', result)
+
+      assert.property(result.tokenData, 'documentUri')
+      assert.property(result.tokenData, 'totalBurned')
+    })
+
+    it('should get stats on a token, with tx history', async () => {
+      const tokenId =
+        '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0'
+
+      const result = await bchjs.PsfSlpIndexer.tokenStats(tokenId, true)
       // console.log('result: ', result)
 
       assert.property(result.tokenData, 'documentUri')
