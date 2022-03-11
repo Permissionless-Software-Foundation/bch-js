@@ -37,8 +37,8 @@
     "url": "git+https://github.com/Permissionless-Software-Foundation/bch-js.git"
   },
   "dependencies": {
-    "@psf/bip21": "2.0.1",
     "@chris.troutner/bip32-utils": "1.0.5",
+    "@psf/bip21": "2.0.1",
     "@psf/bitcoincash-ops": "2.0.0",
     "@psf/bitcoincashjs-lib": "4.0.2",
     "@psf/coininfo": "4.0.0",
@@ -65,7 +65,7 @@
     "wif": "2.0.6"
   },
   "devDependencies": {
-    "apidoc": "0.17.7",
+    "apidoc": "^0.50.5",
     "assert": "2.0.0",
     "chai": "4.1.2",
     "coveralls": "3.0.2",
@@ -77,10 +77,10 @@
     "eslint-plugin-standard": "4.0.0",
     "husky": "^4.3.8",
     "lodash.clonedeep": "4.5.0",
-    "mocha": "9.1.3",
+    "mocha": "^9.2.1",
     "node-mocks-http": "1.7.0",
     "nyc": "15.1.0",
-    "semantic-release": "18.0.0",
+    "semantic-release": "^19.0.2",
     "sinon": "9.2.2",
     "standard": "^16.0.4"
   },

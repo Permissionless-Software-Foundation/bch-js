@@ -72,7 +72,7 @@ class PsfSlpIndexer {
   async status () {
     try {
       const response = await axios.get(
-        `${this.restURL}/psf/slp/status`,
+        `${this.restURL}psf/slp/status`,
         this.axiosOptions
       )
       return response.data
@@ -137,7 +137,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.post(
-          `${this.restURL}/psf/slp/address`,
+          `${this.restURL}psf/slp/address`,
           { address},
           this.axiosOptions
         )
@@ -201,7 +201,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof tokenId === 'string') {
         const response = await axios.post(
-          `${this.restURL}/psf/slp/token`,
+          `${this.restURL}psf/slp/token`,
           { tokenId, withTxHistory},
           this.axiosOptions
         )
@@ -291,7 +291,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof txid === 'string') {
         const response = await axios.post(
-          `${this.restURL}/psf/slp/txid`,
+          `${this.restURL}psf/slp/txid`,
           { txid},
           this.axiosOptions
         )
