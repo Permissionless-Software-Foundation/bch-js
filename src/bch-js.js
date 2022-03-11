@@ -28,7 +28,6 @@ const Script = require('./script')
 const Price = require('./price')
 const Schnorr = require('./schnorr')
 const SLP = require('./slp/slp')
-const IPFS = require('./ipfs')
 const Encryption = require('./encryption')
 const Utxo = require('./utxo')
 const Transaction = require('./transaction')
@@ -111,7 +110,6 @@ class BCHJS {
     this.SLP = new SLP(libConfig)
     this.SLP.HDNode = this.HDNode
 
-    this.IPFS = new IPFS()
     this.Utxo = new Utxo(libConfig)
     this.Transaction = new Transaction(libConfig)
 
