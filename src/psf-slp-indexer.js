@@ -138,7 +138,7 @@ class PsfSlpIndexer {
       if (typeof address === 'string') {
         const response = await axios.post(
           `${this.restURL}psf/slp/address`,
-          { address},
+          { address },
           this.axiosOptions
         )
         return response.data
@@ -202,7 +202,7 @@ class PsfSlpIndexer {
       if (typeof tokenId === 'string') {
         const response = await axios.post(
           `${this.restURL}psf/slp/token`,
-          { tokenId, withTxHistory},
+          { tokenId, withTxHistory },
           this.axiosOptions
         )
         return response.data
@@ -292,7 +292,7 @@ class PsfSlpIndexer {
       if (typeof txid === 'string') {
         const response = await axios.post(
           `${this.restURL}psf/slp/txid`,
-          { txid},
+          { txid },
           this.axiosOptions
         )
         return response.data
