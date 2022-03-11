@@ -254,7 +254,7 @@ describe('#utxo', () => {
         .resolves({ txData: { isValidSlp: false } })
 
       // Mock function to return the same input. Good enough for this test.
-      sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolves(x => x)
+      sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolvesArg(0)
 
       const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
 
