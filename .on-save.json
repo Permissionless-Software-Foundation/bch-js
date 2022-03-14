@@ -1,0 +1,8 @@
+[
+  {
+    "srcDir": "",
+    "destDir": "",
+    "files": "**/*.js",
+    "command": "npm run lint"
+  }
+]
