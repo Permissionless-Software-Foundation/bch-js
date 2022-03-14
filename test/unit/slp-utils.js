@@ -45,43 +45,6 @@ describe('#SLP Utils', () => {
     sandbox.restore()
   })
 
-  describe('#transactions', () => {
-    it('should retrieve transactions for a given tokenId and address', async () => {
-      // Mock the call to the REST API
-      sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.mockTransactions })
-
-      const transactions = await uut.Utils.transactions(
-        '495322b37d6b2eae81f045eda612b95870a0c2b6069c58f70cf8ef4e6a9fd43a',
-        'simpleledger:qrhvcy5xlegs858fjqf8ssl6a4f7wpstaqnt0wauwu'
-      )
-
-      assert.hasAnyKeys(transactions[0], ['txid', 'tokenDetails'])
-    })
-  })
-
-  describe('#burnTotal', () => {
-    it('should retrieve input, output and burn totals', async () => {
-      // Mock the call to the REST API
-      sandbox
-        .stub(uut.Utils.axios, 'get')
-        .resolves({ data: mockData.mockBurnTotal })
-
-      const burnTotal = await uut.Utils.burnTotal(
-        'c7078a6c7400518a513a0bde1f4158cf740d08d3b5bfb19aa7b6657e2f4160de'
-      )
-      // console.log(`burnTotal: ${JSON.stringify(burnTotal, null, 2)}`)
-
-      assert.hasAnyKeys(burnTotal, [
-        'transactionId',
-        'inputTotal',
-        'outputTotal',
-        'burnTotal'
-      ])
-    })
-  })
-
   describe('#decodeOpReturn', () => {
     it('should throw an error for a non-string input', async () => {
       try {
@@ -1735,77 +1698,6 @@ describe('#SLP Utils', () => {
       // console.log(`data: ${JSON.stringify(data, null, 2)}`)
 
       assert.equal(data[0].isValid, false)
-    })
-  })
-
-  describe('#txDetails', () => {
-    it('should throw an error if txid is not included', async () => {
-      try {
-        await uut.Utils.txDetails()
-      } catch (err) {
-        assert.include(
-          err.message,
-          'txid string must be included',
-          'Expected error message.'
-        )
-      }
-    })
-
-    it('should throw error for non-existent txid', async () => {
-      try {
-        // Mock the call to the REST API
-        if (process.env.TEST === 'unit') {
-          sandbox
-            .stub(uut.Utils.axios, 'get')
-            // .resolves({ data: mockData.nonSLPTxDetailsWithoutOpReturn })
-            .throws({ error: 'TXID not found' })
-        }
-
-        const txid =
-          'd284e71227ec89f714b964d8eda595be6392bebd2fac46082bc5a9ce6fb7b33e'
-
-        await uut.Utils.txDetails(txid)
-        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-        assert.fail('Unexpected result')
-      } catch (err) {
-        // console.log(`err: `, err)
-        assert.include(err.error, 'TXID not found', 'Expected error message.')
-      }
-    })
-
-    it('should return details for an SLP txid', async () => {
-      // Mock the call to the REST API
-      if (process.env.TEST === 'unit') {
-        sandbox
-          .stub(uut.Utils.axios, 'get')
-          .resolves({ data: mockData.mockTxDetails })
-      }
-
-      const txid =
-        '9dbaaafc48c49a21beabada8de632009288a2cd52eecefd0c00edcffca9955d0'
-
-      const result = await uut.Utils.txDetails(txid)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
-
-      assert.hasAnyKeys(result, [
-        'txid',
-        'version',
-        'locktime',
-        'vin',
-        'vout',
-        'blockhash',
-        'blockheight',
-        'confirmations',
-        'time',
-        'blocktime',
-        'valueOut',
-        'size',
-        'valueIn',
-        'fees',
-        'tokenInfo',
-        'tokenIsValid'
-      ])
     })
   })
 })
