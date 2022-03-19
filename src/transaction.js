@@ -20,11 +20,50 @@ class Transaction {
     this.psfSlpIndexer = new PsfSlpIndexer(config)
   }
 
-  // Proxy the call to the psf-slp-indexer.
+  /**
+   * @api Transaction.get() get()
+   * @apiName get
+   * @apiGroup Transaction
+   * @apiDescription
+   * Returns an object of transaction data, including addresses for input UTXOs.
+   * If it is a SLP token transaction, the token information for inputs and
+   * outputs will also be included.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   * try {
+   *  let txData = await bchjs.Transaction.get("0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098");
+   *  console.log(txData);
+   * } catch(error) {
+   * console.error(error)
+   * }
+   * })()
+   */
   async get (txid) {
     return await this.psfSlpIndexer.tx(txid)
   }
 
+  /**
+   * @api Transaction.getTokenInfo() getTokenInfo()
+   * @apiName getTokenInfo
+   * @apiGroup Transaction
+   * @apiDescription
+   * Given the TXID of a token transaction, it will return data about that
+   * token by retrieving the data from the Genesis transaction and docoding
+   * the OP_RETURN.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   * try {
+   *  let txData = await bchjs.Transaction.getTokenInfo("0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098");
+   *  console.log(txData);
+   * } catch(error) {
+   * console.error(error)
+   * }
+   * })()
+   */
   // A wrapper for decodeOpReturn(). Returns false if txid is not an SLP tx.
   // Returns the token data if the txid is an SLP tx.
   async getTokenInfo (txid) {
