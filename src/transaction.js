@@ -20,7 +20,26 @@ class Transaction {
     this.psfSlpIndexer = new PsfSlpIndexer(config)
   }
 
-  // Proxy the call to the psf-slp-indexer.
+  /**
+   * @api Transaction.get() get()
+   * @apiName get
+   * @apiGroup Transaction
+   * @apiDescription
+   * Returns an object of transaction data, including addresses for input UTXOs.
+   * If it is a SLP token transaction, the token information for inputs and
+   * outputs will also be included.
+   *
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   * try {
+   *  let txData = await bchjs.Transaction.get("0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098");
+   *  console.log(txData);
+   * } catch(error) {
+   * console.error(error)
+   * }
+   * })()
+   */
   async get (txid) {
     return await this.psfSlpIndexer.tx(txid)
   }
