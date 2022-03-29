@@ -126,9 +126,6 @@ class UTXO {
             thisUtxo.tokenId = thisSlpUtxo.tokenId
             thisUtxo.address = thisSlpUtxo.address
 
-            // tokenQty is property expected by SLP.tokentype1.js library
-            thisUtxo.tokenQty = thisUtxo.qyStr
-
             break
           }
         }
@@ -233,6 +230,9 @@ class UTXO {
           10 ** parseInt(thisUtxo.decimals)
         )
         thisUtxo.qtyStr = qty.toString()
+
+        // tokenQty is property expected by SLP.tokentype1.js library
+        thisUtxo.tokenQty = thisUtxo.qtyStr
       }
 
       return utxoAry
