@@ -127,7 +127,7 @@ class UTXO {
             thisUtxo.address = thisSlpUtxo.address
 
             // tokenQty is property expected by SLP.tokentype1.js library
-            thisUtxo.tokenQty = thisUtxo.qyStr
+            thisUtxo.tokenQty = thisUtxo.qtyStr
 
             break
           }
