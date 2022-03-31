@@ -24,5 +24,14 @@ describe('#Transaction', () => {
       assert.property(result.txData, 'vout')
       assert.equal(result.txData.isValidSlp, false)
     })
+
+    it('should handle a coinbase transaction', async () => {
+      const txid = 'cca1d2dd3a533d2f501448dec03face2cb2814afd59a533a611e9a2909f2302b'
+
+      const details = await bchjs.Transaction.get(txid)
+      // console.log(`details: ${JSON.stringify(details, null, 2)}`)
+
+      assert.property(details.txData, 'txid')
+    })
   })
 })
