@@ -41,6 +41,7 @@ class Transaction {
    * })()
    */
   async get (txid) {
+    // console.log('transaction.get() txid: ', txid)
     return await this.psfSlpIndexer.tx(txid)
   }
 

@@ -288,6 +288,8 @@ class PsfSlpIndexer {
    */
   async tx (txid) {
     try {
+      // console.log('txid: ', txid)
+
       // Handle single address.
       if (typeof txid === 'string') {
         const response = await axios.post(
@@ -295,8 +297,11 @@ class PsfSlpIndexer {
           { txid },
           this.axiosOptions
         )
+        // console.log('response: ', response)
+
         return response.data
       }
+
       throw new Error('Input txid must be a string.')
     } catch (error) {
       // console.log('error: ', error)
@@ -316,6 +321,7 @@ class PsfSlpIndexer {
 
         // Check if this txid belongs to a blacklisted token.
         const isInBlacklist = await this.checkBlacklist(txid)
+        // console.log('isInBlacklist: ', isInBlacklist)
 
         // Get the TX Details from the full node.
         const txDetails = await this.rawTransaction.getTxData(txid)

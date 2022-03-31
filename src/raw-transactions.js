@@ -381,6 +381,8 @@ class RawTransactions {
   // Appends the BCH address to the inputs of the transaction.
   async getTxData (txid) {
     try {
+      // console.log('getTxData() txid: ', txid)
+
       if (typeof txid !== 'string') {
         throw new Error(
           'Input to raw-transaction.js/getTxData() must be a string containg a TXID.'
@@ -391,17 +393,24 @@ class RawTransactions {
       const txDetails = await this.getRawTransaction(txid, true)
       // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
-      const inAddrs = await this._getInputAddrs(txDetails)
-      // console.log(`inAddrs: ${JSON.stringify(inAddrs, null, 2)}`)
+      try {
+        const inAddrs = await this._getInputAddrs(txDetails)
+        // console.log(`inAddrs: ${JSON.stringify(inAddrs, null, 2)}`)
 
-      // Add the input address to the transaction data.
-      for (let i = 0; i < inAddrs.length; i++) {
-        txDetails.vin[i].address = inAddrs[i].address
-        txDetails.vin[i].value = inAddrs[i].value
+        // Add the input address to the transaction data.
+        for (let i = 0; i < inAddrs.length; i++) {
+          txDetails.vin[i].address = inAddrs[i].address
+          txDetails.vin[i].value = inAddrs[i].value
+        }
+      } catch (err) {
+        // Coinbase transactions will throw an error. Just ignore them and
+        // pass back the raw transaction data.
+        /* exit quietly */
       }
 
       return txDetails
     } catch (error) {
+      // console.log('error: ', error)
       if (error.error) throw new Error(error.error)
 
       // This case handles rate limit errors.
