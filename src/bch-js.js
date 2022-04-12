@@ -121,3 +121,4 @@ class BCHJS {
 }
 
 module.exports = BCHJS
+module.exports.default = BCHJS
