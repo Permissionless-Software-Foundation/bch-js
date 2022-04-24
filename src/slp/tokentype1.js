@@ -375,6 +375,9 @@ class TokenType1 {
       if (!Array.isArray(tokenUtxos)) {
         throw new Error('tokenUtxos must be an array.')
       }
+      if (!mintQty) {
+        throw new Error('mintQty must be a positive number.')
+      }
 
       // Loop through the tokenUtxos array and find the minting baton.
       let mintBatonUtxo
@@ -403,6 +406,8 @@ class TokenType1 {
       baseQty = baseQty.absoluteValue()
       baseQty = Math.floor(baseQty)
       baseQty = baseQty.toString()
+
+      if (isNaN(baseQty)) throw new Error('baseQty is non a number!')
 
       // Signal that the baton should be passed or detroyed.
       let batonVout = 2
