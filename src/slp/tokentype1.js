@@ -395,7 +395,7 @@ class TokenType1 {
       if (!tokenId) {
         throw new Error('tokenId property not found in mint-baton UTXO.')
       }
-      if (!decimals) {
+      if (!decimals && decimals !== 0) {
         throw new Error('decimals property not found in mint-baton UTXO.')
       }
 
