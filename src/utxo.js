@@ -157,10 +157,14 @@ class UTXO {
       // Hydrate the UTXOs with additional token data.
       type1TokenUtxos = await this.hydrateTokenData(type1TokenUtxos)
 
+      // Collect and hydrate any baton UTXOs
       const bchUtxos = utxos.filter(x => x.isSlp === false)
-      const type1BatonUtxos = utxos.filter(
+      let type1BatonUtxos = utxos.filter(
         x => x.isSlp === true && x.type === 'baton'
       )
+      type1BatonUtxos = await this.hydrateTokenData(type1BatonUtxos)
+
+      // Isolate any UTXOs that are marked null by the SLP indexer.
       const nullUtxos = utxos.filter(x => x.isSlp === null)
 
       const outObj = {
