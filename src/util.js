@@ -281,16 +281,17 @@ class Util {
 
         // Array of blocks.
       } else if (Array.isArray(address)) {
-        const options = {
+        const options1 = {
           method: 'POST',
           url: `${this.restURL}util/validateAddress`,
           data: {
             addresses: address
-          },
-          headers: {
-            authorization: `Token ${this.apiToken}`
           }
+          // headers: {
+          //   authorization: `Token ${this.apiToken}`
+          // }
         }
+        const options = Object.assign({}, options1, this.axiosOptions)
         const response = await axios(options)
 
         return response.data
