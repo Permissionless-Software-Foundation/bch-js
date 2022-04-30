@@ -44,7 +44,7 @@ class ElectrumX {
    * @apiDescription Return a list of uxtos for an address.
    *
    * @apiExample Example usage:
-   *    (async () => {
+   * (async () => {
    *   try {
    *     let utxo = await bchjs.Electrumx.utxo('bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9');
    *     console.log(utxo);

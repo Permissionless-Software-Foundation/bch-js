@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/npm/l/@psf/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
 [![js-standard-style](https://img.shields.io/badge/javascript-standard%20code%20style-green.svg?style=flat-square)](https://github.com/feross/standard) [![Join the chat at https://gitter.im/Permissionless-Software-Foundation/bch-js](https://badges.gitter.im/Permissionless-Software-Foundation/bch-js.svg)](https://gitter.im/Permissionless-Software-Foundation/bch-js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) blockchains. It can be used for free, but requires an account on [FullStack.cash](https://fullstack.cash) for increased rate limits. Learn more from [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) about Full Stack Bitcoin Cash development.
+[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) and eCash (XEC) blockchains. bch-js contains a toolbox of handy tools, and an easy API for talking with [bch-api REST API](https://github.com/Permissionless-Software-Foundation/bch-api). [FullStack.cash](https://fullstack.cash) offers paid cloud access to bch-api. You can run your own infrastructure by following documentation on [CashStack.info](https://cashstack.info).
 
 ### Quick Start Videos:
 
@@ -23,6 +23,7 @@ Here are two YouTube walk-through videos to help you get started:
 - [FullStack.cash](https://fullstack.cash) - cloud-based infrastructure for application developers.
 - [FullStack.cash Account](https://fullstack.cash/login) - Get your API key to unlock increased rate limits.
 - [Permissionless Software Foundation](https://psfoundation.cash) - The organization that maintains this library.
+- [CashStack.info](https://cashstack.info) - bch-js is part of the Cash Stack, a JavaScript framework for writing web 2 and web 3 business applications.
 
 ### Quick Notes
 
@@ -42,10 +43,10 @@ the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) RES
 - ABC Mainnet REST API server: https://abc.fullstack.cash/v5/
 - Check server status: https://metrics.fullstack.cash
 
-### API Key
+### API Key (JWT Token)
 
 The [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
-rate limits when interacting with the back end server. See [this article](https://troutsblog.com/research/bitcoin-cash/how-to-bch-full-stack-developer) if you want to understand the system-as-a-whole. The JWT token can be fed to bch-js _implicitly_ or _explicitly_.
+rate limits when interacting with the back end server. See [this article](https://cashstack.info) if you want to understand the system-as-a-whole. The JWT token can be fed to bch-js _implicitly_ or _explicitly_.
 
 - Implicitly: bch-js will detect your JWT token if you set the `BCHJSTOKEN` environment variable.
 - Explicitly: You can directly feed in the JWT token with the `apiToken` property when instantiating the library. Here is an example:
@@ -58,38 +59,25 @@ let bchjs = new BCHJS({
 })
 ```
 
-### Gatsby
+### Gatsby & Web Apps
 
-bch-js is included in this [gatsby-ipfs-template](https://github.com/Permissionless-Software-Foundation/gatsby-ipfs-template) for building uncensorable web apps that can interact with the blockchain. When building a Gatsby (or other front-end app that uses Webpack), you'll need to add these lines to your `gatsby-node.js` file, as per [this issue](https://github.com/gatsbyjs/gatsby/issues/564):
+[minimal-slp-wallet](https://www.npmjs.com/package/minimal-slp-wallet) is a minimal wallet 'engine' that incorporates bch-js. It's compiled with Browserify for front end apps.
 
-```
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    node: {
-      fs: 'empty'
-    }
-  })
-}
-```
+[gatsby-theme-bch-wallet](https://github.com/Permissionless-Software-Foundation/gatsby-theme-bch-wallet) is a Gatsby Theme and [bch-wallet-starter](https://github.com/Permissionless-Software-Foundation/bch-wallet-starter) is a Gatsby Starter for building web wallets using minimal-slp-wallet.
 
-This is because the new IPFS class in bch-js uses the fs library for uploading files, which is not supported by Gatsby.
-
-We also provide [minimal-slp-wallet-web](https://www.npmjs.com/package/minimal-slp-wallet-web) as a basic Bitcoin Cash wallet with SLP support, for front end projects. bch-js is encapsulated inside the instantiation of the library Class.
+[This gist](https://gist.github.com/christroutner/6cb9d1b615f3f9363af79723157bc434) shows how to include minimal-slp-wallet into a basic web page without using a framework.
 
 ## Features
 
 - [ECMAScript 2017 standard JavaScript](https://en.wikipedia.org/wiki/ECMAScript#8th_Edition_-_ECMAScript_2017) used instead of TypeScript. Works
   natively with node.js v10 or higher.
 
-- Full SLP tokens support: bch-js has full support for all SLP token functionality, including send, mint, and genesis transactions. It also fully support all aspects of [non-fugible tokans (NFTs)](https://www.youtube.com/watch?v=vvlpYUx6HRs).
+- Full SLP tokens support: bch-js has full support for all SLP token functionality, including send, mint, and genesis transactions. It also fully supports all aspects of [non-fugible tokans (NFTs)](https://www.youtube.com/watch?v=vvlpYUx6HRs).
 
 - [Semantic Release](https://github.com/semantic-release/semantic-release) for
   continuous delivery using semantic versioning.
 
-- [Greenkeeper](https://greenkeeper.io/) automatic dependency management for
-  automatically maintaining the latest, most secure dependencies.
-
-- [IPFS uploads](https://ipfs.io) of all files and dependencies, to backup
+- [IPFS](https://ipfs.io) and [Radicle](https://radicle.xyz) uploads of all files and dependencies, to backup
   dependencies in case they are ever inaccessible from GitHub or npm.
 
 ## Documentation:
@@ -118,5 +106,3 @@ Copies of this repository are also published on [IPFS](https://ipfs.io).
 ## License
 
 [MIT](LICENSE.md)
-
-test
