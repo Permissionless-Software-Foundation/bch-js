@@ -97,6 +97,16 @@ live in the same repository. To generate the documentation:
 Have questions? Need help? Join our community support
 [Telegram channel](https://t.me/bch_js_toolkit)
 
+## Donate
+
+This open source software is developed and maintained by the [Permissionless Software Foundation](https://psfoundation.cash). If this library provides value to you, please consider making a donation to support the PSF developers:
+
+<div align="center">
+<img src="./img/donation-qr.png" />
+<p>bitcoincash:qqsrke9lh257tqen99dkyy2emh4uty0vky9y0z0lsr</p>
+</div>
+
+
 ## IPFS Releases
 
 Copies of this repository are also published on [IPFS](https://ipfs.io).
