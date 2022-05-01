@@ -107,11 +107,15 @@ This open source software is developed and maintained by the [Permissionless Sof
 </div>
 
 
-## IPFS Releases
+## IPFS & Radicle Releases
 
 Copies of this repository are also published on [IPFS](https://ipfs.io).
 
-- v4.5.4: QmWv3pxJy3MH8vU5nLUVyzqFxfNKXLQQEnz1rgStNuQijd
+- v6.2.10: `bafybeifsioj3ba77u2763nsyuzq53gtbdxsnqpoipvdl4immj6ytznjaoy`
+- (with dependencies, node v14.18.2 and npm v8.8.0): `bafybeihfendd4oj6uxvvecm7sluobwwhpb5wdcxhvhmx56e667nxdncd4a`
+
+They are also posted to the Radicle:
+- v6.2.10: `rad:git:hnrkkroqnbfwj6uxpfjuhspoxnfm4i8e6oqwy`
 
 ## License
 
