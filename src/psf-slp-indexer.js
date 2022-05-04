@@ -41,7 +41,7 @@ class PsfSlpIndexer {
     this.rawTransaction = new RawTransaction(config)
     this.slpUtils = new SlpUtils(config)
 
-  // _this = this
+    // _this = this
   }
 
   /**
@@ -372,6 +372,69 @@ class PsfSlpIndexer {
 
       // Exit quietly.
       return false
+    }
+  }
+
+  /**
+   * @api PsfSlpIndexer.getTokenData()  getTokenData()
+   * @apiName Token Data
+   * @apiGroup PSF SLP
+   * @apiDescription Get mutable and immutable data if the token contains them.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     let tokenData = await bchjs.PsfSlpIndexer.getTokenData('a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2')
+   *     console.log(tokenData)
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * {
+   *   genesisData: {
+   *     type: 1,
+   *     ticker: 'TROUT',
+   *     name: "Trout's test token",
+   *     tokenId: 'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2',
+   *     documentUri: 'troutsblog.com',
+   *     documentHash: '',
+   *     decimals: 2,
+   *     mintBatonIsActive: true,
+   *     tokensInCirculationBN: '100098953386',
+   *     tokensInCirculationStr: '100098953386',
+   *     blockCreated: 622414,
+   *     totalBurned: '1046614',
+   *     totalMinted: '100100000000'
+   *     ]
+   *   },
+   *  immutableData :{
+   *     issuer:"FullStack.cash.",
+   *     website:"https://fullstack.cash/",
+   *     dateCreated:"2022-01-11"
+   *   },
+   *  mutableData :{
+   *    "tokenIcon":"https://gateway.ipfs.io/ipfs/bafybeiehitanirn5gmhqjg44xrmdtomn4n5lu5yjoepsvgpswk5mggaw6i/LP_logo-1.png",
+   *    "about":"Mutable data managed with npm package: https://www.npmjs.com/package/slp-mutable-data"
+   *   }
+   * }
+   *
+   */
+  async getTokenData (tokenId) {
+    try {
+      // Handle single address.
+      if (typeof tokenId === 'string') {
+        const response = await axios.post(
+          'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
+          { tokenId },
+          this.axiosOptions
+        )
+        return response.data
+      }
+      throw new Error('Input tokenId must be a string.')
+    } catch (error) {
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
     }
   }
 }
