@@ -105,13 +105,14 @@ describe('#UTXO', () => {
       assert.equal(result.slpUtxos.type1.tokens.length, 0)
     })
 
-    it('should handle Group NFTs', async () => {
+    it('should filter Group NFTs', async () => {
       const addr = 'bitcoincash:qrnghwrfgccf3s5e9wnglzxegcnhje9rkcwv2eka33'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.equal(result.nullUtxos.length, 0)
+      assert.equal(result.slpUtxos.group.tokens.length, 1)
+      // assert.equal(result.slpUtxos.)
     })
   })
 })

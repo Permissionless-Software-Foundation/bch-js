@@ -125,6 +125,7 @@ class UTXO {
             thisUtxo.qty = thisSlpUtxo.qty
             thisUtxo.tokenId = thisSlpUtxo.tokenId
             thisUtxo.address = thisSlpUtxo.address
+            thisUtxo.tokenType = thisSlpUtxo.tokenType
 
             break
           }
@@ -151,7 +152,7 @@ class UTXO {
 
       // Get token UTXOs
       let type1TokenUtxos = utxos.filter(
-        x => x.isSlp === true && x.type === 'token'
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 1
       )
 
       // Hydrate the UTXOs with additional token data.
@@ -164,6 +165,18 @@ class UTXO {
       )
       type1BatonUtxos = await this.hydrateTokenData(type1BatonUtxos)
 
+      // Collect and hydrate NFT Group tokens
+      let nftGroupTokenUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 129
+      )
+      nftGroupTokenUtxos = await this.hydrateTokenData(nftGroupTokenUtxos)
+
+      // Collect and hydrate NFT child tokens
+      let nftChildTokenUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 65
+      )
+      nftChildTokenUtxos = await this.hydrateTokenData(nftChildTokenUtxos)
+
       // Isolate any UTXOs that are marked null by the SLP indexer.
       const nullUtxos = utxos.filter(x => x.isSlp === null)
 
@@ -175,7 +188,14 @@ class UTXO {
             tokens: type1TokenUtxos,
             mintBatons: type1BatonUtxos
           },
-          nft: {} // Allocated for future support of NFT spec.
+          group: {
+            tokens: nftGroupTokenUtxos,
+            mintBatons: []
+          },
+          nft: {
+            tokens: nftChildTokenUtxos,
+            mintBatons: []
+          } // Allocated for future support of NFT spec.
         },
         nullUtxos
       }
