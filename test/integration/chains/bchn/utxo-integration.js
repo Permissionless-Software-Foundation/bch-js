@@ -87,7 +87,7 @@ describe('#UTXO', () => {
       const addr = 'simpleledger:qz5l5yzz9r09hw9aadcz53elp2knx6gyg5qk3s8md7'
 
       const result = await bchjs.Utxo.get(addr)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that minting batons are correctly identified.
       assert.isAbove(result.slpUtxos.type1.mintBatons.length, 0)
@@ -117,10 +117,9 @@ describe('#UTXO', () => {
       const addr = 'simpleledger:qq7vp2kvejsql898a2760kuq6xz00h0a5vuwu9lywu'
 
       const result = await bchjs.Utxo.get(addr)
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      // assert.isAbove(result.slpUtxos.group.tokens.length, 0)
-      // assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
+      assert.isAbove(result.slpUtxos.nft.tokens.length, 0)
     })
   })
 })

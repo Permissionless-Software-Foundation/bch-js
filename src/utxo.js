@@ -92,7 +92,7 @@ class UTXO {
       // Get SLP UTXOs from the psf-slp-indexer
       try {
         const slpUtxoData = await this.psfSlpIndexer.balance(addr)
-        console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
+        // console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
 
         slpUtxos = slpUtxoData.balance.utxos
       } catch (err) {
