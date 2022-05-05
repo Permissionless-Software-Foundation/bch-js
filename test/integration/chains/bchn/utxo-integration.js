@@ -83,13 +83,11 @@ describe('#UTXO', () => {
       assert.equal(result.slpUtxos.type1.mintBatons.length, 0)
     })
 
-    // TODO: NFTs are currently not identified as different than normal BCH UTXOs.
-    // The psf-slp-indexer needs to be updated to fix this issue.
-    it('should handle minting batons', async () => {
-      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+    it('should handle Type1 minting batons', async () => {
+      const addr = 'simpleledger:qz5l5yzz9r09hw9aadcz53elp2knx6gyg5qk3s8md7'
 
       const result = await bchjs.Utxo.get(addr)
-      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       // Assert that minting batons are correctly identified.
       assert.isAbove(result.slpUtxos.type1.mintBatons.length, 0)
@@ -105,14 +103,25 @@ describe('#UTXO', () => {
       assert.equal(result.slpUtxos.type1.tokens.length, 0)
     })
 
-    it('should handle Group NFTs', async () => {
-      const addr = 'bitcoincash:qrnghwrfgccf3s5e9wnglzxegcnhje9rkcwv2eka33'
+    it('should filter Group tokens and mint batons', async () => {
+      const addr = 'bitcoincash:qzeqcrpe5fcnslv8rfqjq4gh4gzdwytmdc4qmh0ztv'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.equal(result.nullUtxos.length, 0)
+      assert.isAbove(result.slpUtxos.group.tokens.length, 0)
+      assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
     })
+
+    // it('should filter NFTs', async () => {
+    //   const addr = 'bitcoincash:qq7vp2kvejsql898a2760kuq6xz00h0a5vs4h72ysz'
+    //
+    //   const result = await bchjs.Utxo.get(addr)
+    //   console.log(`result: ${JSON.stringify(result, null, 2)}`)
+    //
+    //   // assert.isAbove(result.slpUtxos.group.tokens.length, 0)
+    //   // assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
+    // })
   })
 })
 
