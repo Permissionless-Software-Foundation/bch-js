@@ -92,7 +92,7 @@ class UTXO {
       // Get SLP UTXOs from the psf-slp-indexer
       try {
         const slpUtxoData = await this.psfSlpIndexer.balance(addr)
-        // console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
+        console.log(`slpUtxoData: ${JSON.stringify(slpUtxoData, null, 2)}`)
 
         slpUtxos = slpUtxoData.balance.utxos
       } catch (err) {
@@ -158,10 +158,10 @@ class UTXO {
       // Hydrate the UTXOs with additional token data.
       type1TokenUtxos = await this.hydrateTokenData(type1TokenUtxos)
 
-      // Collect and hydrate any baton UTXOs
+      // Collect and hydrate any type1 baton UTXOs
       const bchUtxos = utxos.filter(x => x.isSlp === false)
       let type1BatonUtxos = utxos.filter(
-        x => x.isSlp === true && x.type === 'baton'
+        x => x.isSlp === true && x.type === 'baton' && x.tokenType === 1
       )
       type1BatonUtxos = await this.hydrateTokenData(type1BatonUtxos)
 
@@ -170,6 +170,12 @@ class UTXO {
         x => x.isSlp === true && x.type === 'token' && x.tokenType === 129
       )
       nftGroupTokenUtxos = await this.hydrateTokenData(nftGroupTokenUtxos)
+
+      // Collect and hydrate any Group baton UTXOs
+      let groupBatonUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'baton' && x.tokenType === 129
+      )
+      groupBatonUtxos = await this.hydrateTokenData(groupBatonUtxos)
 
       // Collect and hydrate NFT child tokens
       let nftChildTokenUtxos = utxos.filter(
@@ -190,12 +196,11 @@ class UTXO {
           },
           group: {
             tokens: nftGroupTokenUtxos,
-            mintBatons: []
+            mintBatons: groupBatonUtxos
           },
           nft: {
-            tokens: nftChildTokenUtxos,
-            mintBatons: []
-          } // Allocated for future support of NFT spec.
+            tokens: nftChildTokenUtxos
+          }
         },
         nullUtxos
       }
@@ -249,14 +254,16 @@ class UTXO {
         thisUtxo.documentHash = genData[0].tokenData.documentHash
         thisUtxo.decimals = genData[0].tokenData.decimals
 
-        // Calculate the real token quantity
-        const qty = new BigNumber(thisUtxo.qty).dividedBy(
-          10 ** parseInt(thisUtxo.decimals)
-        )
-        thisUtxo.qtyStr = qty.toString()
+        if (thisUtxo.type !== 'baton') {
+          // Calculate the real token quantity
+          const qty = new BigNumber(thisUtxo.qty).dividedBy(
+            10 ** parseInt(thisUtxo.decimals)
+          )
+          thisUtxo.qtyStr = qty.toString()
 
-        // tokenQty is property expected by SLP.tokentype1.js library
-        thisUtxo.tokenQty = thisUtxo.qtyStr
+          // tokenQty is property expected by SLP.tokentype1.js library
+          thisUtxo.tokenQty = thisUtxo.qtyStr
+        }
       }
 
       return utxoAry
