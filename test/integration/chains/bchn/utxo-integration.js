@@ -113,15 +113,15 @@ describe('#UTXO', () => {
       assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
     })
 
-    // it('should filter NFTs', async () => {
-    //   const addr = 'bitcoincash:qq7vp2kvejsql898a2760kuq6xz00h0a5vs4h72ysz'
-    //
-    //   const result = await bchjs.Utxo.get(addr)
-    //   console.log(`result: ${JSON.stringify(result, null, 2)}`)
-    //
-    //   // assert.isAbove(result.slpUtxos.group.tokens.length, 0)
-    //   // assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
-    // })
+    it('should filter NFTs', async () => {
+      const addr = 'simpleledger:qq7vp2kvejsql898a2760kuq6xz00h0a5vuwu9lywu'
+
+      const result = await bchjs.Utxo.get(addr)
+      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      // assert.isAbove(result.slpUtxos.group.tokens.length, 0)
+      // assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
+    })
   })
 })
 
