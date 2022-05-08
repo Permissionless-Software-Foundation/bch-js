@@ -336,6 +336,7 @@ describe('#PsfSlpIndexer', () => {
       assert.equal(result, false)
     })
   })
+
   describe('#getTokenData', () => {
     it('should GET token data', async () => {
       // Stub the network call.

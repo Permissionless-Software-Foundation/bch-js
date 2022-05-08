@@ -422,10 +422,14 @@ class PsfSlpIndexer {
    */
   async getTokenData (tokenId) {
     try {
+      const url = `${this.restURL}psf/slp/token/data`
+      // console.log(`url: ${url}`)
+
       // Handle single address.
       if (typeof tokenId === 'string') {
         const response = await axios.post(
-          'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
+          // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
+          url,
           { tokenId },
           this.axiosOptions
         )

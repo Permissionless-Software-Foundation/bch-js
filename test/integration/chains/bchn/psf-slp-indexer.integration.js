@@ -131,7 +131,7 @@ describe('#psf-slp-indexer', () => {
         'f055256b938f1ecfa270459d6f12c7c8c82b66d3263c03d5074445a2b1a498a3'
 
       const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId)
-      console.log('result: ', result)
+      // console.log('result: ', result)
 
       assert.property(result, 'genesisData')
       assert.property(result, 'immutableData')
