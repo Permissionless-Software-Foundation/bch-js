@@ -350,8 +350,8 @@ describe('#PsfSlpIndexer', () => {
       assert.property(result, 'mutableData')
 
       assert.isObject(result.genesisData)
-      assert.isObject(result.immutableData)
-      assert.isObject(result.mutableData)
+      assert.isString(result.immutableData)
+      assert.isString(result.mutableData)
 
       assert.property(result.genesisData, 'type')
       assert.property(result.genesisData, 'ticker')

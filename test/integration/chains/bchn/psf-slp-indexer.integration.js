@@ -130,6 +130,7 @@ describe('#psf-slp-indexer', () => {
       const tokenId =
         'f055256b938f1ecfa270459d6f12c7c8c82b66d3263c03d5074445a2b1a498a3'
 
+      bchjs.PsfSlpIndexer.restURL = 'http://localhost:3000/v5/'
       const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId)
       // console.log('result: ', result)
 
@@ -138,8 +139,8 @@ describe('#psf-slp-indexer', () => {
       assert.property(result, 'mutableData')
 
       assert.isObject(result.genesisData)
-      assert.isObject(result.immutableData)
-      assert.isObject(result.mutableData)
+      assert.isString(result.immutableData)
+      assert.isString(result.mutableData)
     })
   })
 })

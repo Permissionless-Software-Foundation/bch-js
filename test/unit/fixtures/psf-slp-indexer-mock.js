@@ -146,16 +146,10 @@ const tokenData01 = {
 
 const tokenData = {
   genesisData: tokenStats.tokenData,
-  immutableData: {
-    issuer: 'Launchpad Intellectual Property, Inc.',
-    website: 'http://launchpadip.com/',
-    dateCreated: '2022-01-11'
-  },
-  mutableData: {
-    tokenIcon: 'https://gateway.ipfs.io/ipfs/bafybeiehitanirn5gmhqjg44xrmdtomn4n5lu5yjoepsvgpswk5mggaw6i/LP_logo-1.png',
-    about: 'Mutable data managed with npm package: https://www.npmjs.com/package/slp-mutable-data'
-  }
+  immutableData: 'ipfs://bafybeidzfi3sictag4noy746gniyiwwcgio565xuzelmjfwxnga6qyiyai',
+  mutableData: 'ipfs://bafybeie6t5uyupddc7azms737xg4hxrj7i5t5ov3lb5g2qeehaujj6ak64'
 }
+
 module.exports = {
   tokenStats,
   txData,
