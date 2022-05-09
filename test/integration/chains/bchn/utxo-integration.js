@@ -84,7 +84,7 @@ describe('#UTXO', () => {
     })
 
     it('should handle Type1 minting batons', async () => {
-      const addr = 'simpleledger:qz5l5yzz9r09hw9aadcz53elp2knx6gyg5qk3s8md7'
+      const addr = 'simpleledger:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpv4awvv7m7'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
