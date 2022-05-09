@@ -104,7 +104,7 @@ describe('#UTXO', () => {
     })
 
     it('should filter Group tokens and mint batons', async () => {
-      const addr = 'bitcoincash:qzeqcrpe5fcnslv8rfqjq4gh4gzdwytmdc4qmh0ztv'
+      const addr = 'bitcoincash:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpvex9he79q'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -114,7 +114,7 @@ describe('#UTXO', () => {
     })
 
     it('should filter NFTs', async () => {
-      const addr = 'simpleledger:qq7vp2kvejsql898a2760kuq6xz00h0a5vuwu9lywu'
+      const addr = 'bitcoincash:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpvex9he79q'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
