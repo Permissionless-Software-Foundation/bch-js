@@ -174,4 +174,36 @@ describe('#utxo', () => {
       assert.equal(result.nullUtxos.length, 0)
     })
   })
+
+  describe('#isValid', () => {
+    it('should return false if getTxOut() returns null', async () => {
+      // Mock dependencies
+      sandbox.stub(bchjs.Utxo.blockchain, 'getTxOut').resolves(null)
+
+      const utxo = {
+        tx_hash: '17754221b29f189532d4fc2ae89fb467ad2dede30fdec4854eb2129b3ba90d7a',
+        tx_pos: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result
+
+      assert.equal(result, false)
+    })
+
+    it('should return true if getTxOut() returns non-null output', async () => {
+      // Mock dependencies
+      sandbox.stub(bchjs.Utxo.blockchain, 'getTxOut').resolves({ a: 'b' })
+
+      const utxo = {
+        tx_hash: 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40',
+        tx_pos: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result
+
+      assert.equal(result, true)
+    })
+  })
 })
