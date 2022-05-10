@@ -10,6 +10,7 @@ const Electrumx = require('./electrumx')
 const Slp = require('./slp/slp')
 const PsfSlpIndexer = require('./psf-slp-indexer')
 const BigNumber = require('bignumber.js')
+const Blockchain = require('./blockchain')
 
 class UTXO {
   constructor (config = {}) {
@@ -18,6 +19,7 @@ class UTXO {
     this.slp = new Slp(config)
     this.psfSlpIndexer = new PsfSlpIndexer(config)
     this.BigNumber = BigNumber
+    this.blockchain = new Blockchain(config)
   }
 
   /**
@@ -207,7 +209,7 @@ class UTXO {
 
       return outObj
     } catch (err) {
-      console.error('Error in bchjs.Utxo.get(): ', err)
+      console.error('Error in bchjs.Utxo.get()')
 
       if (err.error) throw new Error(err.error)
       throw err
@@ -335,6 +337,57 @@ class UTXO {
     }
 
     return utxos[largestIndex]
+  }
+
+  /**
+   * @api Utxo.isValid() isValid()
+   * @apiName isValid
+   * @apiGroup UTXO
+   * @apiDescription Validate that UTXO exists and is still spendable.
+   *
+   * Given a UTXO, this method will return true if the UTXO is still in the
+   * mempool and still valid for spending. It will return false if the UTXO
+   * has been spent.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const utxos = await bchjs.Utxo.get('bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z');
+   *     const isValid = bchjs.Utxo.isValid(utxos.bchUtxos[0])
+   *     console.log(isValid);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  true
+   */
+  async isValid (utxo) {
+    try {
+      // console.log('utxo: ', utxo)
+
+      // Convert different properties from different indexers
+      const txid = utxo.txid || utxo.tx_hash
+      const vout = utxo.vout | utxo.tx_pos
+
+      // Query the full node
+      const txOut = await this.blockchain.getTxOut(txid, vout, true)
+      // console.log('txOut: ', txOut)
+
+      // Simplify results to either true or false.
+      let isValid = null
+      if (txOut === null) {
+        isValid = false
+      } else {
+        isValid = true
+      }
+
+      return isValid
+    } catch (err) {
+      console.log('Error in Utxo.isValid()')
+      throw err
+    }
   }
 }
 
