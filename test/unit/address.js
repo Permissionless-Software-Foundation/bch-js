@@ -935,4 +935,44 @@ describe('#address.js', () => {
       })
     })
   })
+
+  describe('#toEcashAddress', () => {
+    it('should convert a BCH address to an eCash address', () => {
+      const cashAddr = 'bitcoincash:qr24z7q6s26d9wr078lr2pxsmxg22cyn9s7yw984vk'
+
+      const result = bchjs.Address.toEcashAddress(cashAddr)
+      // console.log('result: ', result)
+
+      assert.equal(result, 'ecash:qr24z7q6s26d9wr078lr2pxsmxg22cyn9s8f6wu02p')
+    })
+
+    it('should convert a BCH address to an eCash address without a prefix', () => {
+      const cashAddr = 'bitcoincash:qr24z7q6s26d9wr078lr2pxsmxg22cyn9s7yw984vk'
+
+      const result = bchjs.Address.toEcashAddress(cashAddr, false)
+      // console.log('result: ', result)
+
+      assert.equal(result, 'qr24z7q6s26d9wr078lr2pxsmxg22cyn9s8f6wu02p')
+    })
+  })
+
+  describe('#toEtokenAddress', () => {
+    it('should convert a BCH address to an eToken address', () => {
+      const cashAddr = 'bitcoincash:qr24z7q6s26d9wr078lr2pxsmxg22cyn9s7yw984vk'
+
+      const result = bchjs.Address.toEtokenAddress(cashAddr)
+      // console.log('result: ', result)
+
+      assert.equal(result, 'etoken:qr24z7q6s26d9wr078lr2pxsmxg22cyn9sfhnv2gwk')
+    })
+
+    it('should convert a BCH address to an eToken address without a prefix', () => {
+      const cashAddr = 'bitcoincash:qr24z7q6s26d9wr078lr2pxsmxg22cyn9s7yw984vk'
+
+      const result = bchjs.Address.toEtokenAddress(cashAddr, false)
+      // console.log('result: ', result)
+
+      assert.equal(result, 'qr24z7q6s26d9wr078lr2pxsmxg22cyn9sfhnv2gwk')
+    })
+  })
 })
