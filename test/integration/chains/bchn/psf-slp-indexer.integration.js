@@ -1,9 +1,12 @@
 /*
-  Integration tests for the psf-slp-indexer.js library
+  Integration tests for the psf-slp-indexer.js library, specific to the BCH
+  blockchain.
 */
 
+// Global npm libraries
 const assert = require('chai').assert
 
+// Local libraries
 const BCHJS = require('../../../../src/bch-js')
 let bchjs
 

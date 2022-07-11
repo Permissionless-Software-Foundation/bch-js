@@ -166,11 +166,11 @@ class Address {
    *
    * @apiExample Example usage:
    * // mainnet
-   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
-   * // ecash:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   * bchjs.Address.toEtokenAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
+   * // etoken:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
    *
    * // mainnet no prefix
-   * bchjs.Address.toEcashAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
+   * bchjs.Address.toEtokenAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
    * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
    *
    */
