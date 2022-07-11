@@ -82,7 +82,10 @@ class UTXO {
       }
 
       // Ensure the address is a BCH address.
-      const addr = this.slp.Address.toCashAddress(address)
+      let addr = address
+      if (!addr.includes('ecash')) {
+        addr = this.slp.Address.toCashAddress(address)
+      }
 
       // Get the UTXOs associated with the address.
       const utxoData = await this.electrumx.utxo(addr)
@@ -209,7 +212,7 @@ class UTXO {
 
       return outObj
     } catch (err) {
-      console.error('Error in bchjs.Utxo.get()')
+      console.error('Error in bchjs.Utxo.get(): ', err)
 
       if (err.error) throw new Error(err.error)
       throw err

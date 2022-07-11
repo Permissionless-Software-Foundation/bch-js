@@ -7,6 +7,7 @@ const axios = require('axios')
 
 // Local libraries.
 const Blockchain = require('./blockchain')
+// const Address = require('./address')
 
 // let _this
 
@@ -32,7 +33,9 @@ class ElectrumX {
       }
     }
 
+    // Encapsulate dependencies
     this.blockchain = new Blockchain(config)
+    // this.address = new Address(config)
 
     // _this = this
   }
@@ -104,6 +107,8 @@ class ElectrumX {
    */
   async utxo (address) {
     try {
+      // console.log(`electrumx.js/utxo() restURL: ${this.restURL}`)
+
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
