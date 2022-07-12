@@ -145,6 +145,15 @@ describe('#psf-slp-indexer', () => {
       assert.isString(result.immutableData)
       assert.isString(result.mutableData)
     })
+
+    it('should get token data with a transaction history', async () => {
+      const tokenId = '43eddfb11c9941edffb8c8815574bb0a43969a7b1de39ad14cd043eaa24fd38d'
+
+      const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId, true)
+      // console.log('result: ', result)
+
+      assert.isArray(result.genesisData.txs)
+    })
   })
 })
 
