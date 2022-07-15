@@ -144,10 +144,17 @@ const tokenData01 = {
   qty: {}
 }
 
+const tokenData = {
+  genesisData: tokenStats.tokenData,
+  immutableData: 'ipfs://bafybeidzfi3sictag4noy746gniyiwwcgio565xuzelmjfwxnga6qyiyai',
+  mutableData: 'ipfs://bafybeie6t5uyupddc7azms737xg4hxrj7i5t5ov3lb5g2qeehaujj6ak64'
+}
+
 module.exports = {
   tokenStats,
   txData,
   balance,
   status,
-  tokenData01
+  tokenData01,
+  tokenData
 }

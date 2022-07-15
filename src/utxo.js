@@ -10,6 +10,7 @@ const Electrumx = require('./electrumx')
 const Slp = require('./slp/slp')
 const PsfSlpIndexer = require('./psf-slp-indexer')
 const BigNumber = require('bignumber.js')
+const Blockchain = require('./blockchain')
 
 class UTXO {
   constructor (config = {}) {
@@ -18,6 +19,7 @@ class UTXO {
     this.slp = new Slp(config)
     this.psfSlpIndexer = new PsfSlpIndexer(config)
     this.BigNumber = BigNumber
+    this.blockchain = new Blockchain(config)
   }
 
   /**
@@ -80,7 +82,10 @@ class UTXO {
       }
 
       // Ensure the address is a BCH address.
-      const addr = this.slp.Address.toCashAddress(address)
+      let addr = address
+      if (!addr.includes('ecash')) {
+        addr = this.slp.Address.toCashAddress(address)
+      }
 
       // Get the UTXOs associated with the address.
       const utxoData = await this.electrumx.utxo(addr)
@@ -125,6 +130,7 @@ class UTXO {
             thisUtxo.qty = thisSlpUtxo.qty
             thisUtxo.tokenId = thisSlpUtxo.tokenId
             thisUtxo.address = thisSlpUtxo.address
+            thisUtxo.tokenType = thisSlpUtxo.tokenType
 
             break
           }
@@ -151,16 +157,38 @@ class UTXO {
 
       // Get token UTXOs
       let type1TokenUtxos = utxos.filter(
-        x => x.isSlp === true && x.type === 'token'
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 1
       )
 
       // Hydrate the UTXOs with additional token data.
       type1TokenUtxos = await this.hydrateTokenData(type1TokenUtxos)
 
+      // Collect and hydrate any type1 baton UTXOs
       const bchUtxos = utxos.filter(x => x.isSlp === false)
-      const type1BatonUtxos = utxos.filter(
-        x => x.isSlp === true && x.type === 'baton'
+      let type1BatonUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'baton' && x.tokenType === 1
       )
+      type1BatonUtxos = await this.hydrateTokenData(type1BatonUtxos)
+
+      // Collect and hydrate NFT Group tokens
+      let nftGroupTokenUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 129
+      )
+      nftGroupTokenUtxos = await this.hydrateTokenData(nftGroupTokenUtxos)
+
+      // Collect and hydrate any Group baton UTXOs
+      let groupBatonUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'baton' && x.tokenType === 129
+      )
+      groupBatonUtxos = await this.hydrateTokenData(groupBatonUtxos)
+
+      // Collect and hydrate NFT child tokens
+      let nftChildTokenUtxos = utxos.filter(
+        x => x.isSlp === true && x.type === 'token' && x.tokenType === 65
+      )
+      nftChildTokenUtxos = await this.hydrateTokenData(nftChildTokenUtxos)
+
+      // Isolate any UTXOs that are marked null by the SLP indexer.
       const nullUtxos = utxos.filter(x => x.isSlp === null)
 
       const outObj = {
@@ -171,7 +199,13 @@ class UTXO {
             tokens: type1TokenUtxos,
             mintBatons: type1BatonUtxos
           },
-          nft: {} // Allocated for future support of NFT spec.
+          group: {
+            tokens: nftGroupTokenUtxos,
+            mintBatons: groupBatonUtxos
+          },
+          nft: {
+            tokens: nftChildTokenUtxos
+          }
         },
         nullUtxos
       }
@@ -225,14 +259,16 @@ class UTXO {
         thisUtxo.documentHash = genData[0].tokenData.documentHash
         thisUtxo.decimals = genData[0].tokenData.decimals
 
-        // Calculate the real token quantity
-        const qty = new BigNumber(thisUtxo.qty).dividedBy(
-          10 ** parseInt(thisUtxo.decimals)
-        )
-        thisUtxo.qtyStr = qty.toString()
+        if (thisUtxo.type !== 'baton') {
+          // Calculate the real token quantity
+          const qty = new BigNumber(thisUtxo.qty).dividedBy(
+            10 ** parseInt(thisUtxo.decimals)
+          )
+          thisUtxo.qtyStr = qty.toString()
 
-        // tokenQty is property expected by SLP.tokentype1.js library
-        thisUtxo.tokenQty = thisUtxo.qtyStr
+          // tokenQty is property expected by SLP.tokentype1.js library
+          thisUtxo.tokenQty = thisUtxo.qtyStr
+        }
       }
 
       return utxoAry
@@ -304,6 +340,57 @@ class UTXO {
     }
 
     return utxos[largestIndex]
+  }
+
+  /**
+   * @api Utxo.isValid() isValid()
+   * @apiName isValid
+   * @apiGroup UTXO
+   * @apiDescription Validate that UTXO exists and is still spendable.
+   *
+   * Given a UTXO, this method will return true if the UTXO is still in the
+   * mempool and still valid for spending. It will return false if the UTXO
+   * has been spent.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     const utxos = await bchjs.Utxo.get('bitcoincash:qq54fgjn3hz0357n8a6guy4demw9xfkjk5jcj0xr0z');
+   *     const isValid = bchjs.Utxo.isValid(utxos.bchUtxos[0])
+   *     console.log(isValid);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * // returns
+   *  true
+   */
+  async isValid (utxo) {
+    try {
+      // console.log('utxo: ', utxo)
+
+      // Convert different properties from different indexers
+      const txid = utxo.txid || utxo.tx_hash
+      const vout = utxo.vout | utxo.tx_pos
+
+      // Query the full node
+      const txOut = await this.blockchain.getTxOut(txid, vout, true)
+      // console.log('txOut: ', txOut)
+
+      // Simplify results to either true or false.
+      let isValid = null
+      if (txOut === null) {
+        isValid = false
+      } else {
+        isValid = true
+      }
+
+      return isValid
+    } catch (err) {
+      console.log('Error in Utxo.isValid()')
+      throw err
+    }
   }
 }
 

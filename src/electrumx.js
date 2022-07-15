@@ -7,6 +7,7 @@ const axios = require('axios')
 
 // Local libraries.
 const Blockchain = require('./blockchain')
+// const Address = require('./address')
 
 // let _this
 
@@ -32,7 +33,9 @@ class ElectrumX {
       }
     }
 
+    // Encapsulate dependencies
     this.blockchain = new Blockchain(config)
+    // this.address = new Address(config)
 
     // _this = this
   }
@@ -44,7 +47,7 @@ class ElectrumX {
    * @apiDescription Return a list of uxtos for an address.
    *
    * @apiExample Example usage:
-   *    (async () => {
+   * (async () => {
    *   try {
    *     let utxo = await bchjs.Electrumx.utxo('bitcoincash:qqh793x9au6ehvh7r2zflzguanlme760wuzehgzjh9');
    *     console.log(utxo);
@@ -104,6 +107,8 @@ class ElectrumX {
    */
   async utxo (address) {
     try {
+      // console.log(`electrumx.js/utxo() restURL: ${this.restURL}`)
+
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(

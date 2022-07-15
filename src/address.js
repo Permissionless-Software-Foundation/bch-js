@@ -133,7 +133,7 @@ class Address {
    * @api Address.toEcashAddress() toEcashAddress()
    * @apiName toEcashAddress
    * @apiGroup Address
-   * @apiDescription Convert legacy to cashAddress format
+   * @apiDescription Convert legacy to eCash (XEC) format
    *
    * @apiExample Example usage:
    * // mainnet
@@ -156,6 +156,35 @@ class Address {
 
     if (prefix) return ecashAddress
     return ecashAddress.split(':')[1]
+  }
+
+  /**
+   * @api Address.toEtokenAddress() toEtokenAddress()
+   * @apiName toEtokenAddress
+   * @apiGroup Address
+   * @apiDescription Convert legacy to eToken (XEC) format
+   *
+   * @apiExample Example usage:
+   * // mainnet
+   * bchjs.Address.toEtokenAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2')
+   * // etoken:qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   * // mainnet no prefix
+   * bchjs.Address.toEtokenAddress('bitcoincash:qq50d800hgunr8u4trz3uuppspk3mds0dy9978plt2', false)
+   * // qq50d800hgunr8u4trz3uuppspk3mds0dyug2v69da
+   *
+   */
+  toEtokenAddress (address, prefix = true) {
+    const decoded = this._decode(address)
+
+    const etokenAddress = cashaddr.encode(
+      'etoken',
+      decoded.type,
+      decoded.hash
+    )
+
+    if (prefix) return etokenAddress
+    return etokenAddress.split(':')[1]
   }
 
   /**

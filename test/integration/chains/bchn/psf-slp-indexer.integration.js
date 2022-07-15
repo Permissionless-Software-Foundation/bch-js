@@ -1,9 +1,12 @@
 /*
-  Integration tests for the psf-slp-indexer.js library
+  Integration tests for the psf-slp-indexer.js library, specific to the BCH
+  blockchain.
 */
 
+// Global npm libraries
 const assert = require('chai').assert
 
+// Local libraries
 const BCHJS = require('../../../../src/bch-js')
 let bchjs
 
@@ -122,6 +125,34 @@ describe('#psf-slp-indexer', () => {
 
         assert.include(err.message, 'No such mempool or blockchain transaction')
       }
+    })
+  })
+
+  describe('#getTokenData', () => {
+    it('should get token data', async () => {
+      const tokenId =
+        'd9aafa7acb514c597caf440ae268b5e4e955f2687e05f044cdf8fd9550d9a27b'
+
+      // bchjs.PsfSlpIndexer.restURL = 'http://localhost:3000/v5/'
+      const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId)
+      // console.log('result: ', result)
+
+      assert.property(result, 'genesisData')
+      assert.property(result, 'immutableData')
+      assert.property(result, 'mutableData')
+
+      assert.isObject(result.genesisData)
+      assert.isString(result.immutableData)
+      assert.isString(result.mutableData)
+    })
+
+    it('should get token data with a transaction history', async () => {
+      const tokenId = '43eddfb11c9941edffb8c8815574bb0a43969a7b1de39ad14cd043eaa24fd38d'
+
+      const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId, true)
+      // console.log('result: ', result)
+
+      assert.isArray(result.genesisData.txs)
     })
   })
 })

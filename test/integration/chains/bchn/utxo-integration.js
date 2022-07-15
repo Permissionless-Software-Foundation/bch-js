@@ -83,10 +83,8 @@ describe('#UTXO', () => {
       assert.equal(result.slpUtxos.type1.mintBatons.length, 0)
     })
 
-    // TODO: NFTs are currently not identified as different than normal BCH UTXOs.
-    // The psf-slp-indexer needs to be updated to fix this issue.
-    it('should handle minting batons', async () => {
-      const addr = 'simpleledger:qrm0c67wwqh0w7wjxua2gdt2xggnm90xwsr5k22euj'
+    it('should handle Type1 minting batons', async () => {
+      const addr = 'simpleledger:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpv4awvv7m7'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
@@ -105,13 +103,82 @@ describe('#UTXO', () => {
       assert.equal(result.slpUtxos.type1.tokens.length, 0)
     })
 
-    it('should handle Group NFTs', async () => {
-      const addr = 'bitcoincash:qrnghwrfgccf3s5e9wnglzxegcnhje9rkcwv2eka33'
+    it('should filter Group tokens and mint batons', async () => {
+      const addr = 'bitcoincash:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpvex9he79q'
 
       const result = await bchjs.Utxo.get(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
-      assert.equal(result.nullUtxos.length, 0)
+      assert.isAbove(result.slpUtxos.group.tokens.length, 0)
+      assert.isAbove(result.slpUtxos.group.mintBatons.length, 0)
+    })
+
+    it('should filter NFTs', async () => {
+      const addr = 'bitcoincash:qrp4mlmsrtwlvjn4seuchvtmus06tuqmpvex9he79q'
+
+      const result = await bchjs.Utxo.get(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.isAbove(result.slpUtxos.nft.tokens.length, 0)
+    })
+  })
+
+  describe('#isValid', () => {
+    it('should return true for valid UTXO with fullnode properties', async () => {
+      const utxo = {
+        txid: 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40',
+        vout: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result)
+
+      assert.equal(result, true)
+    })
+
+    it('should return true for valid UTXO with fulcrum properties', async () => {
+      const utxo = {
+        tx_hash: 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40',
+        tx_pos: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result)
+
+      assert.equal(result, true)
+    })
+
+    it('should return true for valid UTXO with fullnode properties', async () => {
+      const utxo = {
+        txid: '17754221b29f189532d4fc2ae89fb467ad2dede30fdec4854eb2129b3ba90d7a',
+        vout: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result)
+
+      assert.equal(result, false)
+    })
+
+    it('should return true for valid UTXO with fulcrum properties', async () => {
+      const utxo = {
+        tx_hash: '17754221b29f189532d4fc2ae89fb467ad2dede30fdec4854eb2129b3ba90d7a',
+        tx_pos: 0
+      }
+
+      const result = await bchjs.Utxo.isValid(utxo)
+      // console.log('result: ', result
+
+      assert.equal(result, false)
+    })
+
+    it('should process output of Utxo.get()', async () => {
+      const utxo = await bchjs.Utxo.get('bitcoincash:qr4yscpw9jgq8ltajfeknpj32kamkf9knujffcdhyq')
+      // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
+
+      const result = await bchjs.Utxo.isValid(utxo.bchUtxos[0])
+
+      assert.equal(result, true)
     })
   })
 })

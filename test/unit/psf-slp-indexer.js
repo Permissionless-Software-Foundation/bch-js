@@ -336,4 +336,79 @@ describe('#PsfSlpIndexer', () => {
       assert.equal(result, false)
     })
   })
+
+  describe('#getTokenData', () => {
+    it('should GET token data', async () => {
+      // Stub the network call.
+      sandbox.stub(axios, 'post').resolves({ data: mockData.tokenData })
+
+      const tokenId =
+        'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+      const result = await bchjs.PsfSlpIndexer.getTokenData(tokenId)
+      assert.property(result, 'genesisData')
+      assert.property(result, 'immutableData')
+      assert.property(result, 'mutableData')
+
+      assert.isObject(result.genesisData)
+      assert.isString(result.immutableData)
+      assert.isString(result.mutableData)
+
+      assert.property(result.genesisData, 'type')
+      assert.property(result.genesisData, 'ticker')
+      assert.property(result.genesisData, 'name')
+      assert.property(result.genesisData, 'tokenId')
+      assert.property(result.genesisData, 'documentUri')
+      assert.property(result.genesisData, 'documentHash')
+      assert.property(result.genesisData, 'decimals')
+      assert.property(result.genesisData, 'mintBatonIsActive')
+      assert.property(result.genesisData, 'tokensInCirculationBN')
+      assert.property(result.genesisData, 'tokensInCirculationStr')
+      assert.property(result.genesisData, 'blockCreated')
+      assert.property(result.genesisData, 'totalBurned')
+      assert.property(result.genesisData, 'totalMinted')
+    })
+
+    it('should throw an error for improper input', async () => {
+      try {
+        const tokenId = 12345
+
+        await bchjs.PsfSlpIndexer.getTokenData(tokenId)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(err.message, 'Input tokenId must be a string.')
+      }
+    })
+
+    it('should handle axios error', async () => {
+      try {
+        // Stub the network call.
+        sandbox.stub(axios, 'post').throws(new Error('test error'))
+
+        const tokenId =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        await bchjs.PsfSlpIndexer.getTokenData(tokenId)
+        // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        assert.include(err.message, 'test error')
+      }
+    })
+
+    it('should handle request error', async () => {
+      try {
+        // Stub the network call.
+        const testErr = new Error()
+        testErr.response = { data: { status: 422 } }
+        sandbox.stub(axios, 'post').throws(testErr)
+
+        const tokenId =
+          'a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2'
+        await bchjs.PsfSlpIndexer.getTokenData(tokenId)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        assert.equal(err.status, 422)
+      }
+    })
+  })
 })

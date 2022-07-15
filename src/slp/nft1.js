@@ -147,7 +147,7 @@ class Nft1 {
     // Loop through the tokenUtxos array and find the minting baton.
     let mintBatonUtxo
     for (let i = 0; i < tokenUtxos.length; i++) {
-      if (tokenUtxos[i].utxoType === 'minting-baton') {
+      if (tokenUtxos[i].utxoType === 'minting-baton' || tokenUtxos[i].type === 'baton') {
         mintBatonUtxo = tokenUtxos[i]
       }
     }

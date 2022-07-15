@@ -4,6 +4,7 @@ wallet-info.txt
 wallet.json
 integration-test-sweet.sh
 integration-test-ss.sh
+integration-test-bitfinex.sh
 
 docs/
 coverage/
