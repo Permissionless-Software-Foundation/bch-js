@@ -28,7 +28,9 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
-    "lint": "standard --env mocha --fix"
+    "lint": "standard --env mocha --fix",
+    "res:build": "rescript",
+    "res:start": "rescript build -w"
   },
   "license": "MIT",
   "homepage": "https://github.com/Permissionless-Software-Foundation/bch-js",
@@ -78,6 +80,7 @@
     "mocha": "9.2.1",
     "node-mocks-http": "1.7.0",
     "nyc": "15.1.0",
+    "rescript": "^10.0.1",
     "semantic-release": "^19.0.2",
     "sinon": "9.2.2",
     "standard": "^16.0.4"
