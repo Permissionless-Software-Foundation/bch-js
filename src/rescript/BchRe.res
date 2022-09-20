@@ -1,4 +1,4 @@
-let default_rest_api = "https://api.fullstack.cash/v5/"
+let defaultRestApi = "https://api.fullstack.cash/v5/"
 
 type extModules =
   | BitcoinCash
