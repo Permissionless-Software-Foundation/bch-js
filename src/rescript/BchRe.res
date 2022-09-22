@@ -1,10 +1,15 @@
 let defaultRestApi = "https://api.fullstack.cash/v5/"
-
+type libConfiguration = {
+  restURL: string,
+  apiToken: string,
+  authToken: string,
+}
+@new external newElectrumxModule: libConfiguration => unit = "Electrumx"
 @val @scope(("process", "env")) external getRestURL: option<string> = "RESTURL"
 @val @scope(("process", "env")) external getApiToken: string = "BCHJSTOKEN"
 @val @scope(("process", "env")) external getAuthPass: string = "BCHJSAUTHPASS"
-@val external bufferFromString: string => string = "Buffer.from"
-@send external toStringWithEncoding: (unit, string) => string = "toString"
+// @val external bufferFromString: string => string = "Buffer.from"
+// @send external toStringWithEncoding: (unit, string) => string = "toString"
 
 type extModules =
   | BitcoinCash
@@ -73,7 +78,6 @@ type configuration = option<configurationObject>
 //     Js.log2("The data is: ", data)
 //   }
 // }
-
 module BCHJS = {
   let constructor = config => {
     let restURL = switch config {
@@ -93,8 +97,14 @@ module BCHJS = {
     | None => getAuthPass
     }
     let combined = `fullstackcash:${authPass}`
-    // This part needs to be implemented more
-    let base64Credential = bufferFromString(combined)
+    open NodeJs
+    let base64Credential =
+      Buffer.fromString(combined)->Buffer.toStringWithEncoding(StringEncoding.base64)
     let authToken = `Basic ${base64Credential}`
+    let libConfig = {
+      restURL,
+      apiToken,
+      authToken,
+    }
   }
 }

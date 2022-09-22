@@ -57,7 +57,7 @@ function constructor(config) {
   }
   var authPass = config !== undefined ? config : process.env.BCHJSAUTHPASS;
   var combined = "fullstackcash:" + authPass + "";
-  Buffer.from(combined);
+  Buffer.from(combined).toString("base64");
 }
 
 var BCHJS = {
