@@ -134,5 +134,7 @@ module BCHJS = {
       authToken,
     }
     let Electrumx = newElectrumxModule(libConfig)
+    let Control = newControlModule(libConfig)
+    let Mining = newMiningModule(libConfig)
   }
 }

@@ -70,14 +70,38 @@ function constructor(config) {
     authToken: authToken
   };
   var match = new Electrumx(libConfig);
-  if (match === 22) {
+  if (match !== 22) {
+    throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "BchRe.res",
+            136,
+            8
+          ],
+          Error: new Error()
+        };
+  }
+  var match$1 = new Control(libConfig);
+  if (match$1 !== 4) {
+    throw {
+          RE_EXN_ID: "Match_failure",
+          _1: [
+            "BchRe.res",
+            137,
+            8
+          ],
+          Error: new Error()
+        };
+  }
+  var match$2 = new Mining(libConfig);
+  if (match$2 === 6) {
     return ;
   }
   throw {
         RE_EXN_ID: "Match_failure",
         _1: [
           "BchRe.res",
-          136,
+          138,
           8
         ],
         Error: new Error()
