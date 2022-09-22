@@ -3,7 +3,7 @@ let defaultRestApi = "https://api.fullstack.cash/v5/"
 @val @scope(("process", "env")) external getRestURL: option<string> = "RESTURL"
 @val @scope(("process", "env")) external getApiToken: string = "BCHJSTOKEN"
 @val @scope(("process", "env")) external getAuthPass: string = "BCHJSAUTHPASS"
-@val external bufferFromString: string => unit = "Buffer.from"
+@val external bufferFromString: string => string = "Buffer.from"
 @send external toStringWithEncoding: (unit, string) => string = "toString"
 
 type extModules =
@@ -55,7 +55,7 @@ let transaction = require("./transaction")
 let dsProof = require("./dsproof")
 let eCash = require("./ecash")
 
-type restURL
+type restURL = string
 type apiToken
 type authPass
 type authToken
@@ -93,6 +93,8 @@ module BCHJS = {
     | None => getAuthPass
     }
     let combined = `fullstackcash:${authPass}`
+    // This part needs to be implemented more
     let base64Credential = bufferFromString(combined)
+    let authToken = `Basic ${base64Credential}`
   }
 }

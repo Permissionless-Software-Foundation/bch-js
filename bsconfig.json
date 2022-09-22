@@ -13,5 +13,5 @@
     }
   ],
   "suffix": ".bs.js",
-  "bs-dependencies": []
+  "bs-dependencies": ["rescript-nodejs"]
 }
