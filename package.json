@@ -88,10 +88,5 @@
   "apidoc": {
     "title": "bch-js",
     "url": "bchjs."
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
   }
 }

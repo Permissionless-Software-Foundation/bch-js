@@ -1,5 +1,11 @@
 let defaultRestApi = "https://api.fullstack.cash/v5/"
 
+@val @scope(("process", "env")) external getRestURL: option<string> = "RESTURL"
+@val @scope(("process", "env")) external getApiToken: string = "BCHJSTOKEN"
+@val @scope(("process", "env")) external getAuthPass: string = "BCHJSAUTHPASS"
+@val external bufferFromString: string => unit = "Buffer.from"
+@send external toStringWithEncoding: (unit, string) => string = "toString"
+
 type extModules =
   | BitcoinCash
   | Crypto
@@ -48,3 +54,45 @@ let utxo = require("./utxo")
 let transaction = require("./transaction")
 let dsProof = require("./dsproof")
 let eCash = require("./ecash")
+
+type restURL
+type apiToken
+type authPass
+type authToken
+type environment = {@as("RESTURL") restURL: restURL}
+type process = {env: environment}
+type configurationObject = {
+  restURL: option<restURL>,
+  apiToken: option<apiToken>,
+  authPass: option<authPass>,
+  authToken: option<authToken>,
+}
+type configuration = option<configurationObject>
+// module Buffer = {
+//   let from = data => {
+//     Js.log2("The data is: ", data)
+//   }
+// }
+
+module BCHJS = {
+  let constructor = config => {
+    let restURL = switch config {
+    | Some(url) => url
+    | None =>
+      switch getRestURL {
+      | Some(url) => url
+      | None => defaultRestApi
+      }
+    }
+    let apiToken = switch config {
+    | Some(token) => token
+    | None => getApiToken
+    }
+    let authPass = switch config {
+    | Some(pass) => pass
+    | None => getAuthPass
+    }
+    let combined = `fullstackcash:${authPass}`
+    let base64Credential = bufferFromString(combined)
+  }
+}
