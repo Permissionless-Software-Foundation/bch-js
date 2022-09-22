@@ -47,17 +47,41 @@ var dsProof = require("./dsproof");
 
 var eCash = require("./ecash");
 
+var electrumx = require("./electrumx");
+
+var psfSlpIndexer = require("./psf-slp-indexer");
+
 function constructor(config) {
-  if (config === undefined) {
+  var restURL;
+  if (config !== undefined) {
+    restURL = config;
+  } else {
     var url = process.env.RESTURL;
-    url !== undefined;
+    restURL = url !== undefined ? url : defaultRestApi;
   }
-  if (config === undefined) {
-    process.env.BCHJSTOKEN;
-  }
+  var apiToken = config !== undefined ? config : process.env.BCHJSTOKEN;
   var authPass = config !== undefined ? config : process.env.BCHJSAUTHPASS;
   var combined = "fullstackcash:" + authPass + "";
-  Buffer.from(combined).toString("base64");
+  var base64Credential = Buffer.from(combined).toString("base64");
+  var authToken = "Basic " + base64Credential + "";
+  var libConfig = {
+    restURL: restURL,
+    apiToken: apiToken,
+    authToken: authToken
+  };
+  var match = new Electrumx(libConfig);
+  if (match === 22) {
+    return ;
+  }
+  throw {
+        RE_EXN_ID: "Match_failure",
+        _1: [
+          "BchRe.res",
+          136,
+          8
+        ],
+        Error: new Error()
+      };
 }
 
 var BCHJS = {
@@ -88,6 +112,8 @@ export {
   transaction ,
   dsProof ,
   eCash ,
+  electrumx ,
+  psfSlpIndexer ,
   BCHJS ,
 }
 /* bitcoincash Not a pure module */
