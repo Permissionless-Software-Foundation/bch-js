@@ -4,9 +4,9 @@ type libConfiguration = {
   apiToken: string,
   authToken: string,
 }
-@val @scope(("process", "env")) external getRestURL: option<string> = "RESTURL"
-@val @scope(("process", "env")) external getApiToken: string = "BCHJSTOKEN"
-@val @scope(("process", "env")) external getAuthPass: string = "BCHJSAUTHPASS"
+@val @scope(("process", "env")) external envRestURL: option<string> = "RESTURL"
+@val @scope(("process", "env")) external envApiToken: string = "BCHJSTOKEN"
+@val @scope(("process", "env")) external envAuthPass: string = "BCHJSAUTHPASS"
 // @val external bufferFromString: string => string = "Buffer.from"
 // @send external toStringWithEncoding: (unit, string) => string = "toString"
 
@@ -26,7 +26,7 @@ type extModules =
   | ECPair
   | Script
   | Price
-  | Scnorr
+  | Schnorr
   | SLP
   | Encryption
   | Utxo
@@ -40,7 +40,7 @@ external require: string => extModules = "require"
 @new external newElectrumxModule: libConfiguration => extModules = "Electrumx"
 @new external newControlModule: libConfiguration => extModules = "Control"
 @new external newMiningModule: libConfiguration => extModules = "Mining"
-@new external newRawtransactionsModule: libConfiguration => extModules = "RawTransactions"
+@new external newRawTransactionsModule: libConfiguration => extModules = "RawTransactions"
 @new external newAddressModule: libConfiguration => extModules = "Address"
 @new external newBitcoinCashModule: libConfiguration => extModules = "BitcoinCash"
 @new external newBlockchainModule: libConfiguration => extModules = "Blockchain"
@@ -110,18 +110,18 @@ module BCHJS = {
     let restURL = switch config {
     | Some(url) => url
     | None =>
-      switch getRestURL {
+      switch envRestURL {
       | Some(url) => url
       | None => defaultRestApi
       }
     }
     let apiToken = switch config {
     | Some(token) => token
-    | None => getApiToken
+    | None => envApiToken
     }
     let authPass = switch config {
     | Some(pass) => pass
-    | None => getAuthPass
+    | None => envAuthPass
     }
     let combined = `fullstackcash:${authPass}`
     open NodeJs
@@ -136,5 +136,22 @@ module BCHJS = {
     let Electrumx = newElectrumxModule(libConfig)
     let Control = newControlModule(libConfig)
     let Mining = newMiningModule(libConfig)
+    let RawTransactions = newRawTransactionsModule(libConfig)
+    let Address = newAddressModule(libConfig)
+    let Blockchain = newBlockchainModule(libConfig)
+    let Encryption = newEncryptionModule(libConfig)
+    let Generating = newGeneratingModule(libConfig)
+    let HDNode = newHDNodeModule(libConfig)
+    let Menmonic = newMnemonicModule(libConfig)
+    let Price = newPriceModule(libConfig)
+    let Script = newScriptModule(libConfig)
+    let Util = newUtilModule(libConfig)
+    let Schnorr = newSchnorrModule(libConfig)
+    let SLP = newSLPModule(libConfig)
+    let Utxo = newUtxoModule(libConfig)
+    let Transaction = newTransactionModule(libConfig)
+    let DSProof = newDSProofModule(libConfig)
+    let Ecash = newECashModule(libConfig)
+    let PsfSlpIndexer = newPsfSlpIndexerModule(libConfig)
   }
 }
