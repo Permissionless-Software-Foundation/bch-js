@@ -7,8 +7,6 @@ type libConfiguration = {
 @val @scope(("process", "env")) external envRestURL: option<string> = "RESTURL"
 @val @scope(("process", "env")) external envApiToken: string = "BCHJSTOKEN"
 @val @scope(("process", "env")) external envAuthPass: string = "BCHJSAUTHPASS"
-// @val external bufferFromString: string => string = "Buffer.from"
-// @send external toStringWithEncoding: (unit, string) => string = "toString"
 
 type extModules =
   | BitcoinCash
@@ -100,11 +98,6 @@ type configurationObject = {
   authToken: option<authToken>,
 }
 type configuration = option<configurationObject>
-// module Buffer = {
-//   let from = data => {
-//     Js.log2("The data is: ", data)
-//   }
-// }
 module BCHJS = {
   let constructor = config => {
     let restURL = switch config {
