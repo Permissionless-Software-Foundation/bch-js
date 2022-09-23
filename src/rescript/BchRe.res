@@ -42,8 +42,8 @@ external require: string => extModules = "require"
 @new external newAddressModule: libConfiguration => extModules = "Address"
 @new external newBitcoinCashModule: libConfiguration => extModules = "BitcoinCash"
 @new external newBlockchainModule: libConfiguration => extModules = "Blockchain"
-@new external newCryptoModule: libConfiguration => extModules = "Crypto"
-@new external newECPairModule: libConfiguration => extModules = "ECPair"
+@new external newCryptoModule: unit => extModules = "Crypto"
+@new external newECPairModule: unit => extModules = "ECPair"
 @new external newEncryptionModule: libConfiguration => extModules = "Encryption"
 @new external newGeneratingModule: libConfiguration => extModules = "Generating"
 @new external newHDNodeModule: libConfiguration => extModules = "HDNode"
@@ -126,25 +126,28 @@ module BCHJS = {
       apiToken,
       authToken,
     }
-    let Electrumx = newElectrumxModule(libConfig)
-    let Control = newControlModule(libConfig)
-    let Mining = newMiningModule(libConfig)
-    let RawTransactions = newRawTransactionsModule(libConfig)
-    let Address = newAddressModule(libConfig)
-    let Blockchain = newBlockchainModule(libConfig)
-    let Encryption = newEncryptionModule(libConfig)
-    let Generating = newGeneratingModule(libConfig)
-    let HDNode = newHDNodeModule(libConfig)
-    let Menmonic = newMnemonicModule(libConfig)
-    let Price = newPriceModule(libConfig)
-    let Script = newScriptModule(libConfig)
-    let Util = newUtilModule(libConfig)
-    let Schnorr = newSchnorrModule(libConfig)
-    let SLP = newSLPModule(libConfig)
-    let Utxo = newUtxoModule(libConfig)
-    let Transaction = newTransactionModule(libConfig)
-    let DSProof = newDSProofModule(libConfig)
-    let Ecash = newECashModule(libConfig)
-    let PsfSlpIndexer = newPsfSlpIndexerModule(libConfig)
+    let electrumx = newElectrumxModule(libConfig)
+    let control = newControlModule(libConfig)
+    let mining = newMiningModule(libConfig)
+    let rawTransactions = newRawTransactionsModule(libConfig)
+    let address = newAddressModule(libConfig)
+    let blockchain = newBlockchainModule(libConfig)
+    let crypto = newCryptoModule()
+    let ecPair = newECPairModule()
+    let encryption = newEncryptionModule(libConfig)
+    let generating = newGeneratingModule(libConfig)
+    let hdNode = newHDNodeModule(libConfig)
+    let mnemonic = newMnemonicModule(libConfig)
+    let price = newPriceModule(libConfig)
+    let script = newScriptModule(libConfig)
+    let util = newUtilModule(libConfig)
+    let schnorr = newSchnorrModule(libConfig)
+    let slp = newSLPModule(libConfig)
+    let utxo = newUtxoModule(libConfig)
+    let transaction = newTransactionModule(libConfig)
+    let dsProof = newDSProofModule(libConfig)
+    let ecash = newECashModule(libConfig)
+    let psfSlpIndexer = newPsfSlpIndexerModule(libConfig)
+    Js.log2("Crypto module is: ", crypto)
   }
 }

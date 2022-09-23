@@ -69,247 +69,29 @@ function constructor(config) {
     apiToken: apiToken,
     authToken: authToken
   };
-  var match = new Electrumx(libConfig);
-  if (match !== 22) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            129,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$1 = new Control(libConfig);
-  if (match$1 !== 4) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            130,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$2 = new Mining(libConfig);
-  if (match$2 !== 6) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            131,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$3 = new RawTransactions(libConfig);
-  if (match$3 !== 7) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            132,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$4 = new Address(libConfig);
-  if (match$4 !== 9) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            133,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$5 = new Blockchain(libConfig);
-  if (match$5 !== 3) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            134,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$6 = new Encryption(libConfig);
-  if (match$6 !== 17) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            135,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$7 = new Generating(libConfig);
-  if (match$7 !== 5) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            136,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$8 = new HDNode(libConfig);
-  if (match$8 !== 10) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            137,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$9 = new Mnemonic(libConfig);
-  if (match$9 !== 8) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            138,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$10 = new Price(libConfig);
-  if (match$10 !== 14) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            139,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$11 = new Script(libConfig);
-  if (match$11 !== 13) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            140,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$12 = new Util(libConfig);
-  if (match$12 !== 2) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            141,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$13 = new Schnorr(libConfig);
-  if (match$13 !== 15) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            142,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$14 = new SLP(libConfig);
-  if (match$14 !== 16) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            143,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$15 = new Utxo(libConfig);
-  if (match$15 !== 18) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            144,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$16 = new Transaction(libConfig);
-  if (match$16 !== 19) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            145,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$17 = new DSProof(libConfig);
-  if (match$17 !== 20) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            146,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$18 = new Ecash(libConfig);
-  if (match$18 !== 21) {
-    throw {
-          RE_EXN_ID: "Match_failure",
-          _1: [
-            "BchRe.res",
-            147,
-            8
-          ],
-          Error: new Error()
-        };
-  }
-  var match$19 = new PsfSlpIndexer(libConfig);
-  if (match$19 >= 23) {
-    return ;
-  }
-  throw {
-        RE_EXN_ID: "Match_failure",
-        _1: [
-          "BchRe.res",
-          148,
-          8
-        ],
-        Error: new Error()
-      };
+  new Electrumx(libConfig);
+  new Control(libConfig);
+  new Mining(libConfig);
+  new RawTransactions(libConfig);
+  new Address(libConfig);
+  new Blockchain(libConfig);
+  var crypto = new Crypto();
+  new ECPair();
+  new Encryption(libConfig);
+  new Generating(libConfig);
+  new HDNode(libConfig);
+  new Mnemonic(libConfig);
+  new Price(libConfig);
+  new Script(libConfig);
+  new Util(libConfig);
+  new Schnorr(libConfig);
+  new SLP(libConfig);
+  new Utxo(libConfig);
+  new Transaction(libConfig);
+  new DSProof(libConfig);
+  new Ecash(libConfig);
+  new PsfSlpIndexer(libConfig);
+  console.log("Crypto module is: ", crypto);
 }
 
 var BCHJS = {
