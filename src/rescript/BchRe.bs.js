@@ -21,13 +21,9 @@ var rawTransactions = require("./raw-transactions");
 
 var mnemonic = require("./mnemonic");
 
-var address = require("./address");
-
 var hdNode = require("./hdnode");
 
 var transactionBuilder = require("./transaction-builder");
-
-var ecPair = require("./ecpair");
 
 var script = require("./script");
 
@@ -109,10 +105,8 @@ export {
   mining ,
   rawTransactions ,
   mnemonic ,
-  address ,
   hdNode ,
   transactionBuilder ,
-  ecPair ,
   script ,
   price ,
   schnorr ,
