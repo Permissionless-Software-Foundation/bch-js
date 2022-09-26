@@ -21,9 +21,13 @@ var rawTransactions = require("./raw-transactions");
 
 var mnemonic = require("./mnemonic");
 
+var address = require("./address");
+
 var hdNode = require("./hdnode");
 
 var transactionBuilder = require("./transaction-builder");
+
+var ecPair = require("./ecpair");
 
 var script = require("./script");
 
@@ -69,14 +73,12 @@ function constructor(config) {
   new Control(libConfig);
   new Mining(libConfig);
   new RawTransactions(libConfig);
-  new Address(libConfig);
+  var address = new Address(libConfig);
   new Blockchain(libConfig);
   var crypto = new Crypto();
-  new ECPair();
+  var ecPair = new ECPair();
   new Encryption(libConfig);
   new Generating(libConfig);
-  new HDNode(libConfig);
-  new Mnemonic(libConfig);
   new Price(libConfig);
   new Script(libConfig);
   new Util(libConfig);
@@ -88,6 +90,10 @@ function constructor(config) {
   new Ecash(libConfig);
   new PsfSlpIndexer(libConfig);
   console.log("Crypto module is: ", crypto);
+  ecPair.setAddress(address);
+  new HDNode(address);
+  new Mnemonic(address);
+  new TransactionBuilder(address);
 }
 
 var BCHJS = {
@@ -105,8 +111,10 @@ export {
   mining ,
   rawTransactions ,
   mnemonic ,
+  address ,
   hdNode ,
   transactionBuilder ,
+  ecPair ,
   script ,
   price ,
   schnorr ,

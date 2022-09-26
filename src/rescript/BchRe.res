@@ -8,8 +8,6 @@ type libConfiguration = {
 @val @scope(("process", "env")) external envApiToken: string = "BCHJSTOKEN"
 @val @scope(("process", "env")) external envAuthPass: string = "BCHJSAUTHPASS"
 
-type ecPairModule
-type addressModule
 type extModules =
   | BitcoinCash
   | Crypto
@@ -48,11 +46,11 @@ external require: string => extModules = "require"
 // @new external newECPairModule: unit => extModules = "ECPair"
 @new external newEncryptionModule: libConfiguration => extModules = "Encryption"
 @new external newGeneratingModule: libConfiguration => extModules = "Generating"
-@new external newHDNodeModule: libConfiguration => extModules = "HDNode"
-@new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
+// @new external newHDNodeModule: extModules => extModules = "HDNode"
+// @new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
 @new external newPriceModule: libConfiguration => extModules = "Price"
 @new external newScriptModule: libConfiguration => extModules = "Script"
-@new external newTransactionBuilderModule: libConfiguration => extModules = "TransactionBuilder"
+// @new external newTransactionBuilderModule: libConfiguration => extModules = "TransactionBuilder"
 @new external newUtilModule: libConfiguration => extModules = "Util"
 @new external newSchnorrModule: libConfiguration => extModules = "Schnorr"
 @new external newSLPModule: libConfiguration => extModules = "SLP"
@@ -71,10 +69,10 @@ let generating = require("./generating")
 let mining = require("./mining")
 let rawTransactions = require("./raw-transactions")
 let mnemonic = require("./mnemonic")
-// let address = require("./address")
+let address = require("./address")
 let hdNode = require("./hdnode")
 let transactionBuilder = require("./transaction-builder")
-// let ecPair = require("./ecpair")
+let ecPair = require("./ecpair")
 let script = require("./script")
 let price = require("./price")
 let schnorr = require("./schnorr")
@@ -139,6 +137,18 @@ module BCHJS = {
       external setAddress: (ecPairModule, Address.addressModule) => ecPairModule = "setAddress"
       @new external newECPairModule: unit => ecPairModule = "ECPair"
     }
+    module HDNode = {
+      type hdNode
+      @new external newHDNodeModule: Address.addressModule => hdNode = "HDNode"
+    }
+    module Mnemonic = {
+      type mnemonic
+      @new external newMnemonicModule: Address.addressModule => mnemonic = "Mnemonic"
+    }
+    module TransactionBuilder = {
+      type transactionBuilder
+      @new external setAddress: Address.addressModule => transactionBuilder = "TransactionBuilder"
+    }
 
     let electrumx = newElectrumxModule(libConfig)
     let control = newControlModule(libConfig)
@@ -150,8 +160,8 @@ module BCHJS = {
     let ecPair = ECPair.newECPairModule()
     let encryption = newEncryptionModule(libConfig)
     let generating = newGeneratingModule(libConfig)
-    let hdNode = newHDNodeModule(libConfig)
-    let mnemonic = newMnemonicModule(libConfig)
+    //let hdNode = newHDNodeModule(address)
+    // let mnemonic = newMnemonicModule(libConfig)
     let price = newPriceModule(libConfig)
     let script = newScriptModule(libConfig)
     let util = newUtilModule(libConfig)
@@ -163,7 +173,9 @@ module BCHJS = {
     let ecash = newECashModule(libConfig)
     let psfSlpIndexer = newPsfSlpIndexerModule(libConfig)
     Js.log2("Crypto module is: ", crypto)
-    // ECPair.setAddress(address)
-    // ecPair->ECPair.setAddress(address)
+    let ecPair = ecPair->ECPair.setAddress(address)
+    let hdNode = HDNode.newHDNodeModule(address)
+    let mnemonic = Mnemonic.newMnemonicModule(address)
+    let transactionBuilder = TransactionBuilder.setAddress(address)
   }
 }
