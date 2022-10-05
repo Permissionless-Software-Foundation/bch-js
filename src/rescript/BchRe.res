@@ -129,7 +129,8 @@ module BitcoinCash = {
 module BCHJS = {
   type t = {@as("Address") address: Address.addressModule,
             @as("BitcoinCash") bitcoinCash :BitcoinCash.bitcoinCash,
-            @as("Script") script: extModules}
+            @as("Script") script: extModules,
+            @as("Crypto") crypto: extModules}
 
   let make = config => {
     let restURL = switch config {
@@ -167,7 +168,8 @@ module BCHJS = {
     let address = Address.newAddressModule(libConfig)
     // Js.log2("Address module is: ", address)
     let blockchain = newBlockchainModule(libConfig)
-    let crypto = newCryptoModule()
+    // let crypto = newCryptoModule()
+    Js.log2("Crypto module is: ", crypto)
     // let ecPair = ECPair.newECPairModule()
     let encryption = newEncryptionModule(libConfig)
     let generating = newGeneratingModule(libConfig)
@@ -193,7 +195,8 @@ module BCHJS = {
     {
       address: address,
       bitcoinCash: bitcoinCash,
-      script: script
+      script: script,
+      crypto: crypto
     }
   }
 }

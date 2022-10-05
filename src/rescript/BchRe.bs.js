@@ -88,7 +88,7 @@ function make(config) {
   new rawTransactions(libConfig);
   var address$2 = new address(libConfig);
   new blockchain(libConfig);
-  new crypto();
+  console.log("Crypto module is: ", crypto);
   new encryption(libConfig);
   new generating(libConfig);
   new price(libConfig);
@@ -109,7 +109,8 @@ function make(config) {
   return {
           Address: address$2,
           BitcoinCash: bitcoinCash$2,
-          Script: script$2
+          Script: script$2,
+          Crypto: crypto
         };
 }
 
