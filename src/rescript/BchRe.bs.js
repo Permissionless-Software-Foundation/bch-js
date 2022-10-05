@@ -82,35 +82,55 @@ function make(config) {
     apiToken: apiToken,
     authToken: authToken
   };
-  new electrumx(libConfig);
-  new control(libConfig);
-  new mining(libConfig);
-  new rawTransactions(libConfig);
+  var electrumx$2 = new electrumx(libConfig);
+  var control$2 = new control(libConfig);
+  var mining$2 = new mining(libConfig);
+  var rawTransactions$2 = new rawTransactions(libConfig);
   var address$2 = new address(libConfig);
-  new blockchain(libConfig);
+  var blockchain$2 = new blockchain(libConfig);
   console.log("Crypto module is: ", crypto);
-  new encryption(libConfig);
-  new generating(libConfig);
-  new price(libConfig);
+  var encryption$2 = new encryption(libConfig);
+  var generating$2 = new generating(libConfig);
+  var price$2 = new price(libConfig);
   var script$2 = new script(libConfig);
-  new util(libConfig);
-  new schnorr(libConfig);
-  new slp(libConfig);
-  new utxo(libConfig);
-  new transaction(libConfig);
-  new dsProof(libConfig);
+  var util$2 = new util(libConfig);
+  var schnorr$2 = new schnorr(libConfig);
+  var slp$2 = new slp(libConfig);
+  var utxo$2 = new utxo(libConfig);
+  var transaction$2 = new transaction(libConfig);
+  var dsProof$2 = new dsProof(libConfig);
   new eCash(libConfig);
-  new psfSlpIndexer(libConfig);
-  ecPair.setAddress(address$2);
-  new hdNode(address$2);
-  new mnemonic(address$2);
-  new transactionBuilder(address$2);
+  var psfSlpIndexer$2 = new psfSlpIndexer(libConfig);
+  var ecPair$1 = ecPair.setAddress(address$2);
+  var hdNode$2 = new hdNode(address$2);
+  var mnemonic$2 = new mnemonic(address$2);
+  var transactionBuilder$2 = new transactionBuilder(address$2);
   var bitcoinCash$2 = new bitcoinCash(address$2);
   return {
           Address: address$2,
           BitcoinCash: bitcoinCash$2,
           Script: script$2,
-          Crypto: crypto
+          Crypto: crypto,
+          Util: util$2,
+          Blockchain: blockchain$2,
+          Control: control$2,
+          Generating: generating$2,
+          Mining: mining$2,
+          RawTransacations: rawTransactions$2,
+          Mnemonic: mnemonic$2,
+          HDNode: hdNode$2,
+          TransactionBuilder: transactionBuilder$2,
+          ECPair: ecPair$1,
+          Price: price$2,
+          Schnorr: schnorr$2,
+          SLP: slp$2,
+          Encryption: encryption$2,
+          Utxo: utxo$2,
+          Transaction: transaction$2,
+          DSProof: dsProof$2,
+          Ecash: eCash,
+          Electrumx: electrumx$2,
+          PsfSlpIndexer: psfSlpIndexer$2
         };
 }
 

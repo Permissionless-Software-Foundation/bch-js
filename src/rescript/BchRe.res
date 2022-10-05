@@ -130,7 +130,27 @@ module BCHJS = {
   type t = {@as("Address") address: Address.addressModule,
             @as("BitcoinCash") bitcoinCash :BitcoinCash.bitcoinCash,
             @as("Script") script: extModules,
-            @as("Crypto") crypto: extModules}
+            @as("Crypto") crypto: extModules,
+            @as("Util") util: extModules,
+            @as("Blockchain") blockchain: extModules,
+            @as("Control") control: extModules,
+            @as("Generating") generating: extModules,
+            @as("Mining") mining: extModules,
+            @as("RawTransacations") rawTransactions: extModules,
+            @as("Mnemonic") mnemonic: Mnemonic.mnemonic,
+            @as("HDNode") hdNode: HDNode.hdNode,
+            @as("TransactionBuilder") transactionBuilder: TransactionBuilder.transactionBuilder,
+            @as("ECPair") ecPair: ECPair.ecPairModule,
+            @as("Price") price: extModules,
+            @as("Schnorr") schnorr: extModules,
+            @as("SLP") slp:extModules,
+            @as("Encryption") encryption: extModules,
+            @as("Utxo") utxo: extModules,
+            @as("Transaction") transaction: extModules,
+            @as("DSProof") dsProof: extModules,
+            @as("Ecash") eCash: extModules,
+            @as("Electrumx") electrumx: extModules,
+            @as("PsfSlpIndexer") psfSlpIndexer: extModules}
 
   let make = config => {
     let restURL = switch config {
@@ -196,7 +216,27 @@ module BCHJS = {
       address: address,
       bitcoinCash: bitcoinCash,
       script: script,
-      crypto: crypto
+      crypto: crypto,
+      util: util,
+      blockchain: blockchain,
+      control: control,
+      generating: generating,
+      mining: mining,
+      rawTransactions: rawTransactions,
+      mnemonic: mnemonic,
+      hdNode: hdNode,
+      transactionBuilder: transactionBuilder,
+      ecPair: ecPair,
+      price: price,
+      schnorr: schnorr,
+      slp: slp,
+      encryption: encryption,
+      utxo: utxo,
+      transaction: transaction,
+      dsProof: dsProof,
+      eCash: eCash,
+      electrumx: electrumx,
+      psfSlpIndexer: psfSlpIndexer
     }
   }
 }

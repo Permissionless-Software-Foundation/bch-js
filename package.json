@@ -9,7 +9,7 @@
   ],
   "main": "src/bch-js",
   "scripts": {
-    "test": "nyc --reporter=text-summary mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
+    "test": "nyc mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
     "test:integration": "npm run test:integration:bchn",
     "test:integration:nft": "export RESTURL=https://bchn.fullstack.cash/v5/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 -g '#nft1' test/integration/chains/bchn/slp.js",
     "test:integration:abc": "export RESTURL=https://abc.fullstack.cash/v5/ && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/abc/",

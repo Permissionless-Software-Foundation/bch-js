@@ -6,6 +6,7 @@ const Bitcoin = require('@psf/bitcoincashjs-lib')
 const fixtures = require('./fixtures/address.json')
 
 // Unit under test (uut)
+// const BCHJS = require('../../src/bch-js')
 const BCHJS = require('../../src/rescript/index')
 let bchjs
 
@@ -79,7 +80,7 @@ const P2SH_ADDRESSES = flatten([
   fixtures.cashaddrMainnetP2SH
 ])
 
-describe.only('#address.js', () => {
+describe('#address.js', () => {
   beforeEach(() => {
     bchjs = new BCHJS()
   })
@@ -915,7 +916,7 @@ describe.only('#address.js', () => {
   })
 
   describe('#fromOutputScript', () => {
-    it.only('generate address from output script', () => {
+    it('generate address from output script', () => {
       const script = bchjs.Script.encode([
         Buffer.from('BOX', 'ascii'),
         bchjs.Script.opcodes.OP_CAT,
