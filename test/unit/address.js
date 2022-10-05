@@ -6,7 +6,7 @@ const Bitcoin = require('@psf/bitcoincashjs-lib')
 const fixtures = require('./fixtures/address.json')
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+const BCHJS = require('../../src/rescript/index')
 let bchjs
 
 function flatten (arrays) {
@@ -79,7 +79,7 @@ const P2SH_ADDRESSES = flatten([
   fixtures.cashaddrMainnetP2SH
 ])
 
-describe('#address.js', () => {
+describe.only('#address.js', () => {
   beforeEach(() => {
     bchjs = new BCHJS()
   })
@@ -915,7 +915,7 @@ describe('#address.js', () => {
   })
 
   describe('#fromOutputScript', () => {
-    it('generate address from output script', () => {
+    it.only('generate address from output script', () => {
       const script = bchjs.Script.encode([
         Buffer.from('BOX', 'ascii'),
         bchjs.Script.opcodes.OP_CAT,
@@ -924,6 +924,7 @@ describe('#address.js', () => {
       ])
 
       // hash160 script buffer
+      console.log("From address.js, Crypto module is: ", bchjs.Crypto)
       const p2shHash160 = bchjs.Crypto.hash160(script)
 
       // encode hash160 as P2SH output
