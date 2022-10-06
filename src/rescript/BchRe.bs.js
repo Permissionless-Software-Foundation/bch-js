@@ -26,6 +26,12 @@ var Price = {};
 
 var Script = {};
 
+var Util = {};
+
+var Schnorr = {};
+
+var SLP = {};
+
 var bitcoinCash = require("../bitcoincash");
 
 var crypto = require("../crypto");
@@ -160,6 +166,9 @@ exports.Encryption = Encryption;
 exports.Generating = Generating;
 exports.Price = Price;
 exports.Script = Script;
+exports.Util = Util;
+exports.Schnorr = Schnorr;
+exports.SLP = SLP;
 exports.bitcoinCash = bitcoinCash;
 exports.crypto = crypto;
 exports.util = util;

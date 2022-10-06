@@ -51,9 +51,9 @@ external require: string => extModules = "require"
 // @new external newPriceModule: libConfiguration => extModules = "price"
 // @new external newScriptModule: libConfiguration => extModules = "script"
 // @new external newTransactionBuilderModule: libConfiguration => extModules = "TransactionBuilder"
-@new external newUtilModule: libConfiguration => extModules = "util"
-@new external newSchnorrModule: libConfiguration => extModules = "schnorr"
-@new external newSLPModule: libConfiguration => extModules = "slp"
+// @new external newUtilModule: libConfiguration => extModules = "util"
+// @new external newSchnorrModule: libConfiguration => extModules = "schnorr"
+// @new external newSLPModule: libConfiguration => extModules = "slp"
 @new external newUtxoModule: libConfiguration => extModules = "utxo"
 @new external newTransactionModule: libConfiguration => extModules = "transaction"
 @new external newDSProofModule: libConfiguration => extModules = "dsProof"
@@ -111,9 +111,24 @@ module Script = {
 external require: string => t = "require"
 @new external newScriptModule: libConfiguration => t = "script"
 }
+module Util = {
+  type t
+external require: string => t = "require"
+@new external newUtilModule: libConfiguration => t = "util"
+}
+module Schnorr = {
+  type t
+external require: string => t = "require"
+@new external newSchnorrModule: libConfiguration => t = "schnorr"
+}
+module SLP = {
+  type t
+external require: string => t = "require"
+@new external newSLPModule: libConfiguration => t = "slp"
+}
 let bitcoinCash = require("../bitcoincash")
 let crypto = require("../crypto")
-let util = require("../util")
+let util = Util.require("../util")
 let blockchain = require("../blockchain")
 let control = require("../control")
 let generating = require("../generating")
@@ -126,8 +141,8 @@ let transactionBuilder = require("../transaction-builder")
 let ecPair = ECPair.require("../ecpair")
 let script = require("../script")
 let price = Price.require("../price")
-let schnorr = require("../schnorr")
-let slp = require("../slp/slp")
+let schnorr = Schnorr.require("../schnorr")
+let slp = SLP.require("../slp/slp")
 let encryption = Generating.require("../encryption")
 let utxo = require("../utxo")
 let transaction = require("../transaction")
@@ -187,7 +202,7 @@ module BCHJS = {
             @as("BitcoinCash") bitcoinCash :BitcoinCash.t,
             @as("Script") script: Script.t,
             @as("Crypto") crypto: extModules,
-            @as("Util") util: extModules,
+            @as("Util") util: Util.t,
             @as("Blockchain") blockchain: extModules,
             @as("Control") control: extModules,
             @as("Generating") generating: extModules,
@@ -198,8 +213,8 @@ module BCHJS = {
             @as("TransactionBuilder") transactionBuilder: TransactionBuilder.t,
             @as("ECPair") ecPair: ECPair.t,
             @as("Price") price: Price.t,
-            @as("Schnorr") schnorr: extModules,
-            @as("SLP") slp:extModules,
+            @as("Schnorr") schnorr: Schnorr.t,
+            @as("SLP") slp:SLP.t,
             @as("Encryption") encryption: Encryption.t,
             @as("Utxo") utxo: extModules,
             @as("Transaction") transaction: extModules,
@@ -226,9 +241,9 @@ module BCHJS = {
     | None => envAuthPass
     }
     let combined = `fullstackcash:${authPass}`
-    open NodeJs
+    
     let base64Credential =
-      Buffer.fromString(combined)->Buffer.toStringWithEncoding(StringEncoding.base64)
+      NodeJs.Buffer.fromString(combined)->NodeJs.Buffer.toStringWithEncoding(NodeJs.StringEncoding.base64)
     let authToken = `Basic ${base64Credential}`
     let libConfig = {
       restURL,
@@ -254,9 +269,9 @@ module BCHJS = {
     let price = Price.newPriceModule(libConfig)
     let script = Script.newScriptModule(libConfig)
     // Js.log2("Script module is: ", script)
-    let util = newUtilModule(libConfig)
-    let schnorr = newSchnorrModule(libConfig)
-    let slp = newSLPModule(libConfig)
+    let util = Util.newUtilModule(libConfig)
+    let schnorr = Schnorr.newSchnorrModule(libConfig)
+    let slp = SLP.newSLPModule(libConfig)
     let utxo = newUtxoModule(libConfig)
     let transaction = newTransactionModule(libConfig)
     let dsProof = newDSProofModule(libConfig)
