@@ -118,8 +118,8 @@ module Mnemonic = {
   @new external newMnemonicModule: Address.t => t = "mnemonic"
 }
 module TransactionBuilder = {
-  type transactionBuilder
-  @new external setAddress: Address.t => transactionBuilder = "transactionBuilder"
+  type t
+  @new external setAddress: Address.t => t = "transactionBuilder"
 }
 module BitcoinCash = {
   type bitcoinCash
@@ -139,7 +139,7 @@ module BCHJS = {
             @as("RawTransacations") rawTransactions: extModules,
             @as("Mnemonic") mnemonic: Mnemonic.t,
             @as("HDNode") hdNode: HDNode.t,
-            @as("TransactionBuilder") transactionBuilder: TransactionBuilder.transactionBuilder,
+            @as("TransactionBuilder") transactionBuilder: TransactionBuilder.t,
             @as("ECPair") ecPair: ECPair.t,
             @as("Price") price: extModules,
             @as("Schnorr") schnorr: extModules,
