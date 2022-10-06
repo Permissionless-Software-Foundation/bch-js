@@ -122,13 +122,13 @@ module TransactionBuilder = {
   @new external setAddress: Address.t => t = "transactionBuilder"
 }
 module BitcoinCash = {
-  type bitcoinCash
-@new external newBitcoinCashModule: Address.t => bitcoinCash = "bitcoinCash"
+  type t
+@new external newBitcoinCashModule: Address.t => t = "bitcoinCash"
 }
 
 module BCHJS = {
   type t = {@as("Address") address: Address.t,
-            @as("BitcoinCash") bitcoinCash :BitcoinCash.bitcoinCash,
+            @as("BitcoinCash") bitcoinCash :BitcoinCash.t,
             @as("Script") script: extModules,
             @as("Crypto") crypto: extModules,
             @as("Util") util: extModules,
