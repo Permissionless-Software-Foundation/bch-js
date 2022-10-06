@@ -100,34 +100,34 @@ type configurationObject = {
 type configuration = option<configurationObject>
 
 module Address = {
-  type addressModule
-  @new external newAddressModule: libConfiguration => addressModule = "address"
+  type t
+  @new external newAddressModule: libConfiguration => t = "address"
 }
 module ECPair = {
   type ecPairModule
   @send
-  external setAddress: (extModules, Address.addressModule) => ecPairModule = "setAddress"
+  external setAddress: (extModules, Address.t) => ecPairModule = "setAddress"
   @new external newECPairModule: unit => ecPairModule = "ecPair"
 }
 module HDNode = {
   type hdNode
-  @new external newHDNodeModule: Address.addressModule => hdNode = "hdNode"
+  @new external newHDNodeModule: Address.t => hdNode = "hdNode"
 }
 module Mnemonic = {
   type mnemonic
-  @new external newMnemonicModule: Address.addressModule => mnemonic = "mnemonic"
+  @new external newMnemonicModule: Address.t => mnemonic = "mnemonic"
 }
 module TransactionBuilder = {
   type transactionBuilder
-  @new external setAddress: Address.addressModule => transactionBuilder = "transactionBuilder"
+  @new external setAddress: Address.t => transactionBuilder = "transactionBuilder"
 }
 module BitcoinCash = {
   type bitcoinCash
-@new external newBitcoinCashModule: Address.addressModule => bitcoinCash = "bitcoinCash"
+@new external newBitcoinCashModule: Address.t => bitcoinCash = "bitcoinCash"
 }
 
 module BCHJS = {
-  type t = {@as("Address") address: Address.addressModule,
+  type t = {@as("Address") address: Address.t,
             @as("BitcoinCash") bitcoinCash :BitcoinCash.bitcoinCash,
             @as("Script") script: extModules,
             @as("Crypto") crypto: extModules,
