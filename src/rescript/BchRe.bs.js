@@ -20,6 +20,8 @@ var $$Crypto = {};
 
 var Encryption = {};
 
+var Generating = {};
+
 var bitcoinCash = require("../bitcoincash");
 
 var crypto = require("../crypto");
@@ -151,6 +153,7 @@ exports.TransactionBuilder = TransactionBuilder;
 exports.BitcoinCash = BitcoinCash;
 exports.$$Crypto = $$Crypto;
 exports.Encryption = Encryption;
+exports.Generating = Generating;
 exports.bitcoinCash = bitcoinCash;
 exports.crypto = crypto;
 exports.util = util;

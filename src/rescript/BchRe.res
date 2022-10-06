@@ -45,7 +45,7 @@ external require: string => extModules = "require"
 // @new external newCryptoModule: unit => extModules = "crypto"
 // @new external newECPairModule: unit => extModules = "ECPair"
 // @new external newEncryptionModule: libConfiguration => extModules = "encryption"
-@new external newGeneratingModule: libConfiguration => extModules = "generating"
+// @new external newGeneratingModule: libConfiguration => extModules = "generating"
 // @new external newHDNodeModule: extModules => extModules = "HDNode"
 // @new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
 @new external newPriceModule: libConfiguration => extModules = "price"
@@ -95,6 +95,11 @@ module Encryption = {
   type t
 @new external newEncryptionModule: libConfiguration => t = "encryption"
 }
+module Generating = {
+  type t
+external require: string => t = "require"
+@new external newGeneratingModule: libConfiguration => extModules = "generating"
+}
 let bitcoinCash = require("../bitcoincash")
 let crypto = require("../crypto")
 let util = require("../util")
@@ -112,7 +117,7 @@ let script = require("../script")
 let price = require("../price")
 let schnorr = require("../schnorr")
 let slp = require("../slp/slp")
-let encryption = require("../encryption")
+let encryption = Generating.require("../encryption")
 let utxo = require("../utxo")
 let transaction = require("../transaction")
 let dsProof = require("../dsproof")
@@ -232,7 +237,7 @@ module BCHJS = {
     Js.log2("Crypto module is: ", crypto)
     // let ecPair = ECPair.newECPairModule()
     let encryption = Encryption.newEncryptionModule(libConfig)
-    let generating = newGeneratingModule(libConfig)
+    let generating = Generating.newGeneratingModule(libConfig)
     //let hdNode = newHDNodeModule(address)
     // let mnemonic = newMnemonicModule(libConfig)
     let price = newPriceModule(libConfig)
