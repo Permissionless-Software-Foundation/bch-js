@@ -49,7 +49,7 @@ external require: string => extModules = "require"
 // @new external newHDNodeModule: extModules => extModules = "HDNode"
 // @new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
 // @new external newPriceModule: libConfiguration => extModules = "price"
-@new external newScriptModule: libConfiguration => extModules = "script"
+// @new external newScriptModule: libConfiguration => extModules = "script"
 // @new external newTransactionBuilderModule: libConfiguration => extModules = "TransactionBuilder"
 @new external newUtilModule: libConfiguration => extModules = "util"
 @new external newSchnorrModule: libConfiguration => extModules = "schnorr"
@@ -105,6 +105,11 @@ module Price = {
   type t
 @new external newPriceModule: libConfiguration => t = "price"
 external require: string => t = "require"
+}
+module Script = {
+  type t
+external require: string => t = "require"
+@new external newScriptModule: libConfiguration => t = "script"
 }
 let bitcoinCash = require("../bitcoincash")
 let crypto = require("../crypto")
@@ -180,7 +185,7 @@ type configuration = option<configurationObject>
 module BCHJS = {
   type t = {@as("Address") address: Address.t,
             @as("BitcoinCash") bitcoinCash :BitcoinCash.t,
-            @as("Script") script: extModules,
+            @as("Script") script: Script.t,
             @as("Crypto") crypto: extModules,
             @as("Util") util: extModules,
             @as("Blockchain") blockchain: extModules,
@@ -247,7 +252,7 @@ module BCHJS = {
     //let hdNode = newHDNodeModule(address)
     // let mnemonic = newMnemonicModule(libConfig)
     let price = Price.newPriceModule(libConfig)
-    let script = newScriptModule(libConfig)
+    let script = Script.newScriptModule(libConfig)
     // Js.log2("Script module is: ", script)
     let util = newUtilModule(libConfig)
     let schnorr = newSchnorrModule(libConfig)

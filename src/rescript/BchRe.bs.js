@@ -24,6 +24,8 @@ var Generating = {};
 
 var Price = {};
 
+var Script = {};
+
 var bitcoinCash = require("../bitcoincash");
 
 var crypto = require("../crypto");
@@ -157,6 +159,7 @@ exports.$$Crypto = $$Crypto;
 exports.Encryption = Encryption;
 exports.Generating = Generating;
 exports.Price = Price;
+exports.Script = Script;
 exports.bitcoinCash = bitcoinCash;
 exports.crypto = crypto;
 exports.util = util;
