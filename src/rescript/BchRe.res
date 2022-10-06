@@ -114,8 +114,8 @@ module HDNode = {
   @new external newHDNodeModule: Address.t => t = "hdNode"
 }
 module Mnemonic = {
-  type mnemonic
-  @new external newMnemonicModule: Address.t => mnemonic = "mnemonic"
+  type t
+  @new external newMnemonicModule: Address.t => t = "mnemonic"
 }
 module TransactionBuilder = {
   type transactionBuilder
@@ -137,7 +137,7 @@ module BCHJS = {
             @as("Generating") generating: extModules,
             @as("Mining") mining: extModules,
             @as("RawTransacations") rawTransactions: extModules,
-            @as("Mnemonic") mnemonic: Mnemonic.mnemonic,
+            @as("Mnemonic") mnemonic: Mnemonic.t,
             @as("HDNode") hdNode: HDNode.t,
             @as("TransactionBuilder") transactionBuilder: TransactionBuilder.transactionBuilder,
             @as("ECPair") ecPair: ECPair.t,
