@@ -104,10 +104,10 @@ module Address = {
   @new external newAddressModule: libConfiguration => t = "address"
 }
 module ECPair = {
-  type ecPairModule
+  type t
   @send
-  external setAddress: (extModules, Address.t) => ecPairModule = "setAddress"
-  @new external newECPairModule: unit => ecPairModule = "ecPair"
+  external setAddress: (extModules, Address.t) => t = "setAddress"
+  @new external newECPairModule: unit => t = "ecPair"
 }
 module HDNode = {
   type hdNode
@@ -140,7 +140,7 @@ module BCHJS = {
             @as("Mnemonic") mnemonic: Mnemonic.mnemonic,
             @as("HDNode") hdNode: HDNode.hdNode,
             @as("TransactionBuilder") transactionBuilder: TransactionBuilder.transactionBuilder,
-            @as("ECPair") ecPair: ECPair.ecPairModule,
+            @as("ECPair") ecPair: ECPair.t,
             @as("Price") price: extModules,
             @as("Schnorr") schnorr: extModules,
             @as("SLP") slp:extModules,
