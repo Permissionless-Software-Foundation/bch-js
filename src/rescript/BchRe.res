@@ -42,9 +42,9 @@ external require: string => extModules = "require"
 // @new external newAddressModule: libConfiguration => extModules = "address"
 // @new external newBitcoinCashModule: libConfiguration => extModules = "bitcoinCash"
 @new external newBlockchainModule: libConfiguration => extModules = "blockchain"
-@new external newCryptoModule: unit => extModules = "crypto"
+// @new external newCryptoModule: unit => extModules = "crypto"
 // @new external newECPairModule: unit => extModules = "ECPair"
-@new external newEncryptionModule: libConfiguration => extModules = "encryption"
+// @new external newEncryptionModule: libConfiguration => extModules = "encryption"
 @new external newGeneratingModule: libConfiguration => extModules = "generating"
 // @new external newHDNodeModule: extModules => extModules = "HDNode"
 // @new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
@@ -60,6 +60,41 @@ external require: string => extModules = "require"
 @new external newECashModule: libConfiguration => extModules = "eCash"
 @new external newPsfSlpIndexerModule: libConfiguration => extModules = "psfSlpIndexer"
 
+module Address = {
+  type t
+  @new external newAddressModule: libConfiguration => t = "address"
+}
+module ECPair = {
+  type t
+external require: string => t = "require"
+  @send
+  external setAddress: (t, Address.t) => t = "setAddress"
+  @new external newECPairModule: unit => t = "ecPair"
+}
+module HDNode = {
+  type t
+  @new external newHDNodeModule: Address.t => t = "hdNode"
+}
+module Mnemonic = {
+  type t
+  @new external newMnemonicModule: Address.t => t = "mnemonic"
+}
+module TransactionBuilder = {
+  type t
+  @new external setAddress: Address.t => t = "transactionBuilder"
+}
+module BitcoinCash = {
+  type t
+@new external newBitcoinCashModule: Address.t => t = "bitcoinCash"
+}
+module Crypto = {
+  type t
+@new external newCryptoModule: unit => t = "crypto"
+}
+module Encryption = {
+  type t
+@new external newEncryptionModule: libConfiguration => t = "encryption"
+}
 let bitcoinCash = require("../bitcoincash")
 let crypto = require("../crypto")
 let util = require("../util")
@@ -72,7 +107,7 @@ let mnemonic = require("../mnemonic")
 let address = require("../address")
 let hdNode = require("../hdnode")
 let transactionBuilder = require("../transaction-builder")
-let ecPair = require("../ecpair")
+let ecPair = ECPair.require("../ecpair")
 let script = require("../script")
 let price = require("../price")
 let schnorr = require("../schnorr")
@@ -99,32 +134,37 @@ type configurationObject = {
 }
 type configuration = option<configurationObject>
 
-module Address = {
-  type t
-  @new external newAddressModule: libConfiguration => t = "address"
-}
-module ECPair = {
-  type t
-  @send
-  external setAddress: (extModules, Address.t) => t = "setAddress"
-  @new external newECPairModule: unit => t = "ecPair"
-}
-module HDNode = {
-  type t
-  @new external newHDNodeModule: Address.t => t = "hdNode"
-}
-module Mnemonic = {
-  type t
-  @new external newMnemonicModule: Address.t => t = "mnemonic"
-}
-module TransactionBuilder = {
-  type t
-  @new external setAddress: Address.t => t = "transactionBuilder"
-}
-module BitcoinCash = {
-  type t
-@new external newBitcoinCashModule: Address.t => t = "bitcoinCash"
-}
+// module Address = {
+//   type t
+//   @new external newAddressModule: libConfiguration => t = "address"
+// }
+// module ECPair = {
+//   type t
+//   @send
+//   external setAddress: (t, Address.t) => t = "setAddress"
+//   @new external newECPairModule: unit => t = "ecPair"
+// }
+// module HDNode = {
+//   type t
+//   @new external newHDNodeModule: Address.t => t = "hdNode"
+// }
+// module Mnemonic = {
+//   type t
+//   @new external newMnemonicModule: Address.t => t = "mnemonic"
+// }
+// module TransactionBuilder = {
+//   type t
+//   @new external setAddress: Address.t => t = "transactionBuilder"
+// }
+// module BitcoinCash = {
+//   type t
+// @new external newBitcoinCashModule: Address.t => t = "bitcoinCash"
+// }
+// module Crypto = {
+//   type t
+// external require: string => t = "require"
+// @new external newCryptoModule: unit => t = "crypto"
+// }
 
 module BCHJS = {
   type t = {@as("Address") address: Address.t,
@@ -144,7 +184,7 @@ module BCHJS = {
             @as("Price") price: extModules,
             @as("Schnorr") schnorr: extModules,
             @as("SLP") slp:extModules,
-            @as("Encryption") encryption: extModules,
+            @as("Encryption") encryption: Encryption.t,
             @as("Utxo") utxo: extModules,
             @as("Transaction") transaction: extModules,
             @as("DSProof") dsProof: extModules,
@@ -191,7 +231,7 @@ module BCHJS = {
     // let crypto = newCryptoModule()
     Js.log2("Crypto module is: ", crypto)
     // let ecPair = ECPair.newECPairModule()
-    let encryption = newEncryptionModule(libConfig)
+    let encryption = Encryption.newEncryptionModule(libConfig)
     let generating = newGeneratingModule(libConfig)
     //let hdNode = newHDNodeModule(address)
     // let mnemonic = newMnemonicModule(libConfig)

@@ -4,6 +4,22 @@
 
 var defaultRestApi = "https://api.fullstack.cash/v5/";
 
+var Address = {};
+
+var ECPair = {};
+
+var HDNode = {};
+
+var Mnemonic = {};
+
+var TransactionBuilder = {};
+
+var BitcoinCash = {};
+
+var $$Crypto = {};
+
+var Encryption = {};
+
 var bitcoinCash = require("../bitcoincash");
 
 var crypto = require("../crypto");
@@ -51,18 +67,6 @@ var eCash = require("../ecash");
 var electrumx = require("../electrumx");
 
 var psfSlpIndexer = require("../psf-slp-indexer");
-
-var Address = {};
-
-var ECPair = {};
-
-var HDNode = {};
-
-var Mnemonic = {};
-
-var TransactionBuilder = {};
-
-var BitcoinCash = {};
 
 function make(config) {
   var restURL;
@@ -139,6 +143,14 @@ var BCHJS = {
 };
 
 exports.defaultRestApi = defaultRestApi;
+exports.Address = Address;
+exports.ECPair = ECPair;
+exports.HDNode = HDNode;
+exports.Mnemonic = Mnemonic;
+exports.TransactionBuilder = TransactionBuilder;
+exports.BitcoinCash = BitcoinCash;
+exports.$$Crypto = $$Crypto;
+exports.Encryption = Encryption;
 exports.bitcoinCash = bitcoinCash;
 exports.crypto = crypto;
 exports.util = util;
@@ -163,11 +175,5 @@ exports.dsProof = dsProof;
 exports.eCash = eCash;
 exports.electrumx = electrumx;
 exports.psfSlpIndexer = psfSlpIndexer;
-exports.Address = Address;
-exports.ECPair = ECPair;
-exports.HDNode = HDNode;
-exports.Mnemonic = Mnemonic;
-exports.TransactionBuilder = TransactionBuilder;
-exports.BitcoinCash = BitcoinCash;
 exports.BCHJS = BCHJS;
 /* bitcoinCash Not a pure module */
