@@ -48,7 +48,7 @@ external require: string => extModules = "require"
 // @new external newGeneratingModule: libConfiguration => extModules = "generating"
 // @new external newHDNodeModule: extModules => extModules = "HDNode"
 // @new external newMnemonicModule: libConfiguration => extModules = "Mnemonic"
-@new external newPriceModule: libConfiguration => extModules = "price"
+// @new external newPriceModule: libConfiguration => extModules = "price"
 @new external newScriptModule: libConfiguration => extModules = "script"
 // @new external newTransactionBuilderModule: libConfiguration => extModules = "TransactionBuilder"
 @new external newUtilModule: libConfiguration => extModules = "util"
@@ -73,6 +73,7 @@ external require: string => t = "require"
 }
 module HDNode = {
   type t
+external require: string => t = "require"
   @new external newHDNodeModule: Address.t => t = "hdNode"
 }
 module Mnemonic = {
@@ -100,6 +101,11 @@ module Generating = {
 external require: string => t = "require"
 @new external newGeneratingModule: libConfiguration => extModules = "generating"
 }
+module Price = {
+  type t
+@new external newPriceModule: libConfiguration => t = "price"
+external require: string => t = "require"
+}
 let bitcoinCash = require("../bitcoincash")
 let crypto = require("../crypto")
 let util = require("../util")
@@ -114,7 +120,7 @@ let hdNode = require("../hdnode")
 let transactionBuilder = require("../transaction-builder")
 let ecPair = ECPair.require("../ecpair")
 let script = require("../script")
-let price = require("../price")
+let price = Price.require("../price")
 let schnorr = require("../schnorr")
 let slp = require("../slp/slp")
 let encryption = Generating.require("../encryption")
@@ -186,7 +192,7 @@ module BCHJS = {
             @as("HDNode") hdNode: HDNode.t,
             @as("TransactionBuilder") transactionBuilder: TransactionBuilder.t,
             @as("ECPair") ecPair: ECPair.t,
-            @as("Price") price: extModules,
+            @as("Price") price: Price.t,
             @as("Schnorr") schnorr: extModules,
             @as("SLP") slp:extModules,
             @as("Encryption") encryption: Encryption.t,
@@ -240,7 +246,7 @@ module BCHJS = {
     let generating = Generating.newGeneratingModule(libConfig)
     //let hdNode = newHDNodeModule(address)
     // let mnemonic = newMnemonicModule(libConfig)
-    let price = newPriceModule(libConfig)
+    let price = Price.newPriceModule(libConfig)
     let script = newScriptModule(libConfig)
     // Js.log2("Script module is: ", script)
     let util = newUtilModule(libConfig)
