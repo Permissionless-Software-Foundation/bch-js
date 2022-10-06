@@ -110,8 +110,8 @@ module ECPair = {
   @new external newECPairModule: unit => t = "ecPair"
 }
 module HDNode = {
-  type hdNode
-  @new external newHDNodeModule: Address.t => hdNode = "hdNode"
+  type t
+  @new external newHDNodeModule: Address.t => t = "hdNode"
 }
 module Mnemonic = {
   type mnemonic
@@ -138,7 +138,7 @@ module BCHJS = {
             @as("Mining") mining: extModules,
             @as("RawTransacations") rawTransactions: extModules,
             @as("Mnemonic") mnemonic: Mnemonic.mnemonic,
-            @as("HDNode") hdNode: HDNode.hdNode,
+            @as("HDNode") hdNode: HDNode.t,
             @as("TransactionBuilder") transactionBuilder: TransactionBuilder.transactionBuilder,
             @as("ECPair") ecPair: ECPair.t,
             @as("Price") price: extModules,
