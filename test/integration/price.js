@@ -33,6 +33,7 @@ describe('#price', () => {
       assert.isNumber(result)
     })
   })
+
   describe('#getBchUsd', () => {
     it('should get the USD price of BCH', async () => {
       const result = await bchjs.Price.getBchUsd()
