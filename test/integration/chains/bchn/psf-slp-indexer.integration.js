@@ -155,6 +155,25 @@ describe('#psf-slp-indexer', () => {
       assert.isArray(result.genesisData.txs)
     })
   })
+
+  describe('#getTokenData2', () => {
+    it('should get token data', async () => {
+      const tokenId =
+        'd9aafa7acb514c597caf440ae268b5e4e955f2687e05f044cdf8fd9550d9a27b'
+
+      // bchjs.PsfSlpIndexer.restURL = 'http://localhost:3000/v5/'
+      const result = await bchjs.PsfSlpIndexer.getTokenData2(tokenId)
+      console.log('result: ', result)
+
+      // assert.property(result, 'genesisData')
+      // assert.property(result, 'immutableData')
+      // assert.property(result, 'mutableData')
+      //
+      // assert.isObject(result.genesisData)
+      // assert.isString(result.immutableData)
+      // assert.isString(result.mutableData)
+    })
+  })
 })
 
 // Promise-based sleep function
