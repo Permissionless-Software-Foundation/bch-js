@@ -163,7 +163,7 @@ describe('#psf-slp-indexer', () => {
 
       // bchjs.PsfSlpIndexer.restURL = 'http://localhost:3000/v5/'
       const result = await bchjs.PsfSlpIndexer.getTokenData2(tokenId)
-      console.log('result: ', result)
+      // console.log('result: ', result)
 
       assert.property(result, 'tokenStats')
       assert.property(result, 'mutableData')

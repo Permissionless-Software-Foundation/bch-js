@@ -520,7 +520,7 @@ class PsfSlpIndexer {
 
       throw new Error('Input tokenId must be a string.')
     } catch (error) {
-      console.log('error: ', error)
+      // console.log('error: ', error)
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
