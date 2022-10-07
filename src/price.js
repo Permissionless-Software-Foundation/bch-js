@@ -30,19 +30,19 @@ class Price {
   }
 
   // This endpoint is deprecated. Documentation removed.
-  async current (currency = 'usd') {
-    try {
-      const response = await this.axios.get(
-        `https://index-api.bitcoin.com/api/v0/cash/price/${currency.toLowerCase()}`
-      )
-      // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
-
-      return response.data.price
-    } catch (err) {
-      if (err.response && err.response.data) throw err.response.data
-      else throw err
-    }
-  }
+  // async current (currency = 'usd') {
+  //   try {
+  //     const response = await this.axios.get(
+  //       `https://index-api.bitcoin.com/api/v0/cash/price/${currency.toLowerCase()}`
+  //     )
+  //     // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
+  //
+  //     return response.data.price
+  //   } catch (err) {
+  //     if (err.response && err.response.data) throw err.response.data
+  //     else throw err
+  //   }
+  // }
 
   /**
    * @api price.getUsd() getUsd()

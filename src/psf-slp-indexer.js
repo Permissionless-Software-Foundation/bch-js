@@ -442,6 +442,89 @@ class PsfSlpIndexer {
       else throw error
     }
   }
+
+  /**
+   * @api PsfSlpIndexer.getTokenData2()  getTokenData2()
+   * @apiName Token Data
+   * @apiGroup PSF SLP
+   * @apiDescription Get token icon and other media associated with a token.
+   *
+   * @apiExample Example usage:
+   * (async () => {
+   *   try {
+   *     let tokenData = await bchjs.PsfSlpIndexer.getTokenData2('a4fb5c2da1aa064e25018a43f9165040071d9e984ba190c222a7f59053af84b2')
+   *     console.log(tokenData)
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * {
+   *   tokenStats: {
+   *     type: 1,
+   *     ticker: 'CTAIA006',
+   *     name: 'CTAIA006 - AI Art by Chris Troutner',
+   *     tokenId: '0e4543f820699294ab57e02ee2b1815a8bbc7b17a4333e4a138034e4b2324a61',
+   *     documentUri: 'ipfs://bafybeia5yuq7rg6jmwquako7t277cwrobcunz7cumqrv4wn6bgfvthemku',
+   *     documentHash: '78a00e9db312b8fff4e5c37cf592be83e6bab7f3bd5a54c9545bad5d4f3ee0f5',
+   *     decimals: 0,
+   *     mintBatonIsActive: false,
+   *     tokensInCirculationBN: '1',
+   *     tokensInCirculationStr: '1',
+   *     blockCreated: 757507,
+   *     totalBurned: '0',
+   *     totalMinted: '1'
+   *   },
+   *   mutableData: {
+   *     tokenIcon: 'https://bafybeihiv5jvlhoymmbous3h2akotogj6b7hruhjcj3zq7dsfteimuuttm.ipfs.w3s.link/whale-night-sky-01.png',
+   *     fullSizedUrl: '',
+   *     about: 'This NFT was created using the PSF Token Studio at https://nft-creator.fullstack.cash',
+   *     userData: ''
+   *   },
+   *   immutableData: {
+   *     issuer: 'http://psfoundation.cash',
+   *     website: 'https://nft-creator.fullstack.cash',
+   *     dateCreated: '9/12/2022, 5:17:38 PM',
+   *     userData: '{\n' +
+   *       '  "title": "CTAIA006 - AI Art by Chris Troutner",\n' +
+   *       '  "about": "AI generated art. Generated from DALL-E at https://labs.openai.com",\n' +
+   *       '  "prompt": "whale swimming through a sky full of stars",\n' +
+   *       '  "algorithm": "DALL-E (stable diffusion)",\n' +
+   *       '  "set": "1-of-2"\n' +
+   *       '}'
+   *   },
+   *   tokenIcon: 'https://bafybeihiv5jvlhoymmbous3h2akotogj6b7hruhjcj3zq7dsfteimuuttm.ipfs.w3s.link/whale-night-sky-01.png',
+   *   fullSizedUrl: '',
+   *   optimizedTokenIcon: 'https://p2wdb-gateway-678.fullstack.cash/ipfs/bafybeihiv5jvlhoymmbous3h2akotogj6b7hruhjcj3zq7dsfteimuuttm/whale-night-sky-01.png',
+   *   optimizedFullSizedUrl: '',
+   *   iconRepoCompatible: false,
+   *   ps002Compatible: true
+   * }
+   *
+   */
+  async getTokenData2 (tokenId) {
+    try {
+      const url = `${this.restURL}psf/slp/token/data2`
+      // console.log(`url: ${url}`)
+
+      // Handle single address.
+      if (typeof tokenId === 'string') {
+        const response = await axios.post(
+          // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
+          url,
+          { tokenId },
+          this.axiosOptions
+        )
+        return response.data
+      }
+
+      throw new Error('Input tokenId must be a string.')
+    } catch (error) {
+      console.log('error: ', error)
+      if (error.response && error.response.data) throw error.response.data
+      else throw error
+    }
+  }
 }
 
 module.exports = PsfSlpIndexer

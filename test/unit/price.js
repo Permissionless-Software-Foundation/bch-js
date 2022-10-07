@@ -19,18 +19,18 @@ describe('#price', () => {
 
   afterEach(() => sandbox.restore())
 
-  describe('#current', () => {
-    it('should get current price for single currency', async () => {
-      sandbox
-        .stub(bchjs.Price.axios, 'get')
-        .resolves({ data: { price: 24905 } })
-
-      const result = await bchjs.Price.current('usd')
-      // console.log(result)
-
-      assert.isNumber(result)
-    })
-  })
+  // describe('#current', () => {
+  //   it('should get current price for single currency', async () => {
+  //     sandbox
+  //       .stub(bchjs.Price.axios, 'get')
+  //       .resolves({ data: { price: 24905 } })
+  //
+  //     const result = await bchjs.Price.current('usd')
+  //     // console.log(result)
+  //
+  //     assert.isNumber(result)
+  //   })
+  // })
 
   describe('#getUsd', () => {
     it('should get the USD price of BCH', async () => {

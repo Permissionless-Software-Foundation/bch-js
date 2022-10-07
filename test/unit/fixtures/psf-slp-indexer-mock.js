@@ -150,11 +150,65 @@ const tokenData = {
   mutableData: 'ipfs://bafybeie6t5uyupddc7azms737xg4hxrj7i5t5ov3lb5g2qeehaujj6ak64'
 }
 
+const tokenMedia01 = {
+  tokenStats: {
+    type: 65,
+    ticker: 'TEST02',
+    name: 'How to Send BCH and Tokens',
+    tokenId: 'd9aafa7acb514c597caf440ae268b5e4e955f2687e05f044cdf8fd9550d9a27b',
+    documentUri: 'ipfs://bafybeigjujbb55wqr5lns7z7vleg5cfp4yjwqp4swisxpgxl4xsp5tngai',
+    documentHash: '845f803d8dd3c2b6be94a6cf3a445b54c36f2e01bd5c9ab4c23f37dbd531489e',
+    decimals: 0,
+    mintBatonIsActive: false,
+    tokensInCirculationBN: '0',
+    tokensInCirculationStr: '0',
+    blockCreated: 740089,
+    totalBurned: '1',
+    totalMinted: '1',
+    parentGroupId: 'c9c425f2c6352697c6665a53e035cbad8a44c4b1e36491a1838dc4655479aa09'
+  },
+  mutableData: {
+    updated: '2022-05-14T15:27:44.429Z',
+    tokenIcon: 'https://bafybeiefg3nd5iognbqztkpi5hj34dmwkqfe7v7xeayn2nhhatinmjmzcy.ipfs.dweb.link/send-bch-token-icon.png',
+    tokenInfo: 'https://token.fullstack.cash/?tokenid=d9aafa7acb514c597caf440ae268b5e4e955f2687e05f044cdf8fd9550d9a27b',
+    description: 'This is an NFT representing a video. This is a test token.',
+    issuer: 'Chris Troutner',
+    forSale: false,
+    display: true,
+    currentOwner: {
+      bchAddr: 'bitcoincash:qqy7jcrm3vmtqs96r878hy2kx90mn84f25ujqw9z5h',
+      name: 'Chris Troutner',
+      contactEmail: 'chris.troutner@gmail.com'
+    },
+    content: {
+      youtube: 'https://youtu.be/WZRwkLPtkaI',
+      rumble: 'https://rumble.com/v14n00h-how-to-send-bch-and-tokens.html',
+      odysee: 'https://odysee.com/@trout:5/how-to-send-bch-tokens:0',
+      lbry: 'lbry://@trout#5/how-to-send-bch-tokens#0',
+      ipfs: 'bafybeigf3ky5i6fyxwk5bjmtsr6urqmlx4zq2lqathgguytey67iinh4be',
+      filecoin: 'https://bafybeigf3ky5i6fyxwk5bjmtsr6urqmlx4zq2lqathgguytey67iinh4be.ipfs.dweb.link/send-bch-2022-02-20_08.22.45.mp4'
+    }
+  },
+  immutableData: {
+    creationDate: '2022-05-13T21:32:11.619Z',
+    issuer: 'Chris Troutner',
+    license: 'https://bafybeidnkhjfsbihp4gquwqrs6y35jfpcriafymceszwvkundjkwk546pi.ipfs.dweb.link/copyright.txt',
+    name: 'How to Send BCH and Tokens'
+  },
+  tokenIcon: 'https://bafybeiefg3nd5iognbqztkpi5hj34dmwkqfe7v7xeayn2nhhatinmjmzcy.ipfs.dweb.link/send-bch-token-icon.png',
+  fullSizedUrl: '',
+  optimizedTokenIcon: 'https://p2wdb-gateway-678.fullstack.cash/ipfs/bafybeiefg3nd5iognbqztkpi5hj34dmwkqfe7v7xeayn2nhhatinmjmzcy/send-bch-token-icon.png',
+  optimizedFullSizedUrl: '',
+  iconRepoCompatible: false,
+  ps002Compatible: true
+}
+
 module.exports = {
   tokenStats,
   txData,
   balance,
   status,
   tokenData01,
-  tokenData
+  tokenData,
+  tokenMedia01
 }
