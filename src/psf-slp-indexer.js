@@ -449,6 +449,18 @@ class PsfSlpIndexer {
    * @apiGroup PSF SLP
    * @apiDescription Get token icon and other media associated with a token.
    *
+   * Get the icon for a token, given it's token ID.
+   * This function expects a string input of a token ID property.
+   * This function returns an object with a tokenIcon property that contains
+   * the URL to the icon.
+   *
+   * The output object always have these properties:
+   * - tokenIcon: A url to the token icon, if it exists.
+   * - tokenStats: Data about the token from psf-slp-indexer.
+   * - optimizedTokenIcon: An alternative, potentially more optimal, url to the token icon, if it exists.
+   * - iconRepoCompatible: true if the token icon is available via token.bch.sx
+   * - ps002Compatible: true if the token icon is compatible with PS007 specification.
+   *
    * @apiExample Example usage:
    * (async () => {
    *   try {
@@ -520,7 +532,7 @@ class PsfSlpIndexer {
 
       throw new Error('Input tokenId must be a string.')
     } catch (error) {
-      console.log('error: ', error)
+      // console.log('error: ', error)
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
