@@ -121,6 +121,8 @@ describe('#utxo', () => {
       sandbox
         .stub(bchjs.Utxo.psfSlpIndexer, 'tx')
         .resolves({ txData: { isValidSlp: false } })
+      sandbox.stub(bchjs.Utxo.psfSlpIndexer, 'status')
+        .resolves({ status: { syncedBlockHeight: 600000, chainBlockHeight: 600000 } })
 
       // Mock function to return the same input. Good enough for this test.
       sandbox.stub(bchjs.Utxo, 'hydrateTokenData').resolves(x => x)
@@ -154,6 +156,8 @@ describe('#utxo', () => {
       sandbox
         .stub(bchjs.Utxo.psfSlpIndexer, 'tx')
         .resolves({ txData: { isValidSlp: false } })
+      sandbox.stub(bchjs.Utxo.psfSlpIndexer, 'status')
+        .resolves({ status: { syncedBlockHeight: 600000, chainBlockHeight: 600000 } })
 
       // Force psf-slp-indexer to return no UTXOs
       sandbox
