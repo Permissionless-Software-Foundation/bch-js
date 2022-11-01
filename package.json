@@ -19,7 +19,7 @@
     "test:integration:local:bchn": "export RESTURL=http://localhost:3000/v5/ && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
     "test:integration:local:testnet": "RESTURL=http://localhost:4000/v5/ mocha --timeout 30000 test/integration/chains/testnet",
     "test:integration:decatur:bchn": "export RESTURL=http://192.168.2.129:3000/v5/ && mocha --timeout 30000 test/integration/ && mocha --timeout 30000 test/integration/chains/bchn/",
-    "test:integration:decatur:abc": "export RESTURL=http://192.168.2.141:3000/v5/ && mocha --timeout 30000 test/integration && mocha --timeout 30000 test/integration/chains/abc/",
+    "test:integration:decatur:abc": "export RESTURL=http://192.168.2.142:3000/v5/ && mocha --timeout 30000 test/integration && mocha --timeout 30000 test/integration/chains/abc/",
     "test:integration:temp:bchn": "export RESTURL=http://157.90.174.219:3000/v5/ && mocha --timeout 30000 test/integration/",
     "test:temp": "export RESTURL=http://localhost:3000/v5/ && mocha --timeout 30000 -g '#Encryption' test/integration/",
     "test:temp2": "mocha --timeout=30000 -g '#TransactionLib' test/unit/",

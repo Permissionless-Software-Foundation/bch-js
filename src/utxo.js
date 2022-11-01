@@ -109,6 +109,11 @@ class UTXO {
         }
       }
 
+      // Get the sync status of the SLP indexer
+      const syncStatus = await this.psfSlpIndexer.status()
+      const slpIndexerHeight = syncStatus.status.syncedBlockHeight
+      const chainBlockHeight = syncStatus.status.chainBlockHeight
+
       // Loop through the Fulcrum UTXOs.
       for (let i = 0; i < utxos.length; i++) {
         const thisUtxo = utxos[i]
@@ -152,6 +157,15 @@ class UTXO {
             thisUtxo.isSlp = false
           }
           // console.log(`thisUtxo.isSlp: ${thisUtxo.isSlp}`)
+
+          // If the SLP indexer more than 1 block behind the full node, then
+          // move any BCH UTXOs of 600 sats or less into the null array. This
+          // protects token UTXOs from being burned accidentally.
+          if (slpIndexerHeight < chainBlockHeight - 1) {
+            if (thisUtxo.value < 601) {
+              thisUtxo.isSlp = null
+            }
+          }
         }
       }
 
