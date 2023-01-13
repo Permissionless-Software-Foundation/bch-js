@@ -126,7 +126,7 @@ describe('#UTXO', () => {
   describe('#isValid', () => {
     it('should return true for valid UTXO with fullnode properties', async () => {
       const utxo = {
-        txid: 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40',
+        txid: '260d4fb4006a330660c805327c840d569d7547b7e3e9659fb423b3a041c2e254',
         vout: 0
       }
 
@@ -138,7 +138,7 @@ describe('#UTXO', () => {
 
     it('should return true for valid UTXO with fulcrum properties', async () => {
       const utxo = {
-        tx_hash: 'b94e1ff82eb5781f98296f0af2488ff06202f12ee92b0175963b8dba688d1b40',
+        tx_hash: '260d4fb4006a330660c805327c840d569d7547b7e3e9659fb423b3a041c2e254',
         tx_pos: 0
       }
 
@@ -173,7 +173,7 @@ describe('#UTXO', () => {
     })
 
     it('should process output of Utxo.get()', async () => {
-      const utxo = await bchjs.Utxo.get('bitcoincash:qr4yscpw9jgq8ltajfeknpj32kamkf9knujffcdhyq')
+      const utxo = await bchjs.Utxo.get('bitcoincash:qqgahqa5zkknmhmvsc98jndpwn3r77gqgc02x03jce')
       // console.log(`utxo: ${JSON.stringify(utxo, null, 2)}`)
 
       const result = await bchjs.Utxo.isValid(utxo.bchUtxos[0])
