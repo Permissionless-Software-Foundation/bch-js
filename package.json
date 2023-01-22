@@ -40,7 +40,7 @@
     "@chris.troutner/bip32-utils": "1.0.5",
     "@psf/bip21": "2.0.1",
     "@psf/bitcoincash-ops": "2.0.0",
-    "@psf/bitcoincashjs-lib": "4.0.2",
+    "@psf/bitcoincashjs-lib": "4.0.3",
     "@psf/coininfo": "4.0.0",
     "axios": "0.26.1",
     "bc-bip68": "1.0.5",
