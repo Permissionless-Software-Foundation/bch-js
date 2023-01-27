@@ -514,7 +514,7 @@ class PsfSlpIndexer {
    * }
    *
    */
-  async getTokenData2 (tokenId) {
+  async getTokenData2 (tokenId, updateCache = false) {
     try {
       const url = `${this.restURL}psf/slp/token/data2`
       // console.log(`url: ${url}`)
@@ -524,7 +524,7 @@ class PsfSlpIndexer {
         const response = await axios.post(
           // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
           url,
-          { tokenId },
+          { tokenId, updateCache },
           this.axiosOptions
         )
         return response.data
