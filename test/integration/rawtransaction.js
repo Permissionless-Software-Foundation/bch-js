@@ -204,7 +204,9 @@ describe('#rawtransaction', () => {
       const result = await bchjs.RawTransactions.decodeScript(hex)
       // console.log(`result ${JSON.stringify(result, null, 2)}`)
 
-      assert.hasAllKeys(result, ['asm', 'type', 'p2sh'])
+      assert.property(result, 'asm')
+      assert.property(result, 'type')
+      assert.property(result, 'p2sh')
     })
 
     // CT 2/20/19 - Waiting for this PR to be merged complete the test:

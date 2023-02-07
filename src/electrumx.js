@@ -289,12 +289,12 @@ class ElectrumX {
    *   }
    *
    */
-  async transactions (address, usrObj = null) {
+  async transactions (address, usrObj = null, allTxs = false) {
     try {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/transactions/${address}`,
+          `${this.restURL}electrumx/transactions/${address}/${allTxs}`,
           this.axiosOptions
         )
         return response.data
@@ -305,7 +305,8 @@ class ElectrumX {
           `${this.restURL}electrumx/transactions`,
           {
             addresses: address,
-            usrObj // pass user data when making an internal call.
+            usrObj, // pass user data when making an internal call.
+            allTxs
           },
           this.axiosOptions
         )
@@ -315,6 +316,7 @@ class ElectrumX {
 
       throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
+      // console.log('Error in transactions(): ', error)
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
