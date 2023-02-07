@@ -15,7 +15,7 @@ describe('#control', () => {
   describe('#getNetworkInfo', () => {
     it('should get info on the full node', async () => {
       const result = await bchjs.Control.getNetworkInfo()
-      console.log(`result: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
 
       assert.property(result, 'version')
     })

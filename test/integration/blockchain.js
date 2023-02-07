@@ -318,7 +318,9 @@ describe('#blockchain', () => {
     it('should get info about the blockchain', async () => {
       const result = await bchjs.Blockchain.getBlockchainInfo()
 
-      console.log(`blockchain info: ${JSON.stringify(result, null, 2)}`)
+      // console.log(`blockchain info: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'blocks')
     })
   })
 })
