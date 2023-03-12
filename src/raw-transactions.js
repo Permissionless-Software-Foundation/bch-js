@@ -407,6 +407,7 @@ class RawTransactions {
         // pass back the raw transaction data.
         /* exit quietly */
       }
+      // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
 
       return txDetails
     } catch (error) {

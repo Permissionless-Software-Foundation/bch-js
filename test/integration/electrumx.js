@@ -373,6 +373,9 @@ describe('#ElectrumX', () => {
 
   describe('#sortAllTxs', () => {
     it('should GET transaction history for a single address', async () => {
+      // Add delay for this endpoint.
+      await sleep(6000)
+
       const addr = 'bitcoincash:qpdh9s677ya8tnx7zdhfrn8qfyvy22wj4qa7nwqa5v'
 
       const txs = await bchjs.Electrumx.transactions(addr)
