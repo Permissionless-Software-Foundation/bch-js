@@ -142,7 +142,8 @@ describe('#utxo', () => {
       assert.property(result.slpUtxos, 'nft')
       assert.property(result, 'nullUtxos')
 
-      assert.equal(result.bchUtxos.length, 4)
+      assert.equal(result.bchUtxos.length, 1)
+      assert.equal(result.infoUtxos.length, 3)
       assert.equal(result.slpUtxos.type1.tokens.length, 1)
       assert.equal(result.slpUtxos.type1.mintBatons.length, 1)
       assert.equal(result.nullUtxos.length, 0)

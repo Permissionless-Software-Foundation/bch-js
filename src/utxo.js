@@ -177,8 +177,15 @@ class UTXO {
       // Hydrate the UTXOs with additional token data.
       type1TokenUtxos = await this.hydrateTokenData(type1TokenUtxos)
 
+      // Collect BCH UTXOs above 1000 sats
+      const bchUtxos = utxos.filter(x => x.isSlp === false && x.value > 1000)
+
+      // Collect all BCH UTXOs at 1000 sats or smaller
+      // The prevents SLP tokens, BCMR, and other 'colored' UTXOs from being
+      // accidentally included into normal BCH transactions.
+      const infoUtxos = utxos.filter(x => x.isSlp === false && x.value <= 1000)
+
       // Collect and hydrate any type1 baton UTXOs
-      const bchUtxos = utxos.filter(x => x.isSlp === false)
       let type1BatonUtxos = utxos.filter(
         x => x.isSlp === true && x.type === 'baton' && x.tokenType === 1
       )
@@ -208,6 +215,7 @@ class UTXO {
       const outObj = {
         address: addr,
         bchUtxos,
+        infoUtxos,
         slpUtxos: {
           type1: {
             tokens: type1TokenUtxos,
