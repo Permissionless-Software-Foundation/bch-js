@@ -79,6 +79,7 @@ describe('#UTXO', () => {
       assert.property(result, 'nullUtxos')
 
       assert.isAbove(result.bchUtxos.length, 0)
+      assert.isAbove(result.infoUtxos.length, 0)
       assert.isAbove(result.slpUtxos.type1.tokens.length, 0)
       assert.equal(result.slpUtxos.type1.mintBatons.length, 0)
     })
