@@ -197,6 +197,9 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
+      console.log('Error in bch-js/blockchain.js/getBlockCount()')
+      console.log('blockchain.js restURL: ', this.restURL)
+
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
