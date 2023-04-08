@@ -720,6 +720,8 @@ class ElectrumX {
       return this.sortConfTxs(modifiedTxs, sortingOrder)
     } catch (err) {
       console.log('Error in util.js/sort0ConfTxs')
+      console.log('electrumx.js restURL: ', this.restURL)
+
       throw err
     }
   }
