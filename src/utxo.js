@@ -32,6 +32,8 @@ class UTXO {
    * properties:
    * - address: "" - the address these UTXOs are associated with
    * - bchUtxos: [] - UTXOs confirmed to be spendable as normal BCH
+   * - infoUtxos: [] - UTXOs under of 1000 sats or less that can not be categorized
+   *                   as another type of UTXO (like a token).
    * - nullUtxo: [] - UTXOs that did not pass SLP validation. Should be ignored and
    *   not spent, to be safe.
    * - slpUtxos: {} - UTXOs confirmed to be colored as valid SLP tokens
