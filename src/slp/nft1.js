@@ -9,7 +9,7 @@
 */
 
 // Public npm libraries
-const axios = require('axios')
+// const axios = require('axios')
 
 // Local libraries.
 const Address = require('./address')
@@ -417,97 +417,6 @@ class Nft1 {
     } catch (err) {
       console.log('Error in generateNFTGroupSendOpReturn()')
       throw err
-    }
-  }
-
-  /**
-   * @api SLP.NFT1.listNFTGroupChildren() listNFTGroupChildren()
-   * @apiName listNFTGroupChildren
-   * @apiGroup SLP NFT1
-   * @apiDescription Return list of NFT children tokens in a NFT Group.
-   * It's assumed provided groupId parameter is for an NFT Group token (type=129)
-   *
-   * Returns an Array with GENESIS transaction IDs of the children tokens.
-   *
-   * @apiExample Example usage:
-   *
-   * const groupId = '68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a'
-   * const children = await bchjs.SLP.Nft1.listNFTGroupChildren(groupId)
-   *
-   * children = {
-   *  "nftChildren": [
-   *    "45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9",
-   *    "928ce61fe1006b1325a0ba0dce700bf83986a6f0691ba26e121c9ac035d12a55"
-   *  ]
-   * }
-   */
-  async listNFTGroupChildren (groupId) {
-    try {
-      if (typeof groupId === 'string') {
-        const response = await axios.get(
-          `${this.restURL}slp/nftChildren/${groupId}`,
-          this.axiosOptions
-        )
-        return response.data
-      }
-
-      throw new Error('groupId must be a string.')
-    } catch (error) {
-      // console.log('Error in listNFTGroupChildren()')
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
-    }
-  }
-
-  /**
-   * @api SLP.NFT1.parentNFTGroup() parentNFTGroup()
-   * @apiName parentNFTGroup
-   * @apiGroup SLP NFT1
-   * @apiDescription Return parent NFT Group information for a given NFT child token.
-   * It's assumed provided groupId parameter is for an NFT Child token (type=65)
-   *
-   * Returns a JSON with NFT group information.
-   *
-   * @apiExample Example usage:
-   *
-   * const tokenId = '45a30085691d6ea586e3ec2aa9122e9b0e0d6c3c1fd357decccc15d8efde48a9'
-   * const group = await bchjs.SLP.Nft1.parentNFTGroup(tokenId)
-   *
-   * group = {
-   *   "nftGroup": {
-   *     "decimals": 0,
-   *     "timestamp": "2021-05-03 10:36:01",
-   *     "timestamp_unix": 1620038161,
-   *     "versionType": 129,
-   *     "documentUri": "psfoundation.cash",
-   *     "symbol": "PSF.TEST.GROUP",
-   *     "name": "PSF Test NFT Group",
-   *     "containsBaton": true,
-   *     "id": "68cd33ecd909068fbea318ae5ff1d6207cf754e53b191327d6d73b6916424c0a",
-   *     "documentHash": null,
-   *     "initialTokenQty": 1000000,
-   *     "blockCreated": 686117,
-   *     "totalMinted": null,
-   *     "totalBurned": null,
-   *     "circulatingSupply": null
-   *   }
-   * }
-   */
-  async parentNFTGroup (tokenId) {
-    try {
-      if (typeof tokenId === 'string') {
-        const response = await axios.get(
-          `${this.restURL}slp/nftGroup/${tokenId}`,
-          this.axiosOptions
-        )
-        return response.data
-      }
-
-      throw new Error('tokenId must be a string.')
-    } catch (error) {
-      // console.log('Error in parentNFTGroup()')
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
     }
   }
 }
