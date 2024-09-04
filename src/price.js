@@ -230,6 +230,42 @@ class Price {
       else throw err
     }
   }
+
+  /**
+   * @api price.getPsffppPrice() getPsffppPrice()
+   * @apiName Price getPsffppPrice()
+   * @apiGroup Price
+   * @apiDescription Return the cost in PSF tokens to write 1MB of data to the PSFFPP
+   * Find out more at PSFFPP.com. This is a IPFS pinning service that can pin
+   * up to 100MB per transaction into its network. The cost is denominated in
+   * PSF SLP tokens. The endpoint returns the cost to pin 1MB of data to the
+   * PSFFPP network.
+   *
+   * @apiExample Example usage:
+   *(async () => {
+   *  try {
+   *    let current = await bchjs.Price.getPsffppPrice();
+   *    console.log(current);
+   *  } catch(err) {
+   *   console.error(err)
+   *  }
+   *})()
+   *
+   * // 0.08335233
+   */
+  async getPsffppPrice () {
+    try {
+      const response = await this.axios.get(
+         `${this.restURL}price/psffpp`,
+         this.axiosOptions
+      )
+
+      return response.data.writePrice
+    } catch (err) {
+      if (err.response && err.response.data) throw err.response.data
+      else throw err
+    }
+  }
 }
 
 module.exports = Price

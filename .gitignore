@@ -5,6 +5,7 @@ wallet.json
 integration-test-sweet.sh
 integration-test-ss.sh
 integration-test-bitfinex.sh
+integration-test-pearson.sh
 
 docs/
 coverage/

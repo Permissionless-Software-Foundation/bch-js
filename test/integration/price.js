@@ -52,6 +52,15 @@ describe('#price', () => {
       assert.property(result, 'CAD')
     })
   })
+
+  describe('#getPsffppPrice', () => {
+    it('should get the price of BCH in several currencies', async () => {
+      const result = await bchjs.Price.getPsffppPrice()
+      // console.log(result)
+
+      assert.isNumber(result)
+    })
+  })
 })
 
 function sleep (ms) {
