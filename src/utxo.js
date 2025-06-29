@@ -153,7 +153,9 @@ class UTXO {
           // the indexer.
           const txData = await this.psfSlpIndexer.tx(thisUtxo.tx_hash)
           // console.log(`txData: ${JSON.stringify(txData, null, 2)}`)
-          if (txData.txData.isValidSlp === null) {
+
+          // txData.txData === undefined if the SLP indexer is syncing.
+          if (!txData.txData || txData.txData.isValidSlp === null) {
             thisUtxo.isSlp = null
           } else {
             thisUtxo.isSlp = false
