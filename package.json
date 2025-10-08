@@ -42,7 +42,7 @@
     "@psf/bitcoincash-ops": "2.0.0",
     "@psf/bitcoincashjs-lib": "4.0.3",
     "@psf/coininfo": "4.0.0",
-    "axios": "0.26.1",
+    "axios": "1.12.2",
     "bc-bip68": "1.0.5",
     "bchaddrjs-slp": "0.2.5",
     "bigi": "1.4.2",
