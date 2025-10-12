@@ -14,7 +14,7 @@
 // Local libraries.
 const Address = require('./address')
 
-// const BigNumber = require('bignumber.js')
+const BigNumber = require('bignumber.js')
 const slpMdm = require('slp-mdm')
 
 // let _this
@@ -329,6 +329,85 @@ class Nft1 {
     }
   }
 
+/**
+   * @api SLP.NFT1.generateNFTChildBurnOpReturn() generateNFTChildBurnOpReturn()
+   * @apiName generateNFTChildBurnOpReturn
+   * @apiGroup SLP NFT1
+   * @apiDescription Generate the OP_RETURN value needed to burn an SLP NFT
+   * Child.
+   * @apiDescription Generate the OP_RETURN value needed to create a SLP Send
+   * transaction that burns tokens.
+   * This is a slight variation of generateNFTChildSendOpReturn(). It generates a SLP
+   * SEND transaction designed to burn a select quantity of tokens.
+   *
+   * It's assumed all elements in the tokenUtxos array belong to the same token.
+   *
+   * Returns a Buffer representing a transaction output, ready to be added to
+   * the Transaction Builder.
+   *
+   * @apiExample Example usage:
+   *
+   *  const addr = "bitcoincash:qq6xz6wwcy78uh79vgjvfyahj4arq269w5an8pcjak"
+   *  const utxos = await bchjs.Blockbook.utxos(addr)
+   *
+   *  // Identify the SLP token UTXOs.
+   *  let tokenUtxos = await bchjs.SLP.Utils.tokenUtxoDetails(utxos);
+   *
+   *  // Filter out the token UTXOs that match the user-provided token ID.
+   *  tokenUtxos = tokenUtxos.filter((utxo, index) => {
+   *    if (
+   *      utxo && // UTXO is associated with a token.
+   *      utxo.tokenId === TOKENID && // UTXO matches the token ID.
+   *      utxo.tokenType === "token" // UTXO is not a minting baton.
+   *    )
+   *    return true;
+   *  });
+   *
+   *  // Generate the SEND OP_RETURN
+   *  const slpData = bchjs.SLP.NFT1.generateNFTChildBurnOpReturn(
+   *    tokenUtxos,
+   *    10 // Burn 10 tokens
+   *  );
+   *
+   *  ...
+   *  // Add OP_RETURN as first output.
+   *  transactionBuilder.addOutput(slpData, 0);
+   *
+   */
+  generateNFTChildBurnOpReturn (tokenUtxos, burnQty) {
+    try {
+      const tokenId = tokenUtxos[0].tokenId
+      const decimals = tokenUtxos[0].decimals
+
+      // Calculate the total amount of tokens owned by the wallet.
+      let totalTokens = 0
+      for (let i = 0; i < tokenUtxos.length; i++) {
+        totalTokens += parseFloat(tokenUtxos[i].tokenQty)
+      }
+
+      // Make sure burn quantity isn't bigger than the total amount in tokens
+      if (burnQty > totalTokens) {
+        burnQty = totalTokens
+      }
+
+      const remainder = totalTokens - burnQty
+
+      let baseQty = new BigNumber(remainder).times(10 ** decimals)
+      baseQty = baseQty.absoluteValue()
+      baseQty = Math.floor(baseQty)
+      baseQty = baseQty.toString()
+
+      // Generate the OP_RETURN as a Buffer.
+      const script = slpMdm.NFT1.Child.send(tokenId, [new slpMdm.BN(baseQty)])
+
+      return script
+    } catch (err) {
+      console.log('Error in generateNFTChildBurnOpReturn()')
+      throw err
+    }
+  }
+
+    
   /**
    * @api SLP.NFT1.generateNFTGroupSendOpReturn() generateNFTGroupSendOpReturn()
    * @apiName generateNFTGroupSendOpReturn
