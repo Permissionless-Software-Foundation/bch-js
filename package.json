@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "apidoc": "0.50.5",
-    "assert": "2.0.0",
     "chai": "4.1.2",
     "coveralls": "3.0.2",
     "eslint": "7.17.0",
