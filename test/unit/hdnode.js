@@ -3,13 +3,13 @@ import assert from 'assert'
 import { Buffer } from 'safe-buffer'
 
 // Mocks
-/* eslint-disable */
-import fixtures from './fixtures/hdnode.json' with { type: 'json' }
-/* eslint-enable */
-// import slpFixtures from './fixtures/slp/address.json' with { type: 'json' }
+import { createRequire } from 'module'
+// const slpFixtures = require('./fixtures/slp/address.json')
 
 // Unit under test (uut)
 import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/hdnode.json')
 let bchjs
 
 describe('#HDNode', () => {

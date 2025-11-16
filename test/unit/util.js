@@ -22,7 +22,7 @@ describe('#Util', () => {
         isscript: false
       }
 
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Util.validateAddress(

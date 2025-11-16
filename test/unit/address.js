@@ -4,12 +4,12 @@ import assert from 'assert'
 import Bitcoin from '@psf/bitcoincashjs-lib'
 
 // Mocks
-/* eslint-disable */
-import fixtures from './fixtures/address.json' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
 
 // Unit under test (uut)
 import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/address.json')
 let bchjs
 
 function flatten (arrays) {

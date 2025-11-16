@@ -69,10 +69,20 @@
     "nyc": "15.1.0",
     "semantic-release": "19.0.5",
     "sinon": "9.2.2",
-    "standard": "16.0.4"
+    "standard": "17.1.2"
   },
   "apidoc": {
     "title": "bch-js",
     "url": "bchjs."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "standard": {
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    }
   }
 }

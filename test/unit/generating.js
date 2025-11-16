@@ -20,7 +20,7 @@ describe('#Generating', () => {
 
     it('should generate', done => {
       const data = []
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'post').returns(resolved)
 
       bchjs.Generating.generateToAddress(

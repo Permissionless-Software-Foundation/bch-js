@@ -1,10 +1,10 @@
 import assert from 'assert'
 
-/* eslint-disable */
-import fixtures from './fixtures/slp/ecpair.json' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
 
 import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/slp/ecpair.json')
 let slp
 
 // const SLP = require("../../src/slp/slp")

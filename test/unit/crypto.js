@@ -1,10 +1,10 @@
-/* eslint-disable */
-import fixtures from './fixtures/crypto.json' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
 import assert from 'assert'
 import BCHJS from '../../src/bch-js.js'
-const bchjs = new BCHJS()
 import { Buffer } from 'safe-buffer'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/crypto.json')
+const bchjs = new BCHJS()
 
 describe('#Crypto', () => {
   describe('#sha256', () => {

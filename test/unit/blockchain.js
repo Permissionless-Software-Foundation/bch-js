@@ -61,7 +61,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get block by hash', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'post').returns(resolved)
 
       const blockhash =
@@ -130,7 +130,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get blockchain info', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getBlockchainInfo()
@@ -148,7 +148,7 @@ describe('#Blockchain', () => {
     const data = 527810
 
     it('should get block count', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getBlockCount()
@@ -167,7 +167,7 @@ describe('#Blockchain', () => {
       '000000000000000001d127592d091d4c45062504663c9acab27a1b16c028e3c0'
 
     it('should get block hash by height', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getBlockHash(527810)
@@ -202,7 +202,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get block header by hash', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getBlockHeader(
@@ -223,7 +223,7 @@ describe('#Blockchain', () => {
     const data = '577528469277.1339'
 
     it('should get difficulty', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getDifficulty()
@@ -241,7 +241,7 @@ describe('#Blockchain', () => {
     const data = 'Transaction not in mempool'
 
     it('should get mempool ancestors', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getMempoolAncestors(
@@ -264,7 +264,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get mempool descendants', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getMempoolDescendants(
@@ -287,7 +287,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get mempool entry', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getMempoolEntry(
@@ -315,7 +315,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get mempool info', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getMempoolInfo()
@@ -356,7 +356,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get mempool info', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.getRawMempool()
@@ -452,7 +452,7 @@ describe('#Blockchain', () => {
     }
 
     it('should get TODO', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.preciousBlock()
@@ -470,7 +470,7 @@ describe('#Blockchain', () => {
     const data = 'Cannot prune blocks because node is not in prune mode.'
 
     it('should prune blockchain', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'post').returns(resolved)
 
       bchjs.Blockchain.pruneBlockchain(507)
@@ -488,7 +488,7 @@ describe('#Blockchain', () => {
     const data = true
 
     it('should verify blockchain', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.verifyChain(3, 6)
@@ -506,7 +506,7 @@ describe('#Blockchain', () => {
     const data = "proof must be hexadecimal string (not '')"
 
     it('should verify utxo proof', done => {
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Blockchain.verifyTxOutProof('3')

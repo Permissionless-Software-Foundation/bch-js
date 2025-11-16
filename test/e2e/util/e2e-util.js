@@ -3,14 +3,14 @@
   tests.
 */
 
+import SLPSDK from '../../../lib/SLP.js'
+
 export default {
   openWallet,
   sendToken,
   getTestTokenBalance,
   threeDecimals
 }
-
-import SLPSDK from '../../../lib/SLP.js'
 const slpsdk = new SLPSDK()
 
 const testTokenId =
@@ -20,11 +20,10 @@ const testTokenId =
 // token balance.
 async function openWallet (filename) {
   try {
-    // Note: Dynamic imports for JSON files - use createRequire or import with assert
-    // For ESM, we need to handle dynamic JSON imports differently
-    /* eslint-disable */
-    const walletInfo = await import(filename, { with: { type: 'json' } }).then(m => m.default)
-    /* eslint-enable */
+    // Note: Dynamic imports for JSON files - use createRequire
+    const { createRequire } = await import('module')
+    const require = createRequire(import.meta.url)
+    const walletInfo = require(filename)
 
     // const walletBalance = await getBalance(walletInfo)
     // const walletBalance = await slpsdk.Utils.balancesForAddress(

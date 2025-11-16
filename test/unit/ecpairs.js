@@ -3,12 +3,12 @@ import assert from 'assert'
 import { Buffer } from 'safe-buffer'
 
 // Mocks
-/* eslint-disable */
-import fixtures from './fixtures/ecpair.json' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
 
 // Unit under test (uut)
 import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/ecpair.json')
 // const bchjs = new BCHJS()
 let bchjs
 

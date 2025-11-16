@@ -1,12 +1,12 @@
-/* eslint-disable */
-import fixtures from './fixtures/transaction-builder.json' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
 import assert from 'assert'
 import chai from 'chai'
-const { assert: assert2 } = chai
 import BCHJS from '../../src/bch-js.js'
-const bchjs = new BCHJS()
 import { Buffer } from 'safe-buffer'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/transaction-builder.json')
+const { assert: assert2 } = chai
+const bchjs = new BCHJS()
 
 describe('#TransactionBuilder', () => {
   describe('#hashTypes', () => {

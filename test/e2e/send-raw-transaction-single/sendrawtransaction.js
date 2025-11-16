@@ -31,9 +31,9 @@ async function loadDependencies () {
   // const BITBOX = new BITBOXSDK({ restURL: "http://localhost:3000/v2/" })
 
   try {
-    /* eslint-disable */
-    walletInfo = (await import('./wallet.json', { with: { type: 'json' } })).default
-    /* eslint-enable */
+    const { createRequire } = await import('module')
+    const require = createRequire(import.meta.url)
+    walletInfo = require('./wallet.json')
   } catch (err) {
     console.log(
       'Could not open wallet.json. Generate a wallet with create-wallet first.'

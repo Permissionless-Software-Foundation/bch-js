@@ -288,7 +288,7 @@ class Blockchain {
           `${this.restURL}blockchain/getBlockHeader`,
           {
             hashes: hash,
-            verbose: verbose
+            verbose
           },
           this.axiosOptions
         )
@@ -644,7 +644,7 @@ class Blockchain {
       const response = await axios.post(
         `${this.restURL}blockchain/getTxOut`,
         {
-          txid: txid,
+          txid,
           vout: n,
           mempool: includeMempool
         },
@@ -710,7 +710,7 @@ class Blockchain {
         const response = await axios.post(
           `${this.restURL}blockchain/getTxOutProof`,
           {
-            txids: txids
+            txids
           },
           this.axiosOptions
         )

@@ -275,7 +275,7 @@ class RawTransactions {
           url: `${this.restURL}rawtransactions/getRawTransaction`,
           data: {
             txids: txid,
-            verbose: verbose,
+            verbose,
             usrObj // pass user data when making an internal call.
           },
           headers: this.axiosOptions.headers

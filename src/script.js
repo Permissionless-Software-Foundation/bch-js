@@ -1,7 +1,7 @@
 import Bitcoin from '@psf/bitcoincashjs-lib'
-/* eslint-disable */
-import opcodes from '@psf/bitcoincash-ops' with { type: 'json' }
-/* eslint-enable */
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const opcodes = require('@psf/bitcoincash-ops')
 
 class Script {
   constructor () {

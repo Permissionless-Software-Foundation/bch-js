@@ -312,28 +312,28 @@ class Address {
         return {
           prefix: 'bitcoincash',
           type: 'P2PKH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.main.versions.scripthash:
         return {
           prefix: 'bitcoincash',
           type: 'P2SH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.test.versions.public:
         return {
           prefix: 'bchtest',
           type: 'P2PKH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.test.versions.scripthash:
         return {
           prefix: 'bchtest',
           type: 'P2SH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       default:

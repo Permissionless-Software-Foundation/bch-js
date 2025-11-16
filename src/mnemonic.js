@@ -1,6 +1,3 @@
-/* eslint no-prototype-builtins: "off" */
-/* eslint node/no-callback-literal: "off" */
-
 import BIP39 from 'bip39'
 import randomBytes from 'randombytes'
 import Bitcoin from '@psf/bitcoincashjs-lib'
@@ -356,7 +353,7 @@ const _extend = function (dst) {
   const sources = Array.prototype.slice.call(arguments, 1)
   for (let i = 0; i < sources.length; ++i) {
     const src = sources[i]
-    for (const p in src) if (src.hasOwnProperty(p)) dst[p] = src[p]
+    for (const p in src) if (Object.prototype.hasOwnProperty.call(src, p)) dst[p] = src[p]
   }
   return dst
 }
@@ -503,7 +500,7 @@ const Levenshtein = {
         try {
           options.progress.call(null, (i * 100.0) / str1.length)
         } catch (err) {
-          return cb(`Progress callback: ${err.toString()}`)
+          return cb(new Error(`Progress callback: ${err.toString()}`))
         }
       }
 
