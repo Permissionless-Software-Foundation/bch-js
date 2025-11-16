@@ -3,10 +3,10 @@
   by FullStack.cash
 */
 // Public npm libraries
-const axios = require('axios')
+import axios from 'axios'
 
 // Local libraries.
-const Blockchain = require('./blockchain')
+import Blockchain from './blockchain.js'
 // const Address = require('./address')
 
 // let _this
@@ -727,4 +727,4 @@ class ElectrumX {
   }
 }
 
-module.exports = ElectrumX
+export default ElectrumX

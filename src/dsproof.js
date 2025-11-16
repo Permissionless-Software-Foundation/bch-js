@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 let _this
 
@@ -78,4 +78,4 @@ class DSProof {
   }
 }
 
-module.exports = DSProof
+export default DSProof

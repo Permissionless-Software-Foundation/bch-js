@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -41,4 +41,4 @@ class Generating {
   }
 }
 
-module.exports = Generating
+export default Generating

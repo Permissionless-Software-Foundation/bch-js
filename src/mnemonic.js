@@ -1,11 +1,11 @@
 /* eslint no-prototype-builtins: "off" */
 /* eslint node/no-callback-literal: "off" */
 
-const BIP39 = require('bip39')
-const randomBytes = require('randombytes')
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const Buffer = require('safe-buffer').Buffer
-const wif = require('wif')
+import BIP39 from 'bip39'
+import randomBytes from 'randombytes'
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import { Buffer } from 'safe-buffer'
+import wif from 'wif'
 
 class Mnemonic {
   constructor (address) {
@@ -338,7 +338,7 @@ class Mnemonic {
   }
 }
 
-module.exports = Mnemonic
+export default Mnemonic
 
 // The following code is from: https://raw.githubusercontent.com/iancoleman/bip39/7ff86d4c983f1e8c80b87b31acfd69fcf98c1b82/src/js/levenshtein.js
 

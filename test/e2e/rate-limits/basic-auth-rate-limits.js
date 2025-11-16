@@ -7,11 +7,12 @@
   - Update the PRO_PASS value with a current PRO_PASSES string used by bch-api.
 */
 
-const assert = require('chai').assert
+import chai from 'chai'
+
+import BCHJS from '../../../src/bch-js.js'
+const { assert } = chai
 
 const PRO_PASS = 'testpassword'
-
-const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS({
   // restURL: `https://bchn.fullstack.cash/v5/`,
   restURL: 'https://abc.fullstack.cash/v5/',

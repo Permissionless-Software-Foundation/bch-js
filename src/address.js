@@ -1,7 +1,7 @@
-// const axios = require("axios")
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const cashaddr = require('ecashaddrjs')
-const coininfo = require('@psf/coininfo')
+// import axios from "axios"
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import cashaddr from 'ecashaddrjs'
+import coininfo from '@psf/coininfo'
 
 class Address {
   constructor (config) {
@@ -871,4 +871,4 @@ class Address {
   }
 }
 
-module.exports = Address
+export default Address

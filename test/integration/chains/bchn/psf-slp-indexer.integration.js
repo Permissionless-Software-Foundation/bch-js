@@ -4,10 +4,11 @@
 */
 
 // Global npm libraries
-const assert = require('chai').assert
+import chai from 'chai'
 
 // Local libraries
-const BCHJS = require('../../../../src/bch-js')
+import BCHJS from '../../../../src/bch-js.js'
+const { assert } = chai
 let bchjs
 
 describe('#psf-slp-indexer', () => {

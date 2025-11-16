@@ -1,5 +1,5 @@
-const randomBytes = require('randombytes')
-const Bitcoin = require('@psf/bitcoincashjs-lib')
+import randomBytes from 'randombytes'
+import Bitcoin from '@psf/bitcoincashjs-lib'
 
 class Crypto {
   /**
@@ -135,4 +135,4 @@ class Crypto {
   }
 }
 
-module.exports = Crypto
+export default Crypto

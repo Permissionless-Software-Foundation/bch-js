@@ -2,19 +2,19 @@
   This library handles the OP_RETURN of SLP TokenType1 transactions.
 */
 
-// const BCHJS = require("../bch-js")
+// import BCHJS from "../bch-js.js"
 // const bchjs = new BCHJS()
 
-const Address = require('./address')
-const Script = require('../script')
+import Address from './address.js'
+import Script from '../script.js'
 
-const BigNumber = require('bignumber.js')
-const slpMdm = require('slp-mdm')
-const axios = require('axios')
+import BigNumber from 'bignumber.js'
+import slpMdm from 'slp-mdm'
+import axios from 'axios'
+import TransactionBuilder from '../transaction-builder.js'
 
 // const addy = new Address()
 let addy
-const TransactionBuilder = require('../transaction-builder')
 
 let _this // local global
 
@@ -483,4 +483,4 @@ class TokenType1 {
   }
 }
 
-module.exports = TokenType1
+export default TokenType1

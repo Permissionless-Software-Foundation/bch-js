@@ -6,11 +6,11 @@
 */
 
 // Local libraries
-const Electrumx = require('./electrumx')
-const Slp = require('./slp/slp')
-const PsfSlpIndexer = require('./psf-slp-indexer')
-const BigNumber = require('bignumber.js')
-const Blockchain = require('./blockchain')
+import Electrumx from './electrumx.js'
+import Slp from './slp/slp.js'
+import PsfSlpIndexer from './psf-slp-indexer.js'
+import BigNumber from 'bignumber.js'
+import Blockchain from './blockchain.js'
 
 class UTXO {
   constructor (config = {}) {
@@ -420,4 +420,4 @@ class UTXO {
   }
 }
 
-module.exports = UTXO
+export default UTXO

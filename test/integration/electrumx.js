@@ -1,8 +1,8 @@
-const chai = require('chai')
-const assert = chai.assert
-const sinon = require('sinon')
+import chai from 'chai'
+import sinon from 'sinon'
 
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const assert = chai.assert
 const bchjs = new BCHJS()
 
 describe('#ElectrumX', () => {

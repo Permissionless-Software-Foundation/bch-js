@@ -4,13 +4,13 @@
   TODO
 */
 
-const chai = require('chai')
-const assert = chai.assert
-const BCHJS = require('../../src/bch-js')
-const bchjs = new BCHJS()
+import chai from 'chai'
+import BCHJS from '../../src/bch-js.js'
 
 // Inspect utility used for debugging.
-const util = require('util')
+import util from 'util'
+const assert = chai.assert
+const bchjs = new BCHJS()
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,

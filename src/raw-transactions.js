@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -498,4 +498,4 @@ class RawTransactions {
   }
 }
 
-module.exports = RawTransactions
+export default RawTransactions

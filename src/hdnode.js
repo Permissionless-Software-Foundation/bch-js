@@ -1,7 +1,7 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
-const bip32utils = require('@chris.troutner/bip32-utils')
-const bchaddrjs = require('bchaddrjs-slp')
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import coininfo from '@psf/coininfo'
+import bip32utils from '@chris.troutner/bip32-utils'
+import bchaddrjs from 'bchaddrjs-slp'
 
 class HDNode {
   constructor (address) {
@@ -637,4 +637,4 @@ class HDNode {
   }
 }
 
-module.exports = HDNode
+export default HDNode

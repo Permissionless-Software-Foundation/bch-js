@@ -1,11 +1,11 @@
 /* eslint-disable no-useless-catch */
 
 // Public npm libraries
-const axios = require('axios')
-const slpParser = require('slp-parser')
+import axios from 'axios'
+import slpParser from 'slp-parser'
 
 // Local libraries
-const Util = require('../util')
+import Util from '../util.js'
 
 let _this
 
@@ -184,4 +184,4 @@ class Utils {
   }
 }
 
-module.exports = Utils
+export default Utils

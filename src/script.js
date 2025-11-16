@@ -1,5 +1,7 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const opcodes = require('@psf/bitcoincash-ops')
+import Bitcoin from '@psf/bitcoincashjs-lib'
+/* eslint-disable */
+import opcodes from '@psf/bitcoincash-ops' with { type: 'json' }
+/* eslint-enable */
 
 class Script {
   constructor () {
@@ -240,4 +242,4 @@ class Script {
   }
 }
 
-module.exports = Script
+export default Script

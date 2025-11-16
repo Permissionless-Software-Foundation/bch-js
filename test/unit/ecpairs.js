@@ -1,12 +1,14 @@
 // Public npm libraries.
-const assert = require('assert')
-const Buffer = require('safe-buffer').Buffer
+import assert from 'assert'
+import { Buffer } from 'safe-buffer'
 
 // Mocks
-const fixtures = require('./fixtures/ecpair.json')
+/* eslint-disable */
+import fixtures from './fixtures/ecpair.json' with { type: 'json' }
+/* eslint-enable */
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
 // const bchjs = new BCHJS()
 let bchjs
 

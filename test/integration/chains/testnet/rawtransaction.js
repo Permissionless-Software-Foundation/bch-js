@@ -5,20 +5,20 @@
   TODO
 */
 
-const chai = require('chai')
+import chai from 'chai'
+// if (process.env.RESTURL) RESTURL = process.env.RESTURL
+
+import BCHJS from '../../../../src/bch-js.js'
+
+// Inspect utility used for debugging.
+import util from 'util'
 const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
   : 'https://testnet3.fullstack.cash/v5/'
-// if (process.env.RESTURL) RESTURL = process.env.RESTURL
-
-const BCHJS = require('../../../../src/bch-js')
 // const bchjs = new BCHJS({ restURL: `https://testnet.bchjs.cash/v5/` })
 const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
-
-// Inspect utility used for debugging.
-const util = require('util')
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,

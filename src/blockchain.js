@@ -3,7 +3,7 @@
   - Add blockhash functionality back into getTxOutProof
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -833,4 +833,4 @@ class Blockchain {
   }
 }
 
-module.exports = Blockchain
+export default Blockchain

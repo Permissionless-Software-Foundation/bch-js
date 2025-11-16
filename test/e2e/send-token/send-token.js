@@ -8,7 +8,9 @@
 */
 
 // Inspect utility used for debugging.
-const util = require('util')
+import util from 'util'
+
+import lib from '../util/e2e-util.js'
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,
@@ -20,8 +22,6 @@ util.inspect.defaultOptions = {
 
 const WALLET1 = '../wallet1.json'
 const WALLET2 = '../wallet2.json'
-
-const lib = require('../util/e2e-util')
 
 // The main test function.
 // Sends a token and reports on how long it takes to show up in SLPDB production.
@@ -95,6 +95,6 @@ function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-module.exports = {
+export default {
   sendTokenTest
 }

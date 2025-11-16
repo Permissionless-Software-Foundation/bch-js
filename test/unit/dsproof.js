@@ -1,10 +1,11 @@
 // Public npm libraries
-const assert = require('chai').assert
-const sinon = require('sinon')
+import chai from 'chai'
+import sinon from 'sinon'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
-const mockData = require('./fixtures/dsproof-mock')
+import BCHJS from '../../src/bch-js.js'
+import mockData from './fixtures/dsproof-mock.js'
+const { assert } = chai
 
 let bchjs
 const txid = 'ee0df780b58f6f24467605b2589c44c3a50fc849fb8f91b89669a4ae0d86bc7e'

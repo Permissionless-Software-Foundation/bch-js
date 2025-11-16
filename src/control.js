@@ -2,7 +2,7 @@
   API endpoints for basic control and information of the full node.
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this // Global reference to the instance of this class.
 
@@ -115,4 +115,4 @@ class Control {
   // }
 }
 
-module.exports = Control
+export default Control

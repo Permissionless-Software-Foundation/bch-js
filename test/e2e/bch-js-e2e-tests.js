@@ -2,10 +2,11 @@
   A Mocha test file for running end-to-end (e2e) tests.
 */
 
-// const mocha = require("mocha")
-const assert = require('chai').assert
+// import mocha from "mocha"
+import chai from 'chai'
 
-const sendToken = require('./send-token/send-token')
+import sendToken from './send-token/send-token.js'
+const { assert } = chai
 
 describe('#end-to-end tests', () => {
   describe('#send-tokens', () => {

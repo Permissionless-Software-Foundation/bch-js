@@ -1,11 +1,13 @@
 // Public npm libraries
-const assert = require('assert')
+import assert from 'assert'
 
 // Mocks
-const fixtures = require('./fixtures/bitcoincash.json')
+/* eslint-disable */
+import fixtures from './fixtures/bitcoincash.json' with { type: 'json' }
+/* eslint-enable */
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
 // const bchjs = new BCHJS()
 let bchjs
 

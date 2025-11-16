@@ -1,13 +1,15 @@
 // Public npm libraries
-const assert = require('assert')
-const Buffer = require('safe-buffer').Buffer
+import assert from 'assert'
+import { Buffer } from 'safe-buffer'
 
 // Mocks
-const fixtures = require('./fixtures/hdnode.json')
-// const slpFixtures = require('./fixtures/slp/address.json')
+/* eslint-disable */
+import fixtures from './fixtures/hdnode.json' with { type: 'json' }
+/* eslint-enable */
+// import slpFixtures from './fixtures/slp/address.json' with { type: 'json' }
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
 let bchjs
 
 describe('#HDNode', () => {

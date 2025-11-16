@@ -3,11 +3,17 @@
   IPFS is working.
 */
 
-process.env.IPFS_API = 'http://localhost:5001'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
 // process.env.IPFS_API = `https://ipfs-api.fullstack.cash`
 
-const BCHJS = require('../../../src/bch-js')
+import BCHJS from '../../../src/bch-js.js'
+
+process.env.IPFS_API = 'http://localhost:5001'
 const bchjs = new BCHJS()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 describe('#IPFS', () => {
   it('should upload a file to the server', async () => {

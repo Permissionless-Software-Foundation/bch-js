@@ -39,7 +39,7 @@ const utxo = [
   }
 ]
 
-module.exports = {
+export default {
   balance,
   utxo
 }

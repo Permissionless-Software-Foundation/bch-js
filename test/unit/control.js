@@ -1,8 +1,8 @@
-const assert = require('assert')
-const axios = require('axios')
-const BCHJS = require('../../src/bch-js')
+import assert from 'assert'
+import axios from 'axios'
+import BCHJS from '../../src/bch-js.js'
+import sinon from 'sinon'
 const bchjs = new BCHJS()
-const sinon = require('sinon')
 
 describe('#Control', () => {
   let sandbox

@@ -7,36 +7,36 @@
 */
 
 // bch-api mainnet.
-const DEFAULT_REST_API = 'https://api.fullstack.cash/v5/'
 // const DEFAULT_REST_API = "http://localhost:3000/v5/"
 
 // local deps
-const BitcoinCash = require('./bitcoincash')
-const Crypto = require('./crypto')
-const Util = require('./util')
-const Blockchain = require('./blockchain')
-const Control = require('./control')
-const Generating = require('./generating')
-const Mining = require('./mining')
-const RawTransactions = require('./raw-transactions')
-const Mnemonic = require('./mnemonic')
-const Address = require('./address')
-const HDNode = require('./hdnode')
-const TransactionBuilder = require('./transaction-builder')
-const ECPair = require('./ecpair')
-const Script = require('./script')
-const Price = require('./price')
-const Schnorr = require('./schnorr')
-const SLP = require('./slp/slp')
-const Encryption = require('./encryption')
-const Utxo = require('./utxo')
-const Transaction = require('./transaction')
-const DSProof = require('./dsproof')
-const Ecash = require('./ecash')
+import BitcoinCash from './bitcoincash.js'
+import Crypto from './crypto.js'
+import Util from './util.js'
+import Blockchain from './blockchain.js'
+import Control from './control.js'
+import Generating from './generating.js'
+import Mining from './mining.js'
+import RawTransactions from './raw-transactions.js'
+import Mnemonic from './mnemonic.js'
+import Address from './address.js'
+import HDNode from './hdnode.js'
+import TransactionBuilder from './transaction-builder.js'
+import ECPair from './ecpair.js'
+import Script from './script.js'
+import Price from './price.js'
+import Schnorr from './schnorr.js'
+import SLP from './slp/slp.js'
+import Encryption from './encryption.js'
+import Utxo from './utxo.js'
+import Transaction from './transaction.js'
+import DSProof from './dsproof.js'
+import Ecash from './ecash.js'
 
 // Indexers
-const Electrumx = require('./electrumx')
-const PsfSlpIndexer = require('./psf-slp-indexer')
+import Electrumx from './electrumx.js'
+import PsfSlpIndexer from './psf-slp-indexer.js'
+const DEFAULT_REST_API = 'https://api.fullstack.cash/v5/'
 
 class BCHJS {
   constructor (config) {
@@ -120,4 +120,4 @@ class BCHJS {
   }
 }
 
-module.exports = BCHJS
+export default BCHJS

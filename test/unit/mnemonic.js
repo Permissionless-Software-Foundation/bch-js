@@ -1,6 +1,8 @@
-const fixtures = require('./fixtures/mnemonic.json')
-const assert = require('assert')
-const BCHJS = require('../../src/bch-js')
+/* eslint-disable */
+import fixtures from './fixtures/mnemonic.json' with { type: 'json' }
+/* eslint-enable */
+import assert from 'assert'
+import BCHJS from '../../src/bch-js.js'
 const bchjs = new BCHJS()
 
 describe('#Mnemonic', () => {

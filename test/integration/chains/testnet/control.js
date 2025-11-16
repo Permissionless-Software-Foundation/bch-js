@@ -2,14 +2,14 @@
   Integration tests for bchjs control library.
 */
 
-const chai = require('chai')
+import chai from 'chai'
+
+import BCHJS from '../../../../src/bch-js.js'
 const assert = chai.assert
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
   : 'https://testnet3.fullstack.cash/v5/'
-
-const BCHJS = require('../../../../src/bch-js')
 const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe('#control', () => {

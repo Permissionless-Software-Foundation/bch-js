@@ -7,11 +7,11 @@
 */
 
 // Public npm libraries
-const axios = require('axios')
+import axios from 'axios'
 
 // Local libraries
-const RawTransaction = require('./raw-transactions')
-const SlpUtils = require('./slp/utils')
+import RawTransaction from './raw-transactions.js'
+import SlpUtils from './slp/utils.js'
 
 // let _this
 
@@ -539,4 +539,4 @@ class PsfSlpIndexer {
   }
 }
 
-module.exports = PsfSlpIndexer
+export default PsfSlpIndexer

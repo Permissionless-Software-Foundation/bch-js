@@ -3,14 +3,14 @@
   These tests are specific to the ABC chain.
 */
 
-const chai = require('chai')
-const assert = chai.assert
+import chai from 'chai'
 
-const BCHJS = require('../../../../src/bch-js')
-let bchjs
+import BCHJS from '../../../../src/bch-js.js'
 
 // Inspect utility used for debugging.
-const util = require('util')
+import util from 'util'
+const assert = chai.assert
+let bchjs
 util.inspect.defaultOptions = {
   showHidden: true,
   colors: true,

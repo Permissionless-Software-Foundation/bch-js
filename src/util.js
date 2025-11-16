@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -305,4 +305,4 @@ class Util {
   }
 }
 
-module.exports = Util
+export default Util

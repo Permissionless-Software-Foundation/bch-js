@@ -1,10 +1,10 @@
 // Public npm libraries
-const assert = require('assert')
-const axios = require('axios')
-const sinon = require('sinon')
+import assert from 'assert'
+import axios from 'axios'
+import sinon from 'sinon'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
 let bchjs
 
 describe('#Mining', () => {

@@ -2,7 +2,7 @@
   This library contains useful functions that deal with encryption.
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 let _this
 
@@ -73,4 +73,4 @@ class Encryption {
   }
 }
 
-module.exports = Encryption
+export default Encryption

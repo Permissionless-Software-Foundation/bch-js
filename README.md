@@ -31,8 +31,8 @@ Here are two YouTube walk-through videos to help you get started:
 
 - Instantiate the library in your code:
 
-```
-const BCHJS = require("@psf/bch-js")
+```javascript
+import BCHJS from "@psf/bch-js"
 let bchjs = new BCHJS() // Defaults to BCHN network.
 ```
 
@@ -51,8 +51,8 @@ rate limits when interacting with the back end server. See [this article](https:
 - Implicitly: bch-js will detect your JWT token if you set the `BCHJSTOKEN` environment variable.
 - Explicitly: You can directly feed in the JWT token with the `apiToken` property when instantiating the library. Here is an example:
 
-```
-const BCHJS = require("@psf/bch-js")
+```javascript
+import BCHJS from "@psf/bch-js"
 let bchjs = new BCHJS({
   restURL: 'https://bchn.fullstack.cash/v5/',
   apiToken: 'eyJhbGciO...' // Your JWT token here.

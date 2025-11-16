@@ -769,7 +769,7 @@ const genesisTestOpReturn03 = {
   qty: '100000000000000000'
 }
 
-module.exports = {
+export default {
   nonSlpTxDetails,
   slpTxDetails,
   mockOpReturnData01,

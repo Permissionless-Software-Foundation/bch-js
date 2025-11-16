@@ -1,13 +1,13 @@
-const chai = require('chai')
+import chai from 'chai'
+import sinon from 'sinon'
+import util from 'util'
+
+import BCHJS from '../../../../src/bch-js.js'
 const assert = chai.assert
-const sinon = require('sinon')
-const util = require('util')
 
 const RESTURL = process.env.RESTURL
   ? process.env.RESTURL
   : 'https://testnet3.fullstack.cash/v5/'
-
-const BCHJS = require('../../../../src/bch-js')
 const bchjs = new BCHJS({ restURL: RESTURL, apiToken: process.env.BCHJSTOKEN })
 
 describe('#ElectrumX', () => {

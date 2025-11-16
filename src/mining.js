@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -80,4 +80,4 @@ class Mining {
   }
 }
 
-module.exports = Mining
+export default Mining

@@ -1,8 +1,9 @@
-const assert = require('chai').assert
-const BCHJS = require('../../src/bch-js')
-const sinon = require('sinon')
+import chai from 'chai'
+import BCHJS from '../../src/bch-js.js'
+import sinon from 'sinon'
 
-const mockDataLib = require('./fixtures/price-mocks')
+import mockDataLib from './fixtures/price-mocks.js'
+const { assert } = chai
 let mockData
 
 describe('#price', () => {

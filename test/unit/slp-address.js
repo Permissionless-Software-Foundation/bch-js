@@ -1,11 +1,13 @@
-const assert = require('assert')
+import assert from 'assert'
 
-const BCHJS = require('../../src/bch-js')
-// const SLP = require("../../src/slp/slp")
+import BCHJS from '../../src/bch-js.js'
+// import SLP from "../../src/slp/slp.js"
 // const SLP = new slp({ restURL: "http://fakeurl.com/" })
 let slp
 
-const fixtures = require('./fixtures/slp/address.json')
+/* eslint-disable */
+import fixtures from './fixtures/slp/address.json' with { type: 'json' }
+/* eslint-enable */
 // const axios = require("axios")
 // const sinon = require("sinon")
 

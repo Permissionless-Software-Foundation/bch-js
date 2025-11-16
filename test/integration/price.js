@@ -1,5 +1,6 @@
-const assert = require('chai').assert
-const BCHJS = require('../../src/bch-js')
+import chai from 'chai'
+import BCHJS from '../../src/bch-js.js'
+const { assert } = chai
 const bchjs = new BCHJS()
 
 describe('#price', () => {

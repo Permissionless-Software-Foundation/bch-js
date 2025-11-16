@@ -1,5 +1,5 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import coininfo from '@psf/coininfo'
 
 class ECPair {
   static setAddress (address) {
@@ -166,4 +166,4 @@ class ECPair {
   }
 }
 
-module.exports = ECPair
+export default ECPair

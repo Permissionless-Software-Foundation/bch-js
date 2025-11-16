@@ -118,7 +118,7 @@ const paidFileData = {
   }
 }
 
-module.exports = {
+export default {
   uploadData,
   paymentInfo,
   mockNewFileModel,

@@ -1,11 +1,12 @@
-const assert = require('assert')
-const assert2 = require('chai').assert
-const axios = require('axios')
-const BCHJS = require('../../src/bch-js')
-const bchjs = new BCHJS()
-const sinon = require('sinon')
+import assert from 'assert'
+import chai from 'chai'
+import axios from 'axios'
+import BCHJS from '../../src/bch-js.js'
+import sinon from 'sinon'
 
-const mockData = require('./fixtures/blockchain-mock')
+import mockData from './fixtures/blockchain-mock.js'
+const { assert: assert2 } = chai
+const bchjs = new BCHJS()
 
 describe('#Blockchain', () => {
   describe('#getBestBlockHash', () => {

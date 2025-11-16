@@ -1,9 +1,10 @@
-const assert = require('assert')
-const assert2 = require('chai').assert
-const axios = require('axios')
-const BCHJS = require('../../src/bch-js')
+import assert from 'assert'
+import chai from 'chai'
+import axios from 'axios'
+import BCHJS from '../../src/bch-js.js'
+import sinon from 'sinon'
+const { assert: assert2 } = chai
 const bchjs = new BCHJS()
-const sinon = require('sinon')
 
 describe('#Util', () => {
   describe('#validateAddress', () => {

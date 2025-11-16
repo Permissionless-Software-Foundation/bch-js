@@ -2,7 +2,7 @@
   Mock data used for unit testing.
 */
 
-module.exports = {
+export default {
   bestBlockHash:
     '0000000000000000008e1f65f875703872544aa888c7ca6587f055f8f5fbd4bf',
 

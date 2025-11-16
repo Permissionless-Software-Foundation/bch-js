@@ -7,13 +7,13 @@
 
 // imports
 // require deps
-// const BCHJS = require("../bch-js")
-const Address = require('./address')
-const ECPair = require('./ecpair')
-// const HDNode = require("./hdnode")
-const TokenType1 = require('./tokentype1')
-const NFT1 = require('./nft1')
-const Utils = require('./utils')
+// import BCHJS from "../bch-js.js"
+import Address from './address.js'
+import ECPair from './ecpair.js'
+// import HDNode from "./hdnode.js"
+import TokenType1 from './tokentype1.js'
+import NFT1 from './nft1.js'
+import Utils from './utils.js'
 
 // SLP is a superset of BITBOX
 class SLP {
@@ -46,4 +46,4 @@ class SLP {
   }
 }
 
-module.exports = SLP
+export default SLP

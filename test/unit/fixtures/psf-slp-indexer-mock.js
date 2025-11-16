@@ -203,7 +203,7 @@ const tokenMedia01 = {
   ps002Compatible: true
 }
 
-module.exports = {
+export default {
   tokenStats,
   txData,
   balance,

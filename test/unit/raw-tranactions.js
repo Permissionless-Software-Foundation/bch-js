@@ -3,22 +3,23 @@
 */
 
 // Public npm libraries
-const assert = require('assert')
-const assert2 = require('chai').assert
-const axios = require('axios')
-const sinon = require('sinon')
-// const nock = require("nock") // HTTP mocking
+import assert from 'assert'
+import chai from 'chai'
+import axios from 'axios'
+import sinon from 'sinon'
+// import nock from "nock" // HTTP mocking
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
-// const bchjs = new BCHJS()
-let bchjs
+import BCHJS from '../../src/bch-js.js'
 
 // Used for debugging
 // const util = require("util")
 // util.inspect.defaultOptions = { depth: 1 }
 
-const mockData = require('./fixtures/rawtransaction-mock')
+import mockData from './fixtures/rawtransaction-mock.js'
+const { assert: assert2 } = chai
+// const bchjs = new BCHJS()
+let bchjs
 
 describe('#RawTransactions', () => {
   let sandbox

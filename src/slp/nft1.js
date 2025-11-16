@@ -9,18 +9,18 @@
 */
 
 // Public npm libraries
-// const axios = require('axios')
+// import axios from 'axios'
 
 // Local libraries.
-const Address = require('./address')
+import Address from './address.js'
 
-// const BigNumber = require('bignumber.js')
-const slpMdm = require('slp-mdm')
+// import BigNumber from 'bignumber.js'
+import slpMdm from 'slp-mdm'
+import TransactionBuilder from '../transaction-builder.js'
 
 // let _this
 // const addy = new Address()
 let addy
-const TransactionBuilder = require('../transaction-builder')
 
 class Nft1 {
   constructor (config) {
@@ -421,4 +421,4 @@ class Nft1 {
   }
 }
 
-module.exports = Nft1
+export default Nft1

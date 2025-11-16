@@ -2,9 +2,10 @@
   Integration tests for the utxo.js library.
 */
 
-const assert = require('chai').assert
+import chai from 'chai'
 
-const BCHJS = require('../../../../src/bch-js')
+import BCHJS from '../../../../src/bch-js.js'
+const { assert } = chai
 const bchjs = new BCHJS()
 
 describe('#UTXO', () => {

@@ -290,7 +290,7 @@ const txHistoryWithUnconfirmed = {
   ]
 }
 
-module.exports = {
+export default {
   utxo,
   utxos,
   balance,

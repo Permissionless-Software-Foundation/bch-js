@@ -2,13 +2,14 @@
   Unit tests for the utxo.js library.
 */
 
-const sinon = require('sinon')
-const assert = require('chai').assert
+import sinon from 'sinon'
+import chai from 'chai'
 
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+
+import mockData from './fixtures/utxo-mocks.js'
+const { assert } = chai
 const bchjs = new BCHJS()
-
-const mockData = require('./fixtures/utxo-mocks')
 
 describe('#utxo', () => {
   let sandbox

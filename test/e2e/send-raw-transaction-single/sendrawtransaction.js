@@ -17,26 +17,33 @@ const RECV_ADDR1 = 'bchtest:qzfn2mly05t6fjsh5kjj0dqq0jjtct27ng089dgg05'
 const SATOSHIS_TO_SEND = 1000
 
 // Instantiate BITBOX.
-const bitboxLib = '../../../lib/BITBOX'
-const BITBOXSDK = require(bitboxLib)
-const BITBOX = new BITBOXSDK({ restURL: 'https://trest.bitcoin.com/v2/' })
-// const BITBOX = new BITBOXSDK({ restURL: "http://localhost:3000/v2/" })
-
-// const util = require('util')
+// Note: Dynamic require with variable - use dynamic import in ESM
+const bitboxLib = '../../../lib/BITBOX.js'
+let BITBOXSDK, BITBOX, walletInfo
 
 // Open the wallet generated with create-wallet.
-let walletInfo = {}
-try {
-  walletInfo = require('./wallet.json')
-} catch (err) {
-  console.log(
-    'Could not open wallet.json. Generate a wallet with create-wallet first.'
-  )
-  process.exit(0)
-}
+let SEND_ADDR, SEND_MNEMONIC
 
-const SEND_ADDR = walletInfo.cashAddress
-const SEND_MNEMONIC = walletInfo.mnemonic
+// Load dependencies asynchronously
+async function loadDependencies () {
+  BITBOXSDK = (await import(bitboxLib)).default
+  BITBOX = new BITBOXSDK({ restURL: 'https://trest.bitcoin.com/v2/' })
+  // const BITBOX = new BITBOXSDK({ restURL: "http://localhost:3000/v2/" })
+
+  try {
+    /* eslint-disable */
+    walletInfo = (await import('./wallet.json', { with: { type: 'json' } })).default
+    /* eslint-enable */
+  } catch (err) {
+    console.log(
+      'Could not open wallet.json. Generate a wallet with create-wallet first.'
+    )
+    process.exit(0)
+  }
+
+  SEND_ADDR = walletInfo.cashAddress
+  SEND_MNEMONIC = walletInfo.mnemonic
+}
 
 async function testSend () {
   try {
@@ -54,7 +61,10 @@ async function testSend () {
     console.log('Error in testSend: ', err)
   }
 }
-testSend()
+// Load dependencies then run test
+loadDependencies().then(() => {
+  testSend()
+})
 
 // Build a TX hex with the largest UTXO.
 async function buildTx1 (recAddr) {

@@ -1,7 +1,7 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const coininfo = require('@psf/coininfo')
-const bip66 = require('bip66')
-const bip68 = require('bc-bip68')
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import coininfo from '@psf/coininfo'
+import bip66 from 'bip66'
+import bip68 from 'bc-bip68'
 
 class TransactionBuilder {
   static setAddress (address) {
@@ -163,4 +163,4 @@ class TransactionBuilder {
   }
 }
 
-module.exports = TransactionBuilder
+export default TransactionBuilder

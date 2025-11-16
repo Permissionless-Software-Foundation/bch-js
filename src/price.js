@@ -1,4 +1,4 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
@@ -268,4 +268,4 @@ class Price {
   }
 }
 
-module.exports = Price
+export default Price

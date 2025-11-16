@@ -2,9 +2,9 @@
   Integration tests for bchjs control library.
 */
 
-const chai = require('chai')
+import chai from 'chai'
+import BCHJS from '../../src/bch-js.js'
 const assert = chai.assert
-const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
 
 describe('#control', () => {
