@@ -57,8 +57,8 @@
     "ini": "6.0.0",
     "randombytes": "2.1.0",
     "safe-buffer": "5.2.1",
-    "satoshi-bitcoin": "1.0.4",
-    "slp-mdm": "0.0.6",
+    "satoshi-bitcoin": "1.0.5",
+    "slp-mdm": "0.0.7",
     "slp-parser": "0.0.4",
     "wif": "2.0.6"
   },
