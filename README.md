@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/npm/l/@psf/bch-js)](https://github.com/Permissionless-Software-Foundation/bch-js/blob/master/LICENSE.md)
 [![js-standard-style](https://img.shields.io/badge/javascript-standard%20code%20style-green.svg?style=flat-square)](https://github.com/feross/standard) [![Join the chat at https://gitter.im/Permissionless-Software-Foundation/bch-js](https://badges.gitter.im/Permissionless-Software-Foundation/bch-js.svg)](https://gitter.im/Permissionless-Software-Foundation/bch-js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) and eCash (XEC) blockchains. bch-js contains a toolbox of handy tools, and an easy API for talking with [bch-api REST API](https://github.com/Permissionless-Software-Foundation/bch-api). [FullStack.cash](https://fullstack.cash) offers paid cloud access to bch-api. You can run your own infrastructure by following documentation on [CashStack.info](https://cashstack.info).
+[bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) and eCash (XEC) blockchains. bch-js contains a toolbox of handy tools, and an easy API for talking with [psf-bch-api REST API](https://github.com/Permissionless-Software-Foundation/psf-bch-api). [FullStack.cash](https://fullstack.cash) offers paid cloud access to psf-bch-api. You can run your own infrastructure by following documentation on [CashStack.info](https://cashstack.info).
 
 ### Quick Start Videos:
 
@@ -37,15 +37,15 @@ let bchjs = new BCHJS() // Defaults to BCHN network.
 ```
 
 This library is intended to be paired with
-the [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API, and the infrastructure provided by [FullStack.cash](https://fullstack.cash). The `restURL` property can be changed to work with different Bitcoin Cash networks:
+the [psf-bch-api](https://github.com/Permissionless-Software-Foundation/psf-bch-api) REST API, and the infrastructure provided by [FullStack.cash](https://fullstack.cash). The `restURL` property can be changed to work with different Bitcoin Cash networks:
 
-- BCHN Mainnet REST API server: https://bchn.fullstack.cash/v5/
-- ABC Mainnet REST API server: https://abc.fullstack.cash/v5/
+- BCHN Mainnet REST API server: https://bchn.fullstack.cash/v6/
+- ABC Mainnet REST API server: https://abc.fullstack.cash/v6/
 - Check server status: https://metrics.fullstack.cash
 
 ### API Key (JWT Token)
 
-The [bch-api](https://github.com/Permissionless-Software-Foundation/bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
+The [psf-bch-api](https://github.com/Permissionless-Software-Foundation/psf-bch-api) REST API hosted by [FullStack.cash](https://fullstack.cash) uses JWT tokens to pay for increased
 rate limits when interacting with the back end server. See [this article](https://cashstack.info) if you want to understand the system-as-a-whole. The JWT token can be fed to bch-js _implicitly_ or _explicitly_.
 
 - Implicitly: bch-js will detect your JWT token if you set the `BCHJSTOKEN` environment variable.
@@ -54,7 +54,7 @@ rate limits when interacting with the back end server. See [this article](https:
 ```javascript
 import BCHJS from "@psf/bch-js"
 let bchjs = new BCHJS({
-  restURL: 'https://bchn.fullstack.cash/v5/',
+  restURL: 'https://bchn.fullstack.cash/v6/',
   apiToken: 'eyJhbGciO...' // Your JWT token here.
 })
 ```

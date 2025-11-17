@@ -72,7 +72,7 @@ class PsfSlpIndexer {
   async status () {
     try {
       const response = await axios.get(
-        `${this.restURL}psf/slp/status`,
+        `${this.restURL}slp/status`,
         this.axiosOptions
       )
       return response.data
@@ -137,7 +137,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.post(
-          `${this.restURL}psf/slp/address`,
+          `${this.restURL}slp/address`,
           { address },
           this.axiosOptions
         )
@@ -202,7 +202,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof tokenId === 'string') {
         const response = await axios.post(
-          `${this.restURL}psf/slp/token`,
+          `${this.restURL}slp/token`,
           { tokenId, withTxHistory },
           this.axiosOptions
         )
@@ -294,7 +294,7 @@ class PsfSlpIndexer {
       // Handle single address.
       if (typeof txid === 'string') {
         const response = await axios.post(
-          `${this.restURL}psf/slp/txid`,
+          `${this.restURL}slp/txid`,
           { txid },
           this.axiosOptions
         )
@@ -423,7 +423,7 @@ class PsfSlpIndexer {
    */
   async getTokenData (tokenId, withTxHistory = false) {
     try {
-      const url = `${this.restURL}psf/slp/token/data`
+      const url = `${this.restURL}slp/token/data`
       // console.log(`url: ${url}`)
 
       // Handle single address.
@@ -516,7 +516,7 @@ class PsfSlpIndexer {
    */
   async getTokenData2 (tokenId, updateCache = false) {
     try {
-      const url = `${this.restURL}psf/slp/token/data2`
+      const url = `${this.restURL}slp/token/data2`
       // console.log(`url: ${url}`)
 
       // Handle single address.

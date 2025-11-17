@@ -97,7 +97,7 @@ class RawTransactions {
       // Single hex
       if (typeof hex === 'string') {
         const response = await axios.get(
-          `${this.restURL}rawtransactions/decodeRawTransaction/${hex}`,
+          `${this.restURL}full-node/rawtransactions/decodeRawTransaction/${hex}`,
           this.axiosOptions
         )
 
@@ -107,7 +107,7 @@ class RawTransactions {
       } else if (Array.isArray(hex)) {
         const options = {
           method: 'POST',
-          url: `${this.restURL}rawtransactions/decodeRawTransaction`,
+          url: `${this.restURL}full-node/rawtransactions/decodeRawTransaction`,
           data: {
             hexes: hex
           },
@@ -165,7 +165,7 @@ class RawTransactions {
     try {
       if (typeof script === 'string') {
         const response = await axios.get(
-          `${this.restURL}rawtransactions/decodeScript/${script}`,
+          `${this.restURL}full-node/rawtransactions/decodeScript/${script}`,
           this.axiosOptions
         )
 
@@ -173,7 +173,7 @@ class RawTransactions {
       } else if (Array.isArray(script)) {
         const options = {
           method: 'POST',
-          url: `${this.restURL}rawtransactions/decodeScript`,
+          url: `${this.restURL}full-node/rawtransactions/decodeScript`,
           data: {
             hexes: script
           },
@@ -264,7 +264,7 @@ class RawTransactions {
         //   this.axiosOptions
         // )
         const response = await axios.get(
-          `${this.restURL}rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
+          `${this.restURL}full-node/rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
           this.axiosOptions
         )
 
@@ -272,7 +272,7 @@ class RawTransactions {
       } else if (Array.isArray(txid)) {
         const options = {
           method: 'POST',
-          url: `${this.restURL}rawtransactions/getRawTransaction`,
+          url: `${this.restURL}full-node/rawtransactions/getRawTransaction`,
           data: {
             txids: txid,
             verbose,
@@ -460,7 +460,7 @@ class RawTransactions {
       // Single tx hex.
       if (typeof hex === 'string') {
         const response = await this.axios.get(
-          `${this.restURL}rawtransactions/sendRawTransaction/${hex}`,
+          `${this.restURL}full-node/rawtransactions/sendRawTransaction/${hex}`,
           this.axiosOptions
         )
 
@@ -478,7 +478,7 @@ class RawTransactions {
       } else if (Array.isArray(hex)) {
         const options = {
           method: 'POST',
-          url: `${this.restURL}rawtransactions/sendRawTransaction`,
+          url: `${this.restURL}full-node/rawtransactions/sendRawTransaction`,
           data: {
             hexes: hex
           },

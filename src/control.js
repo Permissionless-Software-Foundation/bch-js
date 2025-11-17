@@ -80,7 +80,7 @@ class Control {
   async getNetworkInfo () {
     try {
       const response = await axios.get(
-        `${this.restURL}control/getNetworkInfo`,
+        `${this.restURL}full-node/control/getNetworkInfo`,
         this.axiosOptions
       )
       return response.data
@@ -93,7 +93,7 @@ class Control {
   async getMemoryInfo () {
     try {
       const response = await axios.get(
-        `${this.restURL}control/getMemoryInfo`,
+        `${this.restURL}full-node/control/getMemoryInfo`,
         this.axiosOptions
       )
       return response.data

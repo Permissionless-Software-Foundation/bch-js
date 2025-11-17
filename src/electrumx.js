@@ -112,7 +112,7 @@ class ElectrumX {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/utxos/${address}`,
+          `${this.restURL}fulcrum/utxos/${address}`,
           this.axiosOptions
         )
         return response.data
@@ -120,7 +120,7 @@ class ElectrumX {
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.restURL}electrumx/utxos`,
+          `${this.restURL}fulcrum/utxos`,
           {
             addresses: address
           },
@@ -196,7 +196,7 @@ class ElectrumX {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/balance/${address}`,
+          `${this.restURL}fulcrum/balance/${address}`,
           this.axiosOptions
         )
         return response.data
@@ -204,7 +204,7 @@ class ElectrumX {
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.restURL}electrumx/balance`,
+          `${this.restURL}fulcrum/balance`,
           {
             addresses: address
           },
@@ -294,7 +294,7 @@ class ElectrumX {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/transactions/${address}/${allTxs}`,
+          `${this.restURL}fulcrum/transactions/${address}/${allTxs}`,
           this.axiosOptions
         )
         return response.data
@@ -302,7 +302,7 @@ class ElectrumX {
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.restURL}electrumx/transactions`,
+          `${this.restURL}fulcrum/transactions`,
           {
             addresses: address,
             usrObj, // pass user data when making an internal call.
@@ -389,7 +389,7 @@ class ElectrumX {
       // Handle single address.
       if (typeof address === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/unconfirmed/${address}`,
+          `${this.restURL}fulcrum/unconfirmed/${address}`,
           this.axiosOptions
         )
         return response.data
@@ -397,7 +397,7 @@ class ElectrumX {
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
         const response = await axios.post(
-          `${this.restURL}electrumx/unconfirmed`,
+          `${this.restURL}fulcrum/unconfirmed`,
           {
             addresses: address
           },
@@ -458,7 +458,7 @@ class ElectrumX {
   async blockHeader (height, count = 1) {
     try {
       const response = await axios.get(
-        `${this.restURL}electrumx/block/headers/${height}?count=${count}`,
+        `${this.restURL}fulcrum/block/headers/${height}?count=${count}`,
         this.axiosOptions
       )
       return response.data
@@ -549,13 +549,13 @@ class ElectrumX {
       // Handle single transaction.
       if (typeof txid === 'string') {
         const response = await axios.get(
-          `${this.restURL}electrumx/tx/data/${txid}`,
+          `${this.restURL}fulcrum/tx/data/${txid}`,
           this.axiosOptions
         )
         return response.data
       } else if (Array.isArray(txid)) {
         const response = await axios.post(
-          `${this.restURL}electrumx/tx/data`,
+          `${this.restURL}fulcrum/tx/data`,
           {
             txids: txid
           },
@@ -597,7 +597,7 @@ class ElectrumX {
     try {
       if (typeof txHex === 'string') {
         const response = await axios.post(
-          `${this.restURL}electrumx/tx/broadcast`,
+          `${this.restURL}fulcrum/tx/broadcast`,
           { txHex },
           this.axiosOptions
         )

@@ -36,7 +36,7 @@ import Ecash from './ecash.js'
 // Indexers
 import Electrumx from './electrumx.js'
 import PsfSlpIndexer from './psf-slp-indexer.js'
-const DEFAULT_REST_API = 'https://api.fullstack.cash/v5/'
+const DEFAULT_REST_API = 'https://api.fullstack.cash/v6/'
 
 class BCHJS {
   constructor (config) {
