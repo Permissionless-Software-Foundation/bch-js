@@ -385,7 +385,6 @@ describe('#ElectrumX', () => {
       assert.isAbove(sortedTransactions[0].height, sortedTransactions[1].height)
     })
   })
-  
 })
 
 function sleep (ms) {
