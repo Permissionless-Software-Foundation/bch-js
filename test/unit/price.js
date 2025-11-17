@@ -58,16 +58,6 @@ describe('#price', () => {
     })
   })
 
-  describe('#getBchaUsd', () => {
-    it('should get the USD price of BCHA', async () => {
-      sandbox.stub(bchjs.Price.axios, 'get').resolves({ data: { usd: 18.87 } })
-
-      const result = await bchjs.Price.getBchaUsd()
-      // console.log(result)
-
-      assert.isNumber(result)
-    })
-  })
   describe('#getBchUsd', () => {
     it('should get the USD price of BCH', async () => {
       sandbox.stub(bchjs.Price.axios, 'get').resolves({ data: { usd: 510.39 } })
