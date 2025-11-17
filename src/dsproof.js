@@ -67,7 +67,7 @@ class DSProof {
         throw new Error(`txid must be of length 64 (not ${txid.length})`)
       }
       const response = await _this.axios.get(
-        `${this.restURL}dsproof/getdsproof/${txid}`,
+        `${this.restURL}full-node/dsproof/getdsproof/${txid}`,
         this.axiosOptions
       )
       return response.data

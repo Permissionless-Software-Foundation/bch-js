@@ -2,10 +2,13 @@
   Integration tests for bchjs dsproof library.
 */
 
+// Global npm libraries
 import chai from 'chai'
 
+// Local libraries
 import BCHJS from '../../../../src/bch-js.js'
 const { assert } = chai
+
 const bchjs = new BCHJS()
 
 describe('#DSProof', () => {
