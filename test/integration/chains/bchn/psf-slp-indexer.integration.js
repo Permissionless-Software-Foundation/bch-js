@@ -96,9 +96,7 @@ describe('#psf-slp-indexer', () => {
     })
 
     // FlexUSD transactions
-    // Currently FlexUSD UTXOs are reported as invalid SLP UTXOs, which means
-    // the wallet will burn them. There is a TODO in the code. This test will
-    // need to be changed when it is done.
+    // FlexUSD is blacklisted by the SLP indexer.
     it('should mark blacklisted token as null', async () => {
       const txid =
         '302113c11b90edc5f36c073d2f8a75e1e0eaf59b56235491a843d3819cd6a85f'
@@ -109,7 +107,7 @@ describe('#psf-slp-indexer', () => {
       assert.property(result.txData, 'vin')
       assert.property(result.txData, 'vout')
       assert.property(result.txData, 'isValidSlp')
-      assert.equal(result.txData.isValidSlp, null)
+      assert.equal(result.txData.isValidSlp, false)
     })
 
     it('should throw error for non-existent txid', async () => {
