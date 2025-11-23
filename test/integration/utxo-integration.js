@@ -4,7 +4,7 @@
 
 import chai from 'chai'
 
-import BCHJS from '../../../../src/bch-js.js'
+import BCHJS from '../../src/bch-js.js'
 const { assert } = chai
 const bchjs = new BCHJS()
 // const bchjs = new BCHJS({ restURL: 'http://192.168.2.129:3000/v5/' })
