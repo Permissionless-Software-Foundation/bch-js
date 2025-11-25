@@ -78,8 +78,8 @@ class BCHJS {
     } else if (process.env.BCHJSWIF && process.env.BCHJSWIF !== '') {
       this.wif = process.env.BCHJSWIF
     }
-    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000
-    this.bchServerURL = (config && config.bchServerURL) || 'http://free-bch.fullstack.cash'
+    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 10
+    this.bchServerURL = (config && config.bchServerURL) || 'https://free-bch.fullstack.cash'
 
     const libConfig = {
       restURL: this.restURL,
