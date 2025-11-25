@@ -11,13 +11,11 @@
   "main": "src/bch-js",
   "scripts": {
     "test": "c8 mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
-    "test:integration": "npm run test:integration:bchn",
+    "test:integration": "npm run test:integration:local:noauth",
     "test:integration:nft": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 -g '#nft1' test/integration/slp.js",
     "test:integration:bchn": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/",
-    "test:integration:local:bchn": "export RESTURL=http://localhost:5942/v6/ && mocha --timeout 30000 test/integration/",
-    "test:integration:decatur:bchn": "export RESTURL=http://192.168.2.127:5942/v6/ && mocha --timeout 30000 test/integration/",
-    "test:integration:decatur:abc": "export RESTURL=http://192.168.2.142:5942/v6/ && mocha --timeout 30000 test/integration && mocha --timeout 30000 test/integration/chains/abc/",
-    "test:integration:temp:bchn": "export RESTURL=http://157.90.174.219:5942/v6/ && mocha --timeout 30000 test/integration/",
+    "test:integration:local:noauth": "export RESTURL=http://localhost:5942/v6/ && mocha --timeout 30000 test/integration/",
+    "test:integration:decatur": "export RESTURL=http://192.168.2.127:5942/v6/ && mocha --timeout 30000 test/integration/",
     "coverage": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs && ./fix-docs-contrast.sh",
     "lint": "standard --env mocha --fix"
