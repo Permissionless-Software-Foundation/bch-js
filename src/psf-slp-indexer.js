@@ -18,30 +18,17 @@ import SlpUtils from './slp/utils.js'
 class PsfSlpIndexer {
   constructor (config = {}) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
 
     // Encapsulate dependencies
     this.rawTransaction = new RawTransaction(config)
     this.slpUtils = new SlpUtils(config)
-
-    // _this = this
   }
 
   /**

@@ -15,6 +15,7 @@
     "test:integration:nft": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 -g '#nft1' test/integration/slp.js",
     "test:integration:bchn": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/",
     "test:integration:local:noauth": "export RESTURL=http://localhost:5942/v6/ && mocha --timeout 30000 test/integration/",
+    "test:integration:local:auth": "export RESTURL=http://localhost:5942/v6/ && export BCHJSBEARERTOKEN=some-random-token && mocha --timeout 30000 test/integration/",
     "test:integration:decatur": "export RESTURL=http://192.168.2.127:5942/v6/ && mocha --timeout 30000 test/integration/",
     "coverage": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs && ./fix-docs-contrast.sh",
