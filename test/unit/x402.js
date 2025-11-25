@@ -57,6 +57,43 @@ describe('#X402 Integration', () => {
       assert.strictEqual(bchjs.paymentAmountSats, 2000)
       assert.strictEqual(bchjs.bchServerURL, 'http://free-bch.fullstack.cash')
     })
+
+    it('should read WIF from BCHJSWIF environment variable', () => {
+      const testWif = 'L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4'
+      const originalEnv = process.env.BCHJSWIF
+      process.env.BCHJSWIF = testWif
+
+      try {
+        const bchjs = new BCHJS()
+        assert.strictEqual(bchjs.wif, testWif)
+      } finally {
+        // Restore original env value
+        if (originalEnv === undefined) {
+          delete process.env.BCHJSWIF
+        } else {
+          process.env.BCHJSWIF = originalEnv
+        }
+      }
+    })
+
+    it('should prefer config.wif over BCHJSWIF environment variable', () => {
+      const configWif = 'L1XHKhaBAfkr2FJQn3pTfCMxz652WYfmvKj8xDCHCEDV9tWGcbYj'
+      const envWif = 'L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4'
+      const originalEnv = process.env.BCHJSWIF
+      process.env.BCHJSWIF = envWif
+
+      try {
+        const bchjs = new BCHJS({ wif: configWif })
+        assert.strictEqual(bchjs.wif, configWif)
+      } finally {
+        // Restore original env value
+        if (originalEnv === undefined) {
+          delete process.env.BCHJSWIF
+        } else {
+          process.env.BCHJSWIF = originalEnv
+        }
+      }
+    })
   })
 
   describe('#x402 Helper Functions', () => {

@@ -72,7 +72,12 @@ class BCHJS {
 
     // x402 payment configuration
     // If a WIF private key is provided, enable x402 automatic payment handling
-    this.wif = (config && config.wif) || ''
+    this.wif = ''
+    if (config && config.wif && config.wif !== '') {
+      this.wif = config.wif
+    } else if (process.env.BCHJSWIF && process.env.BCHJSWIF !== '') {
+      this.wif = process.env.BCHJSWIF
+    }
     this.paymentAmountSats = (config && config.paymentAmountSats) || 2000
     this.bchServerURL = (config && config.bchServerURL) || 'http://free-bch.fullstack.cash'
 
