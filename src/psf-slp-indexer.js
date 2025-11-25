@@ -19,6 +19,8 @@ class PsfSlpIndexer {
   constructor (config = {}) {
     this.restURL = config.restURL
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     this.axiosOptions = {
       headers: {
@@ -58,7 +60,7 @@ class PsfSlpIndexer {
    */
   async status () {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}slp/status`,
         this.axiosOptions
       )
@@ -123,7 +125,7 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}slp/address`,
           { address },
           this.axiosOptions
@@ -188,7 +190,7 @@ class PsfSlpIndexer {
     try {
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}slp/token`,
           { tokenId, withTxHistory },
           this.axiosOptions
@@ -280,7 +282,7 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof txid === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}slp/txid`,
           { txid },
           this.axiosOptions
@@ -415,7 +417,7 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
           url,
           { tokenId, withTxHistory },
@@ -508,7 +510,7 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
           url,
           { tokenId, updateCache },

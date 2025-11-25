@@ -10,6 +10,8 @@ class Control {
   constructor (config) {
     this.restURL = config.restURL
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     this.axiosOptions = {
       headers: {
@@ -66,7 +68,7 @@ class Control {
    */
   async getNetworkInfo () {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}full-node/control/getNetworkInfo`,
         this.axiosOptions
       )
@@ -79,7 +81,7 @@ class Control {
 
   async getMemoryInfo () {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}full-node/control/getMemoryInfo`,
         this.axiosOptions
       )

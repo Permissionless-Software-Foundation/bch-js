@@ -13,7 +13,8 @@ class RawTransactions {
       }
     }
 
-    this.axios = axios
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
   }
 
   /**
@@ -82,7 +83,7 @@ class RawTransactions {
     try {
       // Single hex
       if (typeof hex === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}full-node/rawtransactions/decodeRawTransaction/${hex}`,
           this.axiosOptions
         )
@@ -99,7 +100,7 @@ class RawTransactions {
           },
           headers: this.axiosOptions.headers
         }
-        const response = await axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }
@@ -150,7 +151,7 @@ class RawTransactions {
 
     try {
       if (typeof script === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}full-node/rawtransactions/decodeScript/${script}`,
           this.axiosOptions
         )
@@ -165,7 +166,7 @@ class RawTransactions {
           },
           headers: this.axiosOptions.headers
         }
-        const response = await axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }
@@ -249,7 +250,7 @@ class RawTransactions {
         //   'getRawTransaction() this.axiosOptions: ',
         //   this.axiosOptions
         // )
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}full-node/rawtransactions/getRawTransaction/${txid}?verbose=${verbose}`,
           this.axiosOptions
         )
@@ -266,7 +267,7 @@ class RawTransactions {
           },
           headers: this.axiosOptions.headers
         }
-        const response = await axios(options)
+        const response = await this.axios(options)
 
         return response.data
       }

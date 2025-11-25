@@ -15,6 +15,8 @@ class ElectrumX {
   constructor (config) {
     this.restURL = config.restURL
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     this.axiosOptions = {
       headers: {
@@ -97,7 +99,7 @@ class ElectrumX {
 
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}fulcrum/utxos/${address}`,
           this.axiosOptions
         )
@@ -105,7 +107,7 @@ class ElectrumX {
 
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/utxos`,
           {
             addresses: address
@@ -181,7 +183,7 @@ class ElectrumX {
     try {
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}fulcrum/balance/${address}`,
           this.axiosOptions
         )
@@ -189,7 +191,7 @@ class ElectrumX {
 
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/balance`,
           {
             addresses: address
@@ -279,7 +281,7 @@ class ElectrumX {
     try {
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}fulcrum/transactions/${address}/${allTxs}`,
           this.axiosOptions
         )
@@ -287,7 +289,7 @@ class ElectrumX {
 
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/transactions`,
           {
             addresses: address,
@@ -374,7 +376,7 @@ class ElectrumX {
     try {
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}fulcrum/unconfirmed/${address}`,
           this.axiosOptions
         )
@@ -382,7 +384,7 @@ class ElectrumX {
 
         // Handle array of addresses.
       } else if (Array.isArray(address)) {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/unconfirmed`,
           {
             addresses: address
@@ -443,7 +445,7 @@ class ElectrumX {
    */
   async blockHeader (height, count = 1) {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}fulcrum/block/headers/${height}?count=${count}`,
         this.axiosOptions
       )
@@ -534,13 +536,13 @@ class ElectrumX {
     try {
       // Handle single transaction.
       if (typeof txid === 'string') {
-        const response = await axios.get(
+        const response = await this.axios.get(
           `${this.restURL}fulcrum/tx/data/${txid}`,
           this.axiosOptions
         )
         return response.data
       } else if (Array.isArray(txid)) {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/tx/data`,
           {
             txids: txid
@@ -582,7 +584,7 @@ class ElectrumX {
   async broadcast (txHex) {
     try {
       if (typeof txHex === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           `${this.restURL}fulcrum/tx/broadcast`,
           { txHex },
           this.axiosOptions

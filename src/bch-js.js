@@ -9,6 +9,15 @@
 // bch-api mainnet.
 // const DEFAULT_REST_API = "http://localhost:3000/v5/"
 
+// Global npm libraries
+import axios from 'axios'
+import {
+  createSigner,
+  withPaymentInterceptor,
+  createPaymentHeader,
+  selectPaymentRequirements
+} from 'x402-bch-axios'
+
 // local deps
 import BitcoinCash from './bitcoincash.js'
 import Crypto from './crypto.js'
@@ -61,9 +70,35 @@ class BCHJS {
       this.authToken = `Bearer ${this.bearerToken}`
     }
 
+    // x402 payment configuration
+    // If a WIF private key is provided, enable x402 automatic payment handling
+    this.wif = (config && config.wif) || ''
+    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000
+    this.bchServerURL = (config && config.bchServerURL) || 'http://free-bch.fullstack.cash'
+
     const libConfig = {
       restURL: this.restURL,
       authToken: this.authToken
+    }
+
+    // If WIF is provided, create an axios instance with x402 payment interceptor
+    // Otherwise, let sub-modules use their own axios import for backwards compatibility
+    if (this.wif) {
+      let axiosInstance = axios.create({
+        baseURL: this.restURL,
+        headers: {
+          authorization: this.authToken
+        }
+      })
+
+      const signer = createSigner(this.wif, this.paymentAmountSats)
+      axiosInstance = withPaymentInterceptor(
+        axiosInstance,
+        signer,
+        { bchServerURL: this.bchServerURL }
+      )
+
+      libConfig.axios = axiosInstance
     }
 
     // ElectrumX indexer
@@ -102,6 +137,14 @@ class BCHJS {
     this.eCash = new Ecash()
 
     this.PsfSlpIndexer = new PsfSlpIndexer(libConfig)
+
+    // Expose x402 helper functions for advanced use cases
+    this.x402 = {
+      createSigner,
+      withPaymentInterceptor,
+      createPaymentHeader,
+      selectPaymentRequirements
+    }
   }
 }
 

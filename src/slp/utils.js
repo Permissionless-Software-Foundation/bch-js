@@ -14,7 +14,8 @@ class Utils {
     this.restURL = config.restURL
     this.slpParser = slpParser
     this.authToken = config.authToken
-    this.axios = axios
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     this.axiosOptions = {
       headers: {

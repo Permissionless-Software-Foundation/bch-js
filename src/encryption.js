@@ -9,7 +9,6 @@ let _this
 class Encryption {
   constructor (config) {
     this.restURL = config.restURL
-    this.axios = axios
     this.authToken = config.authToken
 
     this.axiosOptions = {
@@ -17,6 +16,9 @@ class Encryption {
         authorization: this.authToken
       }
     }
+
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     _this = this
   }

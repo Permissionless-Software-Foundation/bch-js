@@ -13,7 +13,8 @@ class Price {
       }
     }
 
-    this.axios = axios
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
   }
 
   /**

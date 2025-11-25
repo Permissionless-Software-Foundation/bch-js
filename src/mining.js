@@ -6,6 +6,8 @@ class Mining {
   constructor (config) {
     this.restURL = config.restURL
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     this.axiosOptions = {
       headers: {
@@ -16,7 +18,7 @@ class Mining {
 
   async getBlockTemplate (templateRequest) {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getBlockTemplate/${templateRequest}`,
         this.axiosOptions
       )
@@ -29,7 +31,7 @@ class Mining {
 
   async getMiningInfo () {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getMiningInfo`,
         this.axiosOptions
       )
@@ -42,7 +44,7 @@ class Mining {
 
   async getNetworkHashps (nblocks = 120, height = 1) {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getNetworkHashps?nblocks=${nblocks}&height=${height}`,
         this.axiosOptions
       )
@@ -58,7 +60,7 @@ class Mining {
     if (parameters) path = `${path}?parameters=${parameters}`
 
     try {
-      const response = await axios.post(path, this.axiosOptions)
+      const response = await this.axios.post(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
