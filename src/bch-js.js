@@ -59,6 +59,11 @@ class BCHJS {
       )
     }
 
+    // Normalize restURL to always have a trailing slash
+    if (!this.restURL.endsWith('/')) {
+      this.restURL = this.restURL + '/'
+    }
+
     // Retrieve the Bearer token for simple token authentication.
     this.bearerToken = '' // default value.
     if (config && config.bearerToken && config.bearerToken !== '') {
