@@ -534,8 +534,6 @@ class ElectrumX {
    */
   async txData (txid) {
     try {
-      console.log('bch-js txData() restURL: ', this.restURL)
-
       // Handle single transaction.
       if (typeof txid === 'string') {
         const response = await this.axios.get(

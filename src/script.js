@@ -1,7 +1,14 @@
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
 import Bitcoin from '@psf/bitcoincashjs-lib'
-import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
-const opcodes = require('@psf/bitcoincash-ops')
+
+// Import the bitcoincash-ops library using ESM methods that don't piss off
+// the standard linter.
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const opcodes = JSON.parse(
+  readFileSync(join(__dirname, '../node_modules/@psf/bitcoincash-ops/index.json'), 'utf8')
+)
 
 class Script {
   constructor () {
