@@ -1,8 +1,8 @@
-const chai = require('chai')
-const assert = chai.assert
-const sinon = require('sinon')
+import chai from 'chai'
+import sinon from 'sinon'
 
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const assert = chai.assert
 const bchjs = new BCHJS()
 
 describe('#ElectrumX', () => {
@@ -359,20 +359,14 @@ describe('#ElectrumX', () => {
       try {
         await bchjs.Electrumx.broadcast(txHex)
       } catch (err) {
-        // console.log('err: ', err)
-
-        assert.property(err, 'success')
-        assert.equal(err.success, false)
         assert.include(
-          err.error.error,
+          err.error,
           'the transaction was rejected by network rules'
         )
       }
     })
   })
 
-  /*
-  CT 3/14/23 - This test is frequently failing in BVT due to 429 errors.
   describe('#sortAllTxs', () => {
     it('should GET transaction history for a single address', async () => {
       // Add delay for this endpoint.
@@ -391,7 +385,6 @@ describe('#ElectrumX', () => {
       assert.isAbove(sortedTransactions[0].height, sortedTransactions[1].height)
     })
   })
-  */
 })
 
 function sleep (ms) {

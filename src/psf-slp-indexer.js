@@ -7,41 +7,30 @@
 */
 
 // Public npm libraries
-const axios = require('axios')
+import axios from 'axios'
 
 // Local libraries
-const RawTransaction = require('./raw-transactions')
-const SlpUtils = require('./slp/utils')
+import RawTransaction from './raw-transactions.js'
+import SlpUtils from './slp/utils.js'
 
 // let _this
 
 class PsfSlpIndexer {
   constructor (config = {}) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
 
     // Encapsulate dependencies
     this.rawTransaction = new RawTransaction(config)
     this.slpUtils = new SlpUtils(config)
-
-    // _this = this
   }
 
   /**
@@ -71,8 +60,8 @@ class PsfSlpIndexer {
    */
   async status () {
     try {
-      const response = await axios.get(
-        `${this.restURL}psf/slp/status`,
+      const response = await this.axios.get(
+        `${this.restURL}slp/status`,
         this.axiosOptions
       )
       return response.data
@@ -136,8 +125,8 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof address === 'string') {
-        const response = await axios.post(
-          `${this.restURL}psf/slp/address`,
+        const response = await this.axios.post(
+          `${this.restURL}slp/address`,
           { address },
           this.axiosOptions
         )
@@ -201,8 +190,8 @@ class PsfSlpIndexer {
     try {
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
-          `${this.restURL}psf/slp/token`,
+        const response = await this.axios.post(
+          `${this.restURL}slp/token`,
           { tokenId, withTxHistory },
           this.axiosOptions
         )
@@ -293,8 +282,8 @@ class PsfSlpIndexer {
 
       // Handle single address.
       if (typeof txid === 'string') {
-        const response = await axios.post(
-          `${this.restURL}psf/slp/txid`,
+        const response = await this.axios.post(
+          `${this.restURL}slp/txid`,
           { txid },
           this.axiosOptions
         )
@@ -423,12 +412,12 @@ class PsfSlpIndexer {
    */
   async getTokenData (tokenId, withTxHistory = false) {
     try {
-      const url = `${this.restURL}psf/slp/token/data`
+      const url = `${this.restURL}slp/token/data`
       // console.log(`url: ${url}`)
 
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
           url,
           { tokenId, withTxHistory },
@@ -516,12 +505,12 @@ class PsfSlpIndexer {
    */
   async getTokenData2 (tokenId, updateCache = false) {
     try {
-      const url = `${this.restURL}psf/slp/token/data2`
+      const url = `${this.restURL}slp/token/data2`
       // console.log(`url: ${url}`)
 
       // Handle single address.
       if (typeof tokenId === 'string') {
-        const response = await axios.post(
+        const response = await this.axios.post(
           // 'https://bchn.fullstack.cash/v5/psf/slp/token/data/',
           url,
           { tokenId, updateCache },
@@ -539,4 +528,4 @@ class PsfSlpIndexer {
   }
 }
 
-module.exports = PsfSlpIndexer
+export default PsfSlpIndexer

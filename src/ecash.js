@@ -44,4 +44,4 @@ class eCash {
   }
 }
 
-module.exports = eCash
+export default eCash

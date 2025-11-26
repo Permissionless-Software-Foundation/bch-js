@@ -1,35 +1,24 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
 class Generating {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
-
-    // _this = this
   }
 
   async generateToAddress (blocks, address, maxtries = 1000000) {
     try {
-      const response = await axios.post(
+      const response = await this.axios.post(
         `${this.restURL}generating/generateToAddress/${blocks}/${address}?maxtries=${maxtries}`,
         this.axiosOptions
       )
@@ -41,4 +30,4 @@ class Generating {
   }
 }
 
-module.exports = Generating
+export default Generating

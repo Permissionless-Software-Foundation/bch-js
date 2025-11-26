@@ -1,8 +1,10 @@
-const assert = require('assert')
+import assert from 'assert'
 
+import { createRequire } from 'module'
+
+import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
 const fixtures = require('./fixtures/slp/ecpair.json')
-
-const BCHJS = require('../../src/bch-js')
 let slp
 
 // const SLP = require("../../src/slp/slp")

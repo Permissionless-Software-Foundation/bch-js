@@ -7,36 +7,45 @@
 */
 
 // bch-api mainnet.
-const DEFAULT_REST_API = 'https://api.fullstack.cash/v5/'
 // const DEFAULT_REST_API = "http://localhost:3000/v5/"
 
+// Global npm libraries
+import axios from 'axios'
+import {
+  createSigner,
+  withPaymentInterceptor,
+  createPaymentHeader,
+  selectPaymentRequirements
+} from 'x402-bch-axios'
+
 // local deps
-const BitcoinCash = require('./bitcoincash')
-const Crypto = require('./crypto')
-const Util = require('./util')
-const Blockchain = require('./blockchain')
-const Control = require('./control')
-const Generating = require('./generating')
-const Mining = require('./mining')
-const RawTransactions = require('./raw-transactions')
-const Mnemonic = require('./mnemonic')
-const Address = require('./address')
-const HDNode = require('./hdnode')
-const TransactionBuilder = require('./transaction-builder')
-const ECPair = require('./ecpair')
-const Script = require('./script')
-const Price = require('./price')
-const Schnorr = require('./schnorr')
-const SLP = require('./slp/slp')
-const Encryption = require('./encryption')
-const Utxo = require('./utxo')
-const Transaction = require('./transaction')
-const DSProof = require('./dsproof')
-const Ecash = require('./ecash')
+import BitcoinCash from './bitcoincash.js'
+import Crypto from './crypto.js'
+import Util from './util.js'
+import Blockchain from './blockchain.js'
+import Control from './control.js'
+import Generating from './generating.js'
+import Mining from './mining.js'
+import RawTransactions from './raw-transactions.js'
+import Mnemonic from './mnemonic.js'
+import Address from './address.js'
+import HDNode from './hdnode.js'
+import TransactionBuilder from './transaction-builder.js'
+import ECPair from './ecpair.js'
+import Script from './script.js'
+import Price from './price.js'
+import Schnorr from './schnorr.js'
+import SLP from './slp/slp.js'
+import Encryption from './encryption.js'
+import Utxo from './utxo.js'
+import Transaction from './transaction.js'
+import DSProof from './dsproof.js'
+import Ecash from './ecash.js'
 
 // Indexers
-const Electrumx = require('./electrumx')
-const PsfSlpIndexer = require('./psf-slp-indexer')
+import Electrumx from './electrumx.js'
+import PsfSlpIndexer from './psf-slp-indexer.js'
+const DEFAULT_REST_API = 'https://api.fullstack.cash/v6/'
 
 class BCHJS {
   constructor (config) {
@@ -47,39 +56,55 @@ class BCHJS {
       this.restURL = process.env.RESTURL
     } else this.restURL = DEFAULT_REST_API
 
-    // Retrieve the apiToken
-    this.apiToken = '' // default value.
-    if (config && config.apiToken && config.apiToken !== '') {
-      this.apiToken = config.apiToken
-    } else if (process.env.BCHJSTOKEN && process.env.BCHJSTOKEN !== '') {
-      this.apiToken = process.env.BCHJSTOKEN
+    // Retrieve the Bearer token for simple token authentication.
+    this.bearerToken = '' // default value.
+    if (config && config.bearerToken && config.bearerToken !== '') {
+      this.bearerToken = config.bearerToken
+    } else if (process.env.BCHJSBEARERTOKEN && process.env.BCHJSBEARERTOKEN !== '') {
+      this.bearerToken = process.env.BCHJSBEARERTOKEN
     }
 
-    // Retrieve the Basic Authentication password.
-    this.authPass = '' // default value.
-    if (config && config.authPass && config.authPass !== '') {
-      this.authPass = config.authPass
-    } else if (process.env.BCHJSAUTHPASS && process.env.BCHJSAUTHPASS !== '') {
-      this.authPass = process.env.BCHJSAUTHPASS
-    }
-
-    // Generate a Basic Authentication token from an auth password
+    // Generate the authentication token for the authorization header.
     this.authToken = ''
-    if (this.authPass) {
-      // console.log(`bch-js initialized with authPass: ${this.authPass}`)
-      // Generate the header for Basic Authentication.
-      const combined = `fullstackcash:${this.authPass}`
-      const base64Credential = Buffer.from(combined).toString('base64')
-      this.authToken = `Basic ${base64Credential}`
+    if (this.bearerToken) {
+      this.authToken = `Bearer ${this.bearerToken}`
     }
+
+    // x402 payment configuration
+    // If a WIF private key is provided, enable x402 automatic payment handling
+    this.wif = ''
+    if (config && config.wif && config.wif !== '') {
+      this.wif = config.wif
+    } else if (process.env.BCHJSWIF && process.env.BCHJSWIF !== '') {
+      this.wif = process.env.BCHJSWIF
+    }
+    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 10
+    this.bchServerURL = (config && config.bchServerURL) || 'https://free-bch.fullstack.cash'
 
     const libConfig = {
       restURL: this.restURL,
-      apiToken: this.apiToken,
       authToken: this.authToken
     }
 
-    // console.log(`apiToken: ${this.apiToken}`)
+    // If WIF is provided, create an axios instance with x402 payment interceptor
+    // Otherwise, let sub-modules use their own axios import for backwards compatibility
+    if (this.wif) {
+      let axiosInstance = axios.create({
+        baseURL: this.restURL,
+        headers: {
+          authorization: this.authToken
+        }
+      })
+
+      const signer = createSigner(this.wif, this.paymentAmountSats)
+      axiosInstance = withPaymentInterceptor(
+        axiosInstance,
+        signer,
+        { bchServerURL: this.bchServerURL }
+      )
+
+      libConfig.axios = axiosInstance
+    }
 
     // ElectrumX indexer
     this.Electrumx = new Electrumx(libConfig)
@@ -117,7 +142,15 @@ class BCHJS {
     this.eCash = new Ecash()
 
     this.PsfSlpIndexer = new PsfSlpIndexer(libConfig)
+
+    // Expose x402 helper functions for advanced use cases
+    this.x402 = {
+      createSigner,
+      withPaymentInterceptor,
+      createPaymentHeader,
+      selectPaymentRequirements
+    }
   }
 }
 
-module.exports = BCHJS
+export default BCHJS

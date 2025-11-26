@@ -14,6 +14,6 @@ const dsproof = {
   ]
 }
 
-module.exports = {
+export default {
   dsproof
 }

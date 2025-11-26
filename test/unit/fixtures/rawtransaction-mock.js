@@ -55,7 +55,7 @@ const mockGetInputAddrsOutput = [
   }
 ]
 
-module.exports = {
+export default {
   mockTx,
   mockParentTx1,
   mockGetInputAddrsOutput

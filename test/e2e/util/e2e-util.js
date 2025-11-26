@@ -3,14 +3,14 @@
   tests.
 */
 
-module.exports = {
+import SLPSDK from '../../../lib/SLP.js'
+
+export default {
   openWallet,
   sendToken,
   getTestTokenBalance,
   threeDecimals
 }
-
-const SLPSDK = require('../../../lib/SLP')
 const slpsdk = new SLPSDK()
 
 const testTokenId =
@@ -20,6 +20,9 @@ const testTokenId =
 // token balance.
 async function openWallet (filename) {
   try {
+    // Note: Dynamic imports for JSON files - use createRequire
+    const { createRequire } = await import('module')
+    const require = createRequire(import.meta.url)
     const walletInfo = require(filename)
 
     // const walletBalance = await getBalance(walletInfo)

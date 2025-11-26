@@ -1,12 +1,15 @@
 // Public npm libraries.
-const assert = require('assert')
-const Bitcoin = require('@psf/bitcoincashjs-lib')
+import assert from 'assert'
+// import { assert } from 'chai'
+import Bitcoin from '@psf/bitcoincashjs-lib'
 
 // Mocks
-const fixtures = require('./fixtures/address.json')
+import { createRequire } from 'module'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/address.json')
 let bchjs
 
 function flatten (arrays) {

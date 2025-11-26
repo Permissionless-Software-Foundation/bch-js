@@ -1,12 +1,12 @@
-const chai = require('chai')
+import chai from 'chai'
+import axios from 'axios'
+import sinon from 'sinon'
+
+import BCHJS from '../../src/bch-js.js'
+
+import mockData from './fixtures/psf-slp-indexer-mock.js'
 const assert = chai.assert
-const axios = require('axios')
-const sinon = require('sinon')
-
-const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
-
-const mockData = require('./fixtures/psf-slp-indexer-mock')
 
 describe('#PsfSlpIndexer', () => {
   let sandbox

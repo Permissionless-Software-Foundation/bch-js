@@ -11,12 +11,13 @@
   - Update the JWT_TOKEN value with a current free-level JWT token.
 */
 
-const assert = require('chai').assert
+import chai from 'chai'
+
+import BCHJS from '../../../src/bch-js.js'
+const { assert } = chai
 
 const JWT_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODhhY2YyMDIyMWMxMDAxMmFkOTQwMSIsImVtYWlsIjoiZGVtb0BkZW1vLmNvbSIsImFwaUxldmVsIjoxMCwicmF0ZUxpbWl0IjozLCJpYXQiOjE2MDQ4NTQ2OTEsImV4cCI6MTYwNzQ0NjY5MX0.iwse0z0KDKHx9graCxcOwj6lSlfKQAb1zLhmjvygvts'
-
-const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS({
   restURL: 'https://api.fullstack.cash/v5/',
   // restURL: `http://localhost:3000/v5/`,

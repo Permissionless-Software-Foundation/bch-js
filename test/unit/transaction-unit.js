@@ -3,11 +3,12 @@
 */
 
 // Public npm libraries
-const assert = require('chai').assert
-const sinon = require('sinon')
-// const cloneDeep = require('lodash.clonedeep')
+import chai from 'chai'
+import sinon from 'sinon'
+// import cloneDeep from 'lodash.clonedeep'
 
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const { assert } = chai
 const bchjs = new BCHJS()
 
 // const mockDataLib = require('./fixtures/transaction-mock.js')

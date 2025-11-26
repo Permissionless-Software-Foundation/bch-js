@@ -3,8 +3,9 @@
 */
 
 // Global npm libraries
-const assert = require('chai').assert
-const Ecash = require('../../src/ecash')
+import chai from 'chai'
+import Ecash from '../../src/ecash.js'
+const { assert } = chai
 const uut = new Ecash()
 
 describe('#eCash', () => {

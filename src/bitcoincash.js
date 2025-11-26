@@ -1,13 +1,12 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const sb = require('satoshi-bitcoin')
-const bitcoinMessage = require('bitcoinjs-message')
-const bs58 = require('bs58')
-const bip21 = require('@psf/bip21')
-const coininfo = require('@psf/coininfo')
-const bip38 = require('bip38')
-const wif = require('wif')
-
-const Buffer = require('safe-buffer').Buffer
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import sb from 'satoshi-bitcoin'
+import bitcoinMessage from 'bitcoinjs-message'
+import bs58 from 'bs58'
+import bip21 from '@psf/bip21'
+import coininfo from '@psf/coininfo'
+import bip38 from 'bip38'
+import wif from 'wif'
+import { Buffer } from 'safe-buffer'
 
 class BitcoinCash {
   constructor (address) {
@@ -519,4 +518,4 @@ class BitcoinCash {
   }
 }
 
-module.exports = BitcoinCash
+export default BitcoinCash

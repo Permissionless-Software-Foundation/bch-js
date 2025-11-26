@@ -1,19 +1,20 @@
 // Public npm libraries
-const assert = require('chai').assert
-const sinon = require('sinon')
-const cloneDeep = require('lodash.clonedeep')
+import chai from 'chai'
+import sinon from 'sinon'
+import cloneDeep from 'lodash.clonedeep'
 
 // Unit under test
-const SLP = require('../../src/slp/slp')
+import SLP from '../../src/slp/slp.js'
+
+// Mock data used for unit tests
+import mockDataLib from './fixtures/slp/mock-utils.js'
+const { assert } = chai
 let uut
 // let SERVER
 
 const REST_URL = process.env.RESTURL
   ? process.env.RESTURL
   : 'https://bchn.fullstack.cash/v5/'
-
-// Mock data used for unit tests
-const mockDataLib = require('./fixtures/slp/mock-utils')
 let mockData
 
 // Default to unit tests unless some other value for TEST is passed.

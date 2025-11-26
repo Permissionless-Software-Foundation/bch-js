@@ -9,7 +9,7 @@
   - Start a local copy of bch-api
 */
 
-const BCHJS = require('../../../src/bch-js.js')
+import BCHJS from '../../../src/bch-js.js'
 const bchjs = new BCHJS({
   restURL: 'http://localhost:3000/v5/'
 })

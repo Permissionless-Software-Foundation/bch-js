@@ -1,8 +1,8 @@
-const assert = require('assert')
-const axios = require('axios')
-const BCHJS = require('../../src/bch-js')
+import assert from 'assert'
+import axios from 'axios'
+import BCHJS from '../../src/bch-js.js'
+import sinon from 'sinon'
 const bchjs = new BCHJS()
-const sinon = require('sinon')
 
 describe('#Control', () => {
   let sandbox
@@ -24,7 +24,7 @@ describe('#Control', () => {
         relayfee: 0.00001,
         errors: ''
       }
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getNetworkInfo()
@@ -47,7 +47,7 @@ describe('#Control', () => {
           chunks_free: 1
         }
       }
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Control.getMemoryInfo()

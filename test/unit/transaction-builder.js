@@ -1,9 +1,12 @@
+import { createRequire } from 'module'
+import assert from 'assert'
+import chai from 'chai'
+import BCHJS from '../../src/bch-js.js'
+import { Buffer } from 'safe-buffer'
+const require = createRequire(import.meta.url)
 const fixtures = require('./fixtures/transaction-builder.json')
-const assert = require('assert')
-const assert2 = require('chai').assert
-const BCHJS = require('../../src/bch-js')
+const { assert: assert2 } = chai
 const bchjs = new BCHJS()
-const Buffer = require('safe-buffer').Buffer
 
 describe('#TransactionBuilder', () => {
   describe('#hashTypes', () => {

@@ -1,12 +1,14 @@
 // Public npm libraries
-const assert = require('assert')
-const Buffer = require('safe-buffer').Buffer
+import assert from 'assert'
+import { Buffer } from 'safe-buffer'
 
 // Mocks
-const fixtures = require('./fixtures/script.json')
+import { createRequire } from 'module'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/script.json')
 let bchjs
 
 describe('#Script', () => {
@@ -438,8 +440,8 @@ describe('#Script', () => {
               Buffer.from(fixture.hex, 'hex')
             ),
             {
-              redeemScriptSig: redeemScriptSig,
-              redeemScript: redeemScript
+              redeemScriptSig,
+              redeemScript
             }
           )
         })

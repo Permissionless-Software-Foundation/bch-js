@@ -1,9 +1,9 @@
-// const BCHJS = require("../bch-js")
+// import BCHJS from "../bch-js.js"
 // const bchjs = new BCHJS()
 
-const BCHJSECPair = require('../ecpair')
+import BCHJSECPair from '../ecpair.js'
 
-const bchaddrjs = require('bchaddrjs-slp')
+import bchaddrjs from 'bchaddrjs-slp'
 
 class ECPair extends BCHJSECPair {
   /*
@@ -31,4 +31,4 @@ class ECPair extends BCHJSECPair {
   }
 }
 
-module.exports = ECPair
+export default ECPair

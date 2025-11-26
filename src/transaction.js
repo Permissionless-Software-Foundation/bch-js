@@ -6,10 +6,10 @@
 // const BigNumber = require('bignumber.js')
 
 // Local libraries
-const RawTransaction = require('./raw-transactions')
-const SlpUtils = require('./slp/utils')
-const Blockchain = require('./blockchain')
-const PsfSlpIndexer = require('./psf-slp-indexer')
+import RawTransaction from './raw-transactions.js'
+import SlpUtils from './slp/utils.js'
+import Blockchain from './blockchain.js'
+import PsfSlpIndexer from './psf-slp-indexer.js'
 
 class Transaction {
   constructor (config = {}) {
@@ -77,4 +77,4 @@ class Transaction {
   }
 }
 
-module.exports = Transaction
+export default Transaction

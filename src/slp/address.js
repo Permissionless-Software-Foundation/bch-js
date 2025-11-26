@@ -1,8 +1,8 @@
-const BCHJSAddress = require('../address')
+import BCHJSAddress from '../address.js'
+
+import bchaddrjs from 'bchaddrjs-slp'
 // const bchAddress = new BCHJSAddress()
 let bchAddress
-
-const bchaddrjs = require('bchaddrjs-slp')
 
 class Address extends BCHJSAddress {
   constructor (config) {
@@ -661,4 +661,4 @@ class Address extends BCHJSAddress {
   }
 }
 
-module.exports = Address
+export default Address

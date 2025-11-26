@@ -1,11 +1,12 @@
-const assert = require('chai').assert
-const sinon = require('sinon')
+import chai from 'chai'
+import sinon from 'sinon'
 
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+
+import mockData from './fixtures/encryption-mock.js'
+const { assert } = chai
 // const bchjs = new BCHJS()
 let bchjs
-
-const mockData = require('./fixtures/encryption-mock')
 
 describe('#Encryption', () => {
   let sandbox

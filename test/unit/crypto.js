@@ -1,8 +1,10 @@
+import { createRequire } from 'module'
+import assert from 'assert'
+import BCHJS from '../../src/bch-js.js'
+import { Buffer } from 'safe-buffer'
+const require = createRequire(import.meta.url)
 const fixtures = require('./fixtures/crypto.json')
-const assert = require('assert')
-const BCHJS = require('../../src/bch-js')
 const bchjs = new BCHJS()
-const Buffer = require('safe-buffer').Buffer
 
 describe('#Crypto', () => {
   describe('#sha256', () => {

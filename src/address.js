@@ -1,7 +1,7 @@
-// const axios = require("axios")
-const Bitcoin = require('@psf/bitcoincashjs-lib')
-const cashaddr = require('ecashaddrjs')
-const coininfo = require('@psf/coininfo')
+// import axios from "axios"
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import cashaddr from 'ecashaddrjs'
+import coininfo from '@psf/coininfo'
 
 class Address {
   constructor (config) {
@@ -10,22 +10,11 @@ class Address {
     else tmp.restURL = config.restURL
 
     this.restURL = tmp.restURL
-    this.apiToken = tmp.apiToken
     this.authToken = config.authToken
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
   }
@@ -312,28 +301,28 @@ class Address {
         return {
           prefix: 'bitcoincash',
           type: 'P2PKH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.main.versions.scripthash:
         return {
           prefix: 'bitcoincash',
           type: 'P2SH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.test.versions.public:
         return {
           prefix: 'bchtest',
           type: 'P2PKH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       case info.test.versions.scripthash:
         return {
           prefix: 'bchtest',
           type: 'P2SH',
-          hash: hash,
+          hash,
           format: 'legacy'
         }
       default:
@@ -871,4 +860,4 @@ class Address {
   }
 }
 
-module.exports = Address
+export default Address

@@ -1,10 +1,12 @@
-const assert = require('assert')
+import assert from 'assert'
 
-const BCHJS = require('../../src/bch-js')
-// const SLP = require("../../src/slp/slp")
+import BCHJS from '../../src/bch-js.js'
+
+import { createRequire } from 'module'
+// import SLP from "../../src/slp/slp.js"
 // const SLP = new slp({ restURL: "http://fakeurl.com/" })
 let slp
-
+const require = createRequire(import.meta.url)
 const fixtures = require('./fixtures/slp/address.json')
 // const axios = require("axios")
 // const sinon = require("sinon")

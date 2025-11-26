@@ -1411,7 +1411,7 @@ mock503Error.response = {
   }
 }
 
-module.exports = {
+export default {
   mockList,
   mockToken,
   mockTokens,

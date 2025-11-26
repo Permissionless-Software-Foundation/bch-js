@@ -1,35 +1,24 @@
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
 class Mining {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
-
-    // _this = this
   }
 
   async getBlockTemplate (templateRequest) {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getBlockTemplate/${templateRequest}`,
         this.axiosOptions
       )
@@ -42,7 +31,7 @@ class Mining {
 
   async getMiningInfo () {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getMiningInfo`,
         this.axiosOptions
       )
@@ -55,7 +44,7 @@ class Mining {
 
   async getNetworkHashps (nblocks = 120, height = 1) {
     try {
-      const response = await axios.get(
+      const response = await this.axios.get(
         `${this.restURL}mining/getNetworkHashps?nblocks=${nblocks}&height=${height}`,
         this.axiosOptions
       )
@@ -71,7 +60,7 @@ class Mining {
     if (parameters) path = `${path}?parameters=${parameters}`
 
     try {
-      const response = await axios.post(path, this.axiosOptions)
+      const response = await this.axios.post(path, this.axiosOptions)
       return response.data
     } catch (error) {
       if (error.response && error.response.data) throw error.response.data
@@ -80,4 +69,4 @@ class Mining {
   }
 }
 
-module.exports = Mining
+export default Mining

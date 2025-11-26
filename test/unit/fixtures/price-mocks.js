@@ -209,6 +209,6 @@ const mockRates = {
   ZWL: '80215.03'
 }
 
-module.exports = {
+export default {
   mockRates
 }

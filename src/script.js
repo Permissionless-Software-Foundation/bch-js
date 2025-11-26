@@ -1,4 +1,6 @@
-const Bitcoin = require('@psf/bitcoincashjs-lib')
+import Bitcoin from '@psf/bitcoincashjs-lib'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
 const opcodes = require('@psf/bitcoincash-ops')
 
 class Script {
@@ -240,4 +242,4 @@ class Script {
   }
 }
 
-module.exports = Script
+export default Script

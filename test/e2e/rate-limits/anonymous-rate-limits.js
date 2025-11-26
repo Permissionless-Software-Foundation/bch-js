@@ -12,13 +12,14 @@
   mocha --timeout=30000 anonymous-rate-limits.js
 */
 
-const assert = require('chai').assert
+import chai from 'chai'
+// const RESTURL = `http://localhost:3000/v5/`
+
+import BCHJS from '../../../src/bch-js.js'
+const { assert } = chai
 
 // const RESTURL = `https://abc.fullstack.cash/v5/`
 const RESTURL = 'https://bchn.fullstack.cash/v5/'
-// const RESTURL = `http://localhost:3000/v5/`
-
-const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS({ restURL: RESTURL })
 
 describe('#anonymous rate limits', () => {

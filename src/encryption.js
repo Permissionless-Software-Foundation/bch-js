@@ -2,32 +2,23 @@
   This library contains useful functions that deal with encryption.
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 let _this
 
 class Encryption {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
-    this.axios = axios
     this.authToken = config.authToken
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
+
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
     _this = this
   }
@@ -73,4 +64,4 @@ class Encryption {
   }
 }
 
-module.exports = Encryption
+export default Encryption

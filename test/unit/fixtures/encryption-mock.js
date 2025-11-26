@@ -13,7 +13,7 @@ const failureMock = {
   publicKey: 'not found'
 }
 
-module.exports = {
+export default {
   successMock,
   failureMock
 }

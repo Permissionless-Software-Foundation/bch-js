@@ -3,33 +3,22 @@
   - Add blockhash functionality back into getTxOutProof
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this
 
 class Blockchain {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
-
-    // _this = this
   }
 
   /**
@@ -52,8 +41,8 @@ class Blockchain {
    */
   async getBestBlockHash () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBestBlockHash`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getBestBlockHash`,
         this.axiosOptions
       )
       return response.data
@@ -106,8 +95,8 @@ class Blockchain {
       if (!blockhash || typeof blockhash !== 'string') {
         throw new Error('blockhash must be a string')
       }
-      const response = await axios.post(
-        `${this.restURL}blockchain/getblock`,
+      const response = await this.axios.post(
+        `${this.restURL}full-node/blockchain/getblock`,
         {
           blockhash,
           verbosity
@@ -160,8 +149,8 @@ class Blockchain {
    */
   async getBlockchainInfo () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBlockchainInfo`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getBlockchainInfo`,
         this.axiosOptions
       )
       return response.data
@@ -191,8 +180,8 @@ class Blockchain {
    */
   async getBlockCount () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBlockCount`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getBlockCount`,
         this.axiosOptions
       )
       return response.data
@@ -227,8 +216,8 @@ class Blockchain {
     if (typeof height !== 'string') height = JSON.stringify(height)
 
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getBlockHash/${height}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getBlockHash/${height}`,
         this.axiosOptions
       )
       return response.data
@@ -274,8 +263,8 @@ class Blockchain {
     try {
       // Handle single hash.
       if (typeof hash === 'string') {
-        const response = await axios.get(
-          `${this.restURL}blockchain/getBlockHeader/${hash}?verbose=${verbose}`,
+        const response = await this.axios.get(
+          `${this.restURL}full-node/blockchain/getBlockHeader/${hash}?verbose=${verbose}`,
           this.axiosOptions
         )
 
@@ -284,11 +273,11 @@ class Blockchain {
         // Handle array of hashes.
       } else if (Array.isArray(hash)) {
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
-          `${this.restURL}blockchain/getBlockHeader`,
+        const response = await this.axios.post(
+          `${this.restURL}full-node/blockchain/getBlockHeader`,
           {
             hashes: hash,
-            verbose: verbose
+            verbose
           },
           this.axiosOptions
         )
@@ -335,8 +324,8 @@ class Blockchain {
    */
   async getChainTips () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getChainTips`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getChainTips`,
         this.axiosOptions
       )
       return response.data
@@ -367,8 +356,8 @@ class Blockchain {
    */
   async getDifficulty () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getDifficulty`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getDifficulty`,
         this.axiosOptions
       )
       return response.data
@@ -383,8 +372,8 @@ class Blockchain {
     if (typeof txid !== 'string') txid = JSON.stringify(txid)
 
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getMempoolAncestors/${txid}?verbose=${verbose}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getMempoolAncestors/${txid}?verbose=${verbose}`,
         this.axiosOptions
       )
       return response.data
@@ -398,8 +387,8 @@ class Blockchain {
     if (typeof txid !== 'string') txid = JSON.stringify(txid)
 
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getMempoolDescendants/${txid}?verbose=${verbose}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getMempoolDescendants/${txid}?verbose=${verbose}`,
         this.axiosOptions
       )
       return response.data
@@ -495,16 +484,16 @@ class Blockchain {
 
     try {
       if (typeof txid === 'string') {
-        const response = await axios.get(
-          `${this.restURL}blockchain/getMempoolEntry/${txid}`,
+        const response = await this.axios.get(
+          `${this.restURL}full-node/blockchain/getMempoolEntry/${txid}`,
           this.axiosOptions
         )
 
         return response.data
       } else if (Array.isArray(txid)) {
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
-          `${this.restURL}blockchain/getMempoolEntry`,
+        const response = await this.axios.post(
+          `${this.restURL}full-node/blockchain/getMempoolEntry`,
           {
             txids: txid
           },
@@ -546,8 +535,8 @@ class Blockchain {
    */
   async getMempoolInfo () {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getMempoolInfo`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getMempoolInfo`,
         this.axiosOptions
       )
       return response.data
@@ -593,8 +582,8 @@ class Blockchain {
    */
   async getRawMempool (verbose = false) {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/getRawMempool?vebose=${verbose}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/getRawMempool?vebose=${verbose}`,
         this.axiosOptions
       )
       return response.data
@@ -637,14 +626,14 @@ class Blockchain {
       }
 
       // Send the request to the REST API.
-      // const response = await axios.get(
+      // const response = await this.axios.get(
       //   `${this.restURL}blockchain/getTxOut/${txid}/${n}?includeMempool=${includeMempool}`,
       //   this.axiosOptions
       // )
-      const response = await axios.post(
-        `${this.restURL}blockchain/getTxOut`,
+      const response = await this.axios.post(
+        `${this.restURL}full-node/blockchain/getTxOut`,
         {
-          txid: txid,
+          txid,
           vout: n,
           mempool: includeMempool
         },
@@ -698,19 +687,19 @@ class Blockchain {
     try {
       // Single txid.
       if (typeof txids === 'string') {
-        const path = `${this.restURL}blockchain/getTxOutProof/${txids}`
+        const path = `${this.restURL}full-node/blockchain/getTxOutProof/${txids}`
         // if (blockhash) path = `${path}?blockhash=${blockhash}`
 
-        const response = await axios.get(path, this.axiosOptions)
+        const response = await this.axios.get(path, this.axiosOptions)
         return response.data
 
         // Array of txids.
       } else if (Array.isArray(txids)) {
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
-          `${this.restURL}blockchain/getTxOutProof`,
+        const response = await this.axios.post(
+          `${this.restURL}full-node/blockchain/getTxOutProof`,
           {
-            txids: txids
+            txids
           },
           this.axiosOptions
         )
@@ -727,8 +716,8 @@ class Blockchain {
 
   async preciousBlock (blockhash) {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/preciousBlock/${blockhash}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/preciousBlock/${blockhash}`,
         this.axiosOptions
       )
       return response.data
@@ -740,8 +729,8 @@ class Blockchain {
 
   async pruneBlockchain (height) {
     try {
-      const response = await axios.post(
-        `${this.restURL}blockchain/pruneBlockchain/${height}`,
+      const response = await this.axios.post(
+        `${this.restURL}full-node/blockchain/pruneBlockchain/${height}`,
         this.axiosOptions
       )
       return response.data
@@ -753,8 +742,8 @@ class Blockchain {
 
   async verifyChain (checklevel = 3, nblocks = 6) {
     try {
-      const response = await axios.get(
-        `${this.restURL}blockchain/verifyChain?checklevel=${checklevel}&nblocks=${nblocks}`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/blockchain/verifyChain?checklevel=${checklevel}&nblocks=${nblocks}`,
         this.axiosOptions
       )
       return response.data
@@ -805,8 +794,8 @@ class Blockchain {
     try {
       // Single block
       if (typeof proof === 'string') {
-        const response = await axios.get(
-          `${this.restURL}blockchain/verifyTxOutProof/${proof}`,
+        const response = await this.axios.get(
+          `${this.restURL}full-node/blockchain/verifyTxOutProof/${proof}`,
           this.axiosOptions
         )
         return response.data
@@ -814,8 +803,8 @@ class Blockchain {
         // Array of hashes.
       } else if (Array.isArray(proof)) {
         // Dev note: must use axios.post for unit test stubbing.
-        const response = await axios.post(
-          `${this.restURL}blockchain/verifyTxOutProof`,
+        const response = await this.axios.post(
+          `${this.restURL}full-node/blockchain/verifyTxOutProof`,
           {
             proofs: proof
           },
@@ -833,4 +822,4 @@ class Blockchain {
   }
 }
 
-module.exports = Blockchain
+export default Blockchain

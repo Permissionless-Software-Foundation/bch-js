@@ -7,12 +7,13 @@
   - Update the JWT_TOKEN value with a current indexer-level JWT token.
 */
 
-const assert = require('chai').assert
+import chai from 'chai'
+
+import BCHJS from '../../../src/bch-js.js'
+const { assert } = chai
 
 const JWT_TOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlODhhY2JmMDIyMWMxMDAxMmFkOTNmZiIsImVtYWlsIjoiY2hyaXMudHJvdXRuZXJAZ21haWwuY29tIiwiYXBpTGV2ZWwiOjQwLCJyYXRlTGltaXQiOjMsImlhdCI6MTYwMzIyNzEwNCwiZXhwIjoxNjA1ODE5MTA0fQ.CV36grzdD36Ht3BwZGHG4XU40CVDzMRw9Ars1x1r27M'
-
-const BCHJS = require('../../../src/bch-js')
 const bchjs = new BCHJS({
   // restURL: `https://bchn.fullstack.cash/v5/`,
   restURL: 'https://abc.fullstack.cash/v5/',

@@ -1,24 +1,13 @@
-const schnorr = require('bip-schnorr')
+import schnorr from 'bip-schnorr'
 
 class Schnorr {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
   }
@@ -509,4 +498,4 @@ class Schnorr {
   }
 }
 
-module.exports = Schnorr
+export default Schnorr

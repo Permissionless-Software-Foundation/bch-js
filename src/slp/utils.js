@@ -1,35 +1,25 @@
 /* eslint-disable no-useless-catch */
 
 // Public npm libraries
-const axios = require('axios')
-const slpParser = require('slp-parser')
+import axios from 'axios'
+import slpParser from 'slp-parser'
 
 // Local libraries
-const Util = require('../util')
+import Util from '../util.js'
 
 let _this
 
 class Utils {
   constructor (config = {}) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.slpParser = slpParser
     this.authToken = config.authToken
-    this.axios = axios
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
 
@@ -184,4 +174,4 @@ class Utils {
   }
 }
 
-module.exports = Utils
+export default Utils

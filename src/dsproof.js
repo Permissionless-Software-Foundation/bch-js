@@ -1,27 +1,16 @@
-const axios = require('axios')
+import axios from 'axios'
 
 let _this
 
 class DSProof {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
     this.axios = axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
 
@@ -67,7 +56,7 @@ class DSProof {
         throw new Error(`txid must be of length 64 (not ${txid.length})`)
       }
       const response = await _this.axios.get(
-        `${this.restURL}dsproof/getdsproof/${txid}`,
+        `${this.restURL}full-node/dsproof/getdsproof/${txid}`,
         this.axiosOptions
       )
       return response.data
@@ -78,4 +67,4 @@ class DSProof {
   }
 }
 
-module.exports = DSProof
+export default DSProof

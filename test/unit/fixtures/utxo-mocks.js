@@ -476,7 +476,7 @@ const noUtxoErr = {
     'Key not found in database [bitcoincash:qp3sn6vlwz28ntmf3wmyra7jqttfx7z6zgtkygjhc7]'
 }
 
-module.exports = {
+export default {
   mockUtxoData,
   mockHydratedUtxos,
   mockTwoHydratedAddrs,

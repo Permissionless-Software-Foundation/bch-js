@@ -1,10 +1,10 @@
 // Public npm libraries
-const assert = require('assert')
-const axios = require('axios')
-const sinon = require('sinon')
+import assert from 'assert'
+import axios from 'axios'
+import sinon from 'sinon'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
 let bchjs
 
 describe('#Mining', () => {
@@ -30,7 +30,7 @@ describe('#Mining', () => {
         sigops: 2
       }
 
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getBlockTemplate('')
@@ -59,7 +59,7 @@ describe('#Mining', () => {
         chain: 'main'
       }
 
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getMiningInfo()
@@ -78,7 +78,7 @@ describe('#Mining', () => {
     it('should get network hashps', done => {
       const data = 3586365937646890000
 
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'get').returns(resolved)
 
       bchjs.Mining.getNetworkHashps()
@@ -98,7 +98,7 @@ describe('#Mining', () => {
     it('should TODO', done => {
       const data = {}
 
-      const resolved = new Promise(resolve => resolve({ data: data }))
+      const resolved = new Promise(resolve => resolve({ data }))
       sandbox.stub(axios, 'post').returns(resolved)
 
       bchjs.Mining.submitBlock()

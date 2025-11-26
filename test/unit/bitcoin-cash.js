@@ -1,11 +1,13 @@
 // Public npm libraries
-const assert = require('assert')
+import assert from 'assert'
 
 // Mocks
-const fixtures = require('./fixtures/bitcoincash.json')
+import { createRequire } from 'module'
 
 // Unit under test (uut)
-const BCHJS = require('../../src/bch-js')
+import BCHJS from '../../src/bch-js.js'
+const require = createRequire(import.meta.url)
+const fixtures = require('./fixtures/bitcoincash.json')
 // const bchjs = new BCHJS()
 let bchjs
 

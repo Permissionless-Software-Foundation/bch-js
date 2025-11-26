@@ -2,33 +2,22 @@
   API endpoints for basic control and information of the full node.
 */
 
-const axios = require('axios')
+import axios from 'axios'
 
 // let _this // Global reference to the instance of this class.
 
 class Control {
   constructor (config) {
     this.restURL = config.restURL
-    this.apiToken = config.apiToken
     this.authToken = config.authToken
+    // Use the shared axios instance if provided, otherwise fall back to axios
+    this.axios = config.axios || axios
 
-    if (this.authToken) {
-      // Add Basic Authentication token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: this.authToken
-        }
-      }
-    } else {
-      // Add JWT token to the authorization header.
-      this.axiosOptions = {
-        headers: {
-          authorization: `Token ${this.apiToken}`
-        }
+    this.axiosOptions = {
+      headers: {
+        authorization: this.authToken
       }
     }
-
-    // _this = this
   }
 
   /**
@@ -79,8 +68,8 @@ class Control {
    */
   async getNetworkInfo () {
     try {
-      const response = await axios.get(
-        `${this.restURL}control/getNetworkInfo`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/control/getNetworkInfo`,
         this.axiosOptions
       )
       return response.data
@@ -92,8 +81,8 @@ class Control {
 
   async getMemoryInfo () {
     try {
-      const response = await axios.get(
-        `${this.restURL}control/getMemoryInfo`,
+      const response = await this.axios.get(
+        `${this.restURL}full-node/control/getMemoryInfo`,
         this.axiosOptions
       )
       return response.data
@@ -115,4 +104,4 @@ class Control {
   // }
 }
 
-module.exports = Control
+export default Control
