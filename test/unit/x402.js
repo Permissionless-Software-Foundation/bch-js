@@ -18,7 +18,7 @@ describe('#X402 Integration', () => {
       const bchjs = new BCHJS()
 
       assert.strictEqual(bchjs.wif, '')
-      assert.strictEqual(bchjs.paymentAmountSats, 2000)
+      assert.strictEqual(bchjs.paymentAmountSats, 20000)
       assert.strictEqual(bchjs.bchServerURL, 'https://free-bch.fullstack.cash')
     })
 
@@ -54,7 +54,7 @@ describe('#X402 Integration', () => {
       })
 
       assert.strictEqual(bchjs.wif, '')
-      assert.strictEqual(bchjs.paymentAmountSats, 2000)
+      assert.strictEqual(bchjs.paymentAmountSats, 20000)
       assert.strictEqual(bchjs.bchServerURL, 'https://free-bch.fullstack.cash')
     })
 
