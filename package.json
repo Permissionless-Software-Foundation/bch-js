@@ -8,7 +8,7 @@
     "Gabriel Cardona <gabriel@bitcoin.com>",
     "Stoyan Zhekov <zh@zhware.net>"
   ],
-  "main": "src/bch-js",
+  "main": "src/bch-js.js",
   "scripts": {
     "test": "c8 mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
     "test:integration": "npm run test:integration:local:noauth",
