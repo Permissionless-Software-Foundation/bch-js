@@ -40,7 +40,7 @@ class Price {
   async getUsd () {
     try {
       const response = await this.axios.get(
-        `${this.restURL}price/usd`,
+        `${this.restURL}price/bchusd`,
         this.axiosOptions
       )
       // console.log(`response.data: ${JSON.stringify(response.data, null, 2)}`)
