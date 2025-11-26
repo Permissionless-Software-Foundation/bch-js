@@ -10,7 +10,7 @@
   ],
   "main": "src/bch-js.js",
   "scripts": {
-    "test": "c8 mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
+    "test": "export RESTURL=http://localhost:5942/v6/ && c8 mocha --trace-warnings --unhandled-rejections=strict --timeout 30000 test/unit/",
     "test:integration": "npm run test:integration:local:noauth",
     "test:integration:nft": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 -g '#nft1' test/integration/slp.js",
     "test:integration:bchn": "export RESTURL=https://bchn.fullstack.cash/v6/ && export IS_USING_FREE_TIER=true && mocha --timeout 30000 test/integration/",

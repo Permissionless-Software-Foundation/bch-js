@@ -45,7 +45,6 @@ import Ecash from './ecash.js'
 // Indexers
 import Electrumx from './electrumx.js'
 import PsfSlpIndexer from './psf-slp-indexer.js'
-const DEFAULT_REST_API = 'https://api.fullstack.cash/v6/'
 
 class BCHJS {
   constructor (config) {
@@ -54,7 +53,11 @@ class BCHJS {
       this.restURL = config.restURL
     } else if (process.env.RESTURL && process.env.RESTURL !== '') {
       this.restURL = process.env.RESTURL
-    } else this.restURL = DEFAULT_REST_API
+    } else {
+      throw new Error(
+        'REST API URL is required. Provide config.restURL or set the RESTURL environment variable.'
+      )
+    }
 
     // Retrieve the Bearer token for simple token authentication.
     this.bearerToken = '' // default value.
