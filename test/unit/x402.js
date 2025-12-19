@@ -15,16 +15,19 @@ describe('#X402 Integration', () => {
 
   describe('#Constructor Configuration', () => {
     it('should initialize without x402 by default', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       assert.strictEqual(bchjs.wif, '')
       assert.strictEqual(bchjs.paymentAmountSats, 20000)
-      assert.strictEqual(bchjs.bchServerURL, 'https://free-bch.fullstack.cash')
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash')
     })
 
     it('should accept wif in config', () => {
       const testWif = 'L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4'
       const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/',
         wif: testWif
       })
 
@@ -33,6 +36,7 @@ describe('#X402 Integration', () => {
 
     it('should accept paymentAmountSats in config', () => {
       const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/',
         paymentAmountSats: 5000
       })
 
@@ -42,6 +46,7 @@ describe('#X402 Integration', () => {
     it('should accept bchServerURL in config', () => {
       const customUrl = 'http://localhost:5000'
       const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/',
         bchServerURL: customUrl
       })
 
@@ -55,7 +60,7 @@ describe('#X402 Integration', () => {
 
       assert.strictEqual(bchjs.wif, '')
       assert.strictEqual(bchjs.paymentAmountSats, 20000)
-      assert.strictEqual(bchjs.bchServerURL, 'https://free-bch.fullstack.cash')
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash')
     })
 
     it('should read WIF from BCHJSWIF environment variable', () => {
@@ -64,7 +69,9 @@ describe('#X402 Integration', () => {
       process.env.BCHJSWIF = testWif
 
       try {
-        const bchjs = new BCHJS()
+        const bchjs = new BCHJS({
+          restURL: 'http://localhost:3000/v5/'
+        })
         assert.strictEqual(bchjs.wif, testWif)
       } finally {
         // Restore original env value
@@ -83,7 +90,10 @@ describe('#X402 Integration', () => {
       process.env.BCHJSWIF = envWif
 
       try {
-        const bchjs = new BCHJS({ wif: configWif })
+        const bchjs = new BCHJS({
+          restURL: 'http://localhost:3000/v5/',
+          wif: configWif
+        })
         assert.strictEqual(bchjs.wif, configWif)
       } finally {
         // Restore original env value
@@ -94,29 +104,103 @@ describe('#X402 Integration', () => {
         }
       }
     })
+
+    it('should read bchServerURL from BCHJSBCHSERVERURL environment variable', () => {
+      const testUrl = 'https://custom-bch-server.example.com'
+      const originalEnv = process.env.BCHJSBCHSERVERURL
+      process.env.BCHJSBCHSERVERURL = testUrl
+
+      try {
+        const bchjs = new BCHJS({
+          restURL: 'http://localhost:3000/v5/'
+        })
+        assert.strictEqual(bchjs.bchServerURL, testUrl)
+      } finally {
+        // Restore original env value
+        if (originalEnv === undefined) {
+          delete process.env.BCHJSBCHSERVERURL
+        } else {
+          process.env.BCHJSBCHSERVERURL = originalEnv
+        }
+      }
+    })
+
+    it('should prefer config.bchServerURL over BCHJSBCHSERVERURL environment variable', () => {
+      const configUrl = 'https://config-server.example.com'
+      const envUrl = 'https://env-server.example.com'
+      const originalEnv = process.env.BCHJSBCHSERVERURL
+      process.env.BCHJSBCHSERVERURL = envUrl
+
+      try {
+        const bchjs = new BCHJS({
+          restURL: 'http://localhost:3000/v5/',
+          bchServerURL: configUrl
+        })
+        assert.strictEqual(bchjs.bchServerURL, configUrl)
+      } finally {
+        // Restore original env value
+        if (originalEnv === undefined) {
+          delete process.env.BCHJSBCHSERVERURL
+        } else {
+          process.env.BCHJSBCHSERVERURL = originalEnv
+        }
+      }
+    })
+
+    it('should keep restURL and bchServerURL independent', () => {
+      const customRestURL = 'https://x402-bch.fullstack.cash/v5/'
+      const customBchServerURL = 'https://bch.fullstack.cash'
+      const bchjs = new BCHJS({
+        restURL: customRestURL,
+        bchServerURL: customBchServerURL
+      })
+
+      assert.strictEqual(bchjs.restURL, customRestURL)
+      assert.strictEqual(bchjs.bchServerURL, customBchServerURL)
+      // Verify they are different values
+      assert.notStrictEqual(bchjs.restURL, bchjs.bchServerURL)
+    })
+
+    it('should use default bchServerURL when restURL is customized', () => {
+      const customRestURL = 'https://x402-bch.fullstack.cash/v5/'
+      const bchjs = new BCHJS({
+        restURL: customRestURL
+      })
+
+      assert.strictEqual(bchjs.restURL, customRestURL)
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash')
+    })
   })
 
   describe('#x402 Helper Functions', () => {
     it('should expose createSigner function', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       assert.strictEqual(typeof bchjs.x402.createSigner, 'function')
     })
 
     it('should expose withPaymentInterceptor function', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       assert.strictEqual(typeof bchjs.x402.withPaymentInterceptor, 'function')
     })
 
     it('should expose createPaymentHeader function', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       assert.strictEqual(typeof bchjs.x402.createPaymentHeader, 'function')
     })
 
     it('should expose selectPaymentRequirements function', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       assert.strictEqual(typeof bchjs.x402.selectPaymentRequirements, 'function')
     })
@@ -124,7 +208,9 @@ describe('#X402 Integration', () => {
 
   describe('#Axios Instance', () => {
     it('should have axios available in sub-modules', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       // Check that sub-modules have axios available (from their own import or config)
       assert.ok(bchjs.Control.axios)
@@ -138,6 +224,7 @@ describe('#X402 Integration', () => {
     it('should pass x402-wrapped axios instance when WIF is provided', () => {
       const testWif = 'L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4'
       const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/',
         wif: testWif
       })
 
@@ -151,7 +238,9 @@ describe('#X402 Integration', () => {
 
   describe('#selectPaymentRequirements', () => {
     it('should select BCH utxo payment requirements from accepts array', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       const accepts = [
         {
@@ -175,7 +264,9 @@ describe('#X402 Integration', () => {
     })
 
     it('should throw an error when no BCH requirements found', () => {
-      const bchjs = new BCHJS()
+      const bchjs = new BCHJS({
+        restURL: 'http://localhost:3000/v5/'
+      })
 
       const accepts = [
         {

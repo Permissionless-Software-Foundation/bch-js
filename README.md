@@ -40,6 +40,72 @@ the [psf-bch-api](https://github.com/Permissionless-Software-Foundation/psf-bch-
 - BCHN Mainnet REST API server: https://x402-bch.fullstack.cash/v7/
 - Check server status: https://metrics.fullstack.cash
 
+## Configuration
+
+bch-js can be configured through constructor options or environment variables. Configuration options passed to the constructor take precedence over environment variables.
+
+### Constructor Options
+
+When instantiating BCHJS, you can pass a configuration object:
+
+```javascript
+import BCHJS from "@psf/bch-js"
+
+const bchjs = new BCHJS({
+  restURL: 'https://x402-bch.fullstack.cash/v5/',
+  bearerToken: 'your-bearer-token',
+  wif: 'your-private-key-wif',
+  paymentAmountSats: 20000,
+  bchServerURL: 'https://bch.fullstack.cash'
+})
+```
+
+### Configuration Options
+
+| Option | Type | Required | Default | Description |
+|--------|------|----------|---------|-------------|
+| `restURL` | string | Yes* | - | The REST API server URL for making API calls. Must include trailing slash. *Required unless `RESTURL` environment variable is set. |
+| `bearerToken` | string | No | `''` | Bearer token for authentication with the REST API server. |
+| `wif` | string | No | `''` | Private key in WIF format. When provided, enables automatic x402 payment handling. |
+| `paymentAmountSats` | number | No | `20000` | Default amount of satoshis to send when making x402 payments. |
+| `bchServerURL` | string | No | `'https://bch.fullstack.cash'` | BCH server URL used for broadcasting payment transactions to the blockchain. This is separate from `restURL` and is specifically for x402 payment processing. |
+
+### Environment Variables
+
+You can also configure bch-js using environment variables:
+
+| Environment Variable | Config Option | Description |
+|---------------------|---------------|-------------|
+| `RESTURL` | `restURL` | REST API server URL for making API calls. |
+| `BCHJSBEARERTOKEN` | `bearerToken` | Bearer token for API authentication. |
+| `BCHJSWIF` | `wif` | Private key in WIF format for x402 payments. |
+| `BCHJSBCHSERVERURL` | `bchServerURL` | BCH server URL for x402 payment transactions. |
+
+### Understanding restURL vs bchServerURL
+
+These two configuration options serve different purposes:
+
+- **`restURL`**: The REST API server used for all regular API calls (utxo queries, transaction history, etc.). This can be any bch-api compatible server, such as `https://x402-bch.fullstack.cash/v5/` or `https://bch.fullstack.cash/v5/`.
+
+- **`bchServerURL`**: The BCH infrastructure server used specifically for broadcasting x402 payment transactions to the blockchain. This defaults to `https://bch.fullstack.cash` and should typically remain unchanged unless you have specific infrastructure requirements.
+
+**Example Use Case**: Most users will use `https://x402-bch.fullstack.cash/v5/` as their `restURL` to access x402-protected APIs. However, when bch-js needs to make an x402 payment, it uses the `bchServerURL` (default: `https://bch.fullstack.cash`) to broadcast the payment transaction. This ensures payment transactions are sent through a reliable BCH infrastructure endpoint.
+
+```javascript
+// Use x402-bch server for API calls, but bch.fullstack.cash for payments
+const bchjs = new BCHJS({
+  restURL: 'https://x402-bch.fullstack.cash/v5/',
+  wif: 'your-private-key-wif'
+  // bchServerURL defaults to 'https://bch.fullstack.cash'
+})
+
+// Or explicitly set both
+const bchjs2 = new BCHJS({
+  restURL: 'https://x402-bch.fullstack.cash/v5/',
+  bchServerURL: 'https://bch.fullstack.cash',
+  wif: 'your-private-key-wif'
+})
+```
 
 ### Web Apps
 

@@ -87,7 +87,16 @@ class BCHJS {
       this.wif = process.env.BCHJSWIF
     }
     this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 10
-    this.bchServerURL = (config && config.bchServerURL) || 'https://free-bch.fullstack.cash'
+
+    // BCH server URL for x402 payments (separate from REST API server)
+    // This is used when broadcasting payment transactions to the blockchain
+    if (config && config.bchServerURL && config.bchServerURL !== '') {
+      this.bchServerURL = config.bchServerURL
+    } else if (process.env.BCHJSBCHSERVERURL && process.env.BCHJSBCHSERVERURL !== '') {
+      this.bchServerURL = process.env.BCHJSBCHSERVERURL
+    } else {
+      this.bchServerURL = 'https://bch.fullstack.cash'
+    }
 
     const libConfig = {
       restURL: this.restURL,
