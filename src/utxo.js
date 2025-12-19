@@ -20,6 +20,12 @@ class UTXO {
     this.psfSlpIndexer = new PsfSlpIndexer(config)
     this.BigNumber = BigNumber
     this.blockchain = new Blockchain(config)
+
+    // Bind 'this' object to all subfunctions.
+    this.get = this.get.bind(this)
+    this.hydrateTokenData = this.hydrateTokenData.bind(this)
+    this.findBiggestUtxo = this.findBiggestUtxo.bind(this)
+    this.isValid = this.isValid.bind(this)
   }
 
   /**
