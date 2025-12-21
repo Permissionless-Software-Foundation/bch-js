@@ -117,9 +117,9 @@ class BCHJS {
       axiosInstance = withPaymentInterceptor(
         axiosInstance,
         signer,
-        { 
+        {
           apiType: 'rest-api',
-          bchServerURL: this.bchServerURL 
+          bchServerURL: this.bchServerURL
         }
       )
 
