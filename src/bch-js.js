@@ -86,7 +86,7 @@ class BCHJS {
     } else if (process.env.BCHJSWIF && process.env.BCHJSWIF !== '') {
       this.wif = process.env.BCHJSWIF
     }
-    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 10
+    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 5
 
     // BCH server URL for x402 payments (separate from REST API server)
     // This is used when broadcasting payment transactions to the blockchain
@@ -95,7 +95,7 @@ class BCHJS {
     } else if (process.env.BCHJSBCHSERVERURL && process.env.BCHJSBCHSERVERURL !== '') {
       this.bchServerURL = process.env.BCHJSBCHSERVERURL
     } else {
-      this.bchServerURL = 'https://bch.fullstack.cash'
+      this.bchServerURL = 'https://bch.fullstack.cash/v6/'
     }
 
     const libConfig = {
@@ -117,7 +117,10 @@ class BCHJS {
       axiosInstance = withPaymentInterceptor(
         axiosInstance,
         signer,
-        { bchServerURL: this.bchServerURL }
+        {
+          apiType: 'rest-api',
+          bchServerURL: this.bchServerURL
+        }
       )
 
       libConfig.axios = axiosInstance
