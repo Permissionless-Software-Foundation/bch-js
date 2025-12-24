@@ -52,7 +52,7 @@
     "slp-mdm": "0.0.7",
     "slp-parser": "0.0.4",
     "wif": "2.0.6",
-    "x402-bch-axios": "2.1.0"
+    "x402-bch-axios": "2.1.1"
   },
   "devDependencies": {
     "apidoc": "1.2.0",
