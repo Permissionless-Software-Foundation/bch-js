@@ -43,14 +43,14 @@ describe('#PsfSlpIndexer', () => {
       try {
         // Stub the network call.
         const testErr = new Error()
-        testErr.response = { data: { status: 422 } }
+        testErr.response = { data: { error: 'Status 422' } }
         sandbox.stub(axios, 'get').throws(testErr)
 
         await bchjs.PsfSlpIndexer.status()
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.equal(err.status, 422)
+        assert.equal(err.message, 'Status 422')
       }
     })
   })
@@ -103,7 +103,7 @@ describe('#PsfSlpIndexer', () => {
       try {
         // Stub the network call.
         const testErr = new Error()
-        testErr.response = { data: { status: 422 } }
+        testErr.response = { data: { error: 'Status 422' } }
         sandbox.stub(axios, 'post').throws(testErr)
 
         const addr = 'bitcoincash:qzmd5vxgh9m22m6fgvm57yd6kjnjl9qnwywsf3583n'
@@ -112,7 +112,7 @@ describe('#PsfSlpIndexer', () => {
         // console.log(`result: ${JSON.stringify(result, null, 2)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.equal(err.status, 422)
+        assert.equal(err.message, 'Status 422')
       }
     })
   })
@@ -174,7 +174,7 @@ describe('#PsfSlpIndexer', () => {
       try {
         // Stub the network call.
         const testErr = new Error()
-        testErr.response = { data: { status: 422 } }
+        testErr.response = { data: { error: 'Status 422' } }
         sandbox.stub(axios, 'post').throws(testErr)
 
         const tokenId =
@@ -182,7 +182,7 @@ describe('#PsfSlpIndexer', () => {
         await bchjs.PsfSlpIndexer.tokenStats(tokenId)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.equal(err.status, 422)
+        assert.equal(err.message, 'Status 422')
       }
     })
   })
@@ -399,7 +399,7 @@ describe('#PsfSlpIndexer', () => {
       try {
         // Stub the network call.
         const testErr = new Error()
-        testErr.response = { data: { status: 422 } }
+        testErr.response = { data: { error: 'Status 422' } }
         sandbox.stub(axios, 'post').throws(testErr)
 
         const tokenId =
@@ -407,7 +407,7 @@ describe('#PsfSlpIndexer', () => {
         await bchjs.PsfSlpIndexer.getTokenData(tokenId)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.equal(err.status, 422)
+        assert.equal(err.message, 'Status 422')
       }
     })
   })

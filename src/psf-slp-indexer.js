@@ -66,7 +66,7 @@ class PsfSlpIndexer {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.response && error.response.data && error.response.data.error) throw new Error(error.response.data.error)
       else throw error
     }
   }
@@ -134,7 +134,7 @@ class PsfSlpIndexer {
       }
       throw new Error('Input address must be a string.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.response && error.response.data && error.response.data.error) throw new Error(error.response.data.error)
       else throw error
     }
   }
@@ -199,7 +199,7 @@ class PsfSlpIndexer {
       }
       throw new Error('Input tokenId must be a string.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.response && error.response.data && error.response.data.error) throw new Error(error.response.data.error)
       else throw error
     }
   }
@@ -427,7 +427,7 @@ class PsfSlpIndexer {
       }
       throw new Error('Input tokenId must be a string.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
+      if (error.response && error.response.data && error.response.data.error) throw new Error(error.response.data.error)
       else throw error
     }
   }
@@ -522,7 +522,7 @@ class PsfSlpIndexer {
       throw new Error('Input tokenId must be a string.')
     } catch (error) {
       // console.log('error: ', error)
-      if (error.response && error.response.data) throw error.response.data
+      if (error.response && error.response.data && error.response.data.error) throw new Error(error.response.data.error)
       else throw error
     }
   }
