@@ -95,7 +95,7 @@ class BCHJS {
     } else if (process.env.BCHJSBCHSERVERURL && process.env.BCHJSBCHSERVERURL !== '') {
       this.bchServerURL = process.env.BCHJSBCHSERVERURL
     } else {
-      this.bchServerURL = 'https://bch.fullstack.cash/v6/'
+      this.bchServerURL = 'https://bch.fullstack.cash/v6'
     }
 
     const libConfig = {
