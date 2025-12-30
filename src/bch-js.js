@@ -86,7 +86,10 @@ class BCHJS {
     } else if (process.env.BCHJSWIF && process.env.BCHJSWIF !== '') {
       this.wif = process.env.BCHJSWIF
     }
-    this.paymentAmountSats = (config && config.paymentAmountSats) || 2000 * 5
+
+    // Most TXs cost about 250 sats. So we'll set the default to 25000 sats,
+    // so the mining fee is 1% of the transaction.
+    this.paymentAmountSats = (config && config.paymentAmountSats) || 25000
 
     // BCH server URL for x402 payments (separate from REST API server)
     // This is used when broadcasting payment transactions to the blockchain
