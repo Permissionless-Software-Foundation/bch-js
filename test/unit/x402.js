@@ -21,7 +21,7 @@ describe('#X402 Integration', () => {
 
       assert.strictEqual(bchjs.wif, '')
       assert.strictEqual(bchjs.paymentAmountSats, 10000)
-      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6/')
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6')
     })
 
     it('should accept wif in config', () => {
@@ -60,7 +60,7 @@ describe('#X402 Integration', () => {
 
       assert.strictEqual(bchjs.wif, '')
       assert.strictEqual(bchjs.paymentAmountSats, 10000)
-      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6/')
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6')
     })
 
     it('should read WIF from BCHJSWIF environment variable', () => {
@@ -168,7 +168,7 @@ describe('#X402 Integration', () => {
       })
 
       assert.strictEqual(bchjs.restURL, customRestURL)
-      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6/')
+      assert.strictEqual(bchjs.bchServerURL, 'https://bch.fullstack.cash/v6')
     })
   })
 
