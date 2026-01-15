@@ -12,6 +12,7 @@ import axios from 'axios'
 // Local libraries
 import RawTransaction from './raw-transactions.js'
 import SlpUtils from './slp/utils.js'
+import Blockchain from './blockchain.js'
 
 // let _this
 
@@ -31,6 +32,7 @@ class PsfSlpIndexer {
     // Encapsulate dependencies
     this.rawTransaction = new RawTransaction(config)
     this.slpUtils = new SlpUtils(config)
+    this.blockchain = new Blockchain(config)
   }
 
   /**
@@ -316,6 +318,22 @@ class PsfSlpIndexer {
         // Get the TX Details from the full node.
         const txDetails = await this.rawTransaction.getTxData(txid)
         // console.log(`txDetails: ${JSON.stringify(txDetails, null, 2)}`)
+
+        // Add blockheight, height, time, and blocktime to the txDetails object.
+        if (txDetails.height === null) {
+          // Get current block height and increment by 1
+          const currentBlockHeight = await this.blockchain.getBlockCount()
+          const estimatedHeight = currentBlockHeight + 1
+
+          // Set height and blockheight
+          txDetails.height = estimatedHeight
+          txDetails.blockheight = estimatedHeight
+
+          // Set time and blocktime to current unix timestamp
+          const currentTime = Math.floor(Date.now() / 1000)
+          txDetails.time = currentTime
+          txDetails.blocktime = currentTime
+        }
 
         if (isInBlacklist) {
           txDetails.isValidSlp = null

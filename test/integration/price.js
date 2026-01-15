@@ -18,7 +18,7 @@ describe('#price', () => {
   })
 
   describe('#getPsffppPrice', () => {
-    it('should get the price of BCH in several currencies', async () => {
+    it('should get the price to write 1MB to the PSFFPP', async () => {
       const result = await bchjs.Price.getPsffppPrice()
       // console.log(result)
 
