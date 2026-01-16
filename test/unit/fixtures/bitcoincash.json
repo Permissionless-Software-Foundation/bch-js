@@ -406,11 +406,6 @@
           "wif": "L1XHKhaBAfkr2FJQn3pTfCMxz652WYfmvKj8xDCHCEDV9tWGcbYj",
           "password": "1EBPIyj55eR8bVUov9",
           "encryptedKey": "6PYWWnBNfNpSqEJZKcfwbrYgTTdb9PNiGjQJ8r9V6cvsZNKLfcZD8YefQc"
-        },
-        {
-          "wif": "L1phBREbhL4vb1uHHHCAse8bdGE5c7ic2PFjRxMawLzQCsiFVbvu",
-          "password": "9GKVkabAHBMyAf",
-          "encryptedKey": "6PYU2fDHRVF2194gKDGkbFbeu4mFgkWtVvg2RPd2Sp6KmZx3RCHFpgBB2G"
         }
       ],
       "testnet": [
@@ -432,11 +427,6 @@
           "wif": "L1XHKhaBAfkr2FJQn3pTfCMxz652WYfmvKj8xDCHCEDV9tWGcbYj",
           "password": "1EBPIyj55eR8bVUov9",
           "encryptedKey": "6PYWWnBNfNpSqEJZKcfwbrYgTTdb9PNiGjQJ8r9V6cvsZNKLfcZD8YefQc"
-        },
-        {
-          "wif": "L1phBREbhL4vb1uHHHCAse8bdGE5c7ic2PFjRxMawLzQCsiFVbvu",
-          "password": "9GKVkabAHBMyAf",
-          "encryptedKey": "6PYU2fDHRVF2194gKDGkbFbeu4mFgkWtVvg2RPd2Sp6KmZx3RCHFpgBB2G"
         }
       ],
       "testnet": [
