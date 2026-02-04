@@ -287,6 +287,8 @@ class Blockchain {
 
       throw new Error('Input hash must be a string or array of strings.')
     } catch (error) {
+      console.log('Error in bch-js/blockchain.js/getBlockHeader() error: ', error)
+
       if (error.response && error.response.data) throw error.response.data
       else throw error
     }
