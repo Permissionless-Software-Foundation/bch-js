@@ -120,8 +120,11 @@ class ElectrumX {
 
       throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -204,8 +207,11 @@ class ElectrumX {
 
       throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -305,8 +311,11 @@ class ElectrumX {
       throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
       // console.log('Error in transactions(): ', error)
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -397,8 +406,11 @@ class ElectrumX {
 
       throw new Error('Input address must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -453,9 +465,13 @@ class ElectrumX {
     } catch (error) {
       // console.log("error: ", error)
       if (error.response && error.response.data) {
-        if (error.response && error.response.data) {
-          throw new Error(error.response.data.error)
-        } else throw error.response.data
+        const errorData = error.response.data
+        if (errorData.error) {
+          throw new Error(errorData.error)
+        } else {
+          const errorMessage = typeof errorData === 'string' ? errorData : (errorData.message || JSON.stringify(errorData))
+          throw new Error(errorMessage)
+        }
       } else {
         throw error
       }
@@ -555,8 +571,11 @@ class ElectrumX {
 
       throw new Error('Input txId must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -595,8 +614,11 @@ class ElectrumX {
 
       throw new Error('Input txHex must be a string.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 

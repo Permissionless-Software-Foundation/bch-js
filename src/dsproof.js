@@ -62,8 +62,11 @@ class DSProof {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 }

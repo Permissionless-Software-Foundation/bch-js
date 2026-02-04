@@ -103,8 +103,8 @@ describe('#blockchain', () => {
         console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -171,8 +171,8 @@ describe('#blockchain', () => {
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
         // console.log(`err: ${util.inspect(err)}`)
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Transaction not in mempool')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Transaction not in mempool')
       }
     })
   })
@@ -241,8 +241,8 @@ describe('#blockchain', () => {
         console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
