@@ -15,10 +15,11 @@
     "test:integration": "npm run test:integration:local:noauth",
     "test:integration:fullstack:free": "export RESTURL=https://bch.fullstack.cash/v6 && mocha --timeout 60000 test/integration/",
     "test:integration:fullstack:x402": "export RESTURL=https://x402-bch.fullstack.cash/v6 && export BCHJSWIF=L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4 && mocha --timeout 120000 test/integration/",
-    "test:integration:local:noauth": "export RESTURL=http://localhost:5942/v6 && mocha --timeout 30000 test/integration/",
+    "test:integration:fullstack:auth": "export RESTURL=http://dev.fullstack.cash/v6 && export BCHJSBEARERTOKEN=test01 && mocha --timeout 30000 test/integration/",
+    "test:integration:local:noauth": "export RESTURL=http://192.168.1.65:5942/v6 && mocha --timeout 30000 test/integration/",
     "test:integration:local:auth": "export RESTURL=http://192.168.1.115:5942/v6 && export BCHJSBEARERTOKEN=temp01 && mocha --timeout 30000 test/integration/",
     "test:integration:local:x402": "export RESTURL=http://localhost:5942/v6 && export BCHJSWIF=L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4 && mocha --timeout 1200000 test/integration/",    
-    "test:integration:decatur": "export RESTURL=http://192.168.2.127:5942/v6 && mocha --timeout 30000 test/integration/",
+    "test:integration:decatur": "export RESTURL=http://192.168.1.65:5942/v6 && mocha --timeout 30000 test/integration/",
     "coverage": "nyc --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs && ./fix-docs-contrast.sh",
     "lint": "standard --env mocha --fix"

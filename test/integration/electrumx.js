@@ -73,8 +73,8 @@ describe('#ElectrumX', () => {
         // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -129,8 +129,8 @@ describe('#ElectrumX', () => {
 
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -187,8 +187,8 @@ describe('#ElectrumX', () => {
 
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -250,8 +250,8 @@ describe('#ElectrumX', () => {
         // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -345,8 +345,8 @@ describe('#ElectrumX', () => {
         // console.log(`result: ${util.inspect(result)}`)
         assert.equal(true, false, 'Unexpected result!')
       } catch (err) {
-        assert.hasAnyKeys(err, ['error'])
-        assert.include(err.error, 'Array too large')
+        assert.instanceOf(err, Error)
+        assert.include(err.message, 'Array too large')
       }
     })
   })
@@ -359,8 +359,9 @@ describe('#ElectrumX', () => {
       try {
         await bchjs.Electrumx.broadcast(txHex)
       } catch (err) {
+        // console.error('err: ', err)
         assert.include(
-          err.error,
+          err.message,
           'the transaction was rejected by network rules'
         )
       }

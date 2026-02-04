@@ -47,8 +47,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -105,8 +108,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -155,8 +161,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -189,8 +198,11 @@ class Blockchain {
       console.log('Error in bch-js/blockchain.js/getBlockCount()')
       console.log('blockchain.js restURL: ', this.restURL)
 
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -222,8 +234,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -287,8 +302,13 @@ class Blockchain {
 
       throw new Error('Input hash must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      // console.log('Error in bch-js/blockchain.js/getBlockHeader() error: ', error)
+
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -330,8 +350,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -362,8 +385,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -378,8 +404,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -393,8 +422,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -505,8 +537,11 @@ class Blockchain {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -541,8 +576,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -588,8 +626,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -642,8 +683,11 @@ class Blockchain {
 
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -709,8 +753,11 @@ class Blockchain {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -722,8 +769,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -735,8 +785,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -748,8 +801,11 @@ class Blockchain {
       )
       return response.data
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 
@@ -816,8 +872,11 @@ class Blockchain {
 
       throw new Error('Input must be a string or array of strings.')
     } catch (error) {
-      if (error.response && error.response.data) throw error.response.data
-      else throw error
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
     }
   }
 }

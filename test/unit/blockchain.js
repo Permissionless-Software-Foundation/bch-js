@@ -93,7 +93,7 @@ describe('#Blockchain', () => {
         await bchjs.Blockchain.getBlock(blockhash)
         assert2.fail('Unexpected result')
       } catch (err) {
-        assert2.include(err, 'Test Error')
+        assert2.include(err.message, 'Test Error')
       }
     })
   })
