@@ -7,21 +7,16 @@
 
 [bch-js](https://www.npmjs.com/package/@psf/bch-js) is a JavaScript npm library for creating web and mobile apps that can interact with the Bitcoin Cash (BCH) blockchain. bch-js contains a toolbox of handy tools, and an easy API for talking with [psf-bch-api REST API](https://github.com/Permissionless-Software-Foundation/psf-bch-api). [FullStack.cash](https://fullstack.cash) offers paid cloud access to psf-bch-api. You can run your own infrastructure by following documentation on [CashStack.info](https://cashstack.info).
 
-### Quick Start Videos:
-
-YouTube walk-through videos to help you get started:
-
-- [Introduction to bch-js and the bch-js-examples repository](https://youtu.be/GD2i1ZUiyrk)
-
 ### Quick Links
 
+- [Code Examples](https://github.com/Permissionless-Software-Foundation/psf-js-examples) using bch-js
 - [npm Library](https://www.npmjs.com/package/@psf/bch-js)
-- [Documentation](https://bchjs.fullstack.cash/)
-- [Examples](https://github.com/Permissionless-Software-Foundation/bch-js-examples)
+- [API Reference](https://bchjs.fullstack.cash/)
 - [x402-bch.fullstack.cash](https://x402-bch.fullstack.cash) - The REST API this library talks to by default.
 - [FullStack.cash](https://fullstack.cash) - cloud-based infrastructure for application developers.
-- [Permissionless Software Foundation](https://psfoundation.cash) - The organization that maintains this library.
 - [CashStack.info](https://cashstack.info) - bch-js is part of the Cash Stack, a JavaScript framework for writing web 2 and web 3 business applications.
+- [Permissionless Software Foundation](https://psfoundation.info) - The organization that maintains this library.
+
 
 ### Quick Notes
 
@@ -153,17 +148,6 @@ This open source software is developed and maintained by the [Permissionless Sof
 <img src="./img/donation-qr.png" />
 <p>bitcoincash:qqsrke9lh257tqen99dkyy2emh4uty0vky9y0z0lsr</p>
 </div>
-
-
-## IPFS & Radicle Releases
-
-Copies of this repository are also published on [IPFS](https://ipfs.io).
-
-- v6.2.10: `bafybeifsioj3ba77u2763nsyuzq53gtbdxsnqpoipvdl4immj6ytznjaoy`
-- (with dependencies, node v14.18.2 and npm v8.8.0): `bafybeihfendd4oj6uxvvecm7sluobwwhpb5wdcxhvhmx56e667nxdncd4a`
-
-They are also posted to the Radicle:
-- v6.2.10: `rad:git:hnrkkroqnbfwj6uxpfjuhspoxnfm4i8e6oqwy`
 
 ## License
 
