@@ -110,24 +110,11 @@ const bchjs2 = new BCHJS({
 
 [bch-wallet-web3-spa](https://github.com/Permissionless-Software-Foundation/bch-wallet-web3-spa) is a React web app template using bch-js and minimal-slp-wallet.
 
-## Features
-
-- [ECMAScript 2017 standard JavaScript](https://en.wikipedia.org/wiki/ECMAScript#8th_Edition_-_ECMAScript_2017) used instead of TypeScript. Works
-  natively with node.js v10 or higher.
-
-- Full SLP tokens support: bch-js has full support for all SLP token functionality, including send, mint, and genesis transactions. It also fully supports all aspects of [non-fugible tokans (NFTs)](https://www.youtube.com/watch?v=vvlpYUx6HRs).
-
-- [Semantic Release](https://github.com/semantic-release/semantic-release) for
-  continuous delivery using semantic versioning.
-
-- [IPFS](https://ipfs.io) and [Radicle](https://radicle.xyz) uploads of all files and dependencies, to backup
-  dependencies in case they are ever inaccessible from GitHub or npm.
-
 ## Documentation:
 
 Full documentation for this library can be found here:
 
-- [Documentation](https://bchjs.fullstack.cash/)
+- [API Reference](https://bchjs.fullstack.cash/)
 
 bch-js uses [APIDOC](http://apidocjs.com/) so that documentation and working code
 live in the same repository. To generate the documentation:
