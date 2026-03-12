@@ -15,6 +15,46 @@ class RawTransactions {
 
     // Use the shared axios instance if provided, otherwise fall back to axios
     this.axios = config.axios || axios
+
+    // Retry configuration for transient network failures during broadcast.
+    this.maxBroadcastRetries = 2
+    this.broadcastRetryDelayMs = 250
+  }
+
+  _sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  _isTransientNetworkError (error) {
+    if (!error) return false
+
+    const msg = String(error.message || '').toLowerCase()
+    const causeMsg = String(error?.cause?.message || '').toLowerCase()
+    const stack = String(error.stack || '').toLowerCase()
+    const code = String(error.code || error?.cause?.code || '').toUpperCase()
+
+    if (['ECONNRESET', 'EPIPE', 'ETIMEDOUT'].includes(code)) return true
+    if (msg.includes('socket hang up')) return true
+    if (causeMsg.includes('socket hang up')) return true
+    if (stack.includes('socket hang up')) return true
+
+    return false
+  }
+
+  async _postSendRawTransaction (hexes) {
+    const options = {
+      method: 'POST',
+      url: `${this.restURL}full-node/rawtransactions/sendRawTransaction`,
+      data: {
+        hexes
+      },
+      headers: {
+        ...this.axiosOptions.headers,
+        Connection: 'close'
+      }
+    }
+
+    return this.axios(options)
   }
 
   /**
@@ -448,7 +488,13 @@ class RawTransactions {
       if (typeof hex === 'string') {
         const response = await this.axios.get(
           `${this.restURL}full-node/rawtransactions/sendRawTransaction/${hex}`,
-          this.axiosOptions
+          {
+            ...this.axiosOptions,
+            headers: {
+              ...this.axiosOptions.headers,
+              Connection: 'close'
+            }
+          }
         )
 
         if (response.data === '66: insufficient priority') {
@@ -463,17 +509,25 @@ class RawTransactions {
 
         // Array input
       } else if (Array.isArray(hex)) {
-        const options = {
-          method: 'POST',
-          url: `${this.restURL}full-node/rawtransactions/sendRawTransaction`,
-          data: {
-            hexes: hex
-          },
-          headers: this.axiosOptions.headers
-        }
-        const response = await this.axios(options)
+        let lastErr
 
-        return response.data
+        for (let attempt = 0; attempt <= this.maxBroadcastRetries; attempt++) {
+          try {
+            const response = await this._postSendRawTransaction(hex)
+            return response.data
+          } catch (err) {
+            lastErr = err
+
+            const isLastAttempt = attempt >= this.maxBroadcastRetries
+            const shouldRetry = this._isTransientNetworkError(err) && !isLastAttempt
+            if (!shouldRetry) throw err
+
+            const delay = this.broadcastRetryDelayMs * Math.pow(2, attempt)
+            await this._sleep(delay)
+          }
+        }
+
+        throw lastErr
       }
 
       throw new Error('Input hex must be a string or array of strings.')
