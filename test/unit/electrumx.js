@@ -391,6 +391,79 @@ describe('#ElectrumX', () => {
     })
   })
 
+  describe('#merkleBranch', () => {
+    it('should throw an error for improper input', async () => {
+      try {
+        const txid = 12345
+
+        await bchjs.Electrumx.merkleBranch(txid)
+        assert.equal(true, false, 'Unexpected result!')
+      } catch (err) {
+        // console.log(`err: `, err)
+        assert.include(
+          err.message,
+          'Input txId must be a string or array of txid/height objects'
+        )
+      }
+    })
+
+    it('should GET merkle branch data for a single transaction', async () => {
+      // Stub the network call.
+      sandbox.stub(axios, 'get').resolves({ data: mockData.merkleBranch })
+
+      const txid =
+        '4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251'
+      const height = 617812
+
+      const result = await bchjs.Electrumx.merkleBranch(txid, height)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'success')
+      assert.equal(result.success, true)
+
+      assert.property(result, 'merkle')
+      assert.isObject(result.merkle)
+      assert.property(result.merkle, 'block_height')
+      assert.property(result.merkle, 'merkle')
+      assert.property(result.merkle, 'pos')
+      assert.isArray(result.merkle.merkle)
+    })
+
+    it('should POST merkle branch data for an array of transactions', async () => {
+      // Stub the network call.
+      sandbox.stub(axios, 'post').resolves({ data: mockData.merkleBranches })
+
+      const txids = [
+        {
+          txid: '4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251',
+          height: 617812
+        },
+        {
+          txid: '4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251',
+          height: 617812
+        }
+      ]
+
+      const result = await bchjs.Electrumx.merkleBranch(txids)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'success')
+      assert.equal(result.success, true)
+
+      assert.property(result, 'branches')
+      assert.isArray(result.branches)
+
+      assert.property(result.branches[0], 'txid')
+      assert.property(result.branches[0], 'height')
+      assert.property(result.branches[0], 'merkle')
+      assert.property(result.branches[0].merkle, 'block_height')
+      assert.property(result.branches[0].merkle, 'merkle')
+      assert.property(result.branches[0].merkle, 'pos')
+
+      assert.equal(result.branches.length, 2, '2 outputs for 2 inputs')
+    })
+  })
+
   describe('#broadcast', () => {
     it('should throw an error for improper input', async () => {
       try {
