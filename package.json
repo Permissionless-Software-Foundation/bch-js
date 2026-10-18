@@ -20,7 +20,7 @@
     "test:integration:local:auth": "export RESTURL=http://192.168.1.115:5942/v6 && export BCHJSBEARERTOKEN=temp01 && mocha --timeout 30000 test/integration/",
     "test:integration:local:x402": "export RESTURL=http://localhost:5942/v6 && export BCHJSWIF=L1eYaneXDDXy8VDig4Arwe8wYHbhtsA5wuQvwsKwhaYeneoZuKG4 && mocha --timeout 1200000 test/integration/",    
     "test:integration:decatur": "export RESTURL=http://192.168.1.65:5942/v6 && mocha --timeout 30000 test/integration/",
-    "coverage": "nyc --reporter=html mocha --timeout 25000 test/unit/",
+    "coverage": "export RESTURL=http://localhost:5942/v6 && c8 --reporter=html mocha --timeout 25000 test/unit/",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs && ./fix-docs-contrast.sh",
     "lint": "standard --env mocha --fix"
   },
@@ -35,7 +35,7 @@
     "@psf/bip21": "2.0.1",
     "@psf/bitcoincashjs-lib": "4.0.3",
     "@psf/coininfo": "4.0.0",
-    "axios": "1.13.2",
+    "axios": "1.20.0",
     "bc-bip68": "1.0.5",
     "bchaddrjs-slp": "0.2.14",
     "bigi": "1.4.2",
@@ -44,28 +44,26 @@
     "bip38": "3.1.1",
     "bip39": "3.1.0",
     "bip66": "1.1.5",
-    "bitcoinjs-message": "2.2.0",
     "bs58": "4.0.1",
     "ecashaddrjs": "1.0.7",
+    "ecurve": "1.0.6",
     "ini": "6.0.0",
     "randombytes": "2.1.0",
     "safe-buffer": "5.2.1",
     "satoshi-bitcoin": "1.0.5",
     "slp-mdm": "0.0.7",
     "slp-parser": "0.0.4",
-    "wif": "2.0.6",
-    "x402-bch-axios": "2.2.1"
+    "wif": "2.0.6"
   },
   "devDependencies": {
     "apidoc": "1.2.0",
     "assert": "2.1.0",
-    "c8": "10.1.3",
+    "c8": "12.0.0",
     "chai": "4.1.2",
     "husky": "4.3.8",
     "lodash.clonedeep": "4.5.0",
-    "mocha": "11.7.5",
-    "nyc": "15.1.0",
-    "semantic-release": "24.2.9",
+    "mocha": "12.0.3",
+    "semantic-release": "25.0.9",
     "sinon": "9.2.2",
     "standard": "17.1.2"
   },
@@ -82,5 +80,20 @@
     "parserOptions": {
       "ecmaVersion": "latest"
     }
+  },
+  "overrides": {
+    "axios": "1.20.0",
+    "follow-redirects": "1.16.1",
+    "form-data": "4.0.6",
+    "handlebars": "4.7.10",
+    "lodash": "4.18.1",
+    "lodash-es": "4.18.1",
+    "pbkdf2": "3.1.7",
+    "qs": "6.16.1",
+    "semver": "7.8.5",
+    "esbuild": "0.25.12",
+    "markdown-it": "14.3.3",
+    "linkify-it": "5.0.2",
+    "chokidar": "4.0.3"
   }
 }
