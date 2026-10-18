@@ -121,62 +121,49 @@ describe('#BitcoinCash', () => {
   })
 
   describe('sign and verify messages', () => {
-    it('should exercise signMessageWithPrivKey', () => {
-      fixtures.signatures.sign.forEach(sign => {
-        it(`should sign a message w/ ${sign.network} ${sign.privateKeyWIF}`, () => {
-          const privateKeyWIF = sign.privateKeyWIF
-          const message = sign.message
-          const signature = bchjs.BitcoinCash.signMessageWithPrivKey(
-            privateKeyWIF,
-            message
-          )
-          assert.equal(signature, sign.signature)
-        })
+    fixtures.signatures.sign.forEach(sign => {
+      it(`should sign a message w/ ${sign.network} ${sign.privateKeyWIF}`, () => {
+        const signature = bchjs.BitcoinCash.signMessageWithPrivKey(
+          sign.privateKeyWIF,
+          sign.message
+        )
+        assert.equal(signature, sign.signature)
       })
     })
 
-    it('shoudl exercise verifyMessage', () => {
-      fixtures.signatures.verify.forEach(sign => {
-        it(`should verify a valid signed message from ${sign.network} cashaddr address ${sign.address}`, () => {
-          assert.equal(
-            bchjs.BitcoinCash.verifyMessage(
-              sign.address,
-              sign.signature,
-              sign.message
-            ),
-            true
-          )
-        })
+    fixtures.signatures.verify.forEach(sign => {
+      it(`should verify a valid signed message from ${sign.network} cashaddr address ${sign.address}`, () => {
+        assert.equal(
+          bchjs.BitcoinCash.verifyMessage(
+            sign.address,
+            sign.signature,
+            sign.message
+          ),
+          true
+        )
       })
 
-      it('should verify legacy addresses', () => {
-        fixtures.signatures.verify.forEach(sign => {
-          const legacyAddress = bchjs.Address.toLegacyAddress(sign.address)
-          it(`should verify a valid signed message from ${sign.network} legacy address ${legacyAddress}`, () => {
-            assert.equal(
-              bchjs.BitcoinCash.verifyMessage(
-                legacyAddress,
-                sign.signature,
-                sign.message
-              ),
-              true
-            )
-          })
-        })
+      it(`should verify a valid signed message from ${sign.network} legacy address ${sign.address}`, () => {
+        const legacyAddress = bchjs.Address.toLegacyAddress(sign.address)
+        assert.equal(
+          bchjs.BitcoinCash.verifyMessage(
+            legacyAddress,
+            sign.signature,
+            sign.message
+          ),
+          true
+        )
       })
 
-      fixtures.signatures.verify.forEach(sign => {
-        // const legacyAddress = bchjs.Address.toLegacyAddress(sign.address)
-        it(`should not verify an invalid signed message from ${sign.network} cashaddr address ${sign.address}`, () => {
-          assert.equal(
-            bchjs.BitcoinCash.verifyMessage(
-              sign.address,
-              sign.signature,
-              'nope'
-            ),
-            false
-          )
-        })
+      it(`should not verify an invalid signed message from ${sign.network} cashaddr address ${sign.address}`, () => {
+        assert.equal(
+          bchjs.BitcoinCash.verifyMessage(
+            sign.address,
+            sign.signature,
+            'nope'
+          ),
+          false
+        )
       })
     })
   })

@@ -1,6 +1,6 @@
 import Bitcoin from '@psf/bitcoincashjs-lib'
 import sb from 'satoshi-bitcoin'
-import bitcoinMessage from 'bitcoinjs-message'
+import bitcoinMessage from './message.js'
 import bs58 from 'bs58'
 import bip21 from '@psf/bip21'
 import coininfo from '@psf/coininfo'
@@ -157,10 +157,7 @@ class BitcoinCash {
       privateKeyWIF,
       bitcoincashBitcoinJSLib
     )
-    const privateKey = keyPair.d.toBuffer(32)
-    return bitcoinMessage
-      .sign(message, privateKey, keyPair.compressed)
-      .toString('base64')
+    return bitcoinMessage.sign(message, keyPair).toString('base64')
   }
 
   /**

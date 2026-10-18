@@ -16,7 +16,7 @@ import {
   withPaymentInterceptor,
   createPaymentHeader,
   selectPaymentRequirements
-} from 'x402-bch-axios'
+} from './x402.js'
 
 // local deps
 import BitcoinCash from './bitcoincash.js'
