@@ -351,6 +351,56 @@ describe('#ElectrumX', () => {
     })
   })
 
+  describe('#merkleBranch', () => {
+    it('should GET merkle branch for a single transaction', async () => {
+      const txid =
+        'a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d'
+      const height = 617812
+
+      const result = await bchjs.Electrumx.merkleBranch(txid, height)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'success')
+      assert.equal(result.success, true)
+
+      assert.property(result, 'merkle')
+      assert.isObject(result.merkle)
+      assert.property(result.merkle, 'block_height')
+      assert.property(result.merkle, 'merkle')
+      assert.property(result.merkle, 'pos')
+      assert.isArray(result.merkle.merkle)
+    })
+
+    it('should POST merkle branch for an array of transactions', async () => {
+      const txids = [
+        {
+          txid: 'a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d',
+          height: 617812
+        },
+        {
+          txid: 'a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d',
+          height: 617812
+        }
+      ]
+
+      const result = await bchjs.Electrumx.merkleBranch(txids)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.property(result, 'success')
+      assert.equal(result.success, true)
+
+      assert.property(result, 'branches')
+      assert.isArray(result.branches)
+
+      assert.property(result.branches[0], 'txid')
+      assert.property(result.branches[0], 'height')
+      assert.property(result.branches[0], 'merkle')
+      assert.property(result.branches[0].merkle, 'block_height')
+      assert.property(result.branches[0].merkle, 'merkle')
+      assert.property(result.branches[0].merkle, 'pos')
+    })
+  })
+
   describe('#broadcast', () => {
     it('should broadcast a single transaction', async () => {
       const txHex =

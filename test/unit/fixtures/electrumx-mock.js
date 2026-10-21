@@ -257,6 +257,34 @@ const detailsArray = {
   ]
 }
 
+const merkleBranch = {
+  success: true,
+  merkle: {
+    block_height: 617812,
+    merkle: [
+      '713d6c7e6ce7bbea708d61162231eaa8ecb31c4c5dd84f81c20409a90069cb24',
+      '03dbaec78d4a52fbaf3c7aa5d3fccd9d8654f323940716ddf5ee2e4bda458fde'
+    ],
+    pos: 4
+  }
+}
+
+const merkleBranches = {
+  success: true,
+  branches: [
+    {
+      txid: txDetails.txid,
+      height: 617812,
+      merkle: merkleBranch.merkle
+    },
+    {
+      txid: txDetails.txid,
+      height: 617812,
+      merkle: merkleBranch.merkle
+    }
+  ]
+}
+
 const broadcast = {
   success: true,
   txid: txDetails.txid
@@ -302,6 +330,8 @@ export default {
   blockHeaders,
   details,
   detailsArray,
+  merkleBranch,
+  merkleBranches,
   broadcast,
   txHistoryWithUnconfirmed
 }

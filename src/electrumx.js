@@ -580,6 +580,90 @@ class ElectrumX {
   }
 
   /**
+   * @api Electrumx.merkleBranch() merkleBranch()
+   * @apiName ElectrumX merkleBranch
+   * @apiGroup ElectrumX
+   * @apiDescription Returns the merkle branch for a transaction.
+   *
+   * @apiExample Example usage:
+   *    (async () => {
+   *   try {
+   *     let result = await bchjs.Electrumx.merkleBranch('a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d', 617812)
+   *     console.log(result);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * result = {
+   *   "success": true,
+   *   "merkle": {
+   *     "block_height": 617812,
+   *     "merkle": [
+   *       "..."
+   *     ],
+   *     "pos": 4
+   *   }
+   * }
+   *
+   *    (async () => {
+   *   try {
+   *     let result = await bchjs.Electrumx.merkleBranch([{ txid: 'a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d', height: 617812 }])
+   *     console.log(result);
+   *   } catch(error) {
+   *    console.error(error)
+   *   }
+   * })()
+   *
+   * result = {
+   *   "success": true,
+   *   "branches": [
+   *     {
+   *       "txid": "a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d",
+   *       "height": 617812,
+   *       "merkle": {
+   *         "block_height": 617812,
+   *         "merkle": [
+   *           "..."
+   *         ],
+   *         "pos": 4
+   *       }
+   *     }
+   *   ]
+   * }
+   */
+  async merkleBranch (txid, height) {
+    try {
+      // Handle single transaction.
+      if (typeof txid === 'string') {
+        const response = await this.axios.get(
+          `${this.restURL}fulcrum/tx/merkle/${txid}/${height}`,
+          this.axiosOptions
+        )
+        return response.data
+      } else if (Array.isArray(txid)) {
+        const response = await this.axios.post(
+          `${this.restURL}fulcrum/tx/merkle`,
+          {
+            txids: txid
+          },
+          this.axiosOptions
+        )
+
+        return response.data
+      }
+
+      throw new Error('Input txId must be a string or array of txid/height objects.')
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const errorData = error.response.data
+        const errorMessage = typeof errorData === 'string' ? errorData : (errorData.error || errorData.message || JSON.stringify(errorData))
+        throw new Error(errorMessage)
+      } else throw error
+    }
+  }
+
+  /**
    * @api Electrumx.broadcast()  broadcast()
    * @apiName ElectrumX Broadcast
    * @apiGroup ElectrumX
